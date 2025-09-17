@@ -72,6 +72,10 @@ mixin ConnectivityHandlerMixin on BaseViewModel implements ConnectionListener {
         return;
       }
 
+      if(!isUserLoggedIn){
+        return;
+      }
+
       if (navigationRouter.isPageVisible(routeName)) {
         log("Pop displayed by: $routeName");
         if (this is DialogUtilitiesMixin) {

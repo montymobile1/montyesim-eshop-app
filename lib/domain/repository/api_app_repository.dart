@@ -1,5 +1,6 @@
 import "dart:async";
 
+
 abstract interface class ApiAppRepository {
   FutureOr<dynamic> addDevice({
     required String fcmToken,
@@ -27,4 +28,10 @@ abstract interface class ApiAppRepository {
   FutureOr<dynamic> getConfigurations();
 
   FutureOr<dynamic> getCurrencies();
+
+  FutureOr<dynamic> getBanner();
+
+  dynamic getBannerStream();
+
+  Future<void> resetBannerStream();
 }

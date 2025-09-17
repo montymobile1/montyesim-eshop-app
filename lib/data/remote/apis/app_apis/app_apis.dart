@@ -8,7 +8,8 @@ enum AppApis implements URlRequestBuilder {
   faq,
   contactUs,
   configurations,
-  getCurrencies;
+  getCurrencies,
+  getBanner;
 
   @override
   String get baseURL => "";
@@ -30,6 +31,8 @@ enum AppApis implements URlRequestBuilder {
         return "/api/v1/app/configurations";
       case AppApis.getCurrencies:
         return "/api/v1/app/currency";
+      case AppApis.getBanner:
+        return "/api/v1/app/banners";
     }
   }
 
@@ -45,6 +48,7 @@ enum AppApis implements URlRequestBuilder {
       case AppApis.termsConditions:
       case AppApis.configurations:
       case AppApis.getCurrencies:
+      case AppApis.getBanner:
         return HttpMethod.GET;
     }
   }

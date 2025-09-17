@@ -13,46 +13,51 @@ class BannersView extends StatelessWidget {
     return stacked.ViewModelBuilder<BannersViewModel>.reactive(
       viewModelBuilder: BannersViewModel.new,
       onDispose: (BannersViewModel viewModel) => viewModel.onDispose(),
-      onViewModelReady: (BannersViewModel viewModel) =>
-          viewModel.startAnimatingView(context),
+      onViewModelReady: (BannersViewModel viewModel) {
+        viewModel
+          ..onViewModelReady()
+          ..startAnimatingView(context);
+      },
       builder: (
         BuildContext context,
         BannersViewModel viewModel,
         Widget? childWidget,
       ) =>
-          PaddingWidget.applySymmetricPadding(
-        vertical: 5,
-        child: SizedBox(
-          height: screenWidthFraction(context) * 0.43,
-          child: PageView.builder(
-            padEnds: false,
-            controller: viewModel.bannersPageController,
-            itemCount: viewModel.banners.length,
-            itemBuilder: (BuildContext context, int index) =>
-                PaddingWidget.applyPadding(
-              start: index == 0 ? 10 : 0,
-              end: index == viewModel.banners.length - 1 ? 10 : 0,
-              child: SizedBox(
-                width: screenWidthFraction(
-                  context,
-                  dividedBy:
-                      1 / viewModel.bannersPageController.viewportFraction,
+           PaddingWidget.applySymmetricPadding(
+                  vertical: 5,
+                  child: SizedBox(
+                    height: screenWidthFraction(context) * 0.43,
+                    child: PageView.builder(
+                      padEnds: false,
+                      controller: viewModel.bannersPageController,
+                      itemCount: viewModel.banners.length,
+                      itemBuilder: (BuildContext context, int index) =>
+                          PaddingWidget.applyPadding(
+                        start: index == 0 ? 10 : 0,
+                        end: index == viewModel.banners.length - 1 ? 10 : 0,
+                        child: SizedBox(
+                          width: screenWidthFraction(
+                            context,
+                            dividedBy: 1 /
+                                viewModel
+                                    .bannersPageController.viewportFraction,
+                          ),
+                          height: screenWidthFraction(
+                                context,
+                                dividedBy: 1 /
+                                    viewModel
+                                        .bannersPageController.viewportFraction,
+                              ) *
+                              0.49,
+                          child: BannerView(
+                            bannersViewModel: viewModel,
+                            bannerView: viewModel.banners[index],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
-                height: screenWidthFraction(
-                      context,
-                      dividedBy:
-                          1 / viewModel.bannersPageController.viewportFraction,
-                    ) *
-                    0.49,
-                child: BannerView(
-                  bannersViewModel: viewModel,
-                  bannerView: viewModel.banners[index],
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
     );
   }
 }

@@ -1,6 +1,6 @@
 // DO NOT EDIT. This is code generated via package:easy_localization/generate.dart
 
-// ignore_for_file: type=lint
+// ignore_for_file: constant_identifier_names
 
 abstract class  LocaleKeys {
   static const String appName = "appName";
@@ -75,12 +75,6 @@ abstract class  LocaleKeys {
   static const String dataPlans_countryTripText = "dataPlans_countryTripText";
   static const String dataPlans_onCruiseText = "dataPlans_onCruiseText";
   static const String dataPlans_onLandText = "dataPlans_onLandText";
-  static const String dataPlans_liveChatBannerTitle = "dataPlans_liveChatBannerTitle";
-  static const String dataPlans_referAndEarnBannerTitle = "dataPlans_referAndEarnBannerTitle";
-  static const String dataPlans_cashbackRewardsBannerTitle = "dataPlans_cashbackRewardsBannerTitle";
-  static const String dataPlans_liveChatBannerContent = "dataPlans_liveChatBannerContent";
-  static const String dataPlans_referAndEarnBannerContent = "dataPlans_referAndEarnBannerContent";
-  static const String dataPlans_cashbackRewardsBannerContent = "dataPlans_cashbackRewardsBannerContent";
   static const String dataPlans_liveChatBannerButtonText = "dataPlans_liveChatBannerButtonText";
   static const String dataPlans_referAndEarnBannerButtonText = "dataPlans_referAndEarnBannerButtonText";
   static const String dataPlans_cashbackRewardsBannerButtonText = "dataPlans_cashbackRewardsBannerButtonText";

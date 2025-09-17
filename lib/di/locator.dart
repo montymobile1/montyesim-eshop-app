@@ -24,6 +24,7 @@ import "package:esim_open_source/data/services/connectivity_service_impl.dart";
 import "package:esim_open_source/data/services/device_info_service_impl.dart";
 import "package:esim_open_source/data/services/dynamic_linking_service_empty_impl.dart";
 import "package:esim_open_source/data/services/dynamic_linking_service_impl.dart";
+import "package:esim_open_source/data/services/environment_service_impl.dart";
 import "package:esim_open_source/data/services/flutter_channel_handler_service_impl.dart";
 import "package:esim_open_source/data/services/payment/payment_service_impl.dart";
 import "package:esim_open_source/data/services/push_notification_service_impl.dart";
@@ -45,6 +46,7 @@ import "package:esim_open_source/domain/repository/services/app_configuration_se
 import "package:esim_open_source/domain/repository/services/connectivity_service.dart";
 import "package:esim_open_source/domain/repository/services/device_info_service.dart";
 import "package:esim_open_source/domain/repository/services/dynamic_linking_service.dart";
+import "package:esim_open_source/domain/repository/services/environment_service.dart";
 import "package:esim_open_source/domain/repository/services/flutter_channel_handler_service.dart";
 import "package:esim_open_source/domain/repository/services/local_storage_service.dart";
 import "package:esim_open_source/domain/repository/services/payment_service.dart";
@@ -58,8 +60,10 @@ import "package:esim_open_source/domain/use_case/user/get_order_history_paginati
 import "package:esim_open_source/objectbox.g.dart";
 import "package:esim_open_source/presentation/extensions/stacked_services/custom_route_observer.dart";
 import "package:esim_open_source/presentation/view_models/main_model.dart";
+import "package:esim_open_source/presentation/views/home_flow_views/data_plans_view/bundles_list/bundles_list_view_model.dart";
 import "package:esim_open_source/presentation/views/home_flow_views/data_plans_view/data_plans_view_model.dart";
 import "package:esim_open_source/presentation/views/home_flow_views/data_plans_view/purchase_loading_view/purchase_loading_view_model.dart";
+import "package:esim_open_source/presentation/views/home_flow_views/data_plans_view/purchase_order_success/purchase_order_success_view_model.dart";
 import "package:esim_open_source/presentation/views/home_flow_views/data_plans_view/verify_purchase_view/verify_purchase_view_model.dart";
 import "package:esim_open_source/presentation/views/home_flow_views/main_page/home_pager_view_model.dart";
 import "package:esim_open_source/presentation/views/home_flow_views/my_esim_view/my_esim_view_model.dart";
@@ -142,7 +146,7 @@ Future<void> appServicesModule() async {
       () => AppConfigurationServiceImpl.instance as AppConfigurationService,
     )
     ..registerLazySingleton(
-          () => ReferralInfoServiceImpl.instance as ReferralInfoService,
+      () => ReferralInfoServiceImpl.instance as ReferralInfoService,
     )
     ..registerLazySingleton(
       () => FlutterChannelHandlerServiceImpl.getInstance()
@@ -156,6 +160,9 @@ Future<void> appServicesModule() async {
     )
     ..registerLazySingleton(
       () => AnalyticsServiceImpl.instance as AnalyticsService,
+    )
+    ..registerLazySingleton(
+      () => EnvironmentServiceImpl.instance as EnvironmentService,
     );
 }
 
@@ -289,6 +296,12 @@ Future<void> viewModelInjectionModules() async {
     )
     ..registerFactory<VerifyPurchaseViewModel>(
       VerifyPurchaseViewModel.new,
+    )
+    ..registerFactory<PurchaseOrderSuccessViewModel>(
+      PurchaseOrderSuccessViewModel.new,
+    )
+    ..registerFactory<BundlesListViewModel>(
+      BundlesListViewModel.new,
     );
 }
 

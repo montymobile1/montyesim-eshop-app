@@ -133,8 +133,7 @@ class DataPlansView extends StatelessWidget {
       selectedLabelColor: mainDarkTextColor(context: context),
       selectedTabTextStyle: captionOneMediumTextStyle(context: context),
       childWidget: DataPlansViewModel.cruiseTabBarSelectedIndex == 0
-          ? (AppEnvironment.appEnvironmentHelper.enableBannersView &&
-                  !AppEnvironment.isFromAppClip)
+          ? viewModel.showBanner
               ? childWidget
               : null
           : null,
@@ -205,8 +204,7 @@ class DataPlansView extends StatelessWidget {
         }
       },
       initialIndex: DataPlansViewModel.tabBarSelectedIndex,
-      childWidget: (AppEnvironment.appEnvironmentHelper.enableBannersView &&
-              !AppEnvironment.isFromAppClip)
+      childWidget: viewModel.showBanner
           ? childWidget
           : null,
       backGroundColor: bodyBackGroundColor(context: context),

@@ -1,4 +1,4 @@
-import "package:esim_open_source/app/environment/environment_images.dart";
+import "package:cached_network_image/cached_network_image.dart";
 import "package:esim_open_source/presentation/extensions/context_extension.dart";
 import "package:esim_open_source/presentation/shared/shared_styles.dart";
 import "package:esim_open_source/presentation/views/home_flow_views/banners_view/banners_view_model.dart";
@@ -14,85 +14,97 @@ class BannerView extends StatelessWidget {
     required this.bannersViewModel,
     super.key,
   });
-  final BannersViewTypes bannerView;
+  final BannerState bannerView;
   final BannersViewModel bannersViewModel;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => bannerView.onTapGesture,
+      onTap: () => bannersViewModel.onViewTap(bannerView),
       child: PaddingWidget.applySymmetricPadding(
         horizontal: 5,
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage(bannerView.backGroundImage),
-              fit: BoxFit.cover,
-            ),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Row(
-            children: <Widget>[
-              Expanded(
-                child: PaddingWidget.applyPadding(
-                  top: 10,
-                  start: 20,
-                  bottom: 5,
-                  end: bannerView == BannersViewTypes.liveChat ? 0 : 30,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: <Widget>[
-                      Text(
-                        bannerView.titleText,
-                        style: bodyBoldTextStyle(
-                          context: context,
-                          fontColor: mainWhiteTextColor(context: context),
-                        ),
-                      ),
-                      Text(
-                        bannerView.contentText,
-                        style: captionOneNormalTextStyle(
-                          context: context,
-                          fontColor: mainWhiteTextColor(context: context),
-                        ),
-                      ),
-                      MainButton.bannerButton(
-                        action: () => bannerView.onTapGesture,
-                        themeColor: themeColor,
-                        title: bannerView.buttonText,
-                        textColor: bannerView == BannersViewTypes.liveChat
-                            ? bannersViewModel.textColor ??
-                                context.appColors.grey_900
-                            : context.appColors.grey_900,
-                        buttonColor: bannerView == BannersViewTypes.liveChat
-                            ? bannersViewModel.buttonColor ??
-                                context.appColors.baseWhite
-                            : context.appColors.baseWhite,
-                        titleTextStyle:
-                            captionTwoBoldTextStyle(context: context),
-                      ),
-                    ],
+        child: Stack(
+          children: <Widget>[
+            if (bannerView.image?.isNotEmpty ?? false)
+              ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: CachedNetworkImage(
+                  imageUrl: bannerView.image ?? "",
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                  height: double.infinity,
+                  placeholder: (BuildContext context, String url) =>
+                      DecoratedBox(
+                    decoration: BoxDecoration(
+                      color: Colors.black.withAlpha((255.0 * 0.8).round()),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  errorWidget:
+                      (BuildContext context, String url, Object error) =>
+                          DecoratedBox(
+                    decoration: BoxDecoration(
+                      color: Colors.black.withAlpha((255.0 * 0.9).round()),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
                 ),
               ),
-              bannerView == BannersViewTypes.liveChat
-                  ? Align(
-                      alignment: Alignment.bottomRight,
-                      child: ClipRRect(
-                        borderRadius: const BorderRadius.only(
-                          bottomRight: Radius.circular(12),
+            Row(
+              children: <Widget>[
+                Expanded(
+                  child: PaddingWidget.applyPadding(
+                    top: 10,
+                    start: 20,
+                    bottom: 5,
+                    end: bannerView.bannersViewType == BannersViewTypes.liveChat
+                        ? 0
+                        : 30,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: <Widget>[
+                        Text(
+                          bannerView.title ?? "",
+                          style: bodyBoldTextStyle(
+                            context: context,
+                            fontColor: mainWhiteTextColor(context: context),
+                          ),
                         ),
-                        child: Image.asset(
-                          EnvironmentImages
-                              .bannersChatWithUsPerson.fullImagePath,
-                          width: 160,
+                        Text(
+                          bannerView.description ?? "",
+                          style: captionOneNormalTextStyle(
+                            context: context,
+                            fontColor: mainWhiteTextColor(context: context),
+                          ),
                         ),
-                      ),
-                    )
-                  : const SizedBox.shrink(),
-            ],
-          ),
+                        bannerView.bannersViewType != BannersViewTypes.none
+                            ? MainButton.bannerButton(
+                                action: () =>
+                                    bannersViewModel.onViewTap(bannerView),
+                                themeColor: themeColor,
+                                title: bannerView.bannersViewType.buttonText,
+                                textColor: bannerView.bannersViewType ==
+                                        BannersViewTypes.liveChat
+                                    ? bannersViewModel.textColor ??
+                                        context.appColors.grey_900
+                                    : context.appColors.grey_900,
+                                buttonColor: bannerView.bannersViewType ==
+                                        BannersViewTypes.liveChat
+                                    ? bannersViewModel.buttonColor ??
+                                        context.appColors.baseWhite
+                                    : context.appColors.baseWhite,
+                                titleTextStyle:
+                                    captionTwoBoldTextStyle(context: context),
+                              )
+                            : Container(),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );
@@ -102,12 +114,12 @@ class BannerView extends StatelessWidget {
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
-      ..add(EnumProperty<BannersViewTypes>("bannerView", bannerView))
       ..add(
         DiagnosticsProperty<BannersViewModel>(
           "bannersViewModel",
           bannersViewModel,
         ),
-      );
+      )
+      ..add(DiagnosticsProperty<BannerState>("bannerView", bannerView));
   }
 }

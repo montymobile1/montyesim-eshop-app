@@ -31,30 +31,30 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
-  http: ^1.4.0
+  http: ^1.5.0
   path_provider: ^2.1.5
   # stacked_themes depends on rxdart ^0.27.1
-  rxdart: ^0.27.1
+  rxdart: ^0.27.7
   url_launcher: ^6.3.2
   cached_network_image: ^3.4.1
-  image_picker: ^1.1.2
-  stacked: ^3.4.4
+  image_picker: ^1.2.0
+  stacked: ^3.5.0
   stacked_services: ^1.6.0
-  get_it: ^8.0.3
-  lottie: ^3.3.1
-  flutter_hooks: ^0.21.2
-  provider: ^6.1.5
+  get_it: ^8.2.0
+  lottie: ^3.3.2
+  flutter_hooks: ^0.21.3+1
+  provider: ^6.1.5+1
   flutter_native_splash: ^2.4.6
   flutter_launcher_icons: ^0.14.4
   fluttertoast: ^8.2.12
   share_plus: ^11.0.0
   package_info_plus: ^8.3.0
   stacked_themes: ^0.3.15
-  device_info_plus: ^11.5.0
-  easy_localization: ^3.0.7+1
+  device_info_plus: ^12.1.0
+  easy_localization: ^3.0.8
   android_id: ^0.4.0
   #  fluttercontactpicker: ^5.0.0
-  flutter_svg: ^2.2.0
+  flutter_svg: ^2.2.1
   #  android_sms_retriever: ^1.3.3
   #  biometric_storage: 5.0.0
   local_auth: ^2.3.0
@@ -69,9 +69,9 @@ dependencies:
   timer_count_down: ^2.2.2
   #  flutter_otp_text_field: ^1.1.3+2
   webview_flutter: ^4.13.0
-  firebase_core: ^3.15.1
-  firebase_messaging: ^15.2.9
-  flutter_local_notifications: ^19.3.1
+  firebase_core: ^4.1.0
+  firebase_messaging: ^16.0.1
+  flutter_local_notifications: ^19.4.2
   flutter_app_badger: ^1.5.0
   intl: ^0.20.2
   flutter_image_compress: ^2.4.0
@@ -83,9 +83,9 @@ dependencies:
   #  google_mobile_ads: ^2.3.0
   #  fpdart:
   stacked_shared: ^1.4.2
-  connectivity_plus: ^6.1.4
-  webview_flutter_android: ^4.8.2
-  webview_flutter_wkwebview: ^3.22.1
+  connectivity_plus: ^7.0.0
+  webview_flutter_android: ^4.10.2
+  webview_flutter_wkwebview: ^3.23.0
   local_auth_platform_interface: ^1.0.10
   google_sign_in: ^7.1.1
   qr_flutter: ^4.1.0
@@ -94,33 +94,33 @@ dependencies:
   phone_input: ^1.0.0
   flutter_html: ^3.0.0
   json_annotation: ^4.9.0
-  flutter_stripe: ^11.5.0
+  flutter_stripe: ^12.0.2
   shared_preferences: ^2.5.3
   safe_device: ^1.3.5
-  objectbox: ^4.3.0
-  objectbox_flutter_libs: ^4.3.0
+  objectbox: ^4.3.1
+  objectbox_flutter_libs: ^4.3.1
   chucker_flutter: ^1.8.5
   path: ^1.9.1
   flutter_esim: ^0.0.4
-  gallery_saver_plus: ^3.2.8
+  gallery_saver_plus: ^3.2.9
   pdf: ^3.11.3
-  supabase_flutter: ^2.9.1
+  supabase_flutter: ^2.10.1
   crypto: ^3.0.6
   flutter_vibrate: ^1.3.0
-  firebase_remote_config: ^5.4.7
-  app_links: ^6.4.0
+  firebase_remote_config: ^6.0.1
+  app_links: ^6.4.1
   qr_code_scanner: ^1.0.1
-  flutter_branch_sdk: ^8.5.0
-  cupertino_http: ^2.2.0
-  firebase_analytics: ^11.5.2
+  flutter_branch_sdk: ^8.9.0
+  cupertino_http: ^2.3.0
+  firebase_analytics: ^12.0.1
   facebook_app_events: ^0.20.1
   app_tracking_transparency: ^2.0.6+1
-  firebase_crashlytics: ^4.3.9
-  phone_numbers_parser: ^9.0.3
+  firebase_crashlytics: ^5.0.1
+  phone_numbers_parser: ^9.0.11
 dev_dependencies:
-  objectbox_generator: ^4.3.0
+  objectbox_generator: ^4.3.1
   # depends on objectbox_generator
-  build_runner: ^2.4.15
+  build_runner: ^2.7.1
   flutter_test:
     sdk: flutter
   # The "flutter_lints" package below contains a set of recommended lints to
@@ -129,7 +129,7 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^6.0.0
-  mockito: ^5.4.6
+  mockito: ^5.5.1
   husky: ^0.1.7
 
 # For information on the generic Dart part of this file, see the
@@ -158,8 +158,6 @@ flutter:
     - assets/images/open_source/profile/
     #wallet
     - assets/images/open_source/wallet/
-    #banners
-    - assets/images/shared/banners/
     #icons
     - assets/images/shared/icons/
     - assets/images/open_source/icons/

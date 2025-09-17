@@ -15,8 +15,6 @@ class GetReferralInfoUseCase
   FutureOr<Resource<ReferralInfoResponseModel?>> execute(
     NoParams? params,
   ) async {
-    Resource<ReferralInfoResponseModel?> response =
-        await repository.getReferralInfo();
-    return response;
+    return await repository.getReferralInfo();
   }
 }

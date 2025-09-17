@@ -145,12 +145,13 @@ class SocialLoginServiceImpl extends SocialLoginService {
           .authorizationClient
           .authorizationForScopes(<String>["email"]);
 
-      if (authorization == null) {
+      String? idToken = currentUser.authentication.idToken;
+
+      if (authorization == null || idToken == null) {
         throw Exception("Failed to get authorization from Google Sign In");
       }
 
       String? accessToken = authorization.accessToken;
-      String? idToken = authorization.accessToken;
 
       await Supabase.instance.client.auth.signInWithIdToken(
         provider: OAuthProvider.google,

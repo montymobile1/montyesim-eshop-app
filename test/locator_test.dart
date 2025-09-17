@@ -13,6 +13,7 @@ import "package:esim_open_source/domain/repository/services/analytics_service.da
 import "package:esim_open_source/domain/repository/services/app_configuration_service.dart";
 import "package:esim_open_source/domain/repository/services/connectivity_service.dart";
 import "package:esim_open_source/domain/repository/services/device_info_service.dart";
+import "package:esim_open_source/domain/repository/services/environment_service.dart";
 import "package:esim_open_source/domain/repository/services/flutter_channel_handler_service.dart";
 import "package:esim_open_source/domain/repository/services/local_storage_service.dart";
 import "package:esim_open_source/domain/repository/services/payment_service.dart";
@@ -23,6 +24,7 @@ import "package:esim_open_source/domain/repository/services/referral_info_servic
 import "package:esim_open_source/domain/repository/services/secure_storage_service.dart";
 import "package:esim_open_source/domain/repository/services/social_login_service.dart";
 import "package:esim_open_source/domain/use_case/app/get_about_us_use_case.dart";
+import "package:esim_open_source/domain/use_case/app/get_banner_use_case.dart";
 import "package:esim_open_source/domain/use_case/app/get_terms_and_condition_use_case.dart";
 import "package:esim_open_source/domain/use_case/user/get_order_history_pagination_use_case.dart";
 import "package:esim_open_source/presentation/extensions/stacked_services/custom_route_observer.dart";
@@ -30,8 +32,11 @@ import "package:esim_open_source/presentation/reactive_service/bundles_data_serv
 import "package:esim_open_source/presentation/reactive_service/user_authentication_service.dart";
 import "package:esim_open_source/presentation/reactive_service/user_service.dart";
 import "package:esim_open_source/presentation/view_models/main_model.dart";
+import "package:esim_open_source/presentation/views/home_flow_views/data_plans_view/bundles_list/bundles_list_view_model.dart";
 import "package:esim_open_source/presentation/views/home_flow_views/data_plans_view/data_plans_view_model.dart";
 import "package:esim_open_source/presentation/views/home_flow_views/data_plans_view/purchase_loading_view/purchase_loading_view_model.dart";
+import "package:esim_open_source/presentation/views/home_flow_views/data_plans_view/purchase_order_success/purchase_order_success_view_model.dart";
+import "package:esim_open_source/presentation/views/home_flow_views/data_plans_view/verify_purchase_view/verify_purchase_view_model.dart";
 import "package:esim_open_source/presentation/views/home_flow_views/main_page/home_pager_view_model.dart";
 import "package:esim_open_source/presentation/views/home_flow_views/my_esim_view/my_esim_view_model.dart";
 import "package:esim_open_source/presentation/views/home_flow_views/notifications_view/notifications_view_model.dart";
@@ -48,7 +53,6 @@ import "package:esim_open_source/presentation/views/home_flow_views/profile_view
 import "package:esim_open_source/presentation/views/pre_sign_in/continue_with_email_view/continue_with_email_view_model.dart";
 import "package:esim_open_source/presentation/views/pre_sign_in/device_compability_check_view/device_compability_check_view_model.dart";
 import "package:esim_open_source/presentation/views/pre_sign_in/login_view/login_view_model.dart";
-import "package:esim_open_source/presentation/views/home_flow_views/data_plans_view/verify_purchase_view/verify_purchase_view_model.dart";
 import "package:esim_open_source/presentation/views/pre_sign_in/verify_login_view/verify_login_view_model.dart";
 import "package:esim_open_source/presentation/views/skeleton_view/skeleton_view_model.dart";
 import "package:esim_open_source/presentation/views/start_up_view/startup_view_model.dart";
@@ -90,6 +94,7 @@ import "locator_test.mocks.dart";
   APIPromotion,
   ApiPromotionRepository,
   GetAboutUsUseCase,
+  GetBannerUseCase,
   GetTermsAndConditionUseCase,
   GetOrderHistoryPaginationUseCase,
   NavigationService,
@@ -117,6 +122,7 @@ import "locator_test.mocks.dart";
   UserService,
   UserAuthenticationService,
   BundlesDataService,
+  EnvironmentService,
   SharedPreferences,
   FlutterEsim,
   APIDevice,
@@ -169,6 +175,9 @@ Future<void> appServicesModule() async {
     )
     ..registerLazySingleton<FlutterChannelHandlerService>(
       MockFlutterChannelHandlerService.new,
+    )
+    ..registerLazySingleton<EnvironmentService>(
+      MockEnvironmentService.new,
     )
     //..registerLazySingleton<RemoteConfigService>(MockRemoteConfigService.new)
     ..registerLazySingleton<ConnectivityService>(MockConnectivityService.new)
@@ -242,7 +251,7 @@ Future<void> viewModelModules() async {
       /*Mock*/ HomePagerViewModel.new,
     )
     ..registerLazySingleton<PurchaseLoadingViewModel>(
-      MockPurchaseLoadingViewModel.new,
+      PurchaseLoadingViewModel.new,
     )
     ..registerLazySingleton<ContinueWithEmailViewModel>(
       MockContinueWithEmailViewModel.new,
@@ -291,5 +300,11 @@ Future<void> viewModelModules() async {
     )
     ..registerLazySingleton<NotificationsViewModel>(
       NotificationsViewModel.new,
+    )
+    ..registerLazySingleton<PurchaseOrderSuccessViewModel>(
+      PurchaseOrderSuccessViewModel.new,
+    )
+    ..registerLazySingleton<BundlesListViewModel>(
+      BundlesListViewModel.new,
     );
 }

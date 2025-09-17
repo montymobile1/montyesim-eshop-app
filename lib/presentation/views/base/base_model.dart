@@ -100,7 +100,6 @@ class BaseModel extends ReactiveViewModel
 
   Color get themeColor => shared.themeColor;
 
-
   @override
   List<ListenableServiceMixin> get listenableServices =>
       <ListenableServiceMixin>[
@@ -113,5 +112,9 @@ class BaseModel extends ReactiveViewModel
     await userAuthenticationService.clearUserInfo();
     locator<SocialLoginService>().logOut();
     addDeviceUseCase.execute(NoParams());
+  }
+
+  void hideKeyboard() {
+    FocusManager.instance.primaryFocus?.unfocus();
   }
 }

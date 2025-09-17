@@ -7,6 +7,7 @@ class BundleAssignResponseModel {
     this.customerId,
     this.customerEphemeralKeySecret,
     this.testEnv,
+    this.hasTax,
     this.merchantDisplayName,
     this.stripeUrlScheme,
     this.orderId,
@@ -25,6 +26,7 @@ class BundleAssignResponseModel {
       customerId: json["customer_id"],
       customerEphemeralKeySecret: json["customer_ephemeral_key_secret"],
       testEnv: json["test_env"],
+      hasTax: json["has_tax"],
       merchantDisplayName: json["merchant_display_name"],
       stripeUrlScheme: json["stripe_url_scheme"],
       orderId: json["order_id"],
@@ -42,6 +44,7 @@ class BundleAssignResponseModel {
   final String? customerId;
   final String? customerEphemeralKeySecret;
   final bool? testEnv;
+  final bool? hasTax;
   final String? merchantDisplayName;
   final String? stripeUrlScheme;
   final String? orderId;
@@ -51,10 +54,7 @@ class BundleAssignResponseModel {
   final String? totalPriceDisplay;
 
   bool isTaxExist() {
-    String numericPart =
-        (taxPriceDisplay ?? "").replaceAll(RegExp(r"[^0-9\.\-]"), "");
-    double value = double.tryParse(numericPart) ?? 0.0;
-    return value > 0.0;
+    return hasTax ?? false;
   }
 
   Map<String, dynamic> toJson() {
@@ -66,6 +66,7 @@ class BundleAssignResponseModel {
       "customer_id": customerId,
       "customer_ephemeral_key_secret": customerEphemeralKeySecret,
       "test_env": testEnv,
+      "has_tax": hasTax,
       "merchant_display_name": merchantDisplayName,
       "stripe_url_scheme": stripeUrlScheme,
       "order_id": orderId,

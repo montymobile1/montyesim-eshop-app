@@ -27,7 +27,7 @@ class PurchaseLoadingView extends StatelessWidget {
     return BaseView<PurchaseLoadingViewModel>(
       hideAppBar: true,
       routeName: routeName,
-      viewModel: locator(),
+      viewModel: locator<PurchaseLoadingViewModel>(),
       builder: (
         BuildContext context,
         PurchaseLoadingViewModel viewModel,

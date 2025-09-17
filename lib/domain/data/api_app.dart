@@ -27,4 +27,6 @@ abstract interface class APIApp {
   FutureOr<dynamic> getConfigurations();
 
   FutureOr<dynamic> getCurrencies();
+
+  FutureOr<dynamic> getBanner();
 }

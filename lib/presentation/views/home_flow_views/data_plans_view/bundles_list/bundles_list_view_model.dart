@@ -17,9 +17,9 @@ import "package:esim_open_source/presentation/views/pre_sign_in/login_view/login
 import "package:flutter/cupertino.dart";
 
 class BundlesListViewModel extends EsimBaseModel {
-  BundlesListViewModel(this.esimArguments);
+  BundlesListViewModel();
 
-  final EsimArguments esimArguments;
+  late EsimArguments esimArguments;
 
   List<CountryResponseModel> get filteredCountries {
     List<CountryResponseModel> filteredCount = countries
@@ -171,13 +171,15 @@ class BundlesListViewModel extends EsimBaseModel {
   }
 
   Future<void> getSelectedCountry() async {
-    if (esimArguments.type == EsimArgumentType.country) {
-      CountryResponseModel? country = countries?.firstWhere(
-        (CountryResponseModel country) => country.id == esimArguments.id,
-      );
-      if (country != null) {
+    if (esimArguments.type == EsimArgumentType.country && countries != null) {
+      try {
+        CountryResponseModel country = countries!.firstWhere(
+          (CountryResponseModel country) => country.id == esimArguments.id,
+        );
         _selectedCountryChips.add(country);
         notifyListeners();
+      } catch (e) {
+        // Handle case where no country is found
       }
     }
   }
@@ -187,6 +189,7 @@ List<CountryResponseModel> getMockCountries() {
   return List<CountryResponseModel>.of(
     <CountryResponseModel>[
       CountryResponseModel(
+        id: "AFG",
         alternativeCountry: "AFG",
         country: "Afghanistan",
         countryCode: "AFG",
@@ -194,6 +197,7 @@ List<CountryResponseModel> getMockCountries() {
         zoneName: "Afghanistan-esim",
       ),
       CountryResponseModel(
+        id: "ALB",
         alternativeCountry: "ALB",
         country: "Albania",
         countryCode: "ALB",
@@ -201,6 +205,7 @@ List<CountryResponseModel> getMockCountries() {
         zoneName: "Albania-esim",
       ),
       CountryResponseModel(
+        id: "AND",
         alternativeCountry: "AND",
         country: "Andorra",
         countryCode: "AND",

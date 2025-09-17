@@ -2,11 +2,13 @@ import "dart:async";
 
 import "package:esim_open_source/app/app.locator.dart";
 import "package:esim_open_source/app/environment/app_environment.dart";
+import "package:esim_open_source/data/remote/responses/app/banner_response_model.dart";
 import "package:esim_open_source/data/remote/responses/bundles/bundle_response_model.dart";
 import "package:esim_open_source/data/remote/responses/bundles/country_response_model.dart";
 import "package:esim_open_source/data/remote/responses/bundles/regions_response_model.dart";
 import "package:esim_open_source/data/remote/responses/user/user_notification_response.dart";
 import "package:esim_open_source/domain/repository/api_user_repository.dart";
+import "package:esim_open_source/domain/use_case/app/get_banner_use_case.dart";
 import "package:esim_open_source/domain/use_case/base_use_case.dart";
 import "package:esim_open_source/domain/use_case/user/get_user_notifications_use_case.dart";
 import "package:esim_open_source/domain/util/resource.dart";
@@ -16,11 +18,13 @@ import "package:esim_open_source/presentation/enums/view_state.dart";
 import "package:esim_open_source/presentation/setup_bottom_sheet_ui.dart";
 import "package:esim_open_source/presentation/shared/in_app_redirection_heper.dart";
 import "package:esim_open_source/presentation/views/base/base_model.dart";
+import "package:esim_open_source/presentation/views/home_flow_views/banners_view/banners_view_model.dart";
 import "package:esim_open_source/presentation/views/home_flow_views/data_plans_view/bundles_list/bundles_list_screen.dart";
 import "package:esim_open_source/presentation/views/home_flow_views/data_plans_view/bundles_list/navigation/esim_arguments.dart";
 import "package:esim_open_source/presentation/views/home_flow_views/notifications_view/notifications_view.dart";
 import "package:esim_open_source/presentation/views/pre_sign_in/login_view/login_view.dart";
 import "package:esim_open_source/utils/display_message_helper.dart";
+import "package:esim_open_source/utils/value_stream.dart";
 import "package:flutter/material.dart";
 
 class DataPlansViewModel extends BaseModel {
@@ -60,15 +64,52 @@ class DataPlansViewModel extends BaseModel {
   static int tabBarSelectedIndex = 0;
   static int cruiseTabBarSelectedIndex = 0;
 
+  final GetBannerUseCase getBannerUseCase = GetBannerUseCase(locator());
+  List<BannerState> _bannersList = <BannerState>[];
+
   @override
   void onViewModelReady() {
     super.onViewModelReady();
+
+    if (AppEnvironment.appEnvironmentHelper.enableBannersView &&
+        !AppEnvironment.isFromAppClip) {
+      ValueStream<Resource<List<BannerResponseModel>?>> bannerStream =
+          getBannerUseCase.execute(NoParams());
+
+      processBanners(bannerStream.currentValue);
+      bannerStream.stream.listen(processBanners);
+    }
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       _searchTextFieldController.addListener(_updateSearch);
       fetchInitialData();
       notifyListeners();
     });
+  }
+
+  void processBanners(Resource<List<BannerResponseModel>?>? banners) {
+    switch (banners?.resourceType) {
+      case ResourceType.success:
+        _bannersList =
+            banners?.data?.map(BannerState.fromBannerMode).toList() ??
+                <BannerState>[];
+      case ResourceType.error:
+        _bannersList = <BannerState>[];
+      case ResourceType.loading:
+        _bannersList = <BannerState>[];
+      case null:
+    }
+    notifyListeners();
+  }
+
+  bool get showBanner {
+    bool showBanner = AppEnvironment.appEnvironmentHelper.enableBannersView &&
+        !AppEnvironment.isFromAppClip;
+
+    if (showBanner) {
+      return _bannersList.isNotEmpty;
+    }
+    return showBanner;
   }
 
   void onTabBarChange(int newIndex) {

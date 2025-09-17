@@ -1,9 +1,9 @@
 import "dart:async";
-import "dart:io";
 
 import "package:easy_localization/easy_localization.dart";
 import "package:esim_open_source/app/app.locator.dart";
 import "package:esim_open_source/data/remote/responses/bundles/purchase_esim_bundle_response_model.dart";
+import "package:esim_open_source/domain/repository/services/environment_service.dart";
 import "package:esim_open_source/domain/repository/services/flutter_channel_handler_service.dart";
 import "package:esim_open_source/presentation/shared/action_helpers.dart";
 import "package:esim_open_source/presentation/shared/validation_helpers.dart";
@@ -17,14 +17,12 @@ import "package:esim_open_source/utils/image_helper.dart";
 import "package:flutter/material.dart";
 
 class PurchaseOrderSuccessViewModel extends BaseModel {
-  PurchaseOrderSuccessViewModel({required this.purchaseESimBundle});
-
   //#region UseCases
 
   //#endregion
 
   //#region Variables
-  final PurchaseEsimBundleResponseModel? purchaseESimBundle;
+  late PurchaseEsimBundleResponseModel? purchaseESimBundle;
   final PurchaseOrderSuccessState _state = PurchaseOrderSuccessState();
 
   PurchaseOrderSuccessState get state => _state;
@@ -93,7 +91,7 @@ class PurchaseOrderSuccessViewModel extends BaseModel {
 
   Future<void> onInstallClick() async {
     try {
-      if (Platform.isAndroid) {
+      if (locator<EnvironmentService>().isAndroid) {
         // unawaited(
         await locator<FlutterChannelHandlerService>().openEsimSetupForAndroid(
           smdpAddress: _state.smDpAddress,

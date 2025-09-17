@@ -2,6 +2,7 @@ import "dart:async";
 
 import "package:esim_open_source/data/remote/apis/api_provider.dart";
 import "package:esim_open_source/data/remote/apis/app_apis/app_apis.dart";
+import "package:esim_open_source/data/remote/responses/app/banner_response_model.dart";
 import "package:esim_open_source/data/remote/responses/app/configuration_response_model.dart";
 import "package:esim_open_source/data/remote/responses/app/currencies_response_model.dart";
 import "package:esim_open_source/data/remote/responses/app/dynamic_page_response.dart";
@@ -139,6 +140,23 @@ class APIAppImpl extends APIService implements APIApp {
         endPoint: AppApis.getCurrencies,
       ),
       fromJson: CurrenciesResponseModel.fromJsonList,
+    );
+
+    return response;
+  }
+
+  @override
+  FutureOr<ResponseMain<List<BannerResponseModel>?>> getBanner() async {
+    Map<String, String> headers = <String, String>{
+      "x-platform": "mobile",
+    };
+
+    ResponseMain<List<BannerResponseModel>?> response = await sendRequest(
+      endPoint: createAPIEndpoint(
+        endPoint: AppApis.getBanner,
+        additionalHeaders: headers,
+      ),
+      fromJson: BannerResponseModel.fromJsonList,
     );
 
     return response;
