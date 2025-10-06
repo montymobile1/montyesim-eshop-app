@@ -1,4 +1,5 @@
 import "package:esim_open_source/data/remote/responses/bundles/purchase_esim_bundle_response_model.dart";
+import "package:esim_open_source/presentation/helpers/route_wrapper.dart";
 import "package:esim_open_source/presentation/helpers/view_state_utils.dart";
 import "package:esim_open_source/presentation/shared/in_app_redirection_heper.dart";
 import "package:esim_open_source/presentation/views/app_clip_start/app_clip_selection/app_clip_selection_view.dart";
@@ -80,7 +81,15 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       );
 
     case ContinueWithEmailView.routeName:
-      final Object? args = settings.arguments;
+      Object? args = settings.arguments;
+
+      RouteTransitionsBuilder? transitionsBuilder;
+
+      if (args is RouteWrapper) {
+        transitionsBuilder = args.transitionsBuilder;
+        args = args.instance;
+      }
+
       InAppRedirection? redirection;
 
       if (args is InAppRedirection) {
@@ -93,6 +102,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         viewToShow: ContinueWithEmailView(
           redirection: redirection,
         ),
+        transitionsBuilder: transitionsBuilder,
       );
 
     case VerifyLoginView.routeName:
@@ -102,7 +112,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         routeName: settingsName,
         viewToShow: VerifyLoginView(
           redirection: args.redirection,
-          username: args.username,
+          email: args.email,
+          phoneNumber: args.phoneNumber,
         ),
       );
 

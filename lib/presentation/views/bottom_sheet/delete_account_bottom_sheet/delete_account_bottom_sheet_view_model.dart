@@ -17,24 +17,32 @@ import "package:phone_input/phone_input_package.dart";
 class DeleteAccountBottomSheetViewModel extends BaseModel {
   String? emailErrorMessage;
   bool _isButtonEnabled = false;
+
   bool get isButtonEnabled => _isButtonEnabled;
+
   TextEditingController get emailController => _emailController;
   final TextEditingController _emailController = TextEditingController();
   final DeleteAccountUseCase deleteAccountUseCase =
       DeleteAccountUseCase(locator<ApiAuthRepository>());
 
   PhoneController phoneController =
-      PhoneController(const PhoneNumber(isoCode: IsoCode.SY, nsn: ""));
+      PhoneController(const PhoneNumber(isoCode: IsoCode.LB, nsn: ""));
 
   @override
   void onViewModelReady() {
     super.onViewModelReady();
-    PhoneNumber parsed = PhoneNumber.parse(userMsisdn);
+    PhoneNumber? parsed;
+    try {
+      parsed = PhoneNumber.parse(userMsisdn);
+    } on Object catch (_) {}
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      phoneController.value = PhoneNumber(
-        isoCode: parsed.isoCode,
-        nsn: "",
-      );
+      if (parsed != null) {
+        phoneController.value = PhoneNumber(
+          isoCode: parsed.isoCode,
+          nsn: "",
+        );
+      }
+
       _emailController.addListener(_validateForm);
     });
   }

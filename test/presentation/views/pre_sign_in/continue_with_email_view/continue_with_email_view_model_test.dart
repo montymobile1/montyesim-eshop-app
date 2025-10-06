@@ -1,9 +1,9 @@
 // continue_with_email_view_model_test.dart
 
 import "package:easy_localization/easy_localization.dart";
-import "package:esim_open_source/app/environment/app_environment.dart";
-import "package:esim_open_source/data/remote/responses/empty_response.dart";
+import "package:esim_open_source/data/remote/responses/auth/otp_response_model.dart";
 import "package:esim_open_source/domain/repository/api_auth_repository.dart";
+import "package:esim_open_source/domain/repository/services/app_configuration_service.dart";
 import "package:esim_open_source/domain/util/resource.dart";
 import "package:esim_open_source/presentation/enums/bottomsheet_type.dart";
 import "package:esim_open_source/presentation/enums/login_type.dart";
@@ -75,8 +75,11 @@ Future<void> main() async {
     });
 
     test("loginWithEmail navigates to verify view on success", () async {
+      when(locator<AppConfigurationService>().getLoginType)
+          .thenReturn(LoginType.email);
+      viewModel.state?.isTermsChecked = true;
       viewModel.state?.emailController.text = "test@example.com";
-
+      viewModel.state?.emailErrorMessage = "";
       when(
         locator<ApiAuthRepository>().login(
           email: "test@example.com",
@@ -84,7 +87,7 @@ Future<void> main() async {
         ),
       ).thenAnswer(
         (_) async =>
-            Resource<EmptyResponse>.success(EmptyResponse(), message: ""),
+            Resource<OtpResponseModel?>.success(OtpResponseModel(), message: ""),
       );
 
       when(
@@ -93,8 +96,8 @@ Future<void> main() async {
           arguments: argThat(
             isA<ContinueWithEmailViewModelArgs>()
                 .having(
-                  (ContinueWithEmailViewModelArgs args) => args.username,
-                  "username",
+                  (ContinueWithEmailViewModelArgs args) => args.email,
+                  "email",
                   "test@example.com",
                 )
                 .having(
@@ -115,8 +118,8 @@ Future<void> main() async {
           arguments: argThat(
             isA<ContinueWithEmailViewModelArgs>()
                 .having(
-                  (ContinueWithEmailViewModelArgs args) => args.username,
-                  "username",
+                  (ContinueWithEmailViewModelArgs args) => args.email,
+                  "email",
                   "test@example.com",
                 )
                 .having(
@@ -151,8 +154,8 @@ Future<void> main() async {
     });
 
     test("Update terms selection tapped cover lines", () {
-      AppEnvironment.appEnvironmentHelper.setLoginTypeFromApi =
-          LoginType.phoneNumber;
+      when(locator<AppConfigurationService>().getLoginType)
+          .thenReturn(LoginType.phoneNumber);
       viewModel.state?.isTermsChecked = false;
       viewModel.updateTermsSelections();
       expect(viewModel.state?.isTermsChecked, true);

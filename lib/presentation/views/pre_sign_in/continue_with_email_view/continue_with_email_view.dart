@@ -78,8 +78,10 @@ class ContinueWithEmailView extends StatelessWidget {
                       ),
                       verticalSpaceSmall,
                       Text(
-                        AppEnvironment.appEnvironmentHelper.loginType ==
-                                LoginType.phoneNumber
+                        (AppEnvironment.appEnvironmentHelper.loginType ==
+                                    LoginType.phoneNumber ||
+                                AppEnvironment.appEnvironmentHelper.loginType ==
+                                    LoginType.emailAndPhone)
                             ? LocaleKeys.continueWithEmailView_SubTitleTextPhone
                                 .tr()
                             : LocaleKeys.continueWithEmailView_SubTitleText
@@ -89,25 +91,17 @@ class ContinueWithEmailView extends StatelessWidget {
                           fontColor: secondaryTextColor(context: context),
                         ),
                       ),
-                      verticalSpace(90),
-                      AppEnvironment.appEnvironmentHelper.loginType ==
-                              LoginType.phoneNumber
-                          ? MyPhoneInput(
-                              onChanged: (
-                                String code,
-                                String phoneNumber, {
-                                required bool isValid,
-                              }) {
-                                viewModel.validateNumber(
-                                  code: code,
-                                  number: phoneNumber,
-                                  isValid: isValid,
-                                );
-                              },
-                              phoneController: viewModel.phoneController,
-                              validateRequired: true,
-                            )
-                          : MainInputField.formField(
+                      verticalSpace(
+                        AppEnvironment.appEnvironmentHelper.loginType ==
+                                LoginType.emailAndPhone
+                            ? 60
+                            : 90,
+                      ),
+                      (AppEnvironment.appEnvironmentHelper.loginType ==
+                                  LoginType.email ||
+                              AppEnvironment.appEnvironmentHelper.loginType ==
+                                  LoginType.emailAndPhone)
+                          ? MainInputField.formField(
                               themeColor: themeColor,
                               labelTitleText: LocaleKeys
                                   .continueWithEmailView_emailTitleField
@@ -124,7 +118,47 @@ class ContinueWithEmailView extends StatelessWidget {
                                 context: context,
                                 fontColor: secondaryTextColor(context: context),
                               ),
-                            ),
+                            )
+                          : Container(),
+                      AppEnvironment.appEnvironmentHelper.loginType ==
+                              LoginType.emailAndPhone
+                          ? verticalSpaceSmall
+                          : Container(),
+                      (AppEnvironment.appEnvironmentHelper.loginType ==
+                                  LoginType.phoneNumber ||
+                              AppEnvironment.appEnvironmentHelper.loginType ==
+                                  LoginType.emailAndPhone)
+                          ? Column(
+                              children: <Widget>[
+                                PaddingWidget.applySymmetricPadding(
+                                  vertical: 5,
+                                  child: Text(
+                                    LocaleKeys.phoneInput_placeHolder.tr(),
+                                    style: captionOneMediumTextStyle(
+                                      context: context,
+                                      fontColor:
+                                          secondaryTextColor(context: context),
+                                    ),
+                                  ).textSupportsRTL(context),
+                                ),
+                                MyPhoneInput(
+                                  onChanged: (
+                                    String code,
+                                    String phoneNumber, {
+                                    required bool isValid,
+                                  }) {
+                                    viewModel.validateNumber(
+                                      code: code,
+                                      number: phoneNumber,
+                                      isValid: isValid,
+                                    );
+                                  },
+                                  phoneController: viewModel.phoneController,
+                                  validateRequired: true,
+                                ),
+                              ],
+                            )
+                          : Container(),
                       verticalSpaceMediumLarge,
                       GestureDetector(
                         key: const Key("checkBox"),

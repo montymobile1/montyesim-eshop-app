@@ -99,9 +99,12 @@ class AccountInformationView extends StatelessWidget {
                               ),
                               getSpacersWidgets(context),
                               MyPhoneInput(
-                                enabled: AppEnvironment
-                                            .appEnvironmentHelper.loginType ==
-                                        LoginType.phoneNumber
+                                enabled: (AppEnvironment.appEnvironmentHelper
+                                                .loginType ==
+                                            LoginType.phoneNumber ||
+                                        AppEnvironment.appEnvironmentHelper
+                                                .loginType ==
+                                            LoginType.emailAndPhone)
                                     ? false
                                     : true,
                                 onChanged: viewModel.validateNumber,

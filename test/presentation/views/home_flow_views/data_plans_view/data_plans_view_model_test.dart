@@ -1,4 +1,3 @@
-import "dart:async";
 
 import "package:esim_open_source/data/remote/responses/app/banner_response_model.dart";
 import "package:esim_open_source/data/remote/responses/bundles/bundle_response_model.dart";
@@ -6,18 +5,13 @@ import "package:esim_open_source/data/remote/responses/bundles/country_response_
 import "package:esim_open_source/data/remote/responses/bundles/regions_response_model.dart";
 import "package:esim_open_source/data/remote/responses/user/user_notification_response.dart";
 import "package:esim_open_source/domain/repository/api_user_repository.dart";
-import "package:esim_open_source/domain/use_case/app/get_banner_use_case.dart";
-import "package:esim_open_source/domain/use_case/base_use_case.dart";
-import "package:esim_open_source/domain/use_case/user/get_user_notifications_use_case.dart";
 import "package:esim_open_source/domain/util/resource.dart";
-import "package:esim_open_source/presentation/enums/view_state.dart";
 import "package:esim_open_source/presentation/reactive_service/bundles_data_service.dart";
 import "package:esim_open_source/presentation/reactive_service/user_authentication_service.dart";
 import "package:esim_open_source/presentation/views/home_flow_views/data_plans_view/bundles_list/bundles_list_screen.dart";
 import "package:esim_open_source/presentation/views/home_flow_views/data_plans_view/data_plans_view_model.dart";
 import "package:esim_open_source/presentation/views/home_flow_views/notifications_view/notifications_view.dart";
 import "package:esim_open_source/presentation/views/pre_sign_in/login_view/login_view.dart";
-import "package:esim_open_source/utils/value_stream.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:mockito/mockito.dart";
 import "package:stacked_services/stacked_services.dart";
@@ -64,9 +58,9 @@ void main() async {
     });
 
     test("onViewModelReady initializes correctly", () async {
-      final DataPlansViewModel vm = DataPlansViewModel();
+      final DataPlansViewModel vm = DataPlansViewModel()
       
-      vm.onViewModelReady();
+      ..onViewModelReady();
       await Future<void>.delayed(const Duration(milliseconds: 100));
       
       // Verify initialization completes without error
@@ -77,8 +71,8 @@ void main() async {
     });
 
     test("search functionality works correctly", () async {
-      final DataPlansViewModel vm = DataPlansViewModel();
-      vm.onViewModelReady();
+      final DataPlansViewModel vm = DataPlansViewModel()
+      ..onViewModelReady();
       await Future<void>.delayed(const Duration(milliseconds: 100));
       
       // Test search with country name
@@ -88,13 +82,13 @@ void main() async {
       // Search should filter countries
       expect(vm.filteredCountries.length, lessThanOrEqualTo(3));
       if (vm.filteredCountries.isNotEmpty) {
-        expect(vm.filteredCountries.any((c) => c.country?.contains("Afghanistan") ?? false), isTrue);
+        expect(vm.filteredCountries.any((CountryResponseModel c) => c.country?.contains("Afghanistan") ?? false), isTrue);
       }
     });
 
     test("search functionality is case insensitive", () async {
-      final DataPlansViewModel vm = DataPlansViewModel();
-      vm.onViewModelReady();
+      final DataPlansViewModel vm = DataPlansViewModel()
+      ..onViewModelReady();
       await Future<void>.delayed(const Duration(milliseconds: 100));
       
       // Test search with lowercase
@@ -106,8 +100,8 @@ void main() async {
     });
 
     test("search with empty query returns all items", () async {
-      final DataPlansViewModel vm = DataPlansViewModel();
-      vm.onViewModelReady();
+      final DataPlansViewModel vm = DataPlansViewModel()
+      ..onViewModelReady();
       await Future<void>.delayed(const Duration(milliseconds: 100));
       
       // First filter something
@@ -172,7 +166,7 @@ void main() async {
       verify(locator<NavigationService>().navigateTo(
         BundlesListScreen.routeName,
         arguments: anyNamed("arguments"),
-      )).called(1);
+      ),).called(1);
     });
 
     test("navigateToCountryBundleByID works correctly", () async {
@@ -183,7 +177,7 @@ void main() async {
       verify(locator<NavigationService>().navigateTo(
         BundlesListScreen.routeName,
         arguments: anyNamed("arguments"),
-      )).called(1);
+      ),).called(1);
     });
 
     test("navigateToRegionBundles works correctly", () async {
@@ -198,7 +192,7 @@ void main() async {
       verify(locator<NavigationService>().navigateTo(
         BundlesListScreen.routeName,
         arguments: anyNamed("arguments"),
-      )).called(1);
+      ),).called(1);
     });
 
     test("navigateToRegionBundleByID works correctly", () async {
@@ -209,7 +203,7 @@ void main() async {
       verify(locator<NavigationService>().navigateTo(
         BundlesListScreen.routeName,
         arguments: anyNamed("arguments"),
-      )).called(1);
+      ),).called(1);
     });
 
     test("navigateToEsimDetail shows bottom sheet when user is logged in", () async {
@@ -218,7 +212,7 @@ void main() async {
         bundleCode: "test123",
         bundleName: "Test Bundle",
         price: 10.99,
-        priceDisplay: "\$10.99",
+        priceDisplay: r"$10.99",
       );
       
       // Mock user as logged in
@@ -231,7 +225,7 @@ void main() async {
         enableDrag: false,
         isScrollControlled: true,
         variant: anyNamed("variant"),
-      )).called(1);
+      ),).called(1);
     });
 
     test("navigateToEsimDetail navigates to login when user not logged in", () async {
@@ -240,7 +234,7 @@ void main() async {
         bundleCode: "test123",
         bundleName: "Test Bundle",
         price: 10.99,
-        priceDisplay: "\$10.99",
+        priceDisplay: r"$10.99",
       );
       
       // Mock user as not logged in
@@ -259,7 +253,7 @@ void main() async {
       when(locator<ApiUserRepository>().getUserNotifications(
         pageSize: 1,
         pageIndex: 10,
-      )).thenAnswer(
+      ),).thenAnswer(
         (_) async => Resource<List<UserNotificationModel>>.success(
           <UserNotificationModel>[],
           message: "Success",
@@ -275,7 +269,7 @@ void main() async {
       final DataPlansViewModel vm = DataPlansViewModel();
       
       // Mock notifications with unread items
-      final List<UserNotificationModel> notifications = [
+      final List<UserNotificationModel> notifications = <UserNotificationModel>[
         UserNotificationModel(status: false), // unread
         UserNotificationModel(status: true),  // read
       ];
@@ -283,7 +277,7 @@ void main() async {
       when(locator<ApiUserRepository>().getUserNotifications(
         pageSize: 1,
         pageIndex: 10,
-      )).thenAnswer(
+      ),).thenAnswer(
         (_) async => Resource<List<UserNotificationModel>>.success(
           notifications,
           message: "Success",
@@ -303,7 +297,7 @@ void main() async {
       when(locator<ApiUserRepository>().getUserNotifications(
         pageSize: 1,
         pageIndex: 10,
-      )).thenAnswer(
+      ),).thenAnswer(
         (_) async => Resource<List<UserNotificationModel>>.error(
           "Error",
         ),
@@ -327,7 +321,7 @@ void main() async {
 
     test("processBanners with success response", () {
       final DataPlansViewModel vm = DataPlansViewModel();
-      final List<BannerResponseModel> banners = [
+      final List<BannerResponseModel> banners = <BannerResponseModel>[
         BannerResponseModel(title: "Test Banner", description: "Test Description"),
       ];
       
@@ -352,9 +346,9 @@ void main() async {
     });
 
     test("processBanners with null resource", () {
-      final DataPlansViewModel vm = DataPlansViewModel();
+      final DataPlansViewModel vm = DataPlansViewModel()
       
-      vm.processBanners(null);
+      ..processBanners(null);
       
       expect(vm.showBanner, isFalse);
     });
@@ -375,8 +369,8 @@ void main() async {
     });
 
     test("search debouncing works correctly", () async {
-      final DataPlansViewModel vm = DataPlansViewModel();
-      vm.onViewModelReady();
+      final DataPlansViewModel vm = DataPlansViewModel()
+      ..onViewModelReady();
       await Future<void>.delayed(const Duration(milliseconds: 100));
       
       // Rapid fire search changes
@@ -395,7 +389,7 @@ void main() async {
 }
 
 List<CountryResponseModel> getMockCountries() {
-  return [
+  return <CountryResponseModel>[
     CountryResponseModel(
       id: "AFG",
       country: "Afghanistan",
@@ -418,7 +412,7 @@ List<CountryResponseModel> getMockCountries() {
 }
 
 List<RegionsResponseModel> getMockRegions() {
-  return [
+  return <RegionsResponseModel>[
     RegionsResponseModel(
       regionCode: "EU",
       regionName: "Europe",
@@ -431,18 +425,18 @@ List<RegionsResponseModel> getMockRegions() {
 }
 
 List<BundleResponseModel> getMockGlobalBundles() {
-  return [
+  return <BundleResponseModel>[
     BundleResponseModel(
       bundleCode: "global1",
       bundleName: "Global Plan 1GB",
       price: 5.99,
-      priceDisplay: "\$5.99",
+      priceDisplay: r"$5.99",
     ),
     BundleResponseModel(
       bundleCode: "global2",
       bundleName: "Global Plan 5GB",
       price: 19.99,
-      priceDisplay: "\$19.99",
+      priceDisplay: r"$19.99",
     ),
   ];
 }

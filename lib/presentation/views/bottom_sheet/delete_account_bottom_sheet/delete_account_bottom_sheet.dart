@@ -24,6 +24,7 @@ class DeleteAccountBottomSheet extends StatelessWidget {
     required this.requestBase,
     super.key,
   });
+
   final SheetRequest<dynamic> requestBase;
   final Function(SheetResponse<EmptyBottomSheetResponse>) completer;
 
@@ -94,8 +95,11 @@ class DeleteAccountBottomSheet extends StatelessWidget {
                         ),
                         verticalSpaceMediumLarge,
                         Text(
-                          AppEnvironment.appEnvironmentHelper.loginType ==
-                                  LoginType.phoneNumber
+                          (AppEnvironment.appEnvironmentHelper.loginType ==
+                                      LoginType.phoneNumber ||
+                                  AppEnvironment
+                                          .appEnvironmentHelper.loginType ==
+                                      LoginType.emailAndPhone)
                               ? LocaleKeys.deleteAccount_ConfirmTextPhone.tr()
                               : LocaleKeys.deleteAccount_ConfirmText.tr(),
                           textAlign: TextAlign.center,
@@ -105,8 +109,10 @@ class DeleteAccountBottomSheet extends StatelessWidget {
                           ),
                         ),
                         verticalSpaceMediumLarge,
-                        AppEnvironment.appEnvironmentHelper.loginType ==
-                                LoginType.phoneNumber
+                        (AppEnvironment.appEnvironmentHelper.loginType ==
+                                    LoginType.phoneNumber ||
+                                AppEnvironment.appEnvironmentHelper.loginType ==
+                                    LoginType.emailAndPhone)
                             ? MyPhoneInput(
                                 onChanged: (
                                   String code,

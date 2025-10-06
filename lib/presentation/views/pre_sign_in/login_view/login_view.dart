@@ -150,8 +150,11 @@ class LoginView extends StatelessWidget {
                     },
                     themeColor: themeColor,
                     image: EnvironmentImages.loginMail.fullImagePath,
-                    title: AppEnvironment.appEnvironmentHelper.loginType ==
-                            LoginType.phoneNumber
+                    title: (AppEnvironment.appEnvironmentHelper.loginType ==
+                            LoginType.phoneNumber ||
+                            AppEnvironment.appEnvironmentHelper.loginType ==
+                                LoginType.emailAndPhone
+                    )
                         ? LocaleKeys.loginView_continueWithPhone.tr()
                         : LocaleKeys.loginView_continueWithEmail.tr(),
                     titleTextStyle: bodyBoldTextStyle(context: context),

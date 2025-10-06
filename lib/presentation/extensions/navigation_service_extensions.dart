@@ -1,3 +1,10 @@
+import "package:esim_open_source/app/environment/app_environment.dart";
+import "package:esim_open_source/presentation/enums/login_type.dart";
+import "package:esim_open_source/presentation/helpers/route_wrapper.dart";
+import "package:esim_open_source/presentation/shared/in_app_redirection_heper.dart";
+import "package:esim_open_source/presentation/views/pre_sign_in/continue_with_email_view/continue_with_email_view.dart";
+import "package:esim_open_source/presentation/views/pre_sign_in/login_view/login_view.dart";
+import "package:stacked/stacked.dart";
 import "package:stacked_services/stacked_services.dart";
 
 class NavigationServiceRoute {
@@ -61,5 +68,29 @@ extension NavigationServiceExtensions on NavigationService {
 
       _navigateNextWithArgs(index + 1, routes);
     }
+  }
+}
+
+extension NavigationExtension on NavigationService {
+  Future<dynamic>? navigateToLoginScreen({
+    InAppRedirection? redirection,
+  }) {
+    if (AppEnvironment.appEnvironmentHelper.loginType ==
+            LoginType.phoneNumber ||
+        AppEnvironment.appEnvironmentHelper.loginType ==
+            LoginType.emailAndPhone) {
+      return navigateTo(
+        ContinueWithEmailView.routeName,
+        arguments: RouteWrapper<InAppRedirection?>(
+          instance: redirection,
+          transitionsBuilder: TransitionsBuilders.slideBottom,
+        ),
+      );
+    }
+
+    return navigateTo(
+      LoginView.routeName,
+      arguments: redirection,
+    );
   }
 }

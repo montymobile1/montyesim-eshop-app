@@ -21,12 +21,14 @@ import "package:flutter/services.dart";
 
 class VerifyLoginView extends StatelessWidget {
   const VerifyLoginView({
-    required this.username,
+    required this.email,
+    required this.phoneNumber,
     this.redirection,
     super.key,
   });
 
-  final String username;
+  final String? email;
+  final String? phoneNumber;
   static const String routeName = "VerifyLoginView";
   final InAppRedirection? redirection;
 
@@ -49,7 +51,8 @@ class VerifyLoginView extends StatelessWidget {
       routeName: routeName,
       hideAppBar: true,
       viewModel: locator<VerifyLoginViewModel>()
-        ..username = username
+        ..email = email
+        ..phoneNumber = phoneNumber
         ..redirection = redirection,
       builder: (
         BuildContext context,
@@ -75,8 +78,10 @@ class VerifyLoginView extends StatelessWidget {
               ),
               verticalSpaceMediumLarge,
               Text(
-                AppEnvironment.appEnvironmentHelper.loginType ==
-                        LoginType.phoneNumber
+                (AppEnvironment.appEnvironmentHelper.loginType ==
+                            LoginType.phoneNumber ||
+                        AppEnvironment.appEnvironmentHelper.loginType ==
+                            LoginType.emailAndPhone)
                     ? LocaleKeys.verifyLogin_titleTextPhone.tr()
                     : LocaleKeys.verifyLogin_titleText.tr(),
                 style: headerTwoMediumTextStyle(
@@ -136,8 +141,10 @@ class VerifyLoginView extends StatelessWidget {
               ),
               verticalSpaceLarge,
               MainButton(
-                title: AppEnvironment.appEnvironmentHelper.loginType ==
-                        LoginType.phoneNumber
+                title: (AppEnvironment.appEnvironmentHelper.loginType ==
+                            LoginType.phoneNumber ||
+                        AppEnvironment.appEnvironmentHelper.loginType ==
+                            LoginType.emailAndPhone)
                     ? LocaleKeys.verifyLogin_buttonTitleTextPhone.tr()
                     : LocaleKeys.verifyLogin_buttonTitleText.tr(),
                 onPressed: () async {
@@ -203,9 +210,10 @@ class VerifyLoginView extends StatelessWidget {
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
-      ..add(StringProperty("emailAddress", username))
       ..add(
         DiagnosticsProperty<InAppRedirection?>("redirection", redirection),
-      );
+      )
+      ..add(StringProperty("email", email))
+      ..add(StringProperty("phoneNumber", phoneNumber));
   }
 }
