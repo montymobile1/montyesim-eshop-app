@@ -20,11 +20,30 @@ import "package:flutter/gestures.dart";
 import "package:flutter/material.dart";
 import "package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart";
 
+class ContinueWithEmailViewArgs {
+  ContinueWithEmailViewArgs({
+    this.redirection,
+    this.localLoginType,
+  });
+
+  final InAppRedirection? redirection;
+  final LoginType? localLoginType;
+}
+
 class ContinueWithEmailView extends StatelessWidget {
-  const ContinueWithEmailView({super.key, this.redirection});
+  const ContinueWithEmailView({
+    super.key,
+    this.redirection,
+    LoginType? localLoginType,
+  }) : _localLoginType = localLoginType;
 
   static const String routeName = "ContinueWithEmailView";
   final InAppRedirection? redirection;
+
+  final LoginType? _localLoginType;
+
+  LoginType get localLoginType =>
+      _localLoginType ?? AppEnvironment.appEnvironmentHelper.loginType;
 
   @override
   Widget build(BuildContext context) {
@@ -78,29 +97,16 @@ class ContinueWithEmailView extends StatelessWidget {
                       ),
                       verticalSpaceSmall,
                       Text(
-                        (AppEnvironment.appEnvironmentHelper.loginType ==
-                                    LoginType.phoneNumber ||
-                                AppEnvironment.appEnvironmentHelper.loginType ==
-                                    LoginType.emailAndPhone)
-                            ? LocaleKeys.continueWithEmailView_SubTitleTextPhone
-                                .tr()
-                            : LocaleKeys.continueWithEmailView_SubTitleText
-                                .tr(),
+                        getContinueWithEmailSubtitleText(),
                         style: bodyNormalTextStyle(
                           context: context,
                           fontColor: secondaryTextColor(context: context),
                         ),
                       ),
                       verticalSpace(
-                        AppEnvironment.appEnvironmentHelper.loginType ==
-                                LoginType.emailAndPhone
-                            ? 60
-                            : 90,
+                        localLoginType == LoginType.emailAndPhone ? 60 : 90,
                       ),
-                      (AppEnvironment.appEnvironmentHelper.loginType ==
-                                  LoginType.email ||
-                              AppEnvironment.appEnvironmentHelper.loginType ==
-                                  LoginType.emailAndPhone)
+                      viewModel.showEmailField
                           ? MainInputField.formField(
                               themeColor: themeColor,
                               labelTitleText: LocaleKeys
@@ -120,14 +126,10 @@ class ContinueWithEmailView extends StatelessWidget {
                               ),
                             )
                           : Container(),
-                      AppEnvironment.appEnvironmentHelper.loginType ==
-                              LoginType.emailAndPhone
+                      localLoginType == LoginType.emailAndPhone
                           ? verticalSpaceSmall
                           : Container(),
-                      (AppEnvironment.appEnvironmentHelper.loginType ==
-                                  LoginType.phoneNumber ||
-                              AppEnvironment.appEnvironmentHelper.loginType ==
-                                  LoginType.emailAndPhone)
+                      viewModel.showPhoneField
                           ? Column(
                               children: <Widget>[
                                 PaddingWidget.applySymmetricPadding(
@@ -257,11 +259,23 @@ class ContinueWithEmailView extends StatelessWidget {
     );
   }
 
+  String getContinueWithEmailSubtitleText() {
+    switch (localLoginType) {
+      case LoginType.email:
+        return LocaleKeys.continueWithEmailView_SubTitleText.tr();
+      case LoginType.phoneNumber:
+      case LoginType.emailAndPhone:
+        return LocaleKeys.continueWithEmailView_SubTitleTextPhone.tr();
+    }
+  }
+
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(
-      DiagnosticsProperty<InAppRedirection?>("redirection", redirection),
-    );
+    properties
+      ..add(
+        DiagnosticsProperty<InAppRedirection?>("redirection", redirection),
+      )
+      ..add(EnumProperty<LoginType>("localLoginType", localLoginType));
   }
 }

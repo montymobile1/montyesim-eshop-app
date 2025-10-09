@@ -18,24 +18,15 @@ import "package:flutter/material.dart";
 import "package:phone_input/phone_input_package.dart";
 import "package:stacked_services/stacked_services.dart";
 
-class ContinueWithEmailViewModelArgs {
-  ContinueWithEmailViewModelArgs({
-    required this.email,
-    required this.phoneNumber,
-    required this.otpExpiration,
-    this.redirection,
-  });
-
-  final String? email;
-  final String? phoneNumber;
-  final int? otpExpiration;
-  final InAppRedirection? redirection;
-}
-
 class ContinueWithEmailViewModel extends BaseModel {
-  ContinueWithEmailViewModel({this.redirection});
+  ContinueWithEmailViewModel({
+    this.redirection,
+    LoginType? localLoginType,
+  }) : _localLoginType =
+            localLoginType ?? AppEnvironment.appEnvironmentHelper.loginType;
 
   InAppRedirection? redirection;
+  final LoginType _localLoginType;
 
   //#region UseCases
   final LoginUseCase loginUseCase = LoginUseCase(locator<ApiAuthRepository>());
@@ -50,14 +41,37 @@ class ContinueWithEmailViewModel extends BaseModel {
   PhoneController phoneController =
       PhoneController(const PhoneNumber(isoCode: IsoCode.LB, nsn: ""));
 
+  bool get showEmailField {
+    switch (_localLoginType) {
+      case LoginType.email:
+      case LoginType.emailAndPhone:
+        return true;
+      case LoginType.phoneNumber:
+        return false;
+    }
+  }
+
+  bool get showPhoneField {
+    switch (_localLoginType) {
+      case LoginType.email:
+        return false;
+      case LoginType.emailAndPhone:
+      case LoginType.phoneNumber:
+        return true;
+    }
+  }
+
   //#region Functions
   @override
   void onViewModelReady() {
     super.onViewModelReady();
-    if (AppEnvironment.appEnvironmentHelper.loginType == LoginType.email ||
-        AppEnvironment.appEnvironmentHelper.loginType ==
-            LoginType.emailAndPhone) {
-      _state.emailController.addListener(_validateForm);
+
+    switch (_localLoginType) {
+      case LoginType.phoneNumber:
+        break;
+      case LoginType.email:
+      case LoginType.emailAndPhone:
+        _state.emailController.addListener(_validateForm);
     }
   }
 
@@ -65,15 +79,17 @@ class ContinueWithEmailViewModel extends BaseModel {
     final String emailAddress = _state.emailController.text;
     _state.emailErrorMessage = validateEmailAddress(emailAddress);
 
-    if (AppEnvironment.appEnvironmentHelper.loginType ==
-        LoginType.emailAndPhone) {
-      _state.isLoginEnabled = _state.emailErrorMessage == "" &&
-          _state.isTermsChecked &&
-          _state.isValidPhoneNumber;
-    } else if (AppEnvironment.appEnvironmentHelper.loginType ==
-        LoginType.email) {
-      _state.isLoginEnabled =
-          _state.emailErrorMessage == "" && _state.isTermsChecked;
+    switch (_localLoginType) {
+      case LoginType.email:
+        _state.isLoginEnabled =
+            _state.emailErrorMessage == "" && _state.isTermsChecked;
+      case LoginType.phoneNumber:
+        _state.isLoginEnabled =
+            _state.isValidPhoneNumber && _state.isTermsChecked;
+      case LoginType.emailAndPhone:
+        _state.isLoginEnabled = _state.emailErrorMessage == "" &&
+            _state.isTermsChecked &&
+            _state.isValidPhoneNumber;
     }
 
     notifyListeners();
@@ -86,13 +102,14 @@ class ContinueWithEmailViewModel extends BaseModel {
   }) {
     _state.isValidPhoneNumber = isValid;
 
-    if (AppEnvironment.appEnvironmentHelper.loginType ==
-        LoginType.emailAndPhone) {
-      _state.isLoginEnabled =
-          _state.emailErrorMessage == "" && isValid && _state.isTermsChecked;
-    } else if (AppEnvironment.appEnvironmentHelper.loginType ==
-        LoginType.phoneNumber) {
-      _state.isLoginEnabled = isValid && _state.isTermsChecked;
+    switch (_localLoginType) {
+      case LoginType.email:
+        break;
+      case LoginType.phoneNumber:
+        _state.isLoginEnabled = isValid && _state.isTermsChecked;
+      case LoginType.emailAndPhone:
+        _state.isLoginEnabled =
+            _state.emailErrorMessage == "" && isValid && _state.isTermsChecked;
     }
 
     notifyListeners();
@@ -157,8 +174,7 @@ class ContinueWithEmailViewModel extends BaseModel {
     await handleResponse(
       loginResponse,
       onSuccess: (Resource<OtpResponseModel?> response) async {
-        final ContinueWithEmailViewModelArgs args =
-            ContinueWithEmailViewModelArgs(
+        final VerifyLoginViewArgs args = VerifyLoginViewArgs(
           redirection: redirection,
           phoneNumber: _state.isValidPhoneNumber
               ? "+${phoneController.value?.countryCode}${phoneController.value?.nsn}"
@@ -177,8 +193,7 @@ class ContinueWithEmailViewModel extends BaseModel {
       },
       onFailure: (Resource<OtpResponseModel?> response) async {
         if (response.error?.errorCode == 429) {
-          final ContinueWithEmailViewModelArgs args =
-              ContinueWithEmailViewModelArgs(
+          final VerifyLoginViewArgs args = VerifyLoginViewArgs(
             redirection: redirection,
             phoneNumber: _state.isValidPhoneNumber
                 ? "+${phoneController.value?.countryCode}${phoneController.value?.nsn}"

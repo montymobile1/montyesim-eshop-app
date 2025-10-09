@@ -123,6 +123,17 @@ class BundleDetailBottomSheetViewModel extends BaseModel {
     return LocaleKeys.promoCodeView_cancelButtonText.tr();
   }
 
+  bool get showPhoneInput {
+    switch (AppEnvironment.appEnvironmentHelper.loginType) {
+      case LoginType.email:
+        return false;
+      case LoginType.phoneNumber:
+        return true;
+      case LoginType.emailAndPhone:
+        return true;
+    }
+  }
+
   //#endregion
 
   //#region Functions
@@ -169,17 +180,14 @@ class BundleDetailBottomSheetViewModel extends BaseModel {
   }
 
   void _validateForm() {
-    if (AppEnvironment.appEnvironmentHelper.loginType == LoginType.email) {
-      final String emailAddress = _emailController.text.trim();
-      _emailErrorMessage = _validateEmailAddress(emailAddress);
-      _isLoginEnabled = _emailErrorMessage == "" && isTermsChecked;
-    }
-
-    if (AppEnvironment.appEnvironmentHelper.loginType ==
-            LoginType.phoneNumber ||
-        AppEnvironment.appEnvironmentHelper.loginType ==
-            LoginType.emailAndPhone) {
-      _isLoginEnabled = _isValidPhoneNumber && isTermsChecked;
+    switch (AppEnvironment.appEnvironmentHelper.loginType) {
+      case LoginType.email:
+        final String emailAddress = _emailController.text.trim();
+        _emailErrorMessage = _validateEmailAddress(emailAddress);
+        _isLoginEnabled = _emailErrorMessage == "" && isTermsChecked;
+      case LoginType.phoneNumber:
+      case LoginType.emailAndPhone:
+        _isLoginEnabled = _isValidPhoneNumber && isTermsChecked;
     }
 
     notifyListeners();
@@ -266,10 +274,10 @@ class BundleDetailBottomSheetViewModel extends BaseModel {
     if (paymentTypeList.contains(PaymentType.wallet)) {
       try {
         Resource<AuthResponseModel?> response =
-        await GetUserInfoUseCase(locator<ApiAuthRepository>())
-            .execute(NoParams());
+            await GetUserInfoUseCase(locator<ApiAuthRepository>())
+                .execute(NoParams());
 
-       await handleResponse(
+        await handleResponse(
           response,
           onSuccess: (Resource<AuthResponseModel?> result) async {},
           onFailure: (Resource<AuthResponseModel?> result) async {
@@ -278,7 +286,7 @@ class BundleDetailBottomSheetViewModel extends BaseModel {
                 .toList();
           },
         );
-      } on Object catch(_){
+      } on Object catch (_) {
         paymentTypeList = paymentTypeList
             .where((PaymentType element) => element != PaymentType.wallet)
             .toList();

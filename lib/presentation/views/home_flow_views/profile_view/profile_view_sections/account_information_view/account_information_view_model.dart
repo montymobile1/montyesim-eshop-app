@@ -46,6 +46,27 @@ class AccountInformationViewModel extends BaseModel {
   PhoneController phoneController =
       PhoneController(const PhoneNumber(isoCode: IsoCode.LB, nsn: ""));
 
+  bool get isPhoneInputEnabled {
+    switch (AppEnvironment.appEnvironmentHelper.loginType) {
+      case LoginType.email:
+        return true;
+      case LoginType.phoneNumber:
+      case LoginType.emailAndPhone:
+        return false;
+    }
+  }
+
+  bool get isEmailFieldEditable {
+    switch (AppEnvironment.appEnvironmentHelper.loginType) {
+      case LoginType.email:
+        return false;
+      case LoginType.phoneNumber:
+        return true;
+      case LoginType.emailAndPhone:
+        return false;
+    }
+  }
+
   @override
   Future<void> onViewModelReady() async {
     super.onViewModelReady();

@@ -9,6 +9,7 @@ import "package:esim_open_source/presentation/enums/bottomsheet_type.dart";
 import "package:esim_open_source/presentation/enums/login_type.dart";
 import "package:esim_open_source/presentation/setup_bottom_sheet_ui.dart";
 import "package:esim_open_source/presentation/views/pre_sign_in/continue_with_email_view/continue_with_email_view_model.dart";
+import "package:esim_open_source/presentation/views/pre_sign_in/verify_login_view/verify_login_view.dart";
 import "package:esim_open_source/translations/locale_keys.g.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:mockito/mockito.dart";
@@ -86,22 +87,22 @@ Future<void> main() async {
           phoneNumber: null,
         ),
       ).thenAnswer(
-        (_) async =>
-            Resource<OtpResponseModel?>.success(OtpResponseModel(), message: ""),
+        (_) async => Resource<OtpResponseModel?>.success(OtpResponseModel(),
+            message: ""),
       );
 
       when(
         locator<NavigationService>().navigateTo(
           "VerifyLoginView",
           arguments: argThat(
-            isA<ContinueWithEmailViewModelArgs>()
+            isA<VerifyLoginViewArgs>()
                 .having(
-                  (ContinueWithEmailViewModelArgs args) => args.email,
+                  (VerifyLoginViewArgs args) => args.email,
                   "email",
                   "test@example.com",
                 )
                 .having(
-                  (ContinueWithEmailViewModelArgs args) => args.redirection,
+                  (VerifyLoginViewArgs args) => args.redirection,
                   "redirection",
                   null,
                 ),
@@ -116,14 +117,14 @@ Future<void> main() async {
         locator<NavigationService>().navigateTo(
           "VerifyLoginView",
           arguments: argThat(
-            isA<ContinueWithEmailViewModelArgs>()
+            isA<VerifyLoginViewArgs>()
                 .having(
-                  (ContinueWithEmailViewModelArgs args) => args.email,
+                  (VerifyLoginViewArgs args) => args.email,
                   "email",
                   "test@example.com",
                 )
                 .having(
-                  (ContinueWithEmailViewModelArgs args) => args.redirection,
+                  (VerifyLoginViewArgs args) => args.redirection,
                   "redirection",
                   null,
                 ),

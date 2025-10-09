@@ -74,15 +74,28 @@ extension NavigationServiceExtensions on NavigationService {
 extension NavigationExtension on NavigationService {
   Future<dynamic>? navigateToLoginScreen({
     InAppRedirection? redirection,
+    LoginType? localLoginType,
   }) {
-    if (AppEnvironment.appEnvironmentHelper.loginType ==
-            LoginType.phoneNumber ||
-        AppEnvironment.appEnvironmentHelper.loginType ==
-            LoginType.emailAndPhone) {
+    bool shouldShowSocialLoginScreen = true;
+
+    switch (AppEnvironment.appEnvironmentHelper.loginType) {
+      case LoginType.email:
+        shouldShowSocialLoginScreen = true;
+      case LoginType.phoneNumber:
+      case LoginType.emailAndPhone:
+        shouldShowSocialLoginScreen = false;
+    }
+
+    if (!shouldShowSocialLoginScreen) {
+      final ContinueWithEmailViewArgs args = ContinueWithEmailViewArgs(
+        redirection: redirection,
+        localLoginType: localLoginType,
+      );
+
       return navigateTo(
         ContinueWithEmailView.routeName,
-        arguments: RouteWrapper<InAppRedirection?>(
-          instance: redirection,
+        arguments: RouteWrapper<ContinueWithEmailViewArgs?>(
+          instance: args,
           transitionsBuilder: TransitionsBuilders.slideBottom,
         ),
       );

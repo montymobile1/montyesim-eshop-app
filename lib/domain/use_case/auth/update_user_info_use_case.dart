@@ -46,19 +46,29 @@ class UpdateUserInfoUseCase
   FutureOr<Resource<AuthResponseModel>> execute(
     UpdateUserInfoParams params,
   ) async {
+    String? email;
+
+    switch (AppEnvironment.appEnvironmentHelper.loginType) {
+      case LoginType.email:
+      case LoginType.emailAndPhone:
+        email = null;
+      case LoginType.phoneNumber:
+        email = params.email;
+    }
+
+    String? msisdn;
+
+    switch (AppEnvironment.appEnvironmentHelper.loginType) {
+      case LoginType.email:
+        msisdn = params.msisdn;
+      case LoginType.emailAndPhone:
+      case LoginType.phoneNumber:
+        msisdn = null;
+    }
+
     Resource<AuthResponseModel> response = await repository.updateUserInfo(
-      email:
-          (AppEnvironment.appEnvironmentHelper.loginType == LoginType.email ||
-                  AppEnvironment.appEnvironmentHelper.loginType ==
-                      LoginType.emailAndPhone)
-              ? null
-              : params.email,
-      msisdn: (AppEnvironment.appEnvironmentHelper.loginType ==
-                  LoginType.phoneNumber ||
-              AppEnvironment.appEnvironmentHelper.loginType ==
-                  LoginType.emailAndPhone)
-          ? null
-          : params.msisdn,
+      email: email,
+      msisdn: msisdn,
       firstName: params.firstName,
       lastName: params.lastName,
       isNewsletterSubscribed: params.isNewsletterSubscribed,

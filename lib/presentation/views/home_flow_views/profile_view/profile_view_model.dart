@@ -37,12 +37,12 @@ class ProfileViewModel extends BaseModel {
   }
 
   String getUserName() {
-    if (AppEnvironment.appEnvironmentHelper.loginType ==
-            LoginType.phoneNumber ||
-        AppEnvironment.appEnvironmentHelper.loginType ==
-            LoginType.emailAndPhone) {
-      return userMsisdn;
+    switch (AppEnvironment.appEnvironmentHelper.loginType) {
+      case LoginType.email:
+        return userEmailAddress;
+      case LoginType.phoneNumber:
+      case LoginType.emailAndPhone:
+        return userMsisdn;
     }
-    return userEmailAddress;
   }
 }

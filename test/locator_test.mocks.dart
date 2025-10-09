@@ -10047,6 +10047,18 @@ class MockContinueWithEmailViewModel extends _i1.Mock
       ) as _i29.PhoneController);
 
   @override
+  bool get showEmailField => (super.noSuchMethod(
+        Invocation.getter(#showEmailField),
+        returnValue: false,
+      ) as bool);
+
+  @override
+  bool get showPhoneField => (super.noSuchMethod(
+        Invocation.getter(#showPhoneField),
+        returnValue: false,
+      ) as bool);
+
+  @override
   set redirection(_i43.InAppRedirection? value) => super.noSuchMethod(
         Invocation.setter(
           #redirection,

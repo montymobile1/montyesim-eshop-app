@@ -19,18 +19,39 @@ import "package:flutter/gestures.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 
+class VerifyLoginViewArgs {
+  VerifyLoginViewArgs({
+    required this.email,
+    required this.phoneNumber,
+    required this.otpExpiration,
+    this.redirection,
+    this.localLoginType,
+  });
+
+  final String? email;
+  final String? phoneNumber;
+  final int? otpExpiration;
+  final InAppRedirection? redirection;
+  final LoginType? localLoginType;
+}
+
 class VerifyLoginView extends StatelessWidget {
   const VerifyLoginView({
     required this.email,
     required this.phoneNumber,
     this.redirection,
+    LoginType? localLoginType,
     super.key,
-  });
+  }) : _localLoginType = localLoginType;
 
   final String? email;
   final String? phoneNumber;
   static const String routeName = "VerifyLoginView";
   final InAppRedirection? redirection;
+  final LoginType? _localLoginType;
+
+  LoginType get localLoginType =>
+      _localLoginType ?? AppEnvironment.appEnvironmentHelper.loginType;
 
   double calculateFieldWidth({
     required BuildContext context,
@@ -78,12 +99,7 @@ class VerifyLoginView extends StatelessWidget {
               ),
               verticalSpaceMediumLarge,
               Text(
-                (AppEnvironment.appEnvironmentHelper.loginType ==
-                            LoginType.phoneNumber ||
-                        AppEnvironment.appEnvironmentHelper.loginType ==
-                            LoginType.emailAndPhone)
-                    ? LocaleKeys.verifyLogin_titleTextPhone.tr()
-                    : LocaleKeys.verifyLogin_titleText.tr(),
+                getVerifyLoginTitleText(),
                 style: headerTwoMediumTextStyle(
                   context: context,
                   fontColor: mainDarkTextColor(context: context),
@@ -141,12 +157,7 @@ class VerifyLoginView extends StatelessWidget {
               ),
               verticalSpaceLarge,
               MainButton(
-                title: (AppEnvironment.appEnvironmentHelper.loginType ==
-                            LoginType.phoneNumber ||
-                        AppEnvironment.appEnvironmentHelper.loginType ==
-                            LoginType.emailAndPhone)
-                    ? LocaleKeys.verifyLogin_buttonTitleTextPhone.tr()
-                    : LocaleKeys.verifyLogin_buttonTitleText.tr(),
+                title: getVerifyLoginMainButtonText(),
                 onPressed: () async {
                   viewModel.verifyButtonTapped();
                 },
@@ -181,10 +192,7 @@ class VerifyLoginView extends StatelessWidget {
     return Text.rich(
       textAlign: TextAlign.center,
       TextSpan(
-        text: AppEnvironment.appEnvironmentHelper.loginType ==
-                LoginType.phoneNumber
-            ? LocaleKeys.verifyLogin_checkPhone.tr()
-            : LocaleKeys.verifyLogin_checkEmail.tr(),
+        text: getResendCodeText(),
         style: captionOneNormalTextStyle(
           context: context,
           fontColor: secondaryTextColor(context: context),
@@ -206,6 +214,36 @@ class VerifyLoginView extends StatelessWidget {
     );
   }
 
+  String getResendCodeText() {
+    switch (localLoginType) {
+      case LoginType.email:
+        return LocaleKeys.verifyLogin_checkEmail.tr();
+      case LoginType.phoneNumber:
+      case LoginType.emailAndPhone:
+        return LocaleKeys.verifyLogin_checkPhone.tr();
+    }
+  }
+
+  String getVerifyLoginTitleText() {
+    switch (localLoginType) {
+      case LoginType.email:
+        return LocaleKeys.verifyLogin_titleText.tr();
+      case LoginType.phoneNumber:
+      case LoginType.emailAndPhone:
+        return LocaleKeys.verifyLogin_titleTextPhone.tr();
+    }
+  }
+
+  String getVerifyLoginMainButtonText() {
+    switch (localLoginType) {
+      case LoginType.email:
+        return LocaleKeys.verifyLogin_buttonTitleText.tr();
+      case LoginType.phoneNumber:
+      case LoginType.emailAndPhone:
+        return LocaleKeys.verifyLogin_buttonTitleTextPhone.tr();
+    }
+  }
+
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
@@ -214,6 +252,7 @@ class VerifyLoginView extends StatelessWidget {
         DiagnosticsProperty<InAppRedirection?>("redirection", redirection),
       )
       ..add(StringProperty("email", email))
-      ..add(StringProperty("phoneNumber", phoneNumber));
+      ..add(StringProperty("phoneNumber", phoneNumber))
+      ..add(EnumProperty<LoginType>("localLoginType", localLoginType));
   }
 }

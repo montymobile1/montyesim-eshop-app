@@ -2,11 +2,13 @@ import "dart:developer";
 
 import "package:easy_localization/easy_localization.dart";
 import "package:esim_open_source/app/app.locator.dart";
+import "package:esim_open_source/app/environment/app_environment.dart";
 import "package:esim_open_source/data/remote/responses/empty_response.dart";
 import "package:esim_open_source/domain/repository/api_auth_repository.dart";
 import "package:esim_open_source/domain/use_case/auth/delete_account_use_case.dart";
 import "package:esim_open_source/domain/use_case/base_use_case.dart";
 import "package:esim_open_source/domain/util/resource.dart";
+import "package:esim_open_source/presentation/enums/login_type.dart";
 import "package:esim_open_source/presentation/enums/view_state.dart";
 import "package:esim_open_source/presentation/extensions/helper_extensions.dart";
 import "package:esim_open_source/presentation/views/base/base_model.dart";
@@ -27,6 +29,16 @@ class DeleteAccountBottomSheetViewModel extends BaseModel {
 
   PhoneController phoneController =
       PhoneController(const PhoneNumber(isoCode: IsoCode.LB, nsn: ""));
+
+  bool get showPhoneInput {
+    switch (AppEnvironment.appEnvironmentHelper.loginType) {
+      case LoginType.email:
+        return false;
+      case LoginType.phoneNumber:
+      case LoginType.emailAndPhone:
+        return true;
+    }
+  }
 
   @override
   void onViewModelReady() {

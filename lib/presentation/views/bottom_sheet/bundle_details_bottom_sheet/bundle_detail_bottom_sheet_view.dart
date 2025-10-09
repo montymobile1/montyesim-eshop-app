@@ -3,7 +3,6 @@ import "package:esim_open_source/app/environment/app_environment.dart";
 import "package:esim_open_source/app/environment/environment_images.dart";
 import "package:esim_open_source/data/remote/responses/bundles/bundle_response_model.dart";
 import "package:esim_open_source/data/remote/responses/bundles/country_response_model.dart";
-import "package:esim_open_source/presentation/enums/login_type.dart";
 import "package:esim_open_source/presentation/extensions/helper_extensions.dart";
 import "package:esim_open_source/presentation/setup_bottom_sheet_ui.dart";
 import "package:esim_open_source/presentation/shared/shared_styles.dart";
@@ -162,12 +161,7 @@ class BundleDetailBottomSheetView extends StatelessWidget {
                               horizontal: 5,
                               child: Column(
                                 children: <Widget>[
-                                  (AppEnvironment.appEnvironmentHelper
-                                                  .loginType ==
-                                              LoginType.phoneNumber ||
-                                          AppEnvironment.appEnvironmentHelper
-                                                  .loginType ==
-                                              LoginType.emailAndPhone)
+                                  viewModel.showPhoneInput
                                       ? Column(
                                           children: <Widget>[
                                             PaddingWidget.applySymmetricPadding(
