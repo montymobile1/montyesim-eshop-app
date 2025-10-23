@@ -48,7 +48,6 @@ class RegisterResponse {
   }
 }
 
-
 Contacts contactsFromJson(String str) => Contacts.fromJson(json.decode(str));
 String contactsToJson(Contacts data) => json.encode(data.toJson());
 
@@ -141,7 +140,6 @@ class Contacts {
     return map;
   }
 }
-
 
 Client clientFromJson(String str) => Client.fromJson(json.decode(str));
 String clientToJson(Client data) => json.encode(data.toJson());
