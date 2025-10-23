@@ -48,16 +48,6 @@ class RegisterResponse {
   }
 }
 
-/// telephoneNumber : "96170736943"
-/// mobileNumber : "96170736943"
-/// email : "hassan.yass211ine@montyholding.com"
-/// isPrimary : true
-/// firstName : "georges"
-/// lastName : "nicolas"
-/// companyEmail : "georges@example.com"
-/// companyWebsite : "georges@example.com"
-/// recordGuid : "e8991440-6476-46f3-a5e6-d57e29d9fd9c"
-
 Contacts contactsFromJson(String str) => Contacts.fromJson(json.decode(str));
 String contactsToJson(Contacts data) => json.encode(data.toJson());
 
