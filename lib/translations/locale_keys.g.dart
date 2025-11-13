@@ -239,6 +239,7 @@ abstract class  LocaleKeys {
   static const String error_generating_qr_code = "error_generating_qr_code";
   static const String copied_to_clipboard = "copied_to_clipboard";
   static const String top_up_plan = "top_up_plan";
+  static const String validity = "validity";
   static const String faq_not_available = "faq_not_available";
   static const String your_message_has_been_sent = "your_message_has_been_sent";
   static const String second = "second";
@@ -277,7 +278,6 @@ abstract class  LocaleKeys {
   static const String qr_code = "qr_code";
   static const String install = "install";
   static const String goToSettings = "goToSettings";
-  static const String validity = "validity";
   static const String qr_code_details = "qr_code_details";
   static const String supportedCountries_availableInText = "supportedCountries_availableInText";
   static const String supportedCountries_availableNetworks = "supportedCountries_availableNetworks";
