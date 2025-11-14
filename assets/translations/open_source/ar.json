@@ -369,5 +369,7 @@
   "summary_of_payment": "ملخص الدفع",
   "subtotal": "المجموع الفرعي",
   "estimated_tax": "الضريبة المقدرة",
-  "total": "الإجمالي"
+  "total": "الإجمالي",
+  "bundleDetails_planTypeText_dataOnly": "بيانات فقط",
+  "bundleDetails_activationPolicy_Value": "تبدأ فترة الصلاحية عند اتصال الشريحة الإلكترونية بأي من الشبكات المدعومة."
 }
