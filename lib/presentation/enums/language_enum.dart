@@ -4,11 +4,11 @@ enum LanguageEnum {
   arabic;
 
   static LanguageEnum fromString(String language) {
-    if (language == LanguageEnum.english.languageText) {
+    if (language.toLowerCase() == LanguageEnum.english.languageText.toLowerCase()) {
       return LanguageEnum.english;
-    } else if (language == LanguageEnum.french.languageText) {
+    } else if (language.toLowerCase() == LanguageEnum.french.languageText.toLowerCase()) {
       return LanguageEnum.french;
-    } else if (language == LanguageEnum.arabic.languageText) {
+    } else if (language.toLowerCase() == LanguageEnum.arabic.languageText.toLowerCase()) {
       return LanguageEnum.arabic;
     } else {
       return LanguageEnum.english;
@@ -16,11 +16,11 @@ enum LanguageEnum {
   }
 
   static LanguageEnum fromCode(String languageCode) {
-    if (languageCode == LanguageEnum.english.code) {
+    if (languageCode.toLowerCase() == LanguageEnum.english.code.toLowerCase()) {
       return LanguageEnum.english;
-    } else if (languageCode == LanguageEnum.french.code) {
+    } else if (languageCode.toLowerCase() == LanguageEnum.french.code.toLowerCase()) {
       return LanguageEnum.french;
-    } else if (languageCode == LanguageEnum.arabic.code) {
+    } else if (languageCode.toLowerCase() == LanguageEnum.arabic.code.toLowerCase()) {
       return LanguageEnum.arabic;
     } else {
       return LanguageEnum.english;
