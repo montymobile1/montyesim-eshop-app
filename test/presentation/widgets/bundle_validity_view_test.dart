@@ -83,8 +83,8 @@ Future<void> main() async {
       await tester.pumpWidget(
         createTestableWidget(
           const BundleValidityView(
-            bundleValidity: "365 days unlimited",
-            bundleExpiryDate: "2025-12-31 23:59:59",
+            bundleValidity: "365 days",
+            bundleExpiryDate: "2025-12-31",
           ),
         ),
       );
@@ -92,7 +92,7 @@ Future<void> main() async {
       await tester.pump();
 
       expect(find.byType(BundleValidityView), findsOneWidget);
-      expect(find.text("2025-12-31 23:59:59"), findsOneWidget);
+      expect(find.text("2025-12-31"), findsOneWidget);
     });
 
     test("handles validity property", () {

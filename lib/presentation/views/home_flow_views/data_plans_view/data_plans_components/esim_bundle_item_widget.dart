@@ -1,4 +1,4 @@
-import "package:easy_localization/easy_localization.dart";
+import "package:easy_localization/easy_localization.dart" show StringTranslateExtension;
 import "package:esim_open_source/app/environment/environment_images.dart";
 import "package:esim_open_source/data/remote/responses/bundles/country_response_model.dart";
 import "package:esim_open_source/presentation/extensions/helper_extensions.dart";
@@ -67,13 +67,14 @@ class EsimBundleWidget extends StatelessWidget {
                       title,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
+                      textDirection: TextDirection.ltr,
                       style: captionOneNormalTextStyle(
                         context: context,
                         fontColor: regionCountryBundleTitleTextColor(
                           context: context,
                         ),
                       ),
-                    ),
+                    ).textSupportsRTL(context),
                   ),
                   const SizedBox(width: 10),
                   showUnlimitedData
@@ -82,6 +83,7 @@ class EsimBundleWidget extends StatelessWidget {
                           data,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
+                          textDirection: TextDirection.ltr,
                           style: headerTwoMediumTextStyle(
                             context: context,
                             fontColor:
@@ -109,11 +111,8 @@ class EsimBundleWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Text(
-                    LocaleKeys.bundleInfo_validityText.tr(
-                      namedArgs: <String, String>{
-                        "validity": validFor,
-                      },
-                    ),
+                    "${LocaleKeys.bundleInfo_validityText.tr()} $validFor",
+                    textDirection: TextDirection.ltr,
                     style: captionTwoNormalTextStyle(
                       context: context,
                       fontColor: contentTextColor(context: context),

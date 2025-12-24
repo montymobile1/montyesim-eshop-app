@@ -34,7 +34,7 @@ class ConsumptionBottomSheetViewModel extends EsimBaseModel {
   //#region Functions
   @override
   void onViewModelReady() {
-    _state.showTopUP = request.data?.showTopUp ?? true;
+    _state.showTopUP = request.data?.showTopUp ?? false;
     if (!(request.data?.isUnlimitedData ?? false)) {
       unawaited(_fetchConsumptionData());
     } else {

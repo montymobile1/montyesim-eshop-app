@@ -1,4 +1,5 @@
-import "package:easy_localization/easy_localization.dart";
+import "package:easy_localization/easy_localization.dart" show StringTranslateExtension;
+import "package:esim_open_source/presentation/extensions/helper_extensions.dart";
 import "package:esim_open_source/presentation/setup_bottom_sheet_ui.dart";
 import "package:esim_open_source/presentation/shared/shared_styles.dart";
 import "package:esim_open_source/presentation/shared/ui_helpers.dart";
@@ -59,8 +60,9 @@ class ConfirmationBottomSheetView extends StatelessWidget {
                   ),
                   verticalSpaceSmallMedium,
                   Text(
-                    "${request.data?.contentText ?? ""} ${request.data?.selectedText ?? ""} ?",
+                    !isRTL(context)?"${request.data?.contentText ?? ""} ${request.data?.selectedText ?? ""} ?":"\u061F ${request.data?.selectedText ?? ""} ${request.data?.contentText ?? ""}",
                     textAlign: TextAlign.center,
+                    textDirection: TextDirection.ltr,
                     style: bodyNormalTextStyle(
                       context: context,
                       fontColor: secondaryTextColor(context: context),

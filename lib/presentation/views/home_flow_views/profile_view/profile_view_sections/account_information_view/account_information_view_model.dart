@@ -144,8 +144,9 @@ class AccountInformationViewModel extends BaseModel {
         await updateUserInfoUseCase.execute(
       UpdateUserInfoParams(
         email: _emailController.text,
-        msisdn:
-            "+${phoneController.value?.countryCode}${phoneController.value?.nsn}",
+        msisdn: (phoneController.value?.nsn.isEmpty ?? true)
+            ? ""
+            : "+${phoneController.value?.countryCode}${phoneController.value?.nsn}",
         firstName: _nameController.text,
         lastName: _familyNameController.text,
         isNewsletterSubscribed: _receiveUpdates,

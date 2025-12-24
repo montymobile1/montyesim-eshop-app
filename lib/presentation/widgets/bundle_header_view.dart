@@ -54,6 +54,7 @@ class BundleHeaderView extends StatelessWidget {
             children: <Widget>[
               Text(
                 title,
+                textDirection: TextDirection.ltr,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: titleStyle ??
@@ -71,6 +72,7 @@ class BundleHeaderView extends StatelessWidget {
               isLoading ? verticalSpaceSmall : Container(),
               Text(
                 subTitle,
+                textDirection: TextDirection.ltr,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: contentStyle ??
@@ -102,6 +104,7 @@ class BundleHeaderView extends StatelessWidget {
                           )
                         : Text(
                             dataValue,
+                            textDirection: TextDirection.ltr,
                             overflow: TextOverflow.ellipsis,
                             textAlign: TextAlign.right,
                             style: dataValueStyle ??

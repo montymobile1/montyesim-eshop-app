@@ -174,7 +174,7 @@ Future<void> main() async {
           price: 99.99,
           priceDisplay: r"$99.99",
           validity: 30,
-          validityDisplay: "30 days",
+          validityLabel: "days",
           currencyCode: "USD",
           unlimited: true,
           gprsLimitDisplay: "Unlimited",

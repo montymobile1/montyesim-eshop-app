@@ -268,7 +268,7 @@ TextStyle headerTwoBoldTextStyle({
   bool isItalic = false,
 }) =>
     TextStyle(
-      fontSize: 24,
+      fontSize: 22,
       fontWeight: FontWeight.w700,
       color: fontColor ?? context.appColors.baseBlack,
       fontStyle: isItalic ? FontStyle.italic : FontStyle.normal,

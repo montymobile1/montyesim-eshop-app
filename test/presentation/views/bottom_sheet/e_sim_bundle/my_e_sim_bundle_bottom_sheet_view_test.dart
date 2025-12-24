@@ -2,16 +2,20 @@ import "package:esim_open_source/data/remote/responses/bundles/bundle_response_m
 import "package:esim_open_source/data/remote/responses/bundles/country_response_model.dart";
 import "package:esim_open_source/data/remote/responses/bundles/purchase_esim_bundle_response_model.dart";
 import "package:esim_open_source/data/remote/responses/bundles/transaction_history_response_model.dart";
+import "package:esim_open_source/di/locator.dart";
 import "package:esim_open_source/presentation/setup_bottom_sheet_ui.dart";
 import "package:esim_open_source/presentation/views/bottom_sheet/e_sim_bundle/my_e_sim_bundle_bottom_sheet_view.dart";
+import "package:esim_open_source/presentation/views/bottom_sheet/e_sim_bundle/my_e_sim_bundle_bottom_sheet_view_model.dart";
 import "package:esim_open_source/presentation/widgets/bottom_sheet_close_button.dart";
 import "package:esim_open_source/presentation/widgets/bundle_header_view.dart";
 import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
+import "package:mockito/mockito.dart";
 import "package:stacked_services/stacked_services.dart";
 
 import "../../../../helpers/view_helper.dart";
 import "../../../../helpers/view_model_helper.dart";
+import "../../../../locator_test.mocks.dart";
 
 Future<void> main() async {
   await prepareTest();
@@ -19,6 +23,25 @@ Future<void> main() async {
   setUp(() async {
     await setupTest();
     onViewModelReadyMock(viewName: "MyESimBundle");
+
+    // Mock viewModel methods and properties
+    final MockMyESimBundleBottomSheetViewModel mockViewModel =
+        locator<MyESimBundleBottomSheetViewModel>()
+            as MockMyESimBundleBottomSheetViewModel;
+
+    // Mock getBundleTranslation method for specific values used in tests
+    when(mockViewModel.getBundleTranslation("Primary")).thenReturn("Primary");
+    when(mockViewModel.getBundleTranslation("Top-up")).thenReturn("Top-up");
+    when(mockViewModel.getBundleTranslation("Renewal")).thenReturn("Renewal");
+    when(mockViewModel.getBundleTranslation(null)).thenReturn("N/A");
+    when(mockViewModel.getBundleTranslation("")).thenReturn("N/A");
+
+    // Mock isBusy property
+    when(mockViewModel.isBusy).thenReturn(false);
+
+    // Mock state property
+    final MyESimBundleBottomState mockState = MyESimBundleBottomState();
+    when(mockViewModel.state).thenReturn(mockState);
   });
 
   tearDown(() async {
@@ -33,7 +56,7 @@ Future<void> main() async {
     test("widget instantiation with valid data", () {
       final PurchaseEsimBundleResponseModel testBundle =
           PurchaseEsimBundleResponseModel(
-        displayTitle: "Test Bundle",
+        bundleName: "Test Bundle",
         unlimited: true,
       );
 
@@ -75,7 +98,7 @@ Future<void> main() async {
         (WidgetTester tester) async {
       final PurchaseEsimBundleResponseModel testBundle =
           PurchaseEsimBundleResponseModel(
-        displayTitle: "Europe 10GB",
+        bundleName: "Europe 10GB",
         displaySubtitle: "30 Countries",
         gprsLimitDisplay: "10 GB",
         unlimited: false,
@@ -107,7 +130,7 @@ Future<void> main() async {
         (WidgetTester tester) async {
       final PurchaseEsimBundleResponseModel testBundle =
           PurchaseEsimBundleResponseModel(
-        displayTitle: "",
+        bundleName: "",
         displaySubtitle: "",
         gprsLimitDisplay: "",
         unlimited: false,
@@ -135,7 +158,7 @@ Future<void> main() async {
     test("buildTopHeader with unlimited bundle creates widget", () {
       final PurchaseEsimBundleResponseModel testBundle =
           PurchaseEsimBundleResponseModel(
-        displayTitle: "Unlimited Plan",
+        bundleName: "Unlimited Plan",
         displaySubtitle: "Global",
         unlimited: true,
       );
@@ -299,17 +322,33 @@ Future<void> main() async {
         completer: (SheetResponse<MainBottomSheetResponse> response) {},
       );
 
+      // Create a single mock instance and stub it
+      final MockMyESimBundleBottomSheetViewModel mockViewModel =
+          MockMyESimBundleBottomSheetViewModel();
+      when(mockViewModel.getBundleTranslation("Primary")).thenReturn("Primary");
+      when(mockViewModel.getBundleTranslation("Top-up")).thenReturn("Top-up");
+      when(mockViewModel.isBusy).thenReturn(false);
+
       await tester.pumpWidget(
         createTestableWidget(
-          SingleChildScrollView(
-            child: Builder(
-              builder: (BuildContext context) {
-                return widget.buildPlanHistory(context, testBundle);
-              },
+          Material(
+            child: SizedBox(
+              width: 800,
+              height: 1200,
+              child: SingleChildScrollView(
+                child: Builder(
+                  builder: (BuildContext context) {
+                    return widget.buildPlanHistory(context, testBundle, mockViewModel);
+                  },
+                ),
+              ),
             ),
           ),
         ),
       );
+
+      // Wait for any animations to complete
+      await tester.pumpAndSettle();
 
       expect(find.text("TXN-001"), findsOneWidget);
       expect(find.text("TXN-002"), findsOneWidget);
@@ -333,7 +372,7 @@ Future<void> main() async {
         createTestableWidget(
           Builder(
             builder: (BuildContext context) {
-              return widget.buildPlanHistory(context, testBundle);
+              return widget.buildPlanHistory(context, testBundle, locator<MyESimBundleBottomSheetViewModel>());
             },
           ),
         ),
@@ -346,7 +385,7 @@ Future<void> main() async {
         (WidgetTester tester) async {
       final PurchaseEsimBundleResponseModel testBundle =
           PurchaseEsimBundleResponseModel(
-        
+
       );
 
       final MyESimBundleBottomSheetView widget = MyESimBundleBottomSheetView(
@@ -358,7 +397,7 @@ Future<void> main() async {
         createTestableWidget(
           Builder(
             builder: (BuildContext context) {
-              return widget.buildPlanHistory(context, testBundle);
+              return widget.buildPlanHistory(context, testBundle, locator<MyESimBundleBottomSheetViewModel>());
             },
           ),
         ),
@@ -378,7 +417,7 @@ Future<void> main() async {
         createTestableWidget(
           Builder(
             builder: (BuildContext context) {
-              return widget.buildPlanHistory(context, null);
+              return widget.buildPlanHistory(context, null, locator<MyESimBundleBottomSheetViewModel>());
             },
           ),
         ),
@@ -399,7 +438,7 @@ Future<void> main() async {
       ..bundle = BundleResponseModel(
         unlimited: false,
         priceDisplay: r"$30.00",
-        validityDisplay: "7 Days",
+        validityLabel: "Days",
         gprsLimitDisplay: "5 GB",
       );
 
@@ -408,17 +447,32 @@ Future<void> main() async {
         completer: (SheetResponse<MainBottomSheetResponse> response) {},
       );
 
+      // Create a single mock instance and stub it
+      final MockMyESimBundleBottomSheetViewModel mockViewModel =
+          MockMyESimBundleBottomSheetViewModel();
+      when(mockViewModel.getBundleTranslation("Top-up")).thenReturn("Top-up");
+      when(mockViewModel.isBusy).thenReturn(false);
+
       await tester.pumpWidget(
         createTestableWidget(
-          SingleChildScrollView(
-            child: Builder(
-              builder: (BuildContext context) {
-                return widget.transActionsHistory(context, transaction);
-              },
+          Material(
+            child: SizedBox(
+              width: 800,
+              height: 1200,
+              child: SingleChildScrollView(
+                child: Builder(
+                  builder: (BuildContext context) {
+                    return widget.transActionsHistory(context, transaction, mockViewModel);
+                  },
+                ),
+              ),
             ),
           ),
         ),
       );
+
+      // Wait for any animations to complete
+      await tester.pumpAndSettle();
 
       expect(find.text("5 GB"), findsOneWidget);
       expect(find.text(r"$30.00"), findsOneWidget);
@@ -438,17 +492,32 @@ Future<void> main() async {
         completer: (SheetResponse<MainBottomSheetResponse> response) {},
       );
 
+      // Create a single mock instance and stub it
+      final MockMyESimBundleBottomSheetViewModel mockViewModel =
+          MockMyESimBundleBottomSheetViewModel();
+      when(mockViewModel.getBundleTranslation("Primary")).thenReturn("Primary");
+      when(mockViewModel.isBusy).thenReturn(false);
+
       await tester.pumpWidget(
         createTestableWidget(
-          SingleChildScrollView(
-            child: Builder(
-              builder: (BuildContext context) {
-                return widget.transActionsHistory(context, transaction);
-              },
+          Material(
+            child: SizedBox(
+              width: 800,
+              height: 1200,
+              child: SingleChildScrollView(
+                child: Builder(
+                  builder: (BuildContext context) {
+                    return widget.transActionsHistory(context, transaction, mockViewModel);
+                  },
+                ),
+              ),
             ),
           ),
         ),
       );
+
+      // Wait for any animations to complete
+      await tester.pumpAndSettle();
 
       expect(find.byType(Card), findsOneWidget);
     });
@@ -460,17 +529,32 @@ Future<void> main() async {
         completer: (SheetResponse<MainBottomSheetResponse> response) {},
       );
 
+      // Create a single mock instance and stub it
+      final MockMyESimBundleBottomSheetViewModel mockViewModel =
+          MockMyESimBundleBottomSheetViewModel();
+      when(mockViewModel.getBundleTranslation(null)).thenReturn("N/A");
+      when(mockViewModel.isBusy).thenReturn(false);
+
       await tester.pumpWidget(
         createTestableWidget(
-          SingleChildScrollView(
-            child: Builder(
-              builder: (BuildContext context) {
-                return widget.transActionsHistory(context, null);
-              },
+          Material(
+            child: SizedBox(
+              width: 800,
+              height: 1200,
+              child: SingleChildScrollView(
+                child: Builder(
+                  builder: (BuildContext context) {
+                    return widget.transActionsHistory(context, null, mockViewModel);
+                  },
+                ),
+              ),
             ),
           ),
         ),
       );
+
+      // Wait for any animations to complete
+      await tester.pumpAndSettle();
 
       expect(find.byType(Card), findsOneWidget);
     });
@@ -487,7 +571,7 @@ Future<void> main() async {
       ..bundle = BundleResponseModel(
         unlimited: false,
         priceDisplay: r"$25.00",
-        validityDisplay: "15 Days",
+        validityLabel: "Days",
         gprsLimitDisplay: "3 GB",
       );
 
@@ -496,17 +580,32 @@ Future<void> main() async {
         completer: (SheetResponse<MainBottomSheetResponse> response) {},
       );
 
+      // Create a single mock instance and stub it
+      final MockMyESimBundleBottomSheetViewModel mockViewModel =
+          MockMyESimBundleBottomSheetViewModel();
+      when(mockViewModel.getBundleTranslation("Renewal")).thenReturn("Renewal");
+      when(mockViewModel.isBusy).thenReturn(false);
+
       await tester.pumpWidget(
         createTestableWidget(
-          SingleChildScrollView(
-            child: Builder(
-              builder: (BuildContext context) {
-                return widget.transActionsHistory(context, transaction);
-              },
+          Material(
+            child: SizedBox(
+              width: 800,
+              height: 1200,
+              child: SingleChildScrollView(
+                child: Builder(
+                  builder: (BuildContext context) {
+                    return widget.transActionsHistory(context, transaction, mockViewModel);
+                  },
+                ),
+              ),
             ),
           ),
         ),
       );
+
+      // Wait for any animations to complete
+      await tester.pumpAndSettle();
 
       expect(find.text("Renewal"), findsOneWidget);
     });
@@ -522,7 +621,7 @@ Future<void> main() async {
       ..bundle = BundleResponseModel(
         unlimited: false,
         priceDisplay: r"$20.00",
-        validityDisplay: "10 Days",
+        validityLabel: "Days",
         gprsLimitDisplay: "2 GB",
       );
 
@@ -531,17 +630,32 @@ Future<void> main() async {
         completer: (SheetResponse<MainBottomSheetResponse> response) {},
       );
 
+      // Create a single mock instance and stub it
+      final MockMyESimBundleBottomSheetViewModel mockViewModel =
+          MockMyESimBundleBottomSheetViewModel();
+      when(mockViewModel.getBundleTranslation(null)).thenReturn("N/A");
+      when(mockViewModel.isBusy).thenReturn(false);
+
       await tester.pumpWidget(
         createTestableWidget(
-          SingleChildScrollView(
-            child: Builder(
-              builder: (BuildContext context) {
-                return widget.transActionsHistory(context, transaction);
-              },
+          Material(
+            child: SizedBox(
+              width: 800,
+              height: 1200,
+              child: SingleChildScrollView(
+                child: Builder(
+                  builder: (BuildContext context) {
+                    return widget.transActionsHistory(context, transaction, mockViewModel);
+                  },
+                ),
+              ),
             ),
           ),
         ),
       );
+
+      // Wait for any animations to complete
+      await tester.pumpAndSettle();
 
       expect(find.text("N/A"), findsOneWidget);
     });
@@ -573,7 +687,7 @@ Future<void> main() async {
       for (final String type in bundleTypes) {
         final PurchaseEsimBundleResponseModel testBundle =
             PurchaseEsimBundleResponseModel(
-          displayTitle: "$type Bundle",
+          bundleName: "$type Bundle",
           unlimited: false,
         );
 
@@ -586,7 +700,7 @@ Future<void> main() async {
 
         expect(widget, isNotNull);
         expect(
-          widget.request.data?.eSimBundleResponseModel?.displayTitle,
+          widget.request.data?.eSimBundleResponseModel?.bundleName,
           equals("$type Bundle"),
         );
       }
@@ -595,7 +709,7 @@ Future<void> main() async {
     test("widget handles multiple countries in bundle", () {
       final PurchaseEsimBundleResponseModel testBundle =
           PurchaseEsimBundleResponseModel(
-        displayTitle: "Multi-Country Bundle",
+        bundleName: "Multi-Country Bundle",
         countries: <CountryResponseModel>[
           CountryResponseModel(country: "USA", countryCode: "US"),
           CountryResponseModel(country: "Canada", countryCode: "CA"),
@@ -620,7 +734,7 @@ Future<void> main() async {
     test("widget with empty countries list", () {
       final PurchaseEsimBundleResponseModel testBundle =
           PurchaseEsimBundleResponseModel(
-        displayTitle: "No Countries Bundle",
+        bundleName: "No Countries Bundle",
         countries: <CountryResponseModel>[],
       );
 

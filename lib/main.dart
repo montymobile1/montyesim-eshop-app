@@ -34,6 +34,7 @@ import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart";
 import "package:flutter_native_splash/flutter_native_splash.dart";
+import "package:phone_input/l10n/generated/phone_field_localization.dart";
 import "package:stacked/stacked.dart";
 import "package:stacked_services/stacked_services.dart";
 import "package:stacked_themes/stacked_themes.dart";
@@ -224,7 +225,10 @@ class _MyFlutterActivityState extends State<MyFlutterActivity>
                 onGenerateRoute: generateRoute,
                 locale: context.locale,
                 supportedLocales: context.supportedLocales,
-                localizationsDelegates: context.localizationDelegates,
+                localizationsDelegates: <LocalizationsDelegate<dynamic>>[
+                  ...context.localizationDelegates, // but only if context is safe
+                  PhoneFieldLocalization.delegate,
+                ],
               ),
             ),
           ),

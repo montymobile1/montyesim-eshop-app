@@ -34,7 +34,7 @@ Future<void> main() async {
       showTopUpButton: item.isTopupAllowed ?? true,
       iconPath: item.icon ?? "",
       price: "",
-      validity: item.validityDisplay ?? "",
+      validity: item.getValidityDisplay()  ?? "",
       expiryDate: DateTimeUtils.formatTimestampToDate(
         timestamp: int.parse(item.paymentDate ?? "0"),
         format: DateTimeUtils.ddMmYyyy,
@@ -109,7 +109,7 @@ Future<void> main() async {
       showTopUpButton: item.isTopupAllowed ?? true,
       iconPath: item.icon ?? "",
       price: "",
-      validity: item.validityDisplay ?? "",
+      validity: item.getValidityDisplay()  ?? "",
       expiryDate: DateTimeUtils.formatTimestampToDate(
         timestamp: int.parse(item.paymentDate ?? "0"),
         format: DateTimeUtils.ddMmYyyy,

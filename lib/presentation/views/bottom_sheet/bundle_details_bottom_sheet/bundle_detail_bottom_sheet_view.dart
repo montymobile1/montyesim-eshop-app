@@ -1,4 +1,4 @@
-import "package:easy_localization/easy_localization.dart";
+import "package:easy_localization/easy_localization.dart" show StringTranslateExtension;
 import "package:esim_open_source/app/environment/app_environment.dart";
 import "package:esim_open_source/app/environment/environment_images.dart";
 import "package:esim_open_source/data/remote/responses/bundles/bundle_response_model.dart";
@@ -76,7 +76,10 @@ class BundleDetailBottomSheetView extends StatelessWidget {
                       child: Column(
                         children: <Widget>[
                           BundleHeaderView(
-                            imagePath: bundle?.icon,
+                            imagePath: (bundle?.isCruise ??
+                                    false)
+                                ? EnvironmentImages.globalFlag.fullImagePath
+                                : bundle?.icon,
                             title: bundle?.displayTitle ?? "",
                             subTitle: bundle?.displaySubtitle ?? "",
                             dataValue: "",
@@ -93,6 +96,7 @@ class BundleDetailBottomSheetView extends StatelessWidget {
                                   ? const UnlimitedDataWidget()
                                   : Text(
                                       bundle?.gprsLimitDisplay ?? "",
+                                textDirection: TextDirection.ltr,
                                       style: headerTwoMediumTextStyle(
                                         context: context,
                                         fontColor: bundleDataPriceTextColor(
@@ -113,7 +117,7 @@ class BundleDetailBottomSheetView extends StatelessWidget {
                           ),
                           const DividerLine(),
                           BundleValidityView(
-                            bundleValidity: bundle?.validityDisplay ?? "",
+                            bundleValidity: bundle?.getValidityDisplay() ?? "",
                             bundleExpiryDate: "",
                           ),
                           verticalSpaceSmall,
@@ -123,7 +127,10 @@ class BundleDetailBottomSheetView extends StatelessWidget {
                               (bundle?.countries?.isNotEmpty ?? false))
                             SupportedCountriesCard(
                               countries:
-                                  bundle?.countries ?? <CountryResponseModel>[],
+                                  (bundle?.bundleCategory?.isCruise ?? false)
+                                      ? <CountryResponseModel>[]
+                                      : bundle?.countries ??
+                                          <CountryResponseModel>[],
                             ),
                           if (viewModel.isPromoCodeEnabled &&
                               viewModel.isUserLoggedIn)

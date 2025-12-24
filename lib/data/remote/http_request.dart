@@ -155,12 +155,7 @@ class HttpRequest {
       );
     } on TimeoutException {
       log("Request timed out after ${timeoutSeconds ?? _defaultTimeoutSeconds} seconds.");
-      throw ResponseMainException(
-        ResponseMain<T>.createError(
-          responseCode: 500,
-          errorMessage: "Time out exception",
-        ),
-      );
+      throw MainTimeoutException(message: "Time out exception");
     }
   }
 
@@ -214,12 +209,7 @@ class HttpRequest {
       );
     } on TimeoutException {
       log("Request timed out after ${timeoutSeconds ?? _defaultTimeoutSeconds} seconds.");
-      throw ResponseMainException(
-        ResponseMain<T>.createError(
-          responseCode: 500,
-          errorMessage: "Time out exception",
-        ),
-      );
+      throw MainTimeoutException(message: "Time out exception");
     }
   }
 

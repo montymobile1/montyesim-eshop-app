@@ -65,7 +65,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
     id: const obx_int.IdUid(2, 3904391743835608439),
     name: 'BundleEntity',
-    lastPropertyId: const obx_int.IdUid(20, 3108433537885829202),
+    lastPropertyId: const obx_int.IdUid(21, 2570379538736439478),
     flags: 0,
     properties: <obx_int.ModelProperty>[
       obx_int.ModelProperty(
@@ -147,17 +147,12 @@ final _entities = <obx_int.ModelEntity>[
         flags: 0,
       ),
       obx_int.ModelProperty(
-        id: const obx_int.IdUid(14, 7931922400127624430),
-        name: 'validityDisplay',
-        type: 9,
-        flags: 0,
-      ),
-      obx_int.ModelProperty(
         id: const obx_int.IdUid(15, 9201633083853427630),
         name: 'bundleCategoryId',
         type: 11,
         flags: 520,
         indexId: const obx_int.IdUid(1, 2207907975271774534),
+        relationField: 'bundleCategory',
         relationTarget: 'BundleCategoryEntity',
       ),
       obx_int.ModelProperty(
@@ -166,6 +161,7 @@ final _entities = <obx_int.ModelEntity>[
         type: 11,
         flags: 520,
         indexId: const obx_int.IdUid(2, 7941058205647145524),
+        relationField: 'homeData',
         relationTarget: 'HomeDataEntity',
       ),
       obx_int.ModelProperty(
@@ -177,6 +173,12 @@ final _entities = <obx_int.ModelEntity>[
       obx_int.ModelProperty(
         id: const obx_int.IdUid(18, 7190723833811720573),
         name: 'icon',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(21, 2570379538736439478),
+        name: 'validityLabel',
         type: 9,
         flags: 0,
       ),
@@ -348,7 +350,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
     id: const obx_int.IdUid(6, 3235132240687106497),
     name: 'EsimEntity',
-    lastPropertyId: const obx_int.IdUid(33, 163138050007622859),
+    lastPropertyId: const obx_int.IdUid(35, 4065702147459238243),
     flags: 0,
     properties: <obx_int.ModelProperty>[
       obx_int.ModelProperty(
@@ -490,12 +492,6 @@ final _entities = <obx_int.ModelEntity>[
         flags: 0,
       ),
       obx_int.ModelProperty(
-        id: const obx_int.IdUid(24, 4622000468227374025),
-        name: 'validityDisplay',
-        type: 9,
-        flags: 0,
-      ),
-      obx_int.ModelProperty(
         id: const obx_int.IdUid(25, 1242955461437902803),
         name: 'planType',
         type: 9,
@@ -531,6 +527,7 @@ final _entities = <obx_int.ModelEntity>[
         type: 11,
         flags: 520,
         indexId: const obx_int.IdUid(3, 2111038786350938522),
+        relationField: 'bundleCategory',
         relationTarget: 'EsimBundleCategoryEntity',
       ),
       obx_int.ModelProperty(
@@ -549,6 +546,12 @@ final _entities = <obx_int.ModelEntity>[
         id: const obx_int.IdUid(33, 163138050007622859),
         name: 'validity',
         type: 8,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(34, 4546734757899963032),
+        name: 'validityLabel',
+        type: 9,
         flags: 0,
       ),
     ],
@@ -585,6 +588,7 @@ final _entities = <obx_int.ModelEntity>[
         type: 11,
         flags: 520,
         indexId: const obx_int.IdUid(5, 2011655117619998248),
+        relationField: 'esimData',
         relationTarget: 'EsimEntity',
       ),
       obx_int.ModelProperty(
@@ -629,6 +633,7 @@ final _entities = <obx_int.ModelEntity>[
         type: 11,
         flags: 520,
         indexId: const obx_int.IdUid(6, 4791991272740744303),
+        relationField: 'bundle',
         relationTarget: 'EsimBundleEntity',
       ),
     ],
@@ -672,7 +677,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
     id: const obx_int.IdUid(9, 6979901880230801504),
     name: 'EsimBundleEntity',
-    lastPropertyId: const obx_int.IdUid(19, 3177782989631971089),
+    lastPropertyId: const obx_int.IdUid(21, 186289510418559146),
     flags: 0,
     properties: <obx_int.ModelProperty>[
       obx_int.ModelProperty(
@@ -754,12 +759,6 @@ final _entities = <obx_int.ModelEntity>[
         flags: 0,
       ),
       obx_int.ModelProperty(
-        id: const obx_int.IdUid(14, 6351227076116927332),
-        name: 'validityDisplay',
-        type: 9,
-        flags: 0,
-      ),
-      obx_int.ModelProperty(
         id: const obx_int.IdUid(15, 6802312610444235966),
         name: 'icon',
         type: 9,
@@ -771,12 +770,25 @@ final _entities = <obx_int.ModelEntity>[
         type: 11,
         flags: 520,
         indexId: const obx_int.IdUid(7, 4294559215289422009),
+        relationField: 'bundleCategory',
         relationTarget: 'EsimBundleCategoryEntity',
       ),
       obx_int.ModelProperty(
         id: const obx_int.IdUid(19, 3177782989631971089),
         name: 'bundleTypeValue',
         type: 2,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(20, 2490058020488022913),
+        name: 'validityLabel',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(21, 186289510418559146),
+        name: 'label',
+        type: 9,
         flags: 0,
       ),
     ],
@@ -892,6 +904,11 @@ Future<obx.Store> openStore({
 /// [obx.Store.new].
 obx_int.ModelDefinition getObjectBoxModel() {
   final model = obx_int.ModelInfo(
+    // If this version is not found, it means that this file was generated
+    // with an older version of the ObjectBox Dart generator.
+    // Please regenerate this file with the current generator version.
+    // Typically, this is done with `dart run build_runner build`.
+    generatorVersion: obx_int.GeneratorVersion.v2025_12_16,
     entities: _entities,
     lastEntityId: const obx_int.IdUid(10, 3152941530312633510),
     lastIndexId: const obx_int.IdUid(7, 4294559215289422009),
@@ -923,6 +940,10 @@ obx_int.ModelDefinition getObjectBoxModel() {
       3108433537885829202,
       3132470159620124837,
       3752738271331101229,
+      7931922400127624430,
+      6351227076116927332,
+      4622000468227374025,
+      4065702147459238243,
     ],
     retiredRelationUids: const [7567996630856210035, 7128603302950765322],
     modelVersion: 5,
@@ -1016,13 +1037,13 @@ obx_int.ModelDefinition getObjectBoxModel() {
         final priceDisplayOffset = object.priceDisplay == null
             ? null
             : fbb.writeString(object.priceDisplay!);
-        final validityDisplayOffset = object.validityDisplay == null
-            ? null
-            : fbb.writeString(object.validityDisplay!);
         final iconOffset = object.icon == null
             ? null
             : fbb.writeString(object.icon!);
-        fbb.startTable(21);
+        final validityLabelOffset = object.validityLabel == null
+            ? null
+            : fbb.writeString(object.validityLabel!);
+        fbb.startTable(22);
         fbb.addInt64(0, object.id);
         fbb.addOffset(1, displayTitleOffset);
         fbb.addOffset(2, displaySubtitleOffset);
@@ -1036,11 +1057,11 @@ obx_int.ModelDefinition getObjectBoxModel() {
         fbb.addOffset(10, priceDisplayOffset);
         fbb.addBool(11, object.unlimited);
         fbb.addInt64(12, object.validity);
-        fbb.addOffset(13, validityDisplayOffset);
         fbb.addInt64(14, object.bundleCategory.targetId);
         fbb.addInt64(15, object.homeData.targetId);
         fbb.addInt8(16, object.bundleTypeValue);
         fbb.addOffset(17, iconOffset);
+        fbb.addOffset(20, validityLabelOffset);
         fbb.finish(fbb.endTable());
         return object.id;
       },
@@ -1091,9 +1112,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
           rootOffset,
           28,
         );
-        final validityDisplayParam = const fb.StringReader(
+        final validityLabelParam = const fb.StringReader(
           asciiOptimization: true,
-        ).vTableGetNullable(buffer, rootOffset, 30);
+        ).vTableGetNullable(buffer, rootOffset, 44);
         final bundleTypeValueParam = const fb.Int8Reader().vTableGet(
           buffer,
           rootOffset,
@@ -1116,7 +1137,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           priceDisplay: priceDisplayParam,
           unlimited: unlimitedParam,
           validity: validityParam,
-          validityDisplay: validityDisplayParam,
+          validityLabel: validityLabelParam,
           bundleTypeValue: bundleTypeValueParam,
           icon: iconParam,
         )..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
@@ -1430,9 +1451,6 @@ obx_int.ModelDefinition getObjectBoxModel() {
         final priceDisplayOffset = object.priceDisplay == null
             ? null
             : fbb.writeString(object.priceDisplay!);
-        final validityDisplayOffset = object.validityDisplay == null
-            ? null
-            : fbb.writeString(object.validityDisplay!);
         final planTypeOffset = object.planType == null
             ? null
             : fbb.writeString(object.planType!);
@@ -1456,7 +1474,10 @@ obx_int.ModelDefinition getObjectBoxModel() {
                     .map(fbb.writeString)
                     .toList(growable: false),
               );
-        fbb.startTable(34);
+        final validityLabelOffset = object.validityLabel == null
+            ? null
+            : fbb.writeString(object.validityLabel!);
+        fbb.startTable(36);
         fbb.addInt64(0, object.id);
         fbb.addBool(1, object.isTopupAllowed);
         fbb.addBool(2, object.planStarted);
@@ -1480,7 +1501,6 @@ obx_int.ModelDefinition getObjectBoxModel() {
         fbb.addOffset(20, gprsLimitDisplayOffset);
         fbb.addOffset(21, priceDisplayOffset);
         fbb.addBool(22, object.unlimited);
-        fbb.addOffset(23, validityDisplayOffset);
         fbb.addOffset(24, planTypeOffset);
         fbb.addOffset(25, activityPolicyOffset);
         fbb.addOffset(26, iconOffset);
@@ -1490,6 +1510,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
         fbb.addFloat64(30, object.countCountries);
         fbb.addFloat64(31, object.price);
         fbb.addFloat64(32, object.validity);
+        fbb.addOffset(33, validityLabelOffset);
         fbb.finish(fbb.endTable());
         return object.id;
       },
@@ -1585,9 +1606,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
           rootOffset,
           68,
         );
-        final validityDisplayParam = const fb.StringReader(
+        final validityLabelParam = const fb.StringReader(
           asciiOptimization: true,
-        ).vTableGetNullable(buffer, rootOffset, 50);
+        ).vTableGetNullable(buffer, rootOffset, 70);
         final planTypeParam = const fb.StringReader(
           asciiOptimization: true,
         ).vTableGetNullable(buffer, rootOffset, 52);
@@ -1631,7 +1652,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           priceDisplay: priceDisplayParam,
           unlimited: unlimitedParam,
           validity: validityParam,
-          validityDisplay: validityDisplayParam,
+          validityLabel: validityLabelParam,
           planType: planTypeParam,
           activityPolicy: activityPolicyParam,
           icon: iconParam,
@@ -1834,13 +1855,16 @@ obx_int.ModelDefinition getObjectBoxModel() {
         final priceDisplayOffset = object.priceDisplay == null
             ? null
             : fbb.writeString(object.priceDisplay!);
-        final validityDisplayOffset = object.validityDisplay == null
-            ? null
-            : fbb.writeString(object.validityDisplay!);
         final iconOffset = object.icon == null
             ? null
             : fbb.writeString(object.icon!);
-        fbb.startTable(20);
+        final validityLabelOffset = object.validityLabel == null
+            ? null
+            : fbb.writeString(object.validityLabel!);
+        final labelOffset = object.label == null
+            ? null
+            : fbb.writeString(object.label!);
+        fbb.startTable(22);
         fbb.addInt64(0, object.id);
         fbb.addOffset(1, displayTitleOffset);
         fbb.addOffset(2, displaySubtitleOffset);
@@ -1854,10 +1878,11 @@ obx_int.ModelDefinition getObjectBoxModel() {
         fbb.addOffset(10, priceDisplayOffset);
         fbb.addBool(11, object.unlimited);
         fbb.addInt64(12, object.validity);
-        fbb.addOffset(13, validityDisplayOffset);
         fbb.addOffset(14, iconOffset);
         fbb.addInt64(17, object.bundleCategory.targetId);
         fbb.addInt8(18, object.bundleTypeValue);
+        fbb.addOffset(19, validityLabelOffset);
+        fbb.addOffset(20, labelOffset);
         fbb.finish(fbb.endTable());
         return object.id;
       },
@@ -1908,9 +1933,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
           rootOffset,
           28,
         );
-        final validityDisplayParam = const fb.StringReader(
+        final validityLabelParam = const fb.StringReader(
           asciiOptimization: true,
-        ).vTableGetNullable(buffer, rootOffset, 30);
+        ).vTableGetNullable(buffer, rootOffset, 42);
         final bundleTypeValueParam = const fb.Int8Reader().vTableGet(
           buffer,
           rootOffset,
@@ -1920,6 +1945,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
         final iconParam = const fb.StringReader(
           asciiOptimization: true,
         ).vTableGetNullable(buffer, rootOffset, 32);
+        final labelParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGetNullable(buffer, rootOffset, 44);
         final object = EsimBundleEntity(
           displayTitle: displayTitleParam,
           displaySubtitle: displaySubtitleParam,
@@ -1933,9 +1961,10 @@ obx_int.ModelDefinition getObjectBoxModel() {
           priceDisplay: priceDisplayParam,
           unlimited: unlimitedParam,
           validity: validityParam,
-          validityDisplay: validityDisplayParam,
+          validityLabel: validityLabelParam,
           bundleTypeValue: bundleTypeValueParam,
           icon: iconParam,
+          label: labelParam,
         )..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
         object.bundleCategory.targetId = const fb.Int64Reader().vTableGet(
           buffer,
@@ -2139,29 +2168,29 @@ class BundleEntity_ {
     _entities[1].properties[12],
   );
 
-  /// See [BundleEntity.validityDisplay].
-  static final validityDisplay = obx.QueryStringProperty<BundleEntity>(
-    _entities[1].properties[13],
-  );
-
   /// See [BundleEntity.bundleCategory].
   static final bundleCategory =
       obx.QueryRelationToOne<BundleEntity, BundleCategoryEntity>(
-        _entities[1].properties[14],
+        _entities[1].properties[13],
       );
 
   /// See [BundleEntity.homeData].
   static final homeData = obx.QueryRelationToOne<BundleEntity, HomeDataEntity>(
-    _entities[1].properties[15],
+    _entities[1].properties[14],
   );
 
   /// See [BundleEntity.bundleTypeValue].
   static final bundleTypeValue = obx.QueryIntegerProperty<BundleEntity>(
-    _entities[1].properties[16],
+    _entities[1].properties[15],
   );
 
   /// See [BundleEntity.icon].
   static final icon = obx.QueryStringProperty<BundleEntity>(
+    _entities[1].properties[16],
+  );
+
+  /// See [BundleEntity.validityLabel].
+  static final validityLabel = obx.QueryStringProperty<BundleEntity>(
     _entities[1].properties[17],
   );
 
@@ -2403,54 +2432,54 @@ class EsimEntity_ {
     _entities[5].properties[22],
   );
 
-  /// See [EsimEntity.validityDisplay].
-  static final validityDisplay = obx.QueryStringProperty<EsimEntity>(
-    _entities[5].properties[23],
-  );
-
   /// See [EsimEntity.planType].
   static final planType = obx.QueryStringProperty<EsimEntity>(
-    _entities[5].properties[24],
+    _entities[5].properties[23],
   );
 
   /// See [EsimEntity.activityPolicy].
   static final activityPolicy = obx.QueryStringProperty<EsimEntity>(
-    _entities[5].properties[25],
+    _entities[5].properties[24],
   );
 
   /// See [EsimEntity.icon].
   static final icon = obx.QueryStringProperty<EsimEntity>(
-    _entities[5].properties[26],
+    _entities[5].properties[25],
   );
 
   /// See [EsimEntity.bundleMessage].
   static final bundleMessage = obx.QueryStringVectorProperty<EsimEntity>(
-    _entities[5].properties[27],
+    _entities[5].properties[26],
   );
 
   /// See [EsimEntity.searchedCountries].
   static final searchedCountries = obx.QueryStringVectorProperty<EsimEntity>(
-    _entities[5].properties[28],
+    _entities[5].properties[27],
   );
 
   /// See [EsimEntity.bundleCategory].
   static final bundleCategory =
       obx.QueryRelationToOne<EsimEntity, EsimBundleCategoryEntity>(
-        _entities[5].properties[29],
+        _entities[5].properties[28],
       );
 
   /// See [EsimEntity.countCountries].
   static final countCountries = obx.QueryDoubleProperty<EsimEntity>(
-    _entities[5].properties[30],
+    _entities[5].properties[29],
   );
 
   /// See [EsimEntity.price].
   static final price = obx.QueryDoubleProperty<EsimEntity>(
-    _entities[5].properties[31],
+    _entities[5].properties[30],
   );
 
   /// See [EsimEntity.validity].
   static final validity = obx.QueryDoubleProperty<EsimEntity>(
+    _entities[5].properties[31],
+  );
+
+  /// See [EsimEntity.validityLabel].
+  static final validityLabel = obx.QueryStringProperty<EsimEntity>(
     _entities[5].properties[32],
   );
 
@@ -2608,25 +2637,30 @@ class EsimBundleEntity_ {
     _entities[8].properties[12],
   );
 
-  /// See [EsimBundleEntity.validityDisplay].
-  static final validityDisplay = obx.QueryStringProperty<EsimBundleEntity>(
-    _entities[8].properties[13],
-  );
-
   /// See [EsimBundleEntity.icon].
   static final icon = obx.QueryStringProperty<EsimBundleEntity>(
-    _entities[8].properties[14],
+    _entities[8].properties[13],
   );
 
   /// See [EsimBundleEntity.bundleCategory].
   static final bundleCategory =
       obx.QueryRelationToOne<EsimBundleEntity, EsimBundleCategoryEntity>(
-        _entities[8].properties[15],
+        _entities[8].properties[14],
       );
 
   /// See [EsimBundleEntity.bundleTypeValue].
   static final bundleTypeValue = obx.QueryIntegerProperty<EsimBundleEntity>(
+    _entities[8].properties[15],
+  );
+
+  /// See [EsimBundleEntity.validityLabel].
+  static final validityLabel = obx.QueryStringProperty<EsimBundleEntity>(
     _entities[8].properties[16],
+  );
+
+  /// See [EsimBundleEntity.label].
+  static final label = obx.QueryStringProperty<EsimBundleEntity>(
+    _entities[8].properties[17],
   );
 
   /// see [EsimBundleEntity.countries]

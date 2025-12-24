@@ -5,6 +5,7 @@ import "package:easy_localization/easy_localization.dart";
 import "package:esim_open_source/app/environment/app_environment.dart";
 import "package:esim_open_source/data/remote/request/related_search.dart";
 import "package:esim_open_source/data/remote/responses/auth/auth_response_model.dart";
+import "package:esim_open_source/data/remote/responses/base_response_model.dart";
 import "package:esim_open_source/data/remote/responses/bundles/bundle_assign_response_model.dart";
 import "package:esim_open_source/data/remote/responses/bundles/bundle_response_model.dart";
 import "package:esim_open_source/di/locator.dart";
@@ -352,10 +353,14 @@ class BundleDetailBottomSheetViewModel extends BaseModel {
             : AppEnvironment
                 .appEnvironmentHelper.defaultPaymentTypeList.first.type,
         bearerToken: bearerToken,
-        relatedSearch: RelatedSearchRequestModel(
-          region: region,
-          countries: countriesList,
-        ),
+        relatedSearch: (bundle?.isCruise ?? false)
+            ? RelatedSearchRequestModel(
+                countries: [],
+              )
+            : RelatedSearchRequestModel(
+                region: region,
+                countries: countriesList,
+              ),
       ),
     );
     setViewState(ViewState.idle);
@@ -393,6 +398,17 @@ class BundleDetailBottomSheetViewModel extends BaseModel {
             billingCountryCode: result.data?.billingCountryCode ?? "",
           ),
         );
+      },
+      onFailure: (Resource<BundleAssignResponseModel?> result) async {
+        if (response.error?.errorCode ==
+            MainTimeoutException.timeoutErrorCode) {
+          await showNativeErrorMessage(
+            response.error?.message,
+            LocaleKeys.processing.tr(),
+          );
+          return;
+        }
+        handleError(response);
       },
     );
   }

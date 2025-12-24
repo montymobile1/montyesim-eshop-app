@@ -1,4 +1,5 @@
 import "package:easy_localization/easy_localization.dart";
+import "package:esim_open_source/app/environment/environment_images.dart";
 import "package:esim_open_source/data/remote/responses/bundles/bundle_response_model.dart";
 import "package:esim_open_source/data/remote/responses/bundles/country_response_model.dart";
 import "package:esim_open_source/presentation/extensions/shimmer_extensions.dart";
@@ -37,11 +38,11 @@ class BundlesListView extends StatelessWidget {
         }
 
         return EsimBundleWidget(
-          icon: bundles[index].icon ?? "",
+          icon: bundles[index].isCruise? EnvironmentImages.globalFlag.fullImagePath : bundles[index].icon ?? "",
           title: bundles[index].bundleName ?? "",
           data: bundles[index].gprsLimitDisplay ?? "",
           showUnlimitedData: bundles[index].unlimited ?? false,
-          validFor: bundles[index].validityDisplay ?? "",
+          validFor: bundles[index].getValidityDisplay() ?? "",
           supportedCountries: hideSupportedCountries
               ? <CountryResponseModel>[]
               : bundles[index].countries ?? <CountryResponseModel>[],

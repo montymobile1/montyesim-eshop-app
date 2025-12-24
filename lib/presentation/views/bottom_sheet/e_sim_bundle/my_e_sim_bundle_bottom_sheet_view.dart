@@ -1,8 +1,11 @@
-import "package:easy_localization/easy_localization.dart";
+import "package:easy_localization/easy_localization.dart"
+    show StringTranslateExtension;
+import "package:esim_open_source/app/environment/environment_images.dart";
 import "package:esim_open_source/data/remote/responses/bundles/country_response_model.dart";
 import "package:esim_open_source/data/remote/responses/bundles/purchase_esim_bundle_response_model.dart";
 import "package:esim_open_source/data/remote/responses/bundles/transaction_history_response_model.dart";
 import "package:esim_open_source/di/locator.dart";
+import "package:esim_open_source/presentation/extensions/helper_extensions.dart";
 import "package:esim_open_source/presentation/extensions/shimmer_extensions.dart";
 import "package:esim_open_source/presentation/setup_bottom_sheet_ui.dart";
 import "package:esim_open_source/presentation/shared/shared_styles.dart";
@@ -43,7 +46,7 @@ class MyESimBundleBottomSheetView extends StatelessWidget {
     return BaseView.bottomSheetBuilder(
       viewModel: locator<MyESimBundleBottomSheetViewModel>()
         ..request = request
-        ..completer =  completer,
+        ..completer = completer,
       builder: (
         BuildContext context,
         MyESimBundleBottomSheetViewModel viewModel,
@@ -90,7 +93,7 @@ class MyESimBundleBottomSheetView extends StatelessWidget {
                               //qr code details title
                               BundleInfoRow(
                                 validity:
-                                    viewModel.state.item?.validityDisplay ?? "",
+                                    viewModel.state.item?.getValidityDisplay() ?? "",
                                 expiryDate: DateTimeUtils.formatTimestampToDate(
                                   timestamp: int.parse(
                                     viewModel.state.item?.paymentDate ?? "0",
@@ -100,10 +103,13 @@ class MyESimBundleBottomSheetView extends StatelessWidget {
                                 isLoading: false,
                               ),
                               verticalSpaceSmall,
-                              SupportedCountriesCard(
-                                countries: viewModel.state.item?.countries ??
-                                    <CountryResponseModel>[],
-                              ),
+                              viewModel.isCruise()
+                                  ? Container()
+                                  : SupportedCountriesCard(
+                                      countries:
+                                          viewModel.state.item?.countries ??
+                                              <CountryResponseModel>[],
+                                    ),
                               verticalSpaceSmall,
                               WarningWidget(
                                 warningTextContent:
@@ -121,7 +127,7 @@ class MyESimBundleBottomSheetView extends StatelessWidget {
                                 viewModel,
                               ),
                               verticalSpaceMedium,
-                              buildPlanHistory(context, viewModel.state.item),
+                              buildPlanHistory(context, viewModel.state.item, viewModel),
                             ],
                           ),
                         ),
@@ -148,12 +154,14 @@ class MyESimBundleBottomSheetView extends StatelessWidget {
           onTap: () => completer(SheetResponse<MainBottomSheetResponse>()),
         ),
         BundleHeaderView(
-          title: item?.displayTitle ?? "",
+          title: item?.getDisplayName() ?? "",
           subTitle: item?.displaySubtitle ?? "",
           dataValue: item?.gprsLimitDisplay ?? "",
           isLoading: false,
           hasNavArrow: false,
-          imagePath: item?.icon ?? "",
+          imagePath: (item?.bundleCategory?.isCruise ?? false)
+              ? EnvironmentImages.globalFlag.fullImagePath
+              : item?.icon ?? "",
           showUnlimitedData: item?.unlimited ?? false,
         ),
       ],
@@ -196,7 +204,7 @@ class MyESimBundleBottomSheetView extends StatelessWidget {
                           children: <Widget>[
                             verticalSpaceSmall,
                             BundleInfoColumn(
-                              label: LocaleKeys.esim_validity.tr(),
+                              label: isRTL(context) ? "${LocaleKeys.esim_validity.tr()} eSIM" : LocaleKeys.esim_validity.tr(),
                               value: expiryDate,
                             ),
                           ],
@@ -241,16 +249,13 @@ class MyESimBundleBottomSheetView extends StatelessWidget {
           child: Column(
             spacing: 12,
             children: <Widget>[
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  LocaleKeys.consumption.tr(),
-                  style: captionTwoBoldTextStyle(
-                    context: context,
-                    fontColor: mainDarkTextColor(context: context),
-                  ),
+              Text(
+                LocaleKeys.consumption.tr(),
+                style: captionTwoBoldTextStyle(
+                  context: context,
+                  fontColor: mainDarkTextColor(context: context),
                 ),
-              ),
+              ).textSupportsRTL(context),
               viewModel.state.item?.unlimited ?? false
                   ? buildConsumptionBodyUnlimited(context, viewModel)
                   : buildConsumptionBodyLimited(context, viewModel),
@@ -305,24 +310,15 @@ class MyESimBundleBottomSheetView extends StatelessWidget {
                         enable: viewModel.state.consumptionLoading,
                       ),
                       verticalSpaceSmall,
+
                       Text(
-                        viewModel.state.consumptionText,
+                        "${viewModel.state.consumptionText}\n${LocaleKeys.data_consumed.tr()}",
                         textAlign: TextAlign.center,
+                        textDirection: TextDirection.ltr,
                         style: captionTwoNormalTextStyle(
                           context: context,
                           fontColor: contentTextColor(context: context),
-                        ),
-                      ).applyShimmer(
-                        context: context,
-                        enable: viewModel.state.consumptionLoading,
-                      ),
-                      Text(
-                        LocaleKeys.data_consumed.tr(),
-                        textAlign: TextAlign.center,
-                        style: captionTwoNormalTextStyle(
-                          context: context,
-                          fontColor: contentTextColor(context: context),
-                        ),
+                        ).copyWith(fontSize: 10),
                       ).applyShimmer(
                         context: context,
                         enable: viewModel.state.consumptionLoading,
@@ -404,29 +400,24 @@ class MyESimBundleBottomSheetView extends StatelessWidget {
   Widget buildPlanHistory(
     BuildContext context,
     PurchaseEsimBundleResponseModel? item,
+    MyESimBundleBottomSheetViewModel viewModel,
   ) {
     return Column(
       spacing: 12,
       children: <Widget>[
-        Align(
-          alignment: Alignment.centerLeft,
-          child: Text(
-            LocaleKeys.plan_history.tr(),
-            style: captionTwoBoldTextStyle(
-              context: context,
-              fontColor: mainDarkTextColor(context: context),
-            ),
+        Text(
+          LocaleKeys.plan_history.tr(),
+          style: captionTwoBoldTextStyle(
+            context: context,
+            fontColor: mainDarkTextColor(context: context),
           ),
-        ),
+        ).textSupportsRTL(context),
         Column(
           spacing: 10,
           children: item?.transactionHistory
                   ?.map(
                     (TransactionHistoryResponseModel transaction) =>
-                        transActionsHistory(
-                      context,
-                      transaction,
-                    ),
+                        transActionsHistory(context, transaction, viewModel),
                   )
                   .toList() ??
               <Widget>[],
@@ -438,6 +429,7 @@ class MyESimBundleBottomSheetView extends StatelessWidget {
   Widget transActionsHistory(
     BuildContext context,
     TransactionHistoryResponseModel? transaction,
+    MyESimBundleBottomSheetViewModel viewModel,
   ) {
     return Card(
       color: Colors.transparent,
@@ -475,6 +467,7 @@ class MyESimBundleBottomSheetView extends StatelessWidget {
                           ? const UnlimitedDataWidget()
                           : Text(
                               transaction?.bundle?.gprsLimitDisplay ?? "",
+                              textDirection: TextDirection.ltr,
                               style: headerOneMediumTextStyle(
                                 context: context,
                                 fontColor: mainDarkTextColor(context: context),
@@ -489,7 +482,7 @@ class MyESimBundleBottomSheetView extends StatelessWidget {
                       Text(
                         LocaleKeys.valid.tr(
                           namedArgs: <String, String>{
-                            "date": transaction?.bundle?.validityDisplay ?? "",
+                            "date": transaction?.bundle?.getValidityDisplay() ?? "",
                           },
                         ),
                         style: captionTwoNormalTextStyle(
@@ -525,7 +518,7 @@ class MyESimBundleBottomSheetView extends StatelessWidget {
                     color:
                         enabledMainButtonColor(context: context).withAlpha(30),
                     child: Text(
-                      transaction?.bundleType ?? "N/A",
+                      viewModel.getBundleTranslation(transaction?.bundleType),
                       style: captionTwoBoldTextStyle(
                         context: context,
                         fontColor: enabledMainButtonColor(context: context),

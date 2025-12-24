@@ -1,5 +1,6 @@
 import "package:easy_localization/easy_localization.dart";
 import "package:esim_open_source/presentation/enums/payment_type.dart";
+import "package:esim_open_source/presentation/extensions/helper_extensions.dart";
 import "package:esim_open_source/presentation/setup_bottom_sheet_ui.dart";
 import "package:esim_open_source/presentation/shared/shared_styles.dart";
 import "package:esim_open_source/presentation/shared/ui_helpers.dart";
@@ -65,16 +66,13 @@ class PaymentSelectionBottomSheetView extends StatelessWidget {
                         BottomSheetCloseButton(
                           onTap: () => viewModel.onCloseClick(),
                         ),
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
+                        Text(
                             LocaleKeys.paymentSelection_titleText.tr(),
                             style: headerThreeMediumTextStyle(
                               context: context,
                               fontColor: mainDarkTextColor(context: context),
                             ),
-                          ),
-                        ),
+                          ).textSupportsRTL(context),
                         verticalSpaceMedium,
                         ListView.separated(
                           shrinkWrap: true,

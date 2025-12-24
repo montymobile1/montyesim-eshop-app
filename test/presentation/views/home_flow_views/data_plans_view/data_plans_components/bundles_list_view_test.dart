@@ -24,7 +24,7 @@ Future<void> main() async {
           bundleName: "Test Bundle",
           gprsLimitDisplay: "5GB",
           unlimited: false,
-          validityDisplay: "30 days",
+          validityLabel: "days",
           priceDisplay: "10.99",
           icon: "test_icon",
           countries: <CountryResponseModel>[],

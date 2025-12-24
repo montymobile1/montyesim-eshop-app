@@ -70,12 +70,19 @@ class ResponseMain<T> {
   }
 
   dynamic get data => _data;
+
   String? get title => _title;
+
   String? get status => _status;
+
   String? get message => _message;
+
   int? get totalCount => _totalCount;
+
   int? get statusCode => _statusCode;
+
   int? get responseCode => _responseCode;
+
   String? get developerMessage => _developerMessage;
 }
 
@@ -85,11 +92,33 @@ class ResponseMainException implements Exception {
   final ResponseMain<dynamic> _errorReply;
 
   dynamic get data => _errorReply.data;
+
   String? get message => _errorReply.message;
+
   int? get errorCode => _errorReply.responseCode;
 
   @override
   String toString() {
     return message ?? "General Error";
   }
+}
+
+// Main Timeout Exception
+class MainTimeoutException extends ResponseMainException {
+  MainTimeoutException({
+    String message = "Request timeout",
+    dynamic data,
+  }) : super(
+          ResponseMain<dynamic>.createErrorWithData(
+            data: data,
+            message: message,
+            responseCode: timeoutErrorCode,
+            statusCode: timeoutErrorCode,
+            title: "Timeout",
+            status: "timeout",
+            developerMessage: "The request took too long to respond",
+          ),
+        ); // or any code you prefer
+  // Static timeout error code
+  static const int timeoutErrorCode = 408;
 }

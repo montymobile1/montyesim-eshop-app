@@ -425,7 +425,7 @@ class TestDataFactory {
       paymentDate: paymentDate ?? "1640995200", // 2022-01-01
       validityDate: validityDate,
       gprsLimitDisplay: gprsLimitDisplay ?? "1GB",
-      validityDisplay: validityDisplay ?? "7 Days",
+      validityLabel: validityDisplay ?? "Days",
       icon: icon ?? "test-icon-path",
       smdpAddress: smdpAddress ?? "test.smdp.address",
       activationCode: activationCode ?? "LPA:test-activation-code",

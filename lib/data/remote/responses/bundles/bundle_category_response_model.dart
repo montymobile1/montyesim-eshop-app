@@ -5,6 +5,8 @@ class BundleCategoryResponseModel {
     this.title,
   });
 
+  bool get isCruise => type == "CRUISE";
+
   factory BundleCategoryResponseModel.fromJson(Map<String, dynamic> json) {
     return BundleCategoryResponseModel(
       type: json["type"],

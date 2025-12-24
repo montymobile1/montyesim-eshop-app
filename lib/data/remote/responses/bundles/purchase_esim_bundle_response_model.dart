@@ -1,7 +1,10 @@
+import "package:easy_localization/easy_localization.dart";
 import "package:esim_open_source/data/remote/responses/bundles/bundle_category_response_model.dart";
+import "package:esim_open_source/data/remote/responses/bundles/bundle_response_model.dart";
 import "package:esim_open_source/data/remote/responses/bundles/country_response_model.dart";
 import "package:esim_open_source/data/remote/responses/bundles/transaction_history_response_model.dart";
 import "package:esim_open_source/presentation/extensions/context_extension.dart";
+import "package:esim_open_source/translations/locale_keys.g.dart";
 import "package:esim_open_source/utils/parsing_helper.dart";
 import "package:flutter/material.dart";
 
@@ -69,7 +72,7 @@ class PurchaseEsimBundleResponseModel {
     String? priceDisplay,
     bool? unlimited,
     num? validity,
-    String? validityDisplay,
+    String? validityLabel,
     String? planType,
     String? activityPolicy,
     List<String>? bundleMessage,
@@ -103,7 +106,7 @@ class PurchaseEsimBundleResponseModel {
     _priceDisplay = priceDisplay;
     _unlimited = unlimited;
     _validity = validity;
-    _validityDisplay = validityDisplay;
+    _validityLabel = validityLabel;
     _planType = planType;
     _activityPolicy = activityPolicy;
     _bundleMessage = bundleMessage;
@@ -141,7 +144,7 @@ class PurchaseEsimBundleResponseModel {
     _priceDisplay = json["price_display"];
     _unlimited = json["unlimited"];
     _validity = json["validity"];
-    _validityDisplay = json["validity_display"];
+    _validityLabel = json["validity_label"];
     _planType = json["plan_type"];
     _activityPolicy = json["activity_policy"];
 
@@ -191,7 +194,7 @@ class PurchaseEsimBundleResponseModel {
   String? _priceDisplay;
   bool? _unlimited;
   num? _validity;
-  String? _validityDisplay;
+  String? _validityLabel;
   String? _planType;
   String? _activityPolicy;
   List<String>? _bundleMessage;
@@ -226,7 +229,7 @@ class PurchaseEsimBundleResponseModel {
     String? priceDisplay,
     bool? unlimited,
     num? validity,
-    String? validityDisplay,
+    String? validityLabel,
     String? planType,
     String? activityPolicy,
     List<String>? bundleMessage,
@@ -261,7 +264,7 @@ class PurchaseEsimBundleResponseModel {
         priceDisplay: priceDisplay ?? _priceDisplay,
         unlimited: unlimited ?? _unlimited,
         validity: validity ?? _validity,
-        validityDisplay: validityDisplay ?? _validityDisplay,
+        validityLabel: validityLabel ?? _validityLabel,
         planType: planType ?? _planType,
         activityPolicy: activityPolicy ?? _activityPolicy,
         bundleMessage: bundleMessage ?? _bundleMessage,
@@ -276,7 +279,7 @@ class PurchaseEsimBundleResponseModel {
 
   bool? get bundleExpired => _bundleExpired;
 
-  dynamic get labelName => _labelName;
+  String? get labelName => _labelName;
 
   String? get orderNumber => _orderNumber;
 
@@ -322,7 +325,7 @@ class PurchaseEsimBundleResponseModel {
 
   num? get validity => _validity;
 
-  String? get validityDisplay => _validityDisplay;
+  String? get validityLabel => _validityLabel;
 
   String? get planType => _planType;
 
@@ -367,7 +370,7 @@ class PurchaseEsimBundleResponseModel {
     map["price_display"] = _priceDisplay;
     map["unlimited"] = _unlimited;
     map["validity"] = _validity;
-    map["validity_display"] = _validityDisplay;
+    map["validity_label"] = validityLabel;
     map["plan_type"] = _planType;
     map["activity_policy"] = _activityPolicy;
     map["bundle_message"] = _bundleMessage;
@@ -380,6 +383,15 @@ class PurchaseEsimBundleResponseModel {
           .toList();
     }
     return map;
+  }
+
+  String? getValidityDisplay() {
+    if (validityLabel != null) {
+      ValidityLabelEnum? val =
+          ValidityLabelEnum.fromString(validityLabel ?? "");
+      return val?.getValidityDisplay(validity?.toInt());
+    }
+    return null;
   }
 
   static List<PurchaseEsimBundleResponseModel> fromJsonList({dynamic json}) {
@@ -453,6 +465,30 @@ class PurchaseEsimBundleResponseModel {
     }
   }
 
+  String getStatusText() {
+    switch (_mapStringToBundleStatus(orderStatus ?? "")) {
+      case BundleStatus.active:
+        return LocaleKeys.status_active.tr();
+      case BundleStatus.inactive:
+        return LocaleKeys.status_inactive.tr();
+      case BundleStatus.expired:
+        return LocaleKeys.status_expired.tr();
+      default:
+        return "";
+    }
+  }
+
+  String? getDisplayName() {
+    if (transactionHistory != null) {
+      if ((transactionHistory?.length ?? 0) > 0) {
+        if (transactionHistory?.first.bundle?.label?.isNotEmpty ?? false) {
+          return transactionHistory?.first.bundle?.label;
+        }
+      }
+    }
+    return bundleName;
+  }
+
   static List<PurchaseEsimBundleResponseModel> mockItems() {
     return <PurchaseEsimBundleResponseModel>[
       PurchaseEsimBundleResponseModel(
@@ -464,7 +500,7 @@ class PurchaseEsimBundleResponseModel {
         bundleName: "Bundle name",
         displayTitle: "Europe5GB10Days",
         displaySubtitle: "USD",
-        validityDisplay: "1 Day",
+        validityLabel: "Day",
         gprsLimitDisplay: "5 GB",
         // icon: "https://placehold.co/600x400?bundle=None",
         countries: CountryResponseModel.getMockCountries(),
@@ -478,7 +514,7 @@ class PurchaseEsimBundleResponseModel {
         bundleName: "Bundle name",
         displayTitle: "Europe5GB10Days",
         displaySubtitle: "USD",
-        validityDisplay: "1 Day",
+        validityLabel: "Day",
         gprsLimitDisplay: "5 GB",
         // icon: "https://placehold.co/600x400?bundle=None",
         countries: CountryResponseModel.getMockCountries(),
@@ -492,7 +528,7 @@ class PurchaseEsimBundleResponseModel {
         bundleName: "Bundle name",
         displayTitle: "Europe5GB10Days",
         displaySubtitle: "USD",
-        validityDisplay: "1 Day",
+        validityLabel: "Day",
         gprsLimitDisplay: "5 GB",
         // icon: "https://placehold.co/600x400?bundle=None",
         countries: CountryResponseModel.getMockCountries(),

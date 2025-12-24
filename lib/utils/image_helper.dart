@@ -58,11 +58,11 @@ Future<dynamic> saveImageToGallery({
 
   result.forEach((Permission permission, PermissionStatus status) {
     if (status != PermissionStatus.granted) {
-      DisplayMessageHelper.toast(
-        LocaleKeys.permission_required.tr(
-          namedArgs: <String, String>{"permission": permission.toString()},
-        ),
-      );
+      // DisplayMessageHelper.toast(
+      //   LocaleKeys.permission_required.tr(
+      //     namedArgs: <String, String>{"permission": permission.toString()},
+      //   ),
+      // );
       return;
     }
   });

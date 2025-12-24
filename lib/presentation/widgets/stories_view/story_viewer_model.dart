@@ -1,6 +1,7 @@
 import "dart:async";
 import "dart:developer";
 
+import "package:esim_open_source/presentation/extensions/helper_extensions.dart";
 import "package:esim_open_source/presentation/helpers/view_state_utils.dart";
 import "package:esim_open_source/presentation/views/base/base_model.dart";
 import "package:esim_open_source/presentation/widgets/stories_view/story_item.dart";
@@ -210,7 +211,14 @@ class StoryViewerViewModel extends BaseModel {
       final double width = MediaQuery.of(context).size.width;
       final double dx = details.globalPosition.dx;
 
-      if (dx < width / 3) {
+      bool shouldGoToPrevious;
+      if (isRTL(context)) {
+        shouldGoToPrevious = dx > (width * 2 / 3);
+      } else {
+        shouldGoToPrevious = dx < (width / 3);
+      }
+
+      if (shouldGoToPrevious) {
         _goToPreviousOrRestart();
       } else {
         _nextStory();

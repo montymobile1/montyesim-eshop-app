@@ -65,7 +65,7 @@ Future<void> main() async {
             displaySubtitle: "Test Subtitle",
             gprsLimitDisplay: "5GB",
             priceDisplay: r"$10.00",
-            validityDisplay: "7 days",
+            validityLabel: "days",
           );
 
           when(mockViewModel.bundle).thenReturn(testBundle);
@@ -128,7 +128,7 @@ Future<void> main() async {
             displayTitle: "Test Bundle",
             gprsLimitDisplay: "5GB",
             priceDisplay: r"$10.00",
-            validityDisplay: "7 days",
+            validityLabel: "days",
           );
 
           when(mockViewModel.bundle).thenReturn(testBundle);
@@ -201,7 +201,7 @@ Future<void> main() async {
         displayTitle: "Test Bundle",
         gprsLimitDisplay: "5GB",
         priceDisplay: r"$10.00",
-        validityDisplay: "7 days",
+        validityLabel: "days",
       );
 
       when(mockViewModel.bundle).thenReturn(testBundle);
@@ -262,7 +262,7 @@ Future<void> main() async {
             displayTitle: "Test Bundle",
             gprsLimitDisplay: "5GB",
             priceDisplay: r"$10.00",
-            validityDisplay: "7 days",
+            validityLabel: "days",
           );
 
           when(mockViewModel.bundle).thenReturn(testBundle);
@@ -360,7 +360,7 @@ Future<void> main() async {
         displayTitle: "Test Bundle",
         gprsLimitDisplay: "5GB",
         priceDisplay: r"$10.00",
-        validityDisplay: "7 days",
+        validityLabel: "days",
       );
 
       when(mockViewModel.bundle).thenReturn(testBundle);
@@ -424,7 +424,7 @@ Future<void> main() async {
         displayTitle: "Unlimited Bundle",
         unlimited: true,
         priceDisplay: r"$50.00",
-        validityDisplay: "30 days",
+        validityLabel: "days",
       );
 
       when(mockViewModel.bundle).thenReturn(testBundle);
@@ -485,7 +485,7 @@ Future<void> main() async {
             displayTitle: "Test Bundle",
             gprsLimitDisplay: "5GB",
             priceDisplay: r"$10.00",
-            validityDisplay: "7 days",
+            validityLabel: "days",
           );
 
           when(mockViewModel.bundle).thenReturn(testBundle);
@@ -557,7 +557,7 @@ Future<void> main() async {
             displayTitle: "Test Bundle",
             gprsLimitDisplay: "5GB",
             priceDisplay: r"$10.00",
-            validityDisplay: "7 days",
+            validityLabel: "days",
           );
 
           when(mockViewModel.bundle).thenReturn(testBundle);
@@ -629,7 +629,7 @@ Future<void> main() async {
             displayTitle: "Test Bundle",
             gprsLimitDisplay: "5GB",
             priceDisplay: r"$10.00",
-            validityDisplay: "7 days",
+            validityLabel: "days",
           );
 
           when(mockViewModel.bundle).thenReturn(testBundle);
@@ -696,7 +696,7 @@ Future<void> main() async {
             displayTitle: "Test Bundle",
             gprsLimitDisplay: "5GB",
             priceDisplay: r"$10.00",
-            validityDisplay: "7 days",
+            validityLabel: "days",
           );
 
           when(mockViewModel.bundle).thenReturn(testBundle);

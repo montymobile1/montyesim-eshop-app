@@ -2,6 +2,7 @@ import "dart:async";
 
 import "package:easy_localization/easy_localization.dart";
 import "package:esim_open_source/app/environment/app_environment.dart";
+import "package:esim_open_source/data/remote/responses/base_response_model.dart";
 import "package:esim_open_source/data/remote/responses/bundles/bundle_assign_response_model.dart";
 import "package:esim_open_source/di/locator.dart";
 import "package:esim_open_source/domain/repository/api_auth_repository.dart";
@@ -121,7 +122,7 @@ class UpgradeWalletBottomSheetViewModel extends BaseModel {
     setViewState(ViewState.busy);
 
     Resource<BundleAssignResponseModel?> response =
-        await topUpWalletUseCase.execute(
+    await topUpWalletUseCase.execute(
       TopUpWalletParam(
         amount: amount,
         currencyCode: "",
@@ -131,7 +132,7 @@ class UpgradeWalletBottomSheetViewModel extends BaseModel {
       response,
       onSuccess: (Resource<BundleAssignResponseModel?> result) async {
         PaymentStatus paymentStatus =
-            PaymentStatus.fromString(result.data?.paymentStatus);
+        PaymentStatus.fromString(result.data?.paymentStatus);
         if (paymentStatus == PaymentStatus.completed) {
           return;
         }
@@ -146,14 +147,25 @@ class UpgradeWalletBottomSheetViewModel extends BaseModel {
             publishableKey: result.data?.publishableKey ?? "",
             merchantIdentifier: result.data?.merchantIdentifier ?? "",
             paymentIntentClientSecret:
-                result.data?.paymentIntentClientSecret ?? "",
+            result.data?.paymentIntentClientSecret ?? "",
             customerId: result.data?.customerId ?? "",
             customerEphemeralKeySecret:
-                result.data?.customerEphemeralKeySecret ?? "",
+            result.data?.customerEphemeralKeySecret ?? "",
             test: result.data?.testEnv ?? false,
             billingCountryCode: result.data?.billingCountryCode ?? "",
           ),
         );
+      },
+      onFailure: (Resource<BundleAssignResponseModel?> result) async {
+        if (response.error?.errorCode ==
+            MainTimeoutException.timeoutErrorCode) {
+          await showNativeErrorMessage(
+            response.error?.message,
+            LocaleKeys.processing.tr(),
+          );
+          return;
+        }
+        handleError(response);
       },
     );
     setViewState(ViewState.idle);

@@ -80,7 +80,7 @@ class OrderBottomSheetView extends StatelessWidget {
               verticalSpaceSmall,
               BundleValidityView(
                 bundleValidity: viewModel
-                        .initBundleOrderModel?.bundleDetails?.validityDisplay ??
+                        .initBundleOrderModel?.bundleDetails?.getValidityDisplay() ??
                     "",
                 bundleExpiryDate: DateTimeUtils.formatTimestampToDate(
                   timestamp: int.parse(

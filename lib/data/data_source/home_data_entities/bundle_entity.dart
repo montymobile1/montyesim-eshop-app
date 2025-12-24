@@ -22,7 +22,7 @@ class BundleEntity {
     required this.priceDisplay,
     required this.unlimited,
     required this.validity,
-    required this.validityDisplay,
+    required this.validityLabel,
     required this.bundleTypeValue,
     required this.icon,
   });
@@ -42,7 +42,7 @@ class BundleEntity {
       priceDisplay: model.priceDisplay,
       unlimited: model.unlimited,
       validity: model.validity,
-      validityDisplay: model.validityDisplay,
+      validityLabel: model.validityLabel,
       bundleTypeValue: type.index,
     );
   }
@@ -62,7 +62,7 @@ class BundleEntity {
   final String? priceDisplay;
   final bool? unlimited;
   final int? validity;
-  final String? validityDisplay;
+  final String? validityLabel;
   final String? icon;
 
   final ToOne<BundleCategoryEntity> bundleCategory =
@@ -95,7 +95,7 @@ class BundleEntity {
       priceDisplay: priceDisplay,
       unlimited: unlimited,
       validity: validity,
-      validityDisplay: validityDisplay,
+      validityLabel: validityLabel,
       bundleCategory: bundleCategory.target?.toModel(),
       countries: countries.map((CountryEntity c) => c.toModel()).toList(),
     );

@@ -5,6 +5,7 @@ import "dart:math";
 import "package:easy_localization/easy_localization.dart";
 import "package:esim_open_source/app/app.locator.dart";
 import "package:esim_open_source/app/environment/app_environment.dart";
+import "package:esim_open_source/data/remote/responses/base_response_model.dart";
 import "package:esim_open_source/data/remote/responses/bundles/bundle_assign_response_model.dart";
 import "package:esim_open_source/data/remote/responses/bundles/bundle_response_model.dart";
 import "package:esim_open_source/domain/repository/services/analytics_service.dart";
@@ -214,6 +215,17 @@ class TopUpBottomSheetViewModel extends EsimBaseModel {
             bundleCurrency: bundleCurrency,
           ),
         );
+      },
+      onFailure: (Resource<BundleAssignResponseModel?> result) async {
+        if (response.error?.errorCode ==
+            MainTimeoutException.timeoutErrorCode) {
+          await showNativeErrorMessage(
+            response.error?.message,
+            LocaleKeys.processing.tr(),
+          );
+          return;
+        }
+        handleError(response);
       },
     );
   }

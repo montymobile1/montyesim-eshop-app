@@ -1,4 +1,6 @@
+import "package:easy_localization/easy_localization.dart";
 import "package:esim_open_source/presentation/widgets/warning_widget.dart";
+import "package:esim_open_source/translations/locale_keys.g.dart";
 import "package:flutter/material.dart";
 import "package:flutter/rendering.dart";
 import "package:flutter_test/flutter_test.dart";
@@ -26,7 +28,7 @@ Future<void> main() async {
       await tester.pump();
 
       expect(find.byType(WarningWidget), findsOneWidget);
-      expect(find.text("Warning"), findsOneWidget);
+      expect(find.text(LocaleKeys.warning_title.tr()), findsOneWidget);
       expect(find.text("This is a warning message"), findsOneWidget);
       expect(find.byType(Card), findsOneWidget);
     });

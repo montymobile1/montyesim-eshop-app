@@ -33,6 +33,7 @@ class GeneralError {
     this.errorCode,
     this.exception,
   });
+
   final int? errorCode;
   final String message;
   final Exception? exception;
@@ -55,6 +56,15 @@ FutureOr<Resource<T>> responseToResource<T>(FutureOr<dynamic> request) async {
       error: GeneralError(
         message: response.title ?? "",
         errorCode: response.responseCode,
+      ),
+    );
+  } on MainTimeoutException catch (ex) {
+    return Resource<T>.error(
+      ex.message ?? "",
+      error: GeneralError(
+        message: ex.message ?? "",
+        errorCode: ex.errorCode,
+        exception: ex,
       ),
     );
   } on ResponseMainException catch (ex) {

@@ -144,7 +144,7 @@ Future<void> main() async {
       await Future<void>.delayed(const Duration(milliseconds: 200));
 
       // Assert
-      expect(viewModel.state.showTopUP, true);
+      expect(viewModel.state.showTopUP, false);
     });
 
     test("fetchConsumptionData success calculates percentage correctly",

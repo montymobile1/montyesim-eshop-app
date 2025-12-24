@@ -1,4 +1,4 @@
-import "package:easy_localization/easy_localization.dart";
+import "package:easy_localization/easy_localization.dart" show StringTranslateExtension;
 import "package:esim_open_source/di/locator.dart";
 import "package:esim_open_source/presentation/extensions/shimmer_extensions.dart";
 import "package:esim_open_source/presentation/setup_bottom_sheet_ui.dart";
@@ -179,6 +179,7 @@ class ConsumptionBottomSheetView extends StatelessWidget {
                         Text(
                           viewModel.state.consumptionText,
                           textAlign: TextAlign.center,
+                          textDirection: TextDirection.ltr,
                           style: captionTwoNormalTextStyle(
                             context: context,
                             fontColor: contentTextColor(context: context),
@@ -194,7 +195,7 @@ class ConsumptionBottomSheetView extends StatelessWidget {
                           style: captionTwoNormalTextStyle(
                             context: context,
                             fontColor: contentTextColor(context: context),
-                          ),
+                          ).copyWith(fontSize: 10),
                         ).applyShimmer(
                           context: context,
                           enable: viewModel.isBusy,

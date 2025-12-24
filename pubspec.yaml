@@ -15,7 +15,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.0.0+9
+version: 1.0.0+11
 
 environment:
   sdk: '>=3.3.2 <4.0.0'
@@ -37,30 +37,30 @@ dependencies:
   rxdart: ^0.27.7
   url_launcher: ^6.3.2
   cached_network_image: ^3.4.1
-  image_picker: ^1.2.0
+  image_picker: ^1.2.1
   stacked: ^3.5.0
   stacked_services: ^1.6.0
   get_it: ^8.2.0
   lottie: ^3.3.2
   flutter_hooks: ^0.21.3+1
   provider: ^6.1.5+1
-  flutter_native_splash: ^2.4.6
+  flutter_native_splash: ^2.4.7
   flutter_launcher_icons: ^0.14.4
   fluttertoast: ^8.2.12
-  share_plus: ^11.0.0
+  share_plus: ^12.0.1
   package_info_plus: ^8.3.0
   stacked_themes: ^0.3.15
-  device_info_plus: ^12.1.0
+  device_info_plus: ^12.3.0
   easy_localization: ^3.0.8
-  android_id: ^0.4.0
+  android_id: ^0.5.1
   #  fluttercontactpicker: ^5.0.0
-  flutter_svg: ^2.2.1
+  flutter_svg: ^2.2.3
   #  android_sms_retriever: ^1.3.3
   #  biometric_storage: 5.0.0
   local_auth: ^2.3.0
   shimmer: ^3.0.0
   flutter_keyboard_visibility: ^6.0.0
-  smooth_page_indicator: ^1.2.1
+  smooth_page_indicator: ^2.0.1
   visibility_detector: ^0.4.0+2
   flutter_statusbarcolor_ns: ^0.6.0
   #  contacts_service: ^0.6.3
@@ -69,9 +69,9 @@ dependencies:
   timer_count_down: ^2.2.2
   #  flutter_otp_text_field: ^1.1.3+2
   webview_flutter: ^4.13.0
-  firebase_core: ^4.1.1
-  firebase_messaging: ^16.0.2
-  flutter_local_notifications: ^19.4.2
+  firebase_core: ^4.2.1
+  firebase_messaging: ^16.0.4
+  flutter_local_notifications: ^19.5.0
   flutter_app_badger: ^1.5.0
   intl: ^0.20.2
   flutter_image_compress: ^2.4.0
@@ -84,9 +84,9 @@ dependencies:
   #  fpdart:
   stacked_shared: ^1.4.2
   connectivity_plus: ^7.0.0
-  webview_flutter_android: ^4.10.5
-  webview_flutter_wkwebview: ^3.23.1
-  local_auth_platform_interface: ^1.0.10
+  webview_flutter_android: ^4.10.11
+  webview_flutter_wkwebview: ^3.23.5
+  local_auth_platform_interface: ^1.1.0
   google_sign_in: ^7.2.0
   qr_flutter: ^4.1.0
   flutter_facebook_auth: ^7.1.2
@@ -94,33 +94,33 @@ dependencies:
   phone_input: ^1.0.0
   flutter_html: ^3.0.0
   json_annotation: ^4.9.0
-  flutter_stripe: ^12.0.2
-  shared_preferences: ^2.5.3
-  safe_device: ^1.3.5
-  objectbox: ^4.3.1
-  objectbox_flutter_libs: ^4.3.1
-  chucker_flutter: ^1.8.5
+  flutter_stripe: ^12.1.1
+  shared_preferences: ^2.5.4
+  safe_device: ^1.3.8
+  objectbox: ^5.0.4
+  objectbox_flutter_libs: ^5.0.4
+  chucker_flutter: ^1.9.0
   path: ^1.9.1
   flutter_esim: ^0.0.4
   gallery_saver_plus: ^3.2.9
   pdf: ^3.11.3
-  supabase_flutter: ^2.10.3
-  crypto: ^3.0.6
+  supabase_flutter: ^2.12.0
+  crypto: ^3.0.7
   flutter_vibrate: ^1.3.0
-  firebase_remote_config: ^6.0.2
+  firebase_remote_config: ^6.1.2
   app_links: ^6.4.1
   qr_code_scanner: ^1.0.1
-  flutter_branch_sdk: ^8.9.0
+  flutter_branch_sdk: ^8.10.0
   cupertino_http: ^2.3.0
-  firebase_analytics: ^12.0.2
-  facebook_app_events: ^0.20.1
+  firebase_analytics: ^12.0.4
+  facebook_app_events: ^0.21.0
   app_tracking_transparency: ^2.0.6+1
-  firebase_crashlytics: ^5.0.2
-  phone_numbers_parser: ^9.0.15
+  firebase_crashlytics: ^5.0.5
+  phone_numbers_parser: ^9.0.17
 dev_dependencies:
-  objectbox_generator: ^4.3.1
+  objectbox_generator: ^5.0.4
   # depends on objectbox_generator
-  build_runner: ^2.7.1
+  build_runner: ^2.10.4
   flutter_test:
     sdk: flutter
   # The "flutter_lints" package below contains a set of recommended lints to
@@ -129,7 +129,7 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^6.0.0
-  mockito: ^5.5.1
+  mockito: ^5.6.1
   husky: ^0.1.7
 
 # For information on the generic Dart part of this file, see the

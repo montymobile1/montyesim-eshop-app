@@ -1,3 +1,4 @@
+import "package:esim_open_source/presentation/extensions/helper_extensions.dart";
 import "package:esim_open_source/presentation/shared/shared_styles.dart";
 import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
@@ -23,14 +24,15 @@ class BundleInfoColumn extends StatelessWidget {
             context: context,
             fontColor: mainDarkTextColor(context: context),
           ),
-        ),
+        ).textSupportsRTL(context),
         Text(
           value,
+          //textDirection: TextDirection.ltr,
           style: captionTwoNormalTextStyle(
             context: context,
             fontColor: contentTextColor(context: context),
           ),
-        ),
+        ).textSupportsRTL(context),
       ],
     );
   }

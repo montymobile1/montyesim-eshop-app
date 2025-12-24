@@ -375,5 +375,18 @@ abstract class  LocaleKeys {
   static const String total = "total";
   static const String bundleDetails_planTypeText_dataOnly = "bundleDetails_planTypeText_dataOnly";
   static const String bundleDetails_activationPolicy_Value = "bundleDetails_activationPolicy_Value";
-
+  static const String status_inactive = "status_inactive";
+  static const String status_active = "status_active";
+  static const String status_expired = "status_expired";
+  static const String warning_title = "warning_title";
+  static const String processing = "processing";
+  static const String validity_day = "validity_day";
+  static const String validity_day_plural = "validity_day_plural";
+  static const String validity_month = "validity_month";
+  static const String validity_month_plural = "validity_month_plural";
+  static const String validity_week = "validity_week";
+  static const String validity_week_plural = "validity_week_plural";
+  static const String validity_year = "validity_year";
+  static const String validity_year_plural = "validity_year_plural";
+  static const String primaryBundle = "primaryBundle";
 }

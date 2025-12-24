@@ -24,7 +24,7 @@ class CommonNavigationTitle extends StatelessWidget {
     return SizedBox(
       height: 40,
       child: PaddingWidget.applySymmetricPadding(
-        horizontal: 10,
+        horizontal: 5,
         child: Row(
           children: <Widget>[
             GestureDetector(

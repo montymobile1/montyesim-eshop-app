@@ -1,5 +1,9 @@
+import "package:easy_localization/easy_localization.dart"
+    show StringTranslateExtension;
 import "package:esim_open_source/data/remote/responses/bundles/bundle_category_response_model.dart";
 import "package:esim_open_source/data/remote/responses/bundles/country_response_model.dart";
+import "package:esim_open_source/translations/locale_keys.g.dart"
+    show LocaleKeys;
 import "package:esim_open_source/utils/parsing_helper.dart";
 
 class BundleResponseModel {
@@ -17,9 +21,10 @@ class BundleResponseModel {
     this.priceDisplay,
     this.unlimited,
     this.validity,
-    this.validityDisplay,
+    this.validityLabel,
     this.countries,
     this.icon,
+    this.label,
   });
 
   // Factory method to create an instance from JSON
@@ -40,8 +45,9 @@ class BundleResponseModel {
       priceDisplay: json["price_display"],
       unlimited: json["unlimited"],
       validity: json["validity"],
-      validityDisplay: json["validity_display"],
+      validityLabel: json["validity_label"],
       icon: json["icon"],
+      label: json["label"],
       countries: json["countries"] != null
           ? List<CountryResponseModel>.from(
               json["countries"]
@@ -64,9 +70,12 @@ class BundleResponseModel {
   final String? priceDisplay;
   final bool? unlimited;
   final int? validity;
-  final String? validityDisplay;
+  final String? validityLabel;
   final String? icon;
   final List<CountryResponseModel>? countries;
+  final String? label;
+
+  bool get isCruise => bundleCategory?.isCruise ?? false;
 
   // Method to convert instance to JSON
   Map<String, dynamic> toJson() {
@@ -85,10 +94,20 @@ class BundleResponseModel {
       "unlimited": unlimited,
       "validity": validity,
       "icon": icon,
-      "validity_display": validityDisplay,
+      "label": label,
+      "validity_label": validityLabel,
       "countries":
           countries?.map((CountryResponseModel item) => item.toJson()).toList(),
     };
+  }
+
+  String? getValidityDisplay() {
+    if (validityLabel != null) {
+      ValidityLabelEnum? val =
+          ValidityLabelEnum.fromString(validityLabel ?? "");
+      return val?.getValidityDisplay(validity);
+    }
+    return null;
   }
 
   static List<BundleResponseModel> fromJsonList({dynamic json}) {
@@ -116,7 +135,7 @@ class BundleResponseModel {
         priceDisplay: "15 BYR",
         unlimited: false,
         validity: 1,
-        validityDisplay: "1 Day",
+        validityLabel: "Day",
         countries: <CountryResponseModel>[
           CountryResponseModel(
             country: "Albania",
@@ -147,7 +166,7 @@ class BundleResponseModel {
         priceDisplay: "1.5 USD",
         unlimited: false,
         validity: 1,
-        validityDisplay: "1 Day",
+        validityLabel: "Day",
         countries: <CountryResponseModel>[],
       ),
       BundleResponseModel(
@@ -169,7 +188,7 @@ class BundleResponseModel {
         priceDisplay: "1.5 USD",
         unlimited: false,
         validity: 1,
-        validityDisplay: "1 Day",
+        validityLabel: "Day",
         countries: <CountryResponseModel>[],
       ),
       BundleResponseModel(
@@ -191,7 +210,7 @@ class BundleResponseModel {
         priceDisplay: "1.5 USD",
         unlimited: false,
         validity: 1,
-        validityDisplay: "1 Day",
+        validityLabel: "Day",
         countries: <CountryResponseModel>[
           CountryResponseModel(
             country: "France",
@@ -230,11 +249,71 @@ class BundleResponseModel {
         priceDisplay: "3 USD",
         unlimited: false,
         validity: 1,
-        validityDisplay: "1 Day",
+        validityLabel: "Day",
         countries: <CountryResponseModel>[],
       ),
     ];
 
     return mockBundles;
+  }
+}
+
+enum ValidityLabelEnum {
+  days("day"),
+  weeks("week"),
+  months("month"),
+  years("year");
+
+  const ValidityLabelEnum(this.type);
+
+  final String type;
+
+  /// Creates a [ValidityLabelEnum] from a string value
+  /// Returns null if no matching type is found
+  static ValidityLabelEnum? fromString(String value) {
+    return ValidityLabelEnum.values.cast<ValidityLabelEnum?>().firstWhere(
+          (ValidityLabelEnum? type) =>
+              value.toLowerCase().contains(type?.type.toLowerCase() ?? ""),
+          orElse: () => null,
+        );
+  }
+
+  /// Gets the string representation of the bundle type
+  @override
+  String toString() => type;
+
+  String getValidityDisplay(int? count) {
+    bool isPlural = false;
+    if (count != null) {
+      isPlural = count > 1;
+    }
+
+    switch (this) {
+      case days:
+        if (isPlural) {
+          return "$count ${LocaleKeys.validity_day_plural.tr()} ";
+        }
+
+        return "$count ${LocaleKeys.validity_day.tr()}";
+      case weeks:
+        if (isPlural) {
+          return "$count ${LocaleKeys.validity_week_plural.tr()}";
+        }
+
+        return "$count ${LocaleKeys.validity_week.tr()}";
+      case months:
+        if (isPlural) {
+          return "$count ${LocaleKeys.validity_month_plural.tr()}";
+        }
+
+        return "$count ${LocaleKeys.validity_month.tr()}";
+
+      case years:
+        if (isPlural) {
+          return "$count ${LocaleKeys.validity_year_plural.tr()}";
+        }
+
+        return "$count ${LocaleKeys.validity_year.tr()}";
+    }
   }
 }

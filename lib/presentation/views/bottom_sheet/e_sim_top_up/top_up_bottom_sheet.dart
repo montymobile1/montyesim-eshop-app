@@ -1,7 +1,10 @@
 import "dart:async";
 
-import "package:easy_localization/easy_localization.dart";
+import "package:easy_localization/easy_localization.dart"
+    show StringTranslateExtension;
+import "package:esim_open_source/app/environment/environment_images.dart";
 import "package:esim_open_source/data/remote/responses/bundles/bundle_response_model.dart";
+import "package:esim_open_source/presentation/extensions/helper_extensions.dart";
 import "package:esim_open_source/presentation/extensions/shimmer_extensions.dart";
 import "package:esim_open_source/presentation/setup_bottom_sheet_ui.dart";
 import "package:esim_open_source/presentation/shared/shared_styles.dart";
@@ -69,7 +72,7 @@ class TopUpBottomSheet extends StatelessWidget {
                                 context: context,
                                 fontColor: contentTextColor(context: context),
                               ),
-                            ),
+                            ).textSupportsRTL(context),
                           ),
                         )
                       : Expanded(
@@ -104,7 +107,7 @@ class TopUpBottomSheet extends StatelessWidget {
               context: context,
               fontColor: mainDarkTextColor(context: context),
             ),
-          ),
+          ).textSupportsRTL(context),
         ),
       ],
     );
@@ -120,16 +123,20 @@ class TopUpBottomSheet extends StatelessWidget {
       itemBuilder: (BuildContext context, int index) {
         BundleResponseModel item = viewModel.bundleItems[index];
         return EsimBundleTopUpWidget(
-          priceButtonText: "${item.priceDisplay} - Buy Now",
+          priceButtonText: LocaleKeys.bundleInfo_priceText.tr(
+            namedArgs: <String, String>{
+              "price": item.priceDisplay ?? "",
+            },
+          ),
           title: item.bundleName ?? "",
           data: item.gprsLimitDisplay ?? "",
           showUnlimitedData: item.unlimited ?? false,
-          validFor: item.validityDisplay ?? "",
+          validFor: item.getValidityDisplay() ?? "",
           onPriceButtonClick: () {
             unawaited(viewModel.onBuyClick(index: index));
           },
           isLoading: viewModel.applyShimmer,
-          icon: item.icon ?? "",
+          icon: item.isCruise? EnvironmentImages.globalFlag.fullImagePath: item.icon ?? "",
         );
       },
     );
@@ -201,6 +208,7 @@ class EsimBundleTopUpWidget extends StatelessWidget {
                 Expanded(
                   child: Text(
                     title,
+                    textDirection: TextDirection.ltr,
                     style: captionOneMediumTextStyle(
                       context: context,
                       fontColor:
@@ -216,11 +224,12 @@ class EsimBundleTopUpWidget extends StatelessWidget {
                     ? const UnlimitedDataWidget()
                     : Text(
                         data,
+                        textDirection: TextDirection.ltr,
                         style: headerOneBoldTextStyle(
                           context: context,
                           fontColor: bundleDataPriceTextColor(context: context),
                         ),
-                      ).applyShimmer(context: context, enable: isLoading),
+                      ).textSupportsRTL(context).applyShimmer(context: context, enable: isLoading),
               ],
             ),
             const BundleDivider(),

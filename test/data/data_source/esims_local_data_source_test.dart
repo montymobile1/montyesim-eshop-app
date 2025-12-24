@@ -87,7 +87,7 @@ EsimEntity createTestEsimEntity({
     priceDisplay: null,
     unlimited: null,
     validity: null,
-    validityDisplay: null,
+    validityLabel: null,
     planType: null,
     activityPolicy: null,
     icon: null,

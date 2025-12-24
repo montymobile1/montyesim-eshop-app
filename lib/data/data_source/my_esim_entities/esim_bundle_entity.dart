@@ -21,9 +21,10 @@ class EsimBundleEntity {
     required this.priceDisplay,
     required this.unlimited,
     required this.validity,
-    required this.validityDisplay,
+    required this.validityLabel,
     required this.bundleTypeValue,
     required this.icon,
+    required this.label,
   });
 
   factory EsimBundleEntity.fromModel(
@@ -44,8 +45,9 @@ class EsimBundleEntity {
       priceDisplay: model.priceDisplay,
       unlimited: model.unlimited,
       validity: model.validity,
-      validityDisplay: model.validityDisplay,
+      validityLabel: model.validityLabel,
       bundleTypeValue: type.index,
+      label: model.label,
     );
   }
 
@@ -64,8 +66,9 @@ class EsimBundleEntity {
   final String? priceDisplay;
   final bool? unlimited;
   final int? validity;
-  final String? validityDisplay;
+  final String? validityLabel;
   final String? icon;
+  final String? label;
 
   final ToOne<EsimBundleCategoryEntity> bundleCategory =
       ToOne<EsimBundleCategoryEntity>();
@@ -94,9 +97,10 @@ class EsimBundleEntity {
       priceDisplay: priceDisplay,
       unlimited: unlimited,
       validity: validity,
-      validityDisplay: validityDisplay,
+      validityLabel: validityLabel,
       bundleCategory: bundleCategory.target?.toModel(),
       countries: countries.map((EsimCountryEntity c) => c.toModel()).toList(),
+      label: label,
     );
   }
 }

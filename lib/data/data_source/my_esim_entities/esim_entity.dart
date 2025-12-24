@@ -32,7 +32,7 @@ class EsimEntity {
     required this.priceDisplay,
     required this.unlimited,
     required this.validity,
-    required this.validityDisplay,
+    required this.validityLabel,
     required this.planType,
     required this.activityPolicy,
     required this.icon,
@@ -67,7 +67,7 @@ class EsimEntity {
       priceDisplay: model.priceDisplay,
       unlimited: model.unlimited,
       validity: model.validity?.toDouble(),
-      validityDisplay: model.validityDisplay,
+      validityLabel: model.validityLabel,
       planType: model.planType,
       activityPolicy: model.activityPolicy,
       icon: model.icon,
@@ -104,7 +104,7 @@ class EsimEntity {
   final String? priceDisplay;
   final bool? unlimited;
   final double? validity;
-  final String? validityDisplay;
+  final String? validityLabel;
   final String? planType;
   final String? activityPolicy;
   final String? icon;
@@ -147,7 +147,7 @@ class EsimEntity {
       priceDisplay: priceDisplay,
       unlimited: unlimited,
       validity: validity,
-      validityDisplay: validityDisplay,
+      validityLabel: validityLabel,
       planType: planType,
       activityPolicy: activityPolicy,
       bundleMessage: bundleMessage,

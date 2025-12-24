@@ -294,7 +294,7 @@ Future<void> main() async {
         activationCode: "test-activation-code",
         bundleCode: "test-bundle-code",
         gprsLimitDisplay: "1GB",
-        validityDisplay: "7 Days",
+        validityLabel: "Days",
         priceDisplay: "10 USD",
       );
 

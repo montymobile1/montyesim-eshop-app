@@ -1,3 +1,5 @@
+import "dart:ui" as ui;
+
 import "package:easy_localization/easy_localization.dart";
 import "package:esim_open_source/presentation/extensions/context_extension.dart";
 import "package:esim_open_source/presentation/shared/shared_styles.dart";
@@ -43,94 +45,97 @@ class MyPhoneInput extends StatelessWidget {
         ? context.appColors.grey_200!
         : context.appColors.grey_100!; // Lighter border for disabled state
 
-    final PhoneInput phoneInput = PhoneInput(
-      enabled: enabled,
-      controller: phoneController,
-      style: bodyNormalTextStyle(
-        context: context,
-      ).copyWith(
-        color: textColor,
-      ),
-      countryCodeStyle: bodyNormalTextStyle(context: context).copyWith(
-        color: textColor,
-      ),
-      defaultCountry: IsoCode.LB,
-      autovalidateMode:
-          enabled ? AutovalidateMode.always : AutovalidateMode.disabled,
-      validator: enabled
-          ? PhoneValidator.compose(
-              <PhoneNumberInputValidator>[
-                validateEmpty ? PhoneValidator.required() : PhoneValidator.none,
-                validateRequired ? PhoneValidator.valid() : PhoneValidator.none,
-              ],
-            )
-          : null,
-      // Disable validation when disabled
-      flagShape: BoxShape.rectangle,
-      decoration: InputDecoration(
-        focusColor: Colors.transparent,
-        labelText: "",
-        hintText: LocaleKeys.phoneInput_placeHolder.tr(),
-        hintStyle: captionOneNormalTextStyle(
+    final Widget phoneInput = Directionality(
+      textDirection: ui.TextDirection.ltr,
+      child: PhoneInput(
+        enabled: enabled,
+        controller: phoneController,
+        style: bodyNormalTextStyle(
           context: context,
-          fontColor: hintColor,
+        ).copyWith(
+          color: textColor,
         ),
-        labelStyle: TextStyle(color: enabled ? Colors.red : Colors.grey),
-        border: OutlineInputBorder(
-          borderSide: BorderSide(color: borderColor),
-          borderRadius: BorderRadius.circular(12),
+        countryCodeStyle: bodyNormalTextStyle(context: context).copyWith(
+          color: textColor,
         ),
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: borderColor),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        disabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: borderColor),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        errorBorder: OutlineInputBorder(
-          borderSide: BorderSide(
-            color: enabled ? context.appColors.grey_200! : borderColor,
-          ),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(
-            color: enabled ? context.appColors.grey_200! : borderColor,
-          ),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        // Add fill color for disabled state
-        fillColor: enabled ? null : context.appColors.grey_50,
-        // Light grey background
-        filled: !enabled,
-      ),
-      onChanged: enabled
-          ? (PhoneNumber? p) => onChanged(
-                p?.countryCode ?? "961",
-                p?.nsn ?? "",
-                isValid: p?.isValid(type: PhoneNumberType.mobile) ?? false,
+        defaultCountry: IsoCode.LB,
+        autovalidateMode:
+            enabled ? AutovalidateMode.always : AutovalidateMode.disabled,
+        validator: enabled
+            ? PhoneValidator.compose(
+                <PhoneNumberInputValidator>[
+                  validateEmpty ? PhoneValidator.required() : PhoneValidator.none,
+                  validateRequired ? PhoneValidator.valid() : PhoneValidator.none,
+                ],
               )
-          : null,
-      // Disable callback when disabled
-      countrySelectorNavigator: CountrySelectorNavigator.modalBottomSheet(
-        searchInputDecoration: InputDecoration(
-          focusColor: Colors.green,
-          labelText: LocaleKeys.phoneInput_countryPlaceHolder.tr(),
-          labelStyle: const TextStyle(color: Colors.grey),
+            : null,
+        // Disable validation when disabled
+        flagShape: BoxShape.rectangle,
+        decoration: InputDecoration(
+          focusColor: Colors.transparent,
+          labelText: "",
+          hintText: LocaleKeys.phoneInput_placeHolder.tr(),
+          hintStyle: captionOneNormalTextStyle(
+            context: context,
+            fontColor: hintColor,
+          ),
+          labelStyle: TextStyle(color: enabled ? Colors.red : Colors.grey),
           border: OutlineInputBorder(
+            borderSide: BorderSide(color: borderColor),
             borderRadius: BorderRadius.circular(12),
           ),
           enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: context.appColors.grey_200!),
+            borderSide: BorderSide(color: borderColor),
             borderRadius: BorderRadius.circular(12),
           ),
           disabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: context.appColors.grey_200!),
+            borderSide: BorderSide(color: borderColor),
             borderRadius: BorderRadius.circular(12),
           ),
+          errorBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: enabled ? context.appColors.grey_200! : borderColor,
+            ),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: enabled ? context.appColors.grey_200! : borderColor,
+            ),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          // Add fill color for disabled state
+          fillColor: enabled ? null : context.appColors.grey_50,
+          // Light grey background
+          filled: !enabled,
         ),
-        searchInputTextStyle: const TextStyle(color: Colors.black),
+        onChanged: enabled
+            ? (PhoneNumber? p) => onChanged(
+                  p?.countryCode ?? "961",
+                  p?.nsn ?? "",
+                  isValid: p?.isValid(type: PhoneNumberType.mobile) ?? false,
+                )
+            : null,
+        // Disable callback when disabled
+        countrySelectorNavigator: CountrySelectorNavigator.modalBottomSheet(
+          searchInputDecoration: InputDecoration(
+            focusColor: Colors.green,
+            labelText: LocaleKeys.phoneInput_countryPlaceHolder.tr(),
+            labelStyle: const TextStyle(color: Colors.grey),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: context.appColors.grey_200!),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            disabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: context.appColors.grey_200!),
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
+          searchInputTextStyle: const TextStyle(color: Colors.black),
+        ),
       ),
     );
 

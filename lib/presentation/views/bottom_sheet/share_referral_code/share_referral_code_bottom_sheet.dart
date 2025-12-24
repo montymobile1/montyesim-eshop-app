@@ -1,5 +1,6 @@
 import "package:easy_localization/easy_localization.dart";
 import "package:esim_open_source/app/environment/environment_images.dart";
+import "package:esim_open_source/presentation/extensions/helper_extensions.dart";
 import "package:esim_open_source/presentation/setup_bottom_sheet_ui.dart";
 import "package:esim_open_source/presentation/shared/action_helpers.dart";
 import "package:esim_open_source/presentation/shared/shared_styles.dart";
@@ -21,6 +22,7 @@ class ShareReferralCodeBottomSheet extends StatelessWidget {
     required this.completer,
     super.key,
   });
+
   final SheetRequest<dynamic> requestBase;
   final Function(SheetResponse<EmptyBottomSheetResponse>) completer;
 
@@ -86,16 +88,13 @@ class ShareReferralCodeBottomSheet extends StatelessWidget {
                     verticalSpaceMedium,
                     Column(
                       children: <Widget>[
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            LocaleKeys.shareReferral_hintText.tr(),
-                            style: bodyMediumTextStyle(
-                              context: context,
-                              fontColor: mainDarkTextColor(context: context),
-                            ),
+                        Text(
+                          LocaleKeys.shareReferral_hintText.tr(),
+                          style: bodyMediumTextStyle(
+                            context: context,
+                            fontColor: mainDarkTextColor(context: context),
                           ),
-                        ),
+                        ).textSupportsRTL(context),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[

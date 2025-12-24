@@ -24,7 +24,7 @@ Future<void> main() async {
       subTitle: item.displaySubtitle ?? "",
       dataValue: item.gprsLimitDisplay ?? "",
       price: "",
-      validity: item.validityDisplay ?? "",
+      validity: item.getValidityDisplay() ?? "",
       expiryDate: DateTimeUtils.formatTimestampToDate(
         timestamp: int.parse(item.paymentDate ?? "0"),
         format: DateTimeUtils.ddMmYyyy,

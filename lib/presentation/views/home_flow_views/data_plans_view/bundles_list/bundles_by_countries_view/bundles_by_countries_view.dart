@@ -57,7 +57,7 @@ class BundlesByCountriesView extends StatelessWidget {
                     title: bundle.bundleName ?? "",
                     data: bundle.gprsLimitDisplay ?? "",
                     showUnlimitedData: bundle.unlimited ?? false,
-                    validFor: bundle.validityDisplay ?? "",
+                    validFor: bundle.getValidityDisplay() ?? "",
                     availableCountries: viewModel.availableCountries,
                     supportedCountries:
                         bundle.countries ?? <CountryResponseModel>[],

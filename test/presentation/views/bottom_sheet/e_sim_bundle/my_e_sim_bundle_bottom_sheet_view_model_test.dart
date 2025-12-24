@@ -38,7 +38,7 @@ Future<void> main() async {
       gprsLimitDisplay: "1 GB",
       unlimited: false,
       icon: "https://test.com/icon.png",
-      validityDisplay: "7 Days",
+      validityLabel: "Days",
       paymentDate: "1708876762000",
       countries: <CountryResponseModel>[
         CountryResponseModel(

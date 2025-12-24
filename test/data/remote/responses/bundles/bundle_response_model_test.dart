@@ -27,7 +27,6 @@ void main() {
         "price_display": r"$49.99",
         "unlimited": false,
         "validity": 30,
-        "validity_display": "30 Days",
         "icon": "https://example.com/icon.png",
         "countries": <Map<String, dynamic>>[
           <String, dynamic>{
@@ -57,7 +56,6 @@ void main() {
       expect(model.priceDisplay, r"$49.99");
       expect(model.unlimited, false);
       expect(model.validity, 30);
-      expect(model.validityDisplay, "30 Days");
       expect(model.icon, "https://example.com/icon.png");
       expect(model.countries, isNotNull);
       expect(model.countries?.length, 1);
@@ -187,7 +185,7 @@ void main() {
         priceDisplay: "€35.00",
         unlimited: false,
         validity: 15,
-        validityDisplay: "15 Days",
+        validityLabel: "Days",
         icon: "https://example.com/de.png",
         countries: countries,
       );
@@ -209,7 +207,6 @@ void main() {
       expect(json["price_display"], "€35.00");
       expect(json["unlimited"], false);
       expect(json["validity"], 15);
-      expect(json["validity_display"], "15 Days");
       expect(json["icon"], "https://example.com/de.png");
       expect(json["countries"], isNotNull);
     });

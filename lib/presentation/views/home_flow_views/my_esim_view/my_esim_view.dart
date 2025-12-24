@@ -151,24 +151,28 @@ class MyESimView extends StatelessWidget {
         return Column(
           children: <Widget>[
             ESimCurrentPlanItem(
-              status: item.orderStatus ?? "",
+              status: item.getStatusText(),
               showUnlimitedData: item.unlimited ?? false,
               statusTextColor: item.getStatusTextColor(context),
               statusBgColor: item.getStatusBgColor(context),
               countryCode: "",
-              title: item.displayTitle ?? "",
+              title: item.getDisplayName() ?? "" ,
               subTitle: item.displaySubtitle ?? "",
               dataValue: item.gprsLimitDisplay ?? "",
               showInstallButton: viewModel.state.showInstallButton,
               showTopUpButton: item.isTopupAllowed ?? true,
-              iconPath: item.icon ?? "",
+              iconPath: (item.bundleCategory?.isCruise ?? false)
+                  ? EnvironmentImages.globalFlag.fullImagePath
+                  : item.icon ?? "",
               price: "",
-              validity: item.validityDisplay ?? "",
+              validity: item.getValidityDisplay() ?? "",
               expiryDate: DateTimeUtils.formatTimestampToDate(
                 timestamp: int.parse(item.paymentDate ?? "0"),
                 format: DateTimeUtils.ddMmYyyy,
               ),
-              supportedCountries: item.countries ?? <CountryResponseModel>[],
+              supportedCountries: (item.bundleCategory?.isCruise ?? false)
+                  ? <CountryResponseModel>[]
+                  : item.countries ?? <CountryResponseModel>[],
               onEditName: () =>
                   unawaited(viewModel.onEditNameClick(iccid: item.iccid ?? "")),
               onTopUpClick: () =>
@@ -217,7 +221,7 @@ class MyESimView extends StatelessWidget {
               subTitle: item.displaySubtitle ?? "",
               dataValue: item.gprsLimitDisplay ?? "",
               price: "",
-              validity: item.validityDisplay ?? "",
+              validity: item.getValidityDisplay() ?? "",
               expiryDate: DateTimeUtils.formatTimestampToDate(
                 timestamp: int.parse(item.paymentDate ?? "0"),
                 format: DateTimeUtils.ddMmYyyy,

@@ -14,6 +14,7 @@ import "package:esim_open_source/domain/use_case/user/get_user_notifications_use
 import "package:esim_open_source/domain/util/resource.dart";
 import "package:esim_open_source/presentation/enums/bottomsheet_type.dart";
 import "package:esim_open_source/presentation/enums/view_state.dart";
+import "package:esim_open_source/presentation/extensions/helper_extensions.dart";
 import "package:esim_open_source/presentation/extensions/navigation_service_extensions.dart";
 import "package:esim_open_source/presentation/setup_bottom_sheet_ui.dart";
 import "package:esim_open_source/presentation/shared/in_app_redirection_heper.dart";
@@ -166,7 +167,7 @@ class DataPlansViewModel extends BaseModel {
 
   void _applySearch() {
     final String searchQuery =
-        _searchTextFieldController.text.trim().toLowerCase();
+        _searchTextFieldController.text.trim().normalizeString;
 
     if (searchQuery.isEmpty) {
       _filteredCountries = List<CountryResponseModel>.from(
@@ -183,36 +184,36 @@ class DataPlansViewModel extends BaseModel {
     } else {
       _filteredCountries = countries
               ?.where(
-                (CountryResponseModel country) =>
-                    country.country?.toLowerCase().contains(searchQuery) ??
-                    false,
+                (CountryResponseModel country) => (country.country ?? "")
+                    .normalizeString
+                    .contains(searchQuery),
               )
               .toList() ??
           <CountryResponseModel>[];
 
       _filteredRegions = regions
               ?.where(
-                (RegionsResponseModel region) =>
-                    region.regionName?.toLowerCase().contains(searchQuery) ??
-                    false,
+                (RegionsResponseModel region) => (region.regionName ?? "")
+                    .normalizeString
+                    .contains(searchQuery),
               )
               .toList() ??
           <RegionsResponseModel>[];
 
       _filteredBundles = globalBundles
               ?.where(
-                (BundleResponseModel bundle) =>
-                    bundle.bundleName?.toLowerCase().contains(searchQuery) ??
-                    false,
+                (BundleResponseModel bundle) => (bundle.bundleName ?? "")
+                    .normalizeString
+                    .contains(searchQuery),
               )
               .toList() ??
           <BundleResponseModel>[];
 
       _filteredCruiseBundles = cruiseBundles
               ?.where(
-                (BundleResponseModel bundle) =>
-                    bundle.bundleName?.toLowerCase().contains(searchQuery) ??
-                    false,
+                (BundleResponseModel bundle) => (bundle.bundleName ?? "")
+                    .normalizeString
+                    .contains(searchQuery),
               )
               .toList() ??
           <BundleResponseModel>[];

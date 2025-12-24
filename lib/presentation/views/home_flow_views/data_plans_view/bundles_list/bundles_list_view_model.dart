@@ -7,6 +7,7 @@ import "package:esim_open_source/data/remote/request/related_search.dart";
 import "package:esim_open_source/data/remote/responses/bundles/bundle_response_model.dart";
 import "package:esim_open_source/data/remote/responses/bundles/country_response_model.dart";
 import "package:esim_open_source/presentation/enums/bottomsheet_type.dart";
+import "package:esim_open_source/presentation/extensions/helper_extensions.dart";
 import "package:esim_open_source/presentation/extensions/navigation_service_extensions.dart";
 import "package:esim_open_source/presentation/setup_bottom_sheet_ui.dart";
 import "package:esim_open_source/presentation/shared/in_app_redirection_heper.dart";
@@ -30,17 +31,16 @@ class BundlesListViewModel extends EsimBaseModel {
         <CountryResponseModel>[];
 
     if (isSearchFocused.value) {
-      final String query = searchTextFieldController.text.toLowerCase();
+      final String query =
+          searchTextFieldController.text.toLowerCase().normalizeString;
       if (query.isEmpty) {
         return filteredCount;
       } else {
         return filteredCount
             .where(
               (CountryResponseModel country) =>
-                  country.country?.toLowerCase().contains(query) ??
-                  false ||
-                      (country.iso3Code?.toLowerCase().contains(query) ??
-                          false),
+                  country.country?.toLowerCase().normalizeString.contains(query) ??
+                  (country.iso3Code?.toLowerCase().contains(query) ?? false),
             )
             .toList();
       }

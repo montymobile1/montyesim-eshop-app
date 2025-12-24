@@ -1,5 +1,6 @@
 import "dart:async";
 
+import "package:easy_localization/easy_localization.dart";
 import "package:esim_open_source/data/remote/responses/bundles/purchase_esim_bundle_response_model.dart";
 import "package:esim_open_source/data/remote/responses/user/user_bundle_consumption_response.dart";
 import "package:esim_open_source/di/locator.dart";
@@ -9,6 +10,7 @@ import "package:esim_open_source/domain/util/resource.dart";
 import "package:esim_open_source/presentation/enums/view_state.dart";
 import "package:esim_open_source/presentation/setup_bottom_sheet_ui.dart";
 import "package:esim_open_source/presentation/views/base/base_model.dart";
+import "package:esim_open_source/translations/locale_keys.g.dart";
 import "package:esim_open_source/utils/date_time_utils.dart";
 import "package:stacked_services/stacked_services.dart";
 
@@ -96,6 +98,10 @@ class MyESimBundleBottomSheetViewModel extends BaseModel {
 
 //#endregion
 
+  bool isCruise() {
+    return state.item?.bundleCategory?.isCruise ?? false;
+  }
+
   void onTopUpClick() {
     completer(
       SheetResponse<MainBottomSheetResponse>(
@@ -105,6 +111,15 @@ class MyESimBundleBottomSheetViewModel extends BaseModel {
         ),
       ),
     );
+  }
+
+  String getBundleTranslation(String? bundleType) {
+    switch (bundleType?.toLowerCase().replaceAll(" ", "")) {
+      case "primarybundle":
+        return LocaleKeys.primaryBundle.tr();
+      default:
+        return bundleType ?? "N/A";
+    }
   }
 }
 

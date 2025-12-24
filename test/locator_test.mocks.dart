@@ -8272,6 +8272,15 @@ class MockMyESimBundleBottomSheetViewModel extends _i1.Mock
       );
 
   @override
+  bool isCruise() => (super.noSuchMethod(
+        Invocation.method(
+          #isCruise,
+          [],
+        ),
+        returnValue: false,
+      ) as bool);
+
+  @override
   void onTopUpClick() => super.noSuchMethod(
         Invocation.method(
           #onTopUpClick,
@@ -8279,6 +8288,21 @@ class MockMyESimBundleBottomSheetViewModel extends _i1.Mock
         ),
         returnValueForMissingStub: null,
       );
+
+  @override
+  String getBundleTranslation(String? bundleType) => (super.noSuchMethod(
+        Invocation.method(
+          #getBundleTranslation,
+          [bundleType],
+        ),
+        returnValue: _i47.dummyValue<String>(
+          this,
+          Invocation.method(
+            #getBundleTranslation,
+            [bundleType],
+          ),
+        ),
+      ) as String);
 
   @override
   _i21.Future<void> refreshData() => (super.noSuchMethod(

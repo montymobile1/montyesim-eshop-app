@@ -118,7 +118,9 @@ class OrderHistoryView extends StatelessWidget {
                 subTitle: bundleOrder.bundleDetails?.displaySubtitle ?? "",
                 dataValue: bundleOrder.bundleDetails?.gprsLimitDisplay ?? "",
                 countryPrice: bundleOrder.bundleDetails?.priceDisplay ?? "",
-                imagePath: bundleOrder.bundleDetails?.icon ?? "",
+                imagePath: (bundleOrder.bundleDetails?.isCruise ?? false)
+                    ? EnvironmentImages.globalFlag.fullImagePath
+                    : bundleOrder.bundleDetails?.icon ?? "",
                 isLoading: false,
                 showUnlimitedData:
                     bundleOrder.bundleDetails?.unlimited ?? false,
@@ -129,7 +131,7 @@ class OrderHistoryView extends StatelessWidget {
               verticalSpaceTiny,
               BundleValidityView(
                 bundleValidity:
-                    bundleOrder.bundleDetails?.validityDisplay ?? "",
+                    bundleOrder.bundleDetails?.getValidityDisplay() ?? "",
                 bundleExpiryDate: DateTimeUtils.formatTimestampToDate(
                   timestamp: int.parse(bundleOrder.orderDate ?? "0"),
                   format: DateTimeUtils.ddMmYyyy,

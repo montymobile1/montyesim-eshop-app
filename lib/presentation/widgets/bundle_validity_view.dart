@@ -1,4 +1,5 @@
-import "package:easy_localization/easy_localization.dart";
+import "package:easy_localization/easy_localization.dart"
+    show StringTranslateExtension;
 import "package:esim_open_source/presentation/shared/shared_styles.dart";
 import "package:esim_open_source/translations/locale_keys.g.dart";
 import "package:flutter/foundation.dart";
@@ -20,11 +21,8 @@ class BundleValidityView extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         Text(
-          LocaleKeys.orderHistory_bundleValidityText.tr(
-            namedArgs: <String, String>{
-              "validity": bundleValidity,
-            },
-          ),
+          "${LocaleKeys.orderHistory_bundleValidityText.tr()} $bundleValidity",
+          textDirection: TextDirection.ltr,
           style: captionTwoNormalTextStyle(
             context: context,
             fontColor: secondaryTextColor(context: context),

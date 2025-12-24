@@ -109,27 +109,21 @@ class UserGuideDetailedView extends StatelessWidget {
                           ],
                         ),
                         verticalSpaceMedium,
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
+                       Text(
                             viewModel.userGuideViewDataSource.stepNumberLabel,
                             style: headerThreeMediumTextStyle(
                               context: context,
                               fontColor: mainDarkTextColor(context: context),
                             ),
-                          ),
-                        ),
+                          ).textSupportsRTL(context),
                         // verticalSpaceSmall,
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            viewModel.userGuideViewDataSource.description,
-                            style: bodyMediumTextStyle(
-                              context: context,
-                              fontColor: secondaryTextColor(context: context),
-                            ),
+                        Text(
+                          viewModel.userGuideViewDataSource.description,
+                          style: bodyMediumTextStyle(
+                            context: context,
+                            fontColor: secondaryTextColor(context: context),
                           ),
-                        ),
+                        ).textSupportsRTL(context),
                       ],
                     ),
                   ),
