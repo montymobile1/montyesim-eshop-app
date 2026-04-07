@@ -9,10 +9,12 @@ class LoginParams {
   LoginParams({
     required this.email,
     required this.phoneNumber,
+    this.otpChannel,
   });
 
   final String? email;
   final String? phoneNumber;
+  final String? otpChannel;
 }
 
 class LoginUseCase
@@ -26,6 +28,7 @@ class LoginUseCase
     return await repository.login(
       email: params.email,
       phoneNumber: params.phoneNumber,
+      otpChannel: params.otpChannel,
     );
   }
 }

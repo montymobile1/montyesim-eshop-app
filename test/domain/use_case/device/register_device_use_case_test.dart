@@ -1,8 +1,8 @@
 import "package:esim_open_source/data/remote/responses/device/device_info_response_model.dart";
+import "package:esim_open_source/domain/data/params/add_device_params.dart";
 import "package:esim_open_source/domain/repository/api_device_repository.dart";
 import "package:esim_open_source/domain/repository/services/device_info_service.dart";
 import "package:esim_open_source/domain/repository/services/secure_storage_service.dart";
-import "package:esim_open_source/domain/use_case/app/add_device_use_case.dart";
 import "package:esim_open_source/domain/use_case/device/register_device_use_case.dart";
 import "package:esim_open_source/domain/util/resource.dart";
 import "package:flutter_test/flutter_test.dart";
@@ -58,7 +58,7 @@ Future<void> main() async {
   group("RegisterDeviceUseCase Tests", () {
     test("execute returns success when device registered", () async {
       // Arrange
-      final RegisterDeviceParams params = RegisterDeviceParams(
+      final RegisterDeviceUseCaseParams params = RegisterDeviceUseCaseParams(
         fcmToken: "test_fcm_token",
         userGuid: "user_guid_123",
       );
@@ -69,15 +69,8 @@ Future<void> main() async {
       Resource<DeviceInfoResponseModel?>.success(mockResponse, message: "Success");
 
       when(mockRepository.registerDevice(
-        fcmToken: anyNamed("fcmToken"),
-        deviceId: anyNamed("deviceId"),
-        platformTag: anyNamed("platformTag"),
-        osTag: anyNamed("osTag"),
-        appGuid: anyNamed("appGuid"),
-        version: anyNamed("version"),
-        userGuid: anyNamed("userGuid"),
-        deviceInfo: anyNamed("deviceInfo"),
-      ),).thenAnswer((_) async => expectedResponse);
+        params: anyNamed("params"),
+      )).thenAnswer((_) async => expectedResponse);
 
       // Act
       final Resource<DeviceInfoResponseModel?> result =
@@ -88,20 +81,13 @@ Future<void> main() async {
       expect(result.data, isNotNull);
 
       verify(mockRepository.registerDevice(
-        fcmToken: anyNamed("fcmToken"),
-        deviceId: anyNamed("deviceId"),
-        platformTag: anyNamed("platformTag"),
-        osTag: anyNamed("osTag"),
-        appGuid: anyNamed("appGuid"),
-        version: anyNamed("version"),
-        userGuid: anyNamed("userGuid"),
-        deviceInfo: anyNamed("deviceInfo"),
-      ),).called(1);
+        params: anyNamed("params"),
+      )).called(1);
     });
 
     test("execute returns error when registration fails", () async {
       // Arrange
-      final RegisterDeviceParams params = RegisterDeviceParams(
+      final RegisterDeviceUseCaseParams params = RegisterDeviceUseCaseParams(
         fcmToken: "test_fcm_token",
         userGuid: "user_guid_123",
       );
@@ -110,15 +96,8 @@ Future<void> main() async {
       Resource<DeviceInfoResponseModel?>.error("Registration failed");
 
       when(mockRepository.registerDevice(
-        fcmToken: anyNamed("fcmToken"),
-        deviceId: anyNamed("deviceId"),
-        platformTag: anyNamed("platformTag"),
-        osTag: anyNamed("osTag"),
-        appGuid: anyNamed("appGuid"),
-        version: anyNamed("version"),
-        userGuid: anyNamed("userGuid"),
-        deviceInfo: anyNamed("deviceInfo"),
-      ),).thenAnswer((_) async => expectedResponse);
+        params: anyNamed("params"),
+      )).thenAnswer((_) async => expectedResponse);
 
       // Act
       final Resource<DeviceInfoResponseModel?> result =
@@ -138,7 +117,7 @@ Future<void> main() async {
       ];
 
       for (final String token in fcmTokens) {
-        final RegisterDeviceParams params = RegisterDeviceParams(
+        final RegisterDeviceUseCaseParams params = RegisterDeviceUseCaseParams(
           fcmToken: token,
           userGuid: "user_guid",
         );
@@ -149,15 +128,8 @@ Future<void> main() async {
         Resource<DeviceInfoResponseModel?>.success(mockResponse, message: null);
 
         when(mockRepository.registerDevice(
-          fcmToken: anyNamed("fcmToken"),
-          deviceId: anyNamed("deviceId"),
-          platformTag: anyNamed("platformTag"),
-          osTag: anyNamed("osTag"),
-          appGuid: anyNamed("appGuid"),
-          version: anyNamed("version"),
-          userGuid: anyNamed("userGuid"),
-          deviceInfo: anyNamed("deviceInfo"),
-        ),).thenAnswer((_) async => expectedResponse);
+          params: anyNamed("params"),
+        )).thenAnswer((_) async => expectedResponse);
 
         // Act
         final Resource<DeviceInfoResponseModel?> result =
@@ -170,21 +142,14 @@ Future<void> main() async {
 
     test("execute handles repository exception", () async {
       // Arrange
-      final RegisterDeviceParams params = RegisterDeviceParams(
+      final RegisterDeviceUseCaseParams params = RegisterDeviceUseCaseParams(
         fcmToken: "test_token",
         userGuid: "user_guid",
       );
 
       when(mockRepository.registerDevice(
-        fcmToken: anyNamed("fcmToken"),
-        deviceId: anyNamed("deviceId"),
-        platformTag: anyNamed("platformTag"),
-        osTag: anyNamed("osTag"),
-        appGuid: anyNamed("appGuid"),
-        version: anyNamed("version"),
-        userGuid: anyNamed("userGuid"),
-        deviceInfo: anyNamed("deviceInfo"),
-      ),).thenThrow(Exception("Network error"));
+        params: anyNamed("params"),
+      )).thenThrow(Exception("Network error"));
 
       // Act & Assert
       expect(

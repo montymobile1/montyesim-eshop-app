@@ -2,10 +2,10 @@ import "dart:async";
 
 import "package:esim_open_source/data/remote/apis/api_provider.dart";
 import "package:esim_open_source/data/remote/apis/device_apis/device_apis.dart";
-import "package:esim_open_source/data/remote/request/device/device_info_request_model.dart";
 import "package:esim_open_source/data/remote/responses/base_response_model.dart";
 import "package:esim_open_source/data/remote/responses/device/device_info_response_model.dart";
 import "package:esim_open_source/domain/data/api_device.dart";
+import "package:esim_open_source/domain/data/params/register_device_params.dart";
 
 class ApiDeviceImpl extends APIService implements APIDevice {
   ApiDeviceImpl._privateConstructor() : super.privateConstructor();
@@ -24,34 +24,27 @@ class ApiDeviceImpl extends APIService implements APIDevice {
 
   @override
   FutureOr<ResponseMain<DeviceInfoResponseModel?>> registerDevice({
-    required String fcmToken,
-    required String deviceId,
-    required String platformTag,
-    required String osTag,
-    required String appGuid,
-    required String version,
-    required String userGuid,
-    required DeviceInfoRequestModel deviceInfo,
+required RegisterDeviceParams params,
   }) async {
-    Map<String, dynamic> params = <String, dynamic>{
-      "deviceId": deviceId,
-      "fcmToken": fcmToken,
-      "platformTag": platformTag,
-      "osTag": osTag,
-      "appGuid": appGuid,
-      "Version": version,
-      "deviceInfo": deviceInfo.toJson(),
+    Map<String, dynamic> requestParams = <String, dynamic>{
+      "deviceId": params.deviceId,
+      "fcmToken": params.fcmToken,
+      "platformTag": params.platformTag,
+      "osTag": params.osTag,
+      "appGuid": params.appGuid,
+      "Version": params.version,
+      "deviceInfo": params.deviceInfo.toJson(),
     };
 
-    if (userGuid.isNotEmpty) {
-      params["userGuid"] = userGuid;
+    if (params.userGuid.isNotEmpty) {
+      requestParams["userGuid"] = params.userGuid;
     }
 
     ResponseMain<DeviceInfoResponseModel?> registerDeviceResponse =
         await sendRequest(
       endPoint: createAPIEndpoint(
         endPoint: DeviceApis.registerDevice,
-        parameters: params,
+        parameters: requestParams,
       ),
       fromJson: DeviceInfoResponseModel.fromJson,
     );

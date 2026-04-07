@@ -1,3 +1,4 @@
+import "dart:async";
 import "dart:io";
 
 import "package:easy_localization/easy_localization.dart";
@@ -11,48 +12,65 @@ import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
+import "package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart";
+
+class BodyStateWrapParams {
+  BodyStateWrapParams({
+    required this.context,
+    required this.model,
+    required this.child,
+    this.noDataWidget,
+    this.onBackPressed,
+    this.backgroundColor,
+    this.loaderColor,
+    this.hideLoader = false,
+    this.disableInteractionWhileBusy = true,
+  });
+
+  final BuildContext context;
+  final BaseModel model;
+  final Widget child;
+  final Widget? noDataWidget;
+  final VoidCallback? onBackPressed;
+  final Color? backgroundColor;
+  final Color? loaderColor;
+  final bool hideLoader;
+  final bool disableInteractionWhileBusy;
+}
 
 Widget wrapBodyWithState({
-  required BuildContext context,
-  required BaseModel model,
-  required Widget child,
-  Widget? noDataWidget,
-  VoidCallback? onBackPressed,
-  Color? backgroundColor,
-  Color? loaderColor,
-  bool hideLoader = false,
-  bool disableInteractionWhileBusy = true,
+  required BodyStateWrapParams params,
 }) {
-  switch (model.viewState) {
+  switch (params.model.viewState) {
     case ViewState.busy:
       return PopScope(
         // Returning true allows the pop to happen, returning false prevents it.
         onPopInvokedWithResult: (bool didPop, Object? result) async {
-          onBackPressed?.call();
+          params.onBackPressed?.call();
         },
         child: _getLoadingUi(
-          context,
-          child,
-          loaderColor,
-          hideLoader,
-          disableInteractionWhileBusy,
+          params.context,
+          params.child,
+          params.loaderColor,
+          params.hideLoader,
+          params.disableInteractionWhileBusy,
         ),
       );
     case ViewState.noDataAvailable:
       return PopScope(
         // Returning true allows the pop to happen, returning false prevents it.
         onPopInvokedWithResult: (bool didPop, Object? result) async {
-          onBackPressed?.call();
+          params.onBackPressed?.call();
         },
-        child: noDataWidget ?? _noDataUi(context, model),
+        child: params.noDataWidget ?? _noDataUi(params.context, params.model),
       );
     case ViewState.error:
       return PopScope(
         // Returning true allows the pop to happen, returning false prevents it.
         onPopInvokedWithResult: (bool didPop, Object? result) async {
-          onBackPressed?.call();
+          params.onBackPressed?.call();
         },
-        child: _errorUi(context, model),
+        child: _errorUi(params.context, params.model),
       );
     case ViewState.dataFetched:
     case ViewState.idle:
@@ -60,9 +78,9 @@ Widget wrapBodyWithState({
       return PopScope(
         // Returning true allows the pop to happen, returning false prevents it.
         onPopInvokedWithResult: (bool didPop, Object? result) async {
-          onBackPressed?.call();
+          params.onBackPressed?.call();
         },
-        child: child,
+        child: params.child,
       );
   }
 }

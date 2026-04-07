@@ -58,33 +58,43 @@ class ContactUsView extends StatelessWidget {
                           ),
                           verticalSpaceMedium,
                           MainInputField.formField(
-                            errorMessage: viewModel.emailErrorMessage,
                             controller: viewModel.state.emailController,
                             themeColor: themeColor,
-                            labelTitleText:
-                                LocaleKeys.contactUs_emailPlaceHolderText.tr(),
-                            labelStyle: bodyNormalTextStyle(
-                              context: context,
-                              fontColor: mainDarkTextColor(context: context),
+                            textConfig: MainInputFieldTextConfig(
+                              labelTitleText:
+                                  LocaleKeys.contactUs_emailPlaceHolderText.tr(),
+                              errorMessage: viewModel.emailErrorMessage,
                             ),
-                            backGroundColor:
-                                whiteBackGroundColor(context: context),
+                            appearanceConfig: MainInputFieldAppearanceConfig(
+                              backgroundColor:
+                                  whiteBackGroundColor(context: context),
+                              labelStyle: bodyNormalTextStyle(
+                                context: context,
+                                fontColor: mainDarkTextColor(context: context),
+                              ),
+                            ),
                           ),
                           verticalSpaceMedium,
                           MainInputField.formField(
-                            maxLines: 8,
-                            errorMessage: viewModel.contentErrorMessage,
                             controller: viewModel.state.messageController,
                             themeColor: themeColor,
-                            labelTitleText: LocaleKeys
-                                .contactUs_messagePlaceHolderText
-                                .tr(),
-                            labelStyle: bodyNormalTextStyle(
-                              context: context,
-                              fontColor: mainDarkTextColor(context: context),
+                            textConfig: MainInputFieldTextConfig(
+                              labelTitleText: LocaleKeys
+                                  .contactUs_messagePlaceHolderText
+                                  .tr(),
+                              errorMessage: viewModel.contentErrorMessage,
                             ),
-                            backGroundColor:
-                                whiteBackGroundColor(context: context),
+                            appearanceConfig: MainInputFieldAppearanceConfig(
+                              backgroundColor:
+                                  whiteBackGroundColor(context: context),
+                              labelStyle: bodyNormalTextStyle(
+                                context: context,
+                                fontColor: mainDarkTextColor(context: context),
+                              ),
+                            ),
+                            inputConfig: const MainInputFieldInputConfig(
+                              maxLines: 8,
+                            ),
                           ),
                           viewModel.isKeyboardVisible(context)
                               ? const SizedBox.shrink()

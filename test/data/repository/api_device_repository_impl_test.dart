@@ -6,6 +6,7 @@ import "package:esim_open_source/data/remote/request/device/device_info_request_
 import "package:esim_open_source/data/remote/responses/base_response_model.dart";
 import "package:esim_open_source/data/remote/responses/device/device_info_response_model.dart";
 import "package:esim_open_source/data/repository/api_device_repository_impl.dart";
+import "package:esim_open_source/domain/data/params/register_device_params.dart";
 import "package:esim_open_source/domain/repository/api_device_repository.dart";
 import "package:esim_open_source/domain/util/resource.dart";
 import "package:flutter_test/flutter_test.dart";
@@ -32,6 +33,7 @@ void main() {
     const String testUserGuid = "test-user-guid-101";
 
     late DeviceInfoRequestModel testDeviceInfo;
+    late RegisterDeviceParams testParams;
 
     setUp(() {
       testDeviceInfo = DeviceInfoRequestModel(
@@ -40,6 +42,17 @@ void main() {
         longitude: 56.78,
         mcc: "404",
         mnc: "10",
+      );
+
+      testParams = RegisterDeviceParams(
+        fcmToken: testFcmToken,
+        deviceId: testDeviceId,
+        platformTag: testPlatformTag,
+        osTag: testOsTag,
+        appGuid: testAppGuid,
+        version: testVersion,
+        userGuid: testUserGuid,
+        deviceInfo: testDeviceInfo,
       );
     });
 
@@ -57,28 +70,14 @@ void main() {
 
         when(
           mockApiDevice.registerDevice(
-            fcmToken: testFcmToken,
-            deviceId: testDeviceId,
-            platformTag: testPlatformTag,
-            osTag: testOsTag,
-            appGuid: testAppGuid,
-            version: testVersion,
-            userGuid: testUserGuid,
-            deviceInfo: testDeviceInfo,
+            params: anyNamed("params"),
           ),
         ).thenAnswer((_) async => responseMain);
 
         // Act
         final Resource<DeviceInfoResponseModel?> result =
             await repository.registerDevice(
-          fcmToken: testFcmToken,
-          deviceId: testDeviceId,
-          platformTag: testPlatformTag,
-          osTag: testOsTag,
-          appGuid: testAppGuid,
-          version: testVersion,
-          userGuid: testUserGuid,
-          deviceInfo: testDeviceInfo,
+          params: testParams,
         ) as Resource<DeviceInfoResponseModel?>;
 
         // Assert
@@ -89,14 +88,7 @@ void main() {
 
         verify(
           mockApiDevice.registerDevice(
-            fcmToken: testFcmToken,
-            deviceId: testDeviceId,
-            platformTag: testPlatformTag,
-            osTag: testOsTag,
-            appGuid: testAppGuid,
-            version: testVersion,
-            userGuid: testUserGuid,
-            deviceInfo: testDeviceInfo,
+            params: anyNamed("params"),
           ),
         ).called(1);
       });
@@ -113,28 +105,14 @@ void main() {
 
         when(
           mockApiDevice.registerDevice(
-            fcmToken: testFcmToken,
-            deviceId: testDeviceId,
-            platformTag: testPlatformTag,
-            osTag: testOsTag,
-            appGuid: testAppGuid,
-            version: testVersion,
-            userGuid: testUserGuid,
-            deviceInfo: testDeviceInfo,
+            params: anyNamed("params"),
           ),
         ).thenAnswer((_) async => responseMain);
 
         // Act
         final Resource<DeviceInfoResponseModel?> result =
             await repository.registerDevice(
-          fcmToken: testFcmToken,
-          deviceId: testDeviceId,
-          platformTag: testPlatformTag,
-          osTag: testOsTag,
-          appGuid: testAppGuid,
-          version: testVersion,
-          userGuid: testUserGuid,
-          deviceInfo: testDeviceInfo,
+          params: testParams,
         ) as Resource<DeviceInfoResponseModel?>;
 
         // Assert
@@ -145,14 +123,7 @@ void main() {
 
         verify(
           mockApiDevice.registerDevice(
-            fcmToken: testFcmToken,
-            deviceId: testDeviceId,
-            platformTag: testPlatformTag,
-            osTag: testOsTag,
-            appGuid: testAppGuid,
-            version: testVersion,
-            userGuid: testUserGuid,
-            deviceInfo: testDeviceInfo,
+            params: anyNamed("params"),
           ),
         ).called(1);
       });
@@ -169,28 +140,14 @@ void main() {
 
         when(
           mockApiDevice.registerDevice(
-            fcmToken: testFcmToken,
-            deviceId: testDeviceId,
-            platformTag: testPlatformTag,
-            osTag: testOsTag,
-            appGuid: testAppGuid,
-            version: testVersion,
-            userGuid: testUserGuid,
-            deviceInfo: testDeviceInfo,
+            params: anyNamed("params"),
           ),
         ).thenAnswer((_) async => responseMain);
 
         // Act
         final Resource<DeviceInfoResponseModel?> result =
             await repository.registerDevice(
-          fcmToken: testFcmToken,
-          deviceId: testDeviceId,
-          platformTag: testPlatformTag,
-          osTag: testOsTag,
-          appGuid: testAppGuid,
-          version: testVersion,
-          userGuid: testUserGuid,
-          deviceInfo: testDeviceInfo,
+          params: testParams,
         ) as Resource<DeviceInfoResponseModel?>;
 
         // Assert
@@ -201,14 +158,7 @@ void main() {
 
         verify(
           mockApiDevice.registerDevice(
-            fcmToken: testFcmToken,
-            deviceId: testDeviceId,
-            platformTag: testPlatformTag,
-            osTag: testOsTag,
-            appGuid: testAppGuid,
-            version: testVersion,
-            userGuid: testUserGuid,
-            deviceInfo: testDeviceInfo,
+            params: anyNamed("params"),
           ),
         ).called(1);
       });
@@ -225,28 +175,14 @@ void main() {
 
         when(
           mockApiDevice.registerDevice(
-            fcmToken: testFcmToken,
-            deviceId: testDeviceId,
-            platformTag: testPlatformTag,
-            osTag: testOsTag,
-            appGuid: testAppGuid,
-            version: testVersion,
-            userGuid: testUserGuid,
-            deviceInfo: testDeviceInfo,
+            params: anyNamed("params"),
           ),
         ).thenAnswer((_) async => responseMain);
 
         // Act
         final Resource<DeviceInfoResponseModel?> result =
             await repository.registerDevice(
-          fcmToken: testFcmToken,
-          deviceId: testDeviceId,
-          platformTag: testPlatformTag,
-          osTag: testOsTag,
-          appGuid: testAppGuid,
-          version: testVersion,
-          userGuid: testUserGuid,
-          deviceInfo: testDeviceInfo,
+          params: testParams,
         ) as Resource<DeviceInfoResponseModel?>;
 
         // Assert
@@ -257,14 +193,7 @@ void main() {
 
         verify(
           mockApiDevice.registerDevice(
-            fcmToken: testFcmToken,
-            deviceId: testDeviceId,
-            platformTag: testPlatformTag,
-            osTag: testOsTag,
-            appGuid: testAppGuid,
-            version: testVersion,
-            userGuid: testUserGuid,
-            deviceInfo: testDeviceInfo,
+            params: anyNamed("params"),
           ),
         ).called(1);
       });
@@ -287,6 +216,17 @@ void main() {
           mnc: "02",
         );
 
+        final RegisterDeviceParams customParams = RegisterDeviceParams(
+          fcmToken: customFcmToken,
+          deviceId: customDeviceId,
+          platformTag: customPlatformTag,
+          osTag: customOsTag,
+          appGuid: customAppGuid,
+          version: customVersion,
+          userGuid: customUserGuid,
+          deviceInfo: customDeviceInfo,
+        );
+
         final DeviceInfoResponseModel expectedResponse =
             DeviceInfoResponseModel();
         final ResponseMain<DeviceInfoResponseModel> responseMain =
@@ -298,40 +238,19 @@ void main() {
 
         when(
           mockApiDevice.registerDevice(
-            fcmToken: customFcmToken,
-            deviceId: customDeviceId,
-            platformTag: customPlatformTag,
-            osTag: customOsTag,
-            appGuid: customAppGuid,
-            version: customVersion,
-            userGuid: customUserGuid,
-            deviceInfo: customDeviceInfo,
+            params: customParams,
           ),
         ).thenAnswer((_) async => responseMain);
 
         // Act
         await repository.registerDevice(
-          fcmToken: customFcmToken,
-          deviceId: customDeviceId,
-          platformTag: customPlatformTag,
-          osTag: customOsTag,
-          appGuid: customAppGuid,
-          version: customVersion,
-          userGuid: customUserGuid,
-          deviceInfo: customDeviceInfo,
+          params: customParams,
         );
 
         // Assert
         verify(
           mockApiDevice.registerDevice(
-            fcmToken: customFcmToken,
-            deviceId: customDeviceId,
-            platformTag: customPlatformTag,
-            osTag: customOsTag,
-            appGuid: customAppGuid,
-            version: customVersion,
-            userGuid: customUserGuid,
-            deviceInfo: customDeviceInfo,
+            params: customParams,
           ),
         ).called(1);
       });
@@ -348,28 +267,14 @@ void main() {
 
         when(
           mockApiDevice.registerDevice(
-            fcmToken: testFcmToken,
-            deviceId: testDeviceId,
-            platformTag: testPlatformTag,
-            osTag: testOsTag,
-            appGuid: testAppGuid,
-            version: testVersion,
-            userGuid: testUserGuid,
-            deviceInfo: testDeviceInfo,
+            params: anyNamed("params"),
           ),
         ).thenAnswer((_) async => responseMain);
 
         // Act
         final Resource<DeviceInfoResponseModel?> result =
             await repository.registerDevice(
-          fcmToken: testFcmToken,
-          deviceId: testDeviceId,
-          platformTag: testPlatformTag,
-          osTag: testOsTag,
-          appGuid: testAppGuid,
-          version: testVersion,
-          userGuid: testUserGuid,
-          deviceInfo: testDeviceInfo,
+          params: testParams,
         ) as Resource<DeviceInfoResponseModel?>;
 
         // Assert - since statusCode is 200, responseToResource will try to call response.dataOfType
@@ -387,6 +292,17 @@ void main() {
           mnc: emptyString,
         );
 
+        final RegisterDeviceParams emptyParams = RegisterDeviceParams(
+          fcmToken: emptyString,
+          deviceId: emptyString,
+          platformTag: emptyString,
+          osTag: emptyString,
+          appGuid: emptyString,
+          version: emptyString,
+          userGuid: emptyString,
+          deviceInfo: emptyDeviceInfo,
+        );
+
         final DeviceInfoResponseModel expectedResponse =
             DeviceInfoResponseModel();
         final ResponseMain<DeviceInfoResponseModel> responseMain =
@@ -398,28 +314,14 @@ void main() {
 
         when(
           mockApiDevice.registerDevice(
-            fcmToken: emptyString,
-            deviceId: emptyString,
-            platformTag: emptyString,
-            osTag: emptyString,
-            appGuid: emptyString,
-            version: emptyString,
-            userGuid: emptyString,
-            deviceInfo: emptyDeviceInfo,
+            params: emptyParams,
           ),
         ).thenAnswer((_) async => responseMain);
 
         // Act
         final Resource<DeviceInfoResponseModel?> result =
             await repository.registerDevice(
-          fcmToken: emptyString,
-          deviceId: emptyString,
-          platformTag: emptyString,
-          osTag: emptyString,
-          appGuid: emptyString,
-          version: emptyString,
-          userGuid: emptyString,
-          deviceInfo: emptyDeviceInfo,
+          params: emptyParams,
         ) as Resource<DeviceInfoResponseModel?>;
 
         // Assert
@@ -428,14 +330,7 @@ void main() {
 
         verify(
           mockApiDevice.registerDevice(
-            fcmToken: emptyString,
-            deviceId: emptyString,
-            platformTag: emptyString,
-            osTag: emptyString,
-            appGuid: emptyString,
-            version: emptyString,
-            userGuid: emptyString,
-            deviceInfo: emptyDeviceInfo,
+            params: emptyParams,
           ),
         ).called(1);
       });
@@ -457,27 +352,13 @@ void main() {
 
         when(
           mockApiDevice.registerDevice(
-            fcmToken: testFcmToken,
-            deviceId: testDeviceId,
-            platformTag: testPlatformTag,
-            osTag: testOsTag,
-            appGuid: testAppGuid,
-            version: testVersion,
-            userGuid: testUserGuid,
-            deviceInfo: testDeviceInfo,
+            params: anyNamed("params"),
           ),
         ).thenAnswer((_) async => responseMain);
 
         // Act
         final FutureOr<dynamic> result = repository.registerDevice(
-          fcmToken: testFcmToken,
-          deviceId: testDeviceId,
-          platformTag: testPlatformTag,
-          osTag: testOsTag,
-          appGuid: testAppGuid,
-          version: testVersion,
-          userGuid: testUserGuid,
-          deviceInfo: testDeviceInfo,
+          params: testParams,
         );
 
         // Assert

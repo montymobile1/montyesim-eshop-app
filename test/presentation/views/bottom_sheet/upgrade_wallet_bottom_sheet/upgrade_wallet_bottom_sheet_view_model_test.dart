@@ -236,11 +236,7 @@ Future<void> main() async {
 
         when(mockPaymentService.processOrderPayment(
           paymentType: anyNamed("paymentType"),
-          testEnv: anyNamed("testEnv"),
-          customerId: anyNamed("customerId"),
-          billingCountryCode: anyNamed("billingCountryCode"),
-          paymentIntentClientSecret: anyNamed("paymentIntentClientSecret"),
-          customerEphemeralKeySecret: anyNamed("customerEphemeralKeySecret"),
+          params: anyNamed("params"),
         ),).thenAnswer((_) async => PaymentResult.completed);
 
         when(mockApiAuthRepository.getUserInfo())

@@ -31,6 +31,8 @@ class LoginView extends StatelessWidget {
       routeName: routeName,
       viewModel: locator<LoginViewModel>()..redirection = redirection,
       hideAppBar: true,
+      updateStatusBarColor: true,
+      statusBarColor: Colors.transparent,
       backGroundImage: EnvironmentImages.onBoardingBackground.fullImagePath,
       builder: (
         BuildContext context,
@@ -93,69 +95,77 @@ class LoginView extends StatelessWidget {
                 children: <Widget>[
                   AppEnvironment.appEnvironmentHelper.enableFacebookSignIn
                       ? MainButton.continueWith(
+                          params: MainButtonParams(
+                            title: LocaleKeys.loginView_continueWithFacebook.tr(),
+                            onPressed: () {},
+                            themeColor: themeColor,
+                            titleTextStyle: bodyBoldTextStyle(context: context),
+                            containerPadding: const EdgeInsets.only(bottom: 10),
+                          ),
                           action: () async {
                             await viewModel.socialMediaSignInAction(
                               SocialMediaLoginType.facebook,
                             );
                           },
-                          themeColor: themeColor,
                           image: EnvironmentImages.loginFacebook.fullImagePath,
-                          title: LocaleKeys.loginView_continueWithFacebook.tr(),
-                          titleTextStyle: bodyBoldTextStyle(context: context),
                           textColor: mainWhiteTextColor(context: context),
                           buttonColor: facebookButtonColor(context: context),
-                          containerPadding: const EdgeInsets.only(bottom: 10),
                         )
                       : const SizedBox.shrink(),
-                  Platform.isIOS
-                      ? AppEnvironment.appEnvironmentHelper.enableAppleSignIn
-                          ? MainButton.continueWith(
-                              action: () async {
-                                await viewModel.socialMediaSignInAction(
-                                  SocialMediaLoginType.apple,
-                                );
-                              },
-                              themeColor: themeColor,
-                              image: EnvironmentImages.loginApple.fullImagePath,
-                              title:
-                                  LocaleKeys.loginView_continueWithApple.tr(),
-                              titleTextStyle:
-                                  bodyBoldTextStyle(context: context),
-                              textColor: mainWhiteTextColor(context: context),
-                              buttonColor:
-                                  enabledMainDarkButtonColor(context: context),
-                              containerPadding:
-                                  const EdgeInsets.only(bottom: 10),
-                            )
-                          : const SizedBox.shrink()
+                  Platform.isIOS &&
+                          AppEnvironment.appEnvironmentHelper.enableAppleSignIn
+                      ? MainButton.continueWith(
+                          params: MainButtonParams(
+                            title: LocaleKeys.loginView_continueWithApple.tr(),
+                            onPressed: () {},
+                            themeColor: themeColor,
+                            titleTextStyle: bodyBoldTextStyle(context: context),
+                            containerPadding: const EdgeInsets.only(bottom: 10),
+                          ),
+                          action: () async {
+                            await viewModel.socialMediaSignInAction(
+                              SocialMediaLoginType.apple,
+                            );
+                          },
+                          image: EnvironmentImages.loginApple.fullImagePath,
+                          textColor: mainWhiteTextColor(context: context),
+                          buttonColor:
+                              enabledMainDarkButtonColor(context: context),
+                        )
                       : const SizedBox.shrink(),
                   AppEnvironment.appEnvironmentHelper.enableGoogleSignIn
                       ? MainButton.continueWith(
+                          params: MainButtonParams(
+                            title: LocaleKeys.loginView_continueWithGoogle.tr(),
+                            onPressed: () {},
+                            themeColor: themeColor,
+                            titleTextStyle: bodyBoldTextStyle(context: context),
+                            containerPadding: const EdgeInsets.only(bottom: 10),
+                          ),
                           action: () async {
                             await viewModel.socialMediaSignInAction(
                               SocialMediaLoginType.google,
                             );
                           },
-                          themeColor: themeColor,
                           image: EnvironmentImages.loginGoogle.fullImagePath,
-                          title: LocaleKeys.loginView_continueWithGoogle.tr(),
-                          titleTextStyle: bodyBoldTextStyle(context: context),
                           textColor: mainWhiteTextColor(context: context),
                           buttonColor: googleButtonColor(context: context),
-                          containerPadding: const EdgeInsets.only(bottom: 10),
                         )
                       : const SizedBox.shrink(),
                   MainButton.continueWith(
+                    params: MainButtonParams(
+                      title: getContinueWithText(),
+                      onPressed: () {},
+                      themeColor: themeColor,
+                      titleTextStyle: bodyBoldTextStyle(context: context),
+                      containerPadding: const EdgeInsets.only(bottom: 10),
+                    ),
                     action: () async {
                       viewModel.navigateToSignInPage();
                     },
-                    themeColor: themeColor,
                     image: EnvironmentImages.loginMail.fullImagePath,
-                    title: getContinueWithText(),
-                    titleTextStyle: bodyBoldTextStyle(context: context),
                     textColor: mainDarkTextColor(context: context),
                     buttonColor: enabledMainWhiteButtonColor(context: context),
-                    containerPadding: const EdgeInsets.only(bottom: 10),
                   ),
                   PaddingWidget.applyPadding(
                     top: 10,
@@ -209,6 +219,9 @@ class LoginView extends StatelessWidget {
         return LocaleKeys.loginView_continueWithEmail.tr();
       case LoginType.phoneNumber:
       case LoginType.emailAndPhone:
+        return LocaleKeys.loginView_continueWithPhone.tr();
+      case LoginType.emailAndPhoneAndEmailVerification:
+      case LoginType.emailAndPhoneAndBothVerification:
         return LocaleKeys.loginView_continueWithPhone.tr();
     }
   }

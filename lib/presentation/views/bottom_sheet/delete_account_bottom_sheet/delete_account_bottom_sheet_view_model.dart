@@ -33,9 +33,11 @@ class DeleteAccountBottomSheetViewModel extends BaseModel {
   bool get showPhoneInput {
     switch (AppEnvironment.appEnvironmentHelper.loginType) {
       case LoginType.email:
+      case LoginType.emailAndPhoneAndEmailVerification:
         return false;
       case LoginType.phoneNumber:
       case LoginType.emailAndPhone:
+      case LoginType.emailAndPhoneAndBothVerification:
         return true;
     }
   }

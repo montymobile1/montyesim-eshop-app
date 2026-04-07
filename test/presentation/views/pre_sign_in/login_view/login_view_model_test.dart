@@ -1,12 +1,13 @@
+import "package:esim_open_source/domain/data/params/update_user_info_params.dart";
 import "package:esim_open_source/data/remote/responses/auth/auth_response_model.dart";
 import "package:esim_open_source/data/remote/responses/empty_response.dart";
+import "package:esim_open_source/domain/data/params/add_device_params.dart";
 import "package:esim_open_source/domain/repository/api_app_repository.dart";
 import "package:esim_open_source/domain/repository/api_auth_repository.dart";
 import "package:esim_open_source/domain/repository/services/device_info_service.dart";
 import "package:esim_open_source/domain/repository/services/local_storage_service.dart";
 import "package:esim_open_source/domain/repository/services/secure_storage_service.dart";
 import "package:esim_open_source/domain/repository/services/social_login_service.dart";
-import "package:esim_open_source/domain/use_case/app/add_device_use_case.dart";
 import "package:esim_open_source/domain/util/resource.dart";
 import "package:esim_open_source/presentation/enums/view_state.dart";
 import "package:esim_open_source/presentation/reactive_service/user_authentication_service.dart";
@@ -104,14 +105,7 @@ Future<void> main() async {
       refreshToken: "test_refresh_token",
     );
     when(mockApiAuthRepository.updateUserInfo(
-      email: anyNamed("email"),
-      msisdn: anyNamed("msisdn"),
-      firstName: anyNamed("firstName"),
-      lastName: anyNamed("lastName"),
-      isNewsletterSubscribed: anyNamed("isNewsletterSubscribed"),
-      currencyCode: anyNamed("currencyCode"),
-      languageCode: anyNamed("languageCode"),
-      bearerToken: anyNamed("bearerToken"),
+      request: argThat(isA<UpdateUserInfoRequest>(), named: "request"),
     ),).thenAnswer((_) async => Resource<AuthResponseModel>.success(
       mockAuthResponse,
       message: "Success",
@@ -119,17 +113,7 @@ Future<void> main() async {
 
     // Mock API app repository addDevice method
     final EmptyResponse mockAddDeviceResponse = EmptyResponse();
-    when(mockApiAppRepository.addDevice(
-      fcmToken: anyNamed("fcmToken"),
-      manufacturer: anyNamed("manufacturer"),
-      deviceModel: anyNamed("deviceModel"),
-      deviceOs: anyNamed("deviceOs"),
-      deviceOsVersion: anyNamed("deviceOsVersion"),
-      appVersion: anyNamed("appVersion"),
-      ramSize: anyNamed("ramSize"),
-      screenResolution: anyNamed("screenResolution"),
-      isRooted: anyNamed("isRooted"),
-    ),).thenAnswer((_) async => Resource<EmptyResponse?>.success(
+    when(mockApiAppRepository.addDevice(any)).thenAnswer((_) async => Resource<EmptyResponse?>.success(
       mockAddDeviceResponse,
       message: "Device added successfully",
     ),);
@@ -357,7 +341,7 @@ Future<void> main() async {
 
         // Verify that updateUserInfo was called with the access token
         verify(mockApiAuthRepository.updateUserInfo(
-          bearerToken: testAccessToken,
+          request: argThat(isA<UpdateUserInfoRequest>(), named: "request"),
         ),).called(1);
       });
 

@@ -70,8 +70,10 @@ class BundlesByCountriesView extends StatelessWidget {
                     onPriceButtonClick: () async =>
                         onBundleSelected.call(bundle),
                   ).applyShimmer(
-                    context: context,
-                    enable: viewModel.isBusy,
+                    params: ShimmerParams(
+                      context: context,
+                      enable: viewModel.isBusy,
+                    ),
                   );
                 },
               );

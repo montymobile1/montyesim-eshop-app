@@ -57,42 +57,50 @@ class AccountInformationView extends StatelessWidget {
                             children: <Widget>[
                               verticalSpaceMedium,
                               MainInputField.formField(
-                                themeColor: themeColor,
-                                hintText: LocaleKeys
-                                    .accountInformation_namePlaceHolderText
-                                    .tr(),
-                                hintLabelStyle: captionOneNormalTextStyle(
-                                  context: context,
-                                  fontColor:
-                                      secondaryTextColor(context: context),
-                                ),
                                 controller: viewModel.nameController,
-                                backGroundColor:
-                                    whiteBackGroundColor(context: context),
-                                labelStyle: bodyNormalTextStyle(
-                                  context: context,
-                                  fontColor:
-                                      mainDarkTextColor(context: context),
+                                themeColor: themeColor,
+                                textConfig: MainInputFieldTextConfig(
+                                  hintText: LocaleKeys
+                                      .accountInformation_namePlaceHolderText
+                                      .tr(),
+                                ),
+                                appearanceConfig: MainInputFieldAppearanceConfig(
+                                  backgroundColor:
+                                      whiteBackGroundColor(context: context),
+                                  hintTextStyle: captionOneNormalTextStyle(
+                                    context: context,
+                                    fontColor:
+                                        secondaryTextColor(context: context),
+                                  ),
+                                  labelStyle: bodyNormalTextStyle(
+                                    context: context,
+                                    fontColor:
+                                        mainDarkTextColor(context: context),
+                                  ),
                                 ),
                               ),
                               getSpacersWidgets(context),
                               MainInputField.formField(
-                                themeColor: themeColor,
-                                hintText: LocaleKeys
-                                    .accountInformation_familyNamePlaceHolderText
-                                    .tr(),
-                                hintLabelStyle: captionOneNormalTextStyle(
-                                  context: context,
-                                  fontColor:
-                                      secondaryTextColor(context: context),
-                                ),
                                 controller: viewModel.familyNameController,
-                                backGroundColor:
-                                    whiteBackGroundColor(context: context),
-                                labelStyle: bodyNormalTextStyle(
-                                  context: context,
-                                  fontColor:
-                                      mainDarkTextColor(context: context),
+                                themeColor: themeColor,
+                                textConfig: MainInputFieldTextConfig(
+                                  hintText: LocaleKeys
+                                      .accountInformation_familyNamePlaceHolderText
+                                      .tr(),
+                                ),
+                                appearanceConfig: MainInputFieldAppearanceConfig(
+                                  backgroundColor:
+                                      whiteBackGroundColor(context: context),
+                                  hintTextStyle: captionOneNormalTextStyle(
+                                    context: context,
+                                    fontColor:
+                                        secondaryTextColor(context: context),
+                                  ),
+                                  labelStyle: bodyNormalTextStyle(
+                                    context: context,
+                                    fontColor:
+                                        mainDarkTextColor(context: context),
+                                  ),
                                 ),
                               ),
                               getSpacersWidgets(context),
@@ -105,23 +113,27 @@ class AccountInformationView extends StatelessWidget {
                               getSpacersWidgets(context),
                               viewModel.isEmailFieldEditable
                                   ? MainInputField.formField(
+                                      controller: viewModel.emailController,
                                       themeColor: themeColor,
-                                      hintText: LocaleKeys.email.tr(),
-                                      hintLabelStyle: captionOneNormalTextStyle(
-                                        context: context,
-                                        fontColor: secondaryTextColor(
+                                      textConfig: MainInputFieldTextConfig(
+                                        hintText: LocaleKeys.email.tr(),
+                                        errorMessage: viewModel.emailErrorMessage,
+                                      ),
+                                      appearanceConfig: MainInputFieldAppearanceConfig(
+                                        backgroundColor: whiteBackGroundColor(
                                           context: context,
                                         ),
-                                      ),
-                                      errorMessage: viewModel.emailErrorMessage,
-                                      controller: viewModel.emailController,
-                                      backGroundColor: whiteBackGroundColor(
-                                        context: context,
-                                      ),
-                                      labelStyle: bodyNormalTextStyle(
-                                        context: context,
-                                        fontColor:
-                                            mainDarkTextColor(context: context),
+                                        hintTextStyle: captionOneNormalTextStyle(
+                                          context: context,
+                                          fontColor: secondaryTextColor(
+                                            context: context,
+                                          ),
+                                        ),
+                                        labelStyle: bodyNormalTextStyle(
+                                          context: context,
+                                          fontColor:
+                                              mainDarkTextColor(context: context),
+                                        ),
                                       ),
                                     )
                                   : Container(
@@ -151,35 +163,6 @@ class AccountInformationView extends StatelessWidget {
                                       ),
                                     ),
                               verticalSpaceSmallMedium,
-                              Row(
-                                children: <Widget>[
-                                  CupertinoSwitch(
-                                    value: viewModel.receiveUpdated,
-                                    activeTrackColor:
-                                        enabledSwitchColor(context: context),
-                                    thumbColor:
-                                        switchThumbColor(context: context),
-                                    onChanged: (bool newValue) {
-                                      viewModel.updateSwitch(
-                                        newValue: newValue,
-                                      );
-                                    },
-                                  ),
-                                  horizontalSpaceSmall,
-                                  Expanded(
-                                    child: Text(
-                                      LocaleKeys.accountInformation_contentText
-                                          .tr(),
-                                      style: captionTwoNormalTextStyle(
-                                        context: context,
-                                        fontColor: secondaryTextColor(
-                                          context: context,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
                             ],
                           ),
                         ),

@@ -35,39 +35,60 @@ class NativeButtonParams {
   final VoidCallback buttonAction;
 }
 
+class NativeDialogParams {
+  NativeDialogParams({
+    required this.context,
+    this.barrierDismissible = false,
+    this.titleText,
+    this.contentText,
+    this.titleTextStyle,
+    this.contentTextStyle,
+    this.buttonTitleTextStyle,
+    this.buttons = const <NativeButtonParams>[],
+  });
+
+  final BuildContext context;
+  final bool barrierDismissible;
+  final String? titleText;
+  final String? contentText;
+  final TextStyle? titleTextStyle;
+  final TextStyle? contentTextStyle;
+  final TextStyle? buttonTitleTextStyle;
+  final List<NativeButtonParams> buttons;
+}
+
+class AndroidDialogParams {
+  AndroidDialogParams({
+    required this.allowAndroidBackAction,
+    required this.nativeParams,
+  });
+
+  final NativeDialogParams nativeParams;
+  final bool allowAndroidBackAction;
+}
+
 Future<T?> showNativeDialog<T>({
-  required BuildContext context,
-  bool barrierDismissible = false,
-  String? titleText,
-  String? contentText,
-  TextStyle? titleTextStyle,
-  TextStyle? contentTextStyle,
-  TextStyle? buttonTitleTextStyle,
-  List<NativeButtonParams> buttons = const <NativeButtonParams>[],
+  required NativeDialogParams params,
 }) async {
   return showDialog(
-    context: context,
-    barrierDismissible: barrierDismissible,
+    context: params.context,
+    barrierDismissible: params.barrierDismissible,
     builder: (BuildContext context) {
       return Platform.isIOS
           ? _iOSNativeDialog(
               context: context,
-              buttons: buttons,
-              titleText: titleText,
-              contentText: contentText,
-              titleTextStyle: titleTextStyle,
-              contentTextStyle: contentTextStyle,
-              buttonTitleTextStyle: buttonTitleTextStyle,
+              buttons: params.buttons,
+              titleText: params.titleText,
+              contentText: params.contentText,
+              titleTextStyle: params.titleTextStyle,
+              contentTextStyle: params.contentTextStyle,
+              buttonTitleTextStyle: params.buttonTitleTextStyle,
             )
           : _androidNativeDialog(
-              context: context,
-              buttons: buttons,
-              titleText: titleText,
-              contentText: contentText,
-              titleTextStyle: titleTextStyle,
-              contentTextStyle: contentTextStyle,
-              buttonTitleTextStyle: buttonTitleTextStyle,
-              allowAndroidBackAction: barrierDismissible,
+              params: AndroidDialogParams(
+                nativeParams: params,
+                allowAndroidBackAction: params.barrierDismissible,
+              ),
             );
     },
   );
@@ -125,42 +146,38 @@ Widget _iOSNativeDialog({
 }
 
 Widget _androidNativeDialog({
-  required BuildContext context,
-  required bool allowAndroidBackAction,
-  String? titleText,
-  String? contentText,
-  TextStyle? titleTextStyle,
-  TextStyle? contentTextStyle,
-  TextStyle? buttonTitleTextStyle,
-  List<NativeButtonParams> buttons = const <NativeButtonParams>[],
+  required AndroidDialogParams params,
 }) {
   return PopScope(
-    canPop: allowAndroidBackAction,
+    canPop: params.allowAndroidBackAction,
     child: AlertDialog(
       backgroundColor: Colors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      title: titleText == null
+      title: params.nativeParams.titleText == null
           ? null
           : Text(
-              titleText,
+              params.nativeParams.titleText ?? "",
               textAlign: TextAlign.center,
-              style: titleTextStyle ??
+              style: params.nativeParams.titleTextStyle ??
                   bodyMediumTextStyle(
-                    context: context,
-                    fontColor: mainDarkTextColor(context: context),
+                    context: params.nativeParams.context,
+                    fontColor:
+                        mainDarkTextColor(context: params.nativeParams.context),
                   ),
             ),
-      content: contentText == null
+      content: params.nativeParams.contentText == null
           ? null
           : Padding(
               padding: const EdgeInsets.only(top: 8),
               child: Text(
-                contentText,
+                params.nativeParams.contentText ?? "",
                 textAlign: TextAlign.center,
-                style: contentTextStyle ??
+                style: params.nativeParams.contentTextStyle ??
                     captionOneNormalTextStyle(
-                      context: context,
-                      fontColor: contentTextColor(context: context),
+                      context: params.nativeParams.context,
+                      fontColor: contentTextColor(
+                        context: params.nativeParams.context,
+                      ),
                     ),
               ),
             ),
@@ -168,7 +185,7 @@ Widget _androidNativeDialog({
       actions: <Widget>[
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: buttons
+          children: params.nativeParams.buttons
               .map(
                 (NativeButtonParams button) => Flexible(
                   child: TextButton(
@@ -182,9 +199,9 @@ Widget _androidNativeDialog({
                     child: Text(
                       textAlign: TextAlign.center,
                       button.buttonTitle,
-                      style: buttonTitleTextStyle ??
+                      style: params.nativeParams.buttonTitleTextStyle ??
                           bodyMediumTextStyle(
-                            context: context,
+                            context: params.nativeParams.context,
                             fontColor: Colors.blue,
                           ),
                       maxLines: 2,
@@ -361,7 +378,7 @@ Future<void>? registerDevice({
 }) async {
   Resource<DeviceInfoResponseModel?> registerResponse =
       await RegisterDeviceUseCase(locator<ApiDeviceRepository>()).execute(
-    RegisterDeviceParams(
+    RegisterDeviceUseCaseParams(
       fcmToken: fcmToken,
       userGuid: userGuid,
     ),

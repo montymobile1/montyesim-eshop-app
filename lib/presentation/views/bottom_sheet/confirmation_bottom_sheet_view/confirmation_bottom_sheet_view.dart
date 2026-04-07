@@ -83,14 +83,16 @@ class ConfirmationBottomSheetView extends StatelessWidget {
                   ),
                   verticalSpaceSmall,
                   MainButton.onlyText(
-                    title: LocaleKeys.confirmation_cancellationButtonText.tr(),
-                    titleTextStyle: bodyMediumTextStyle(context: context),
-                    hideShadows: true,
-                    onPressed: () => completer(
-                      SheetResponse<EmptyBottomSheetResponse>(),
+                    params: MainButtonParams(
+                      title: LocaleKeys.confirmation_cancellationButtonText.tr(),
+                      titleTextStyle: bodyMediumTextStyle(context: context),
+                      hideShadows: true,
+                      onPressed: () => completer(
+                        SheetResponse<EmptyBottomSheetResponse>(),
+                      ),
+                      themeColor: themeColor,
+                      enabledTextColor: mainDarkTextColor(context: context),
                     ),
-                    themeColor: themeColor,
-                    enabledTextColor: mainDarkTextColor(context: context),
                   ),
                   verticalSpaceMedium,
                 ],

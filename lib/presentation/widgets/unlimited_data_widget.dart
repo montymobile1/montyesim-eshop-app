@@ -38,7 +38,7 @@ class UnlimitedDataWidget extends StatelessWidget {
           children: <Widget>[
             Text(
               LocaleKeys.unlimited.tr(),
-              style:  unlimitedBoldTextStyle(
+              style: unlimitedBoldTextStyle(
                 context: context,
               ),
             ),
@@ -51,7 +51,9 @@ class UnlimitedDataWidget extends StatelessWidget {
           ],
         ),
       ),
-    ).applyShimmer(enable: isLoading, context: context);
+    ).applyShimmer(
+      params: ShimmerParams(enable: isLoading, context: context),
+    );
   }
 
   @override

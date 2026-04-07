@@ -39,9 +39,11 @@ class ProfileViewModel extends BaseModel {
   String getUserName() {
     switch (AppEnvironment.appEnvironmentHelper.loginType) {
       case LoginType.email:
+      case LoginType.emailAndPhoneAndEmailVerification:
         return userEmailAddress;
       case LoginType.phoneNumber:
       case LoginType.emailAndPhone:
+      case LoginType.emailAndPhoneAndBothVerification:
         return userMsisdn;
     }
   }

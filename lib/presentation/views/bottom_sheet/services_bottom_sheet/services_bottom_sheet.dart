@@ -83,16 +83,14 @@ class ServicesBottomSheet extends StatelessWidget {
                                     const EdgeInsets.symmetric(horizontal: 20),
                                 child: Column(
                                   children: <Widget>[
-                                    request.title != null
-                                        ? Text(
-                                            request.title ?? "",
-                                          )
-                                        : const SizedBox(height: 0),
-                                    request.subtitle != null
-                                        ? Text(
-                                            request.subtitle ?? "",
-                                          )
-                                        : const SizedBox(height: 0),
+                                    if (request.title != null)
+                                      Text(
+                                        request.title!,
+                                      ),
+                                    if (request.subtitle != null)
+                                      Text(
+                                        request.subtitle!,
+                                      ),
                                   ],
                                 ),
                               ),

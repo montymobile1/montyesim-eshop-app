@@ -48,8 +48,10 @@ class CountryRegionView extends StatelessWidget {
               CountryFlagImage(
                 icon: icon,
               ).applyShimmer(
-                context: context,
-                enable: showShimmer,
+                params: ShimmerParams(
+                  context: context,
+                  enable: showShimmer,
+                ),
               ),
               const SizedBox(width: 10),
               Expanded(
@@ -62,8 +64,10 @@ class CountryRegionView extends StatelessWidget {
                         regionCountryBundleTitleTextColor(context: context),
                   ),
                 ).applyShimmer(
-                  context: context,
-                  enable: showShimmer,
+                  params: ShimmerParams(
+                    context: context,
+                    enable: showShimmer,
+                  ),
                 ),
               ),
               // Trailing arrow icon

@@ -95,11 +95,13 @@ class PurchaseOrderSuccessView extends StatelessWidget {
               ),
               viewModel.state.showGoToMyEsimButton
                   ? MainButton.emptyBackground(
-                      title: LocaleKeys.gotoMyESim.tr(),
-                      onPressed: viewModel.onGotoMyESimClick,
-                      hideShadows: true,
-                      borderColor: greyBackGroundColor(context: context),
-                      themeColor: mainDarkTextColor(context: context),
+                      params: MainButtonParams(
+                        title: LocaleKeys.gotoMyESim.tr(),
+                        onPressed: viewModel.onGotoMyESimClick,
+                        hideShadows: true,
+                        borderColor: greyBackGroundColor(context: context),
+                        themeColor: mainDarkTextColor(context: context),
+                      ),
                     )
                   : Container(),
               viewModel.state.showInstallButton
@@ -174,11 +176,13 @@ class PurchaseOrderSuccessView extends StatelessWidget {
         ),
         verticalSpaceSmall,
         MainButton.emptyBackground(
-          width: 200,
-          hideShadows: true,
-          title: LocaleKeys.check_user_guide.tr(),
-          onPressed: viewModel.onUserGuideClick,
-          themeColor: userGuideButtonColor(context: context),
+          params: MainButtonParams(
+            width: 200,
+            hideShadows: true,
+            title: LocaleKeys.check_user_guide.tr(),
+            onPressed: viewModel.onUserGuideClick,
+            themeColor: userGuideButtonColor(context: context),
+          ),
         ),
       ],
     );
@@ -230,7 +234,9 @@ class PurchaseOrderSuccessView extends StatelessWidget {
                   fontColor: contentTextColor(context: context),
                 ),
                 maxLines: 2,
-              ).applyShimmer(context: context, enable: isLoading),
+              ).applyShimmer(
+                params: ShimmerParams(context: context, enable: isLoading),
+              ),
             ],
           ),
         ),
@@ -240,9 +246,11 @@ class PurchaseOrderSuccessView extends StatelessWidget {
             size: 20,
             color: secondaryIconButtonColor(context: context),
           ).applyShimmer(
-            context: context,
-            enable: isLoading,
-            borderRadius: 30,
+            params: ShimmerParams(
+              context: context,
+              enable: isLoading,
+              borderRadius: 30,
+            ),
           ),
           onPressed: onCopyClicked,
         ),

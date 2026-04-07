@@ -95,7 +95,6 @@ Future<void> main() async {
           balance: 100.50,
           currencyCode: "USD",
           referralCode: "REF123",
-          shouldNotify: true,
         ),
         userToken: "user_token_123",
         isVerified: true,
@@ -117,7 +116,6 @@ Future<void> main() async {
       expect(authService.walletAvailableBalance, equals(100.50));
       expect(authService.walletCurrencyCode, equals("USD"));
       expect(authService.referralCode, equals("REF123"));
-      expect(authService.isNewsletterSubscribed, isTrue);
     });
 
     test("notifies listeners when user response is saved", () async {
@@ -256,7 +254,6 @@ Future<void> main() async {
           balance: 250.75,
           currencyCode: "EUR",
           referralCode: "ALICE123",
-          shouldNotify: false,
         ),
       );
 
@@ -274,7 +271,6 @@ Future<void> main() async {
       expect(authService.walletAvailableBalance, equals(250.75));
       expect(authService.walletCurrencyCode, equals("EUR"));
       expect(authService.referralCode, equals("ALICE123"));
-      expect(authService.isNewsletterSubscribed, isFalse);
     });
 
     test("returns default values when user info is null", () {
@@ -286,7 +282,6 @@ Future<void> main() async {
       expect(authService.walletAvailableBalance, equals(0));
       expect(authService.walletCurrencyCode, isEmpty);
       expect(authService.referralCode, isEmpty);
-      expect(authService.isNewsletterSubscribed, isFalse);
     });
 
     test("returns default values when specific properties are null", () async {

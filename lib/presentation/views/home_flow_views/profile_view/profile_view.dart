@@ -204,18 +204,20 @@ class ProfileView extends StatelessWidget {
                 children: <Widget>[
                   verticalSpaceTiny,
                   MainButton.bannerButton(
-                    title: LocaleKeys.profile_login.tr(),
-                    action: () async {
-                      viewModel.loginButtonTapped();
-                    },
-                    themeColor: themeColor,
-                    titleHorizontalPadding: 15,
-                    textColor: enabledMainButtonTextColor(context: context),
-                    buttonColor: enabledMainButtonColor(context: context),
-                    titleTextStyle: bodyBoldTextStyle(
-                      context: context,
-                      fontColor: mainWhiteTextColor(context: context),
-                    ).copyWith(fontWeight: FontWeight.w600),
+                    params: BannerButtonParams(
+                      title: LocaleKeys.profile_login.tr(),
+                      action: () async {
+                        viewModel.loginButtonTapped();
+                      },
+                      themeColor: themeColor,
+                      titleHorizontalPadding: 15,
+                      textColor: enabledMainButtonTextColor(context: context),
+                      buttonColor: enabledMainButtonColor(context: context),
+                      titleTextStyle: bodyBoldTextStyle(
+                        context: context,
+                        fontColor: mainWhiteTextColor(context: context),
+                      ).copyWith(fontWeight: FontWeight.w600),
+                    ),
                   ),
                 ],
               ),

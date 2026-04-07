@@ -11,6 +11,7 @@ import "package:esim_open_source/domain/repository/services/payment_service.dart
 import "package:esim_open_source/domain/util/resource.dart";
 import "package:esim_open_source/presentation/enums/payment_type.dart";
 import "package:esim_open_source/presentation/enums/view_state.dart";
+import "package:esim_open_source/presentation/models/payment_request_params.dart";
 import "package:esim_open_source/presentation/reactive_service/user_authentication_service.dart";
 import "package:esim_open_source/presentation/setup_bottom_sheet_ui.dart";
 import "package:esim_open_source/presentation/views/bottom_sheet/e_sim_top_up/top_up_bottom_sheet_view_model.dart";
@@ -101,10 +102,12 @@ Future<void> main() async {
         ),
       );
 
-      when(mockApiUserRepository.getRelatedTopUp(
-        iccID: anyNamed("iccID"),
-        bundleCode: anyNamed("bundleCode"),
-      ),).thenAnswer(
+      when(
+        mockApiUserRepository.getRelatedTopUp(
+          iccID: anyNamed("iccID"),
+          bundleCode: anyNamed("bundleCode"),
+        ),
+      ).thenAnswer(
         (_) async => Resource<List<BundleResponseModel>?>.success(
           <BundleResponseModel>[
             BundleResponseModel(
@@ -123,17 +126,19 @@ Future<void> main() async {
         completer: (SheetResponse<MainBottomSheetResponse> response) {},
       )
 
-      // Act
-      ..onViewModelReady();
+        // Act
+        ..onViewModelReady();
 
       // Wait for async operation
       await Future<void>.delayed(const Duration(milliseconds: 300));
 
       // Assert
-      verify(mockApiUserRepository.getRelatedTopUp(
-        iccID: anyNamed("iccID"),
-        bundleCode: anyNamed("bundleCode"),
-      ),).called(1);
+      verify(
+        mockApiUserRepository.getRelatedTopUp(
+          iccID: anyNamed("iccID"),
+          bundleCode: anyNamed("bundleCode"),
+        ),
+      ).called(1);
     });
 
     test("closeBottomSheet calls completer with empty response", () {
@@ -154,8 +159,8 @@ Future<void> main() async {
         },
       )
 
-      // Act
-      ..closeBottomSheet();
+        // Act
+        ..closeBottomSheet();
 
       // Assert
       expect(completerCalled, true);
@@ -183,7 +188,9 @@ Future<void> main() async {
       expect(height, 300);
     });
 
-    test("calculateHeight calculates correct height when bundleItems is not empty", () {
+    test(
+        "calculateHeight calculates correct height when bundleItems is not empty",
+        () {
       // Arrange
       final SheetRequest<BundleTopUpBottomRequest> request =
           SheetRequest<BundleTopUpBottomRequest>(
@@ -211,7 +218,9 @@ Future<void> main() async {
       expect(height, 520);
     });
 
-    test("calculateHeight returns screenHeight when calculated height exceeds it", () {
+    test(
+        "calculateHeight returns screenHeight when calculated height exceeds it",
+        () {
       // Arrange
       final SheetRequest<BundleTopUpBottomRequest> request =
           SheetRequest<BundleTopUpBottomRequest>(
@@ -266,10 +275,12 @@ Future<void> main() async {
         ),
       ];
 
-      when(mockApiUserRepository.getRelatedTopUp(
-        iccID: anyNamed("iccID"),
-        bundleCode: anyNamed("bundleCode"),
-      ),).thenAnswer(
+      when(
+        mockApiUserRepository.getRelatedTopUp(
+          iccID: anyNamed("iccID"),
+          bundleCode: anyNamed("bundleCode"),
+        ),
+      ).thenAnswer(
         (_) async => Resource<List<BundleResponseModel>?>.success(
           mockBundles,
           message: "Success",
@@ -285,10 +296,12 @@ Future<void> main() async {
       await viewModel.fetchTopUpRelated();
 
       // Assert
-      verify(mockApiUserRepository.getRelatedTopUp(
-        iccID: "test_iccid_123",
-        bundleCode: "TEST123",
-      ),).called(1);
+      verify(
+        mockApiUserRepository.getRelatedTopUp(
+          iccID: "test_iccid_123",
+          bundleCode: "TEST123",
+        ),
+      ).called(1);
       expect(viewModel.bundleItems.length, 2);
       expect(viewModel.bundleItems[0].bundleCode, "TOP_UP_1");
       expect(viewModel.bundleItems[1].bundleCode, "TOP_UP_2");
@@ -305,10 +318,12 @@ Future<void> main() async {
         ),
       );
 
-      when(mockApiUserRepository.getRelatedTopUp(
-        iccID: anyNamed("iccID"),
-        bundleCode: anyNamed("bundleCode"),
-      ),).thenAnswer(
+      when(
+        mockApiUserRepository.getRelatedTopUp(
+          iccID: anyNamed("iccID"),
+          bundleCode: anyNamed("bundleCode"),
+        ),
+      ).thenAnswer(
         (_) async => Resource<List<BundleResponseModel>?>.success(
           null,
           message: "Success",
@@ -324,10 +339,12 @@ Future<void> main() async {
       await viewModel.fetchTopUpRelated();
 
       // Assert
-      verify(mockApiUserRepository.getRelatedTopUp(
-        iccID: anyNamed("iccID"),
-        bundleCode: anyNamed("bundleCode"),
-      ),).called(1);
+      verify(
+        mockApiUserRepository.getRelatedTopUp(
+          iccID: anyNamed("iccID"),
+          bundleCode: anyNamed("bundleCode"),
+        ),
+      ).called(1);
     });
 
     test("fetchTopUpRelated failure closes bottom sheet", () async {
@@ -341,10 +358,12 @@ Future<void> main() async {
         ),
       );
 
-      when(mockApiUserRepository.getRelatedTopUp(
-        iccID: anyNamed("iccID"),
-        bundleCode: anyNamed("bundleCode"),
-      ),).thenAnswer(
+      when(
+        mockApiUserRepository.getRelatedTopUp(
+          iccID: anyNamed("iccID"),
+          bundleCode: anyNamed("bundleCode"),
+        ),
+      ).thenAnswer(
         (_) async => Resource<List<BundleResponseModel>?>.error(
           "Network error",
         ),
@@ -364,10 +383,12 @@ Future<void> main() async {
       await Future<void>.delayed(const Duration(milliseconds: 100));
 
       // Assert
-      verify(mockApiUserRepository.getRelatedTopUp(
-        iccID: anyNamed("iccID"),
-        bundleCode: anyNamed("bundleCode"),
-      ),).called(1);
+      verify(
+        mockApiUserRepository.getRelatedTopUp(
+          iccID: anyNamed("iccID"),
+          bundleCode: anyNamed("bundleCode"),
+        ),
+      ).called(1);
       expect(completerCalled, true);
     });
 
@@ -404,14 +425,18 @@ Future<void> main() async {
       await viewModel.onBuyClick(index: 0);
 
       // Assert - no API call should be made
-      verifyNever(mockApiUserRepository.topUpBundle(
-        iccID: anyNamed("iccID"),
-        bundleCode: anyNamed("bundleCode"),
-        paymentType: anyNamed("paymentType"),
-      ),);
+      verifyNever(
+        mockApiUserRepository.topUpBundle(
+          iccID: anyNamed("iccID"),
+          bundleCode: anyNamed("bundleCode"),
+          paymentType: anyNamed("paymentType"),
+        ),
+      );
     });
 
-    test("onBuyClick with single wallet payment type and sufficient balance calls topUpBundle", () async {
+    test(
+        "onBuyClick with single wallet payment type and sufficient balance calls topUpBundle",
+        () async {
       // Arrange
       final SheetRequest<BundleTopUpBottomRequest> request =
           SheetRequest<BundleTopUpBottomRequest>(
@@ -422,16 +447,19 @@ Future<void> main() async {
       );
 
       when(mockUserAuthenticationService.isUserLoggedIn).thenReturn(true);
-      when(mockUserAuthenticationService.walletAvailableBalance).thenReturn(100);
+      when(mockUserAuthenticationService.walletAvailableBalance)
+          .thenReturn(100);
 
       when(mockAppConfigurationService.getPaymentTypes)
           .thenReturn(<PaymentType>[PaymentType.wallet]);
 
-      when(mockApiUserRepository.topUpBundle(
-        iccID: anyNamed("iccID"),
-        bundleCode: anyNamed("bundleCode"),
-        paymentType: anyNamed("paymentType"),
-      ),).thenAnswer(
+      when(
+        mockApiUserRepository.topUpBundle(
+          iccID: anyNamed("iccID"),
+          bundleCode: anyNamed("bundleCode"),
+          paymentType: anyNamed("paymentType"),
+        ),
+      ).thenAnswer(
         (_) async => Resource<BundleAssignResponseModel?>.success(
           BundleAssignResponseModel(
             orderId: "ORDER_123",
@@ -441,22 +469,20 @@ Future<void> main() async {
         ),
       );
 
-      when(mockPaymentService.prepareCheckout(
-        paymentType: anyNamed("paymentType"),
-        publishableKey: anyNamed("publishableKey"),
-        merchantIdentifier: anyNamed("merchantIdentifier"),
-      ),).thenAnswer((_) async {});
+      when(
+        mockPaymentService.prepareCheckout(
+          paymentType: anyNamed("paymentType"),
+          publishableKey: anyNamed("publishableKey"),
+          merchantIdentifier: anyNamed("merchantIdentifier"),
+        ),
+      ).thenAnswer((_) async {});
 
-      when(mockPaymentService.processOrderPayment(
-        paymentType: anyNamed("paymentType"),
-        iccID: anyNamed("iccID"),
-        orderID: anyNamed("orderID"),
-        billingCountryCode: anyNamed("billingCountryCode"),
-        paymentIntentClientSecret: anyNamed("paymentIntentClientSecret"),
-        customerId: anyNamed("customerId"),
-        customerEphemeralKeySecret: anyNamed("customerEphemeralKeySecret"),
-        testEnv: anyNamed("testEnv"),
-      ),).thenAnswer((_) async => PaymentResult.completed);
+      when(
+        mockPaymentService.processOrderPayment(
+          paymentType: anyNamed("paymentType"),
+          params: anyNamed("params"),
+        ),
+      ).thenAnswer((_) async => PaymentResult.completed);
 
       when(mockAnalyticsService.logEvent(event: anyNamed("event")))
           .thenAnswer((_) async {});
@@ -482,14 +508,18 @@ Future<void> main() async {
       await Future<void>.delayed(const Duration(milliseconds: 300));
 
       // Assert
-      verify(mockApiUserRepository.topUpBundle(
-        iccID: anyNamed("iccID"),
-        bundleCode: anyNamed("bundleCode"),
-        paymentType: anyNamed("paymentType"),
-      ),).called(1);
+      verify(
+        mockApiUserRepository.topUpBundle(
+          iccID: anyNamed("iccID"),
+          bundleCode: anyNamed("bundleCode"),
+          paymentType: anyNamed("paymentType"),
+        ),
+      ).called(1);
     });
 
-    test("onBuyClick with single wallet payment type and insufficient balance shows toast", () async {
+    test(
+        "onBuyClick with single wallet payment type and insufficient balance shows toast",
+        () async {
       // Arrange
       final SheetRequest<BundleTopUpBottomRequest> request =
           SheetRequest<BundleTopUpBottomRequest>(
@@ -521,14 +551,17 @@ Future<void> main() async {
       await viewModel.onBuyClick(index: 0);
 
       // Assert - no API call should be made
-      verifyNever(mockApiUserRepository.topUpBundle(
-        iccID: anyNamed("iccID"),
-        bundleCode: anyNamed("bundleCode"),
-        paymentType: anyNamed("paymentType"),
-      ),);
+      verifyNever(
+        mockApiUserRepository.topUpBundle(
+          iccID: anyNamed("iccID"),
+          bundleCode: anyNamed("bundleCode"),
+          paymentType: anyNamed("paymentType"),
+        ),
+      );
     });
 
-    test("onBuyClick with single card payment type calls topUpBundle", () async {
+    test("onBuyClick with single card payment type calls topUpBundle",
+        () async {
       // Arrange
       final SheetRequest<BundleTopUpBottomRequest> request =
           SheetRequest<BundleTopUpBottomRequest>(
@@ -541,11 +574,13 @@ Future<void> main() async {
       when(mockUserAuthenticationService.isUserLoggedIn).thenReturn(false);
       when(mockUserAuthenticationService.walletAvailableBalance).thenReturn(0);
 
-      when(mockApiUserRepository.topUpBundle(
-        iccID: anyNamed("iccID"),
-        bundleCode: anyNamed("bundleCode"),
-        paymentType: anyNamed("paymentType"),
-      ),).thenAnswer(
+      when(
+        mockApiUserRepository.topUpBundle(
+          iccID: anyNamed("iccID"),
+          bundleCode: anyNamed("bundleCode"),
+          paymentType: anyNamed("paymentType"),
+        ),
+      ).thenAnswer(
         (_) async => Resource<BundleAssignResponseModel?>.success(
           BundleAssignResponseModel(
             orderId: "ORDER_456",
@@ -555,22 +590,20 @@ Future<void> main() async {
         ),
       );
 
-      when(mockPaymentService.prepareCheckout(
-        paymentType: anyNamed("paymentType"),
-        publishableKey: anyNamed("publishableKey"),
-        merchantIdentifier: anyNamed("merchantIdentifier"),
-      ),).thenAnswer((_) async {});
+      when(
+        mockPaymentService.prepareCheckout(
+          paymentType: anyNamed("paymentType"),
+          publishableKey: anyNamed("publishableKey"),
+          merchantIdentifier: anyNamed("merchantIdentifier"),
+        ),
+      ).thenAnswer((_) async {});
 
-      when(mockPaymentService.processOrderPayment(
-        paymentType: anyNamed("paymentType"),
-        iccID: anyNamed("iccID"),
-        orderID: anyNamed("orderID"),
-        billingCountryCode: anyNamed("billingCountryCode"),
-        paymentIntentClientSecret: anyNamed("paymentIntentClientSecret"),
-        customerId: anyNamed("customerId"),
-        customerEphemeralKeySecret: anyNamed("customerEphemeralKeySecret"),
-        testEnv: anyNamed("testEnv"),
-      ),).thenAnswer((_) async => PaymentResult.completed);
+      when(
+        mockPaymentService.processOrderPayment(
+          paymentType: anyNamed("paymentType"),
+          params: anyNamed("params"),
+        ),
+      ).thenAnswer((_) async => PaymentResult.completed);
 
       when(mockAnalyticsService.logEvent(event: anyNamed("event")))
           .thenAnswer((_) async {});
@@ -596,14 +629,17 @@ Future<void> main() async {
       await Future<void>.delayed(const Duration(milliseconds: 300));
 
       // Assert
-      verify(mockApiUserRepository.topUpBundle(
-        iccID: anyNamed("iccID"),
-        bundleCode: anyNamed("bundleCode"),
-        paymentType: anyNamed("paymentType"),
-      ),).called(1);
+      verify(
+        mockApiUserRepository.topUpBundle(
+          iccID: anyNamed("iccID"),
+          bundleCode: anyNamed("bundleCode"),
+          paymentType: anyNamed("paymentType"),
+        ),
+      ).called(1);
     });
 
-    test("onBuyClick with wallet removed from list when balance insufficient", () async {
+    test("onBuyClick with wallet removed from list when balance insufficient",
+        () async {
       // Arrange
       final SheetRequest<BundleTopUpBottomRequest> request =
           SheetRequest<BundleTopUpBottomRequest>(
@@ -619,11 +655,13 @@ Future<void> main() async {
       when(mockAppConfigurationService.getPaymentTypes)
           .thenReturn(<PaymentType>[PaymentType.wallet, PaymentType.card]);
 
-      when(mockApiUserRepository.topUpBundle(
-        iccID: anyNamed("iccID"),
-        bundleCode: anyNamed("bundleCode"),
-        paymentType: anyNamed("paymentType"),
-      ),).thenAnswer(
+      when(
+        mockApiUserRepository.topUpBundle(
+          iccID: anyNamed("iccID"),
+          bundleCode: anyNamed("bundleCode"),
+          paymentType: anyNamed("paymentType"),
+        ),
+      ).thenAnswer(
         (_) async => Resource<BundleAssignResponseModel?>.success(
           BundleAssignResponseModel(
             orderId: "ORDER_789",
@@ -633,22 +671,20 @@ Future<void> main() async {
         ),
       );
 
-      when(mockPaymentService.prepareCheckout(
-        paymentType: anyNamed("paymentType"),
-        publishableKey: anyNamed("publishableKey"),
-        merchantIdentifier: anyNamed("merchantIdentifier"),
-      ),).thenAnswer((_) async {});
+      when(
+        mockPaymentService.prepareCheckout(
+          paymentType: anyNamed("paymentType"),
+          publishableKey: anyNamed("publishableKey"),
+          merchantIdentifier: anyNamed("merchantIdentifier"),
+        ),
+      ).thenAnswer((_) async {});
 
-      when(mockPaymentService.processOrderPayment(
-        paymentType: anyNamed("paymentType"),
-        iccID: anyNamed("iccID"),
-        orderID: anyNamed("orderID"),
-        billingCountryCode: anyNamed("billingCountryCode"),
-        paymentIntentClientSecret: anyNamed("paymentIntentClientSecret"),
-        customerId: anyNamed("customerId"),
-        customerEphemeralKeySecret: anyNamed("customerEphemeralKeySecret"),
-        testEnv: anyNamed("testEnv"),
-      ),).thenAnswer((_) async => PaymentResult.completed);
+      when(
+        mockPaymentService.processOrderPayment(
+          paymentType: anyNamed("paymentType"),
+          params: anyNamed("params"),
+        ),
+      ).thenAnswer((_) async => PaymentResult.completed);
 
       when(mockAnalyticsService.logEvent(event: anyNamed("event")))
           .thenAnswer((_) async {});
@@ -674,14 +710,17 @@ Future<void> main() async {
       await Future<void>.delayed(const Duration(milliseconds: 300));
 
       // Assert - wallet should be removed, only card payment should be used
-      verify(mockApiUserRepository.topUpBundle(
-        iccID: anyNamed("iccID"),
-        bundleCode: anyNamed("bundleCode"),
-        paymentType: anyNamed("paymentType"),
-      ),).called(1);
+      verify(
+        mockApiUserRepository.topUpBundle(
+          iccID: anyNamed("iccID"),
+          bundleCode: anyNamed("bundleCode"),
+          paymentType: anyNamed("paymentType"),
+        ),
+      ).called(1);
     });
 
-    test("onBuyClick with multiple payment types user selects payment", () async {
+    test("onBuyClick with multiple payment types user selects payment",
+        () async {
       // Arrange
       final SheetRequest<BundleTopUpBottomRequest> request =
           SheetRequest<BundleTopUpBottomRequest>(
@@ -692,29 +731,34 @@ Future<void> main() async {
       );
 
       when(mockUserAuthenticationService.isUserLoggedIn).thenReturn(true);
-      when(mockUserAuthenticationService.walletAvailableBalance).thenReturn(100);
+      when(mockUserAuthenticationService.walletAvailableBalance)
+          .thenReturn(100);
 
       when(mockAppConfigurationService.getPaymentTypes)
           .thenReturn(<PaymentType>[PaymentType.wallet, PaymentType.card]);
 
       // Mock PaymentHelper.choosePaymentMethod to return a payment type
-      when(mockBottomSheetService.showCustomSheet(
-        data: anyNamed("data"),
-        enableDrag: anyNamed("enableDrag"),
-        isScrollControlled: anyNamed("isScrollControlled"),
-        variant: anyNamed("variant"),
-      ),).thenAnswer(
+      when(
+        mockBottomSheetService.showCustomSheet(
+          data: anyNamed("data"),
+          enableDrag: anyNamed("enableDrag"),
+          isScrollControlled: anyNamed("isScrollControlled"),
+          variant: anyNamed("variant"),
+        ),
+      ).thenAnswer(
         (_) async => SheetResponse<PaymentType>(
           data: PaymentType.card,
           confirmed: true,
         ),
       );
 
-      when(mockApiUserRepository.topUpBundle(
-        iccID: anyNamed("iccID"),
-        bundleCode: anyNamed("bundleCode"),
-        paymentType: anyNamed("paymentType"),
-      ),).thenAnswer(
+      when(
+        mockApiUserRepository.topUpBundle(
+          iccID: anyNamed("iccID"),
+          bundleCode: anyNamed("bundleCode"),
+          paymentType: anyNamed("paymentType"),
+        ),
+      ).thenAnswer(
         (_) async => Resource<BundleAssignResponseModel?>.success(
           BundleAssignResponseModel(
             orderId: "ORDER_MULTI",
@@ -724,22 +768,20 @@ Future<void> main() async {
         ),
       );
 
-      when(mockPaymentService.prepareCheckout(
-        paymentType: anyNamed("paymentType"),
-        publishableKey: anyNamed("publishableKey"),
-        merchantIdentifier: anyNamed("merchantIdentifier"),
-      ),).thenAnswer((_) async {});
+      when(
+        mockPaymentService.prepareCheckout(
+          paymentType: anyNamed("paymentType"),
+          publishableKey: anyNamed("publishableKey"),
+          merchantIdentifier: anyNamed("merchantIdentifier"),
+        ),
+      ).thenAnswer((_) async {});
 
-      when(mockPaymentService.processOrderPayment(
-        paymentType: anyNamed("paymentType"),
-        iccID: anyNamed("iccID"),
-        orderID: anyNamed("orderID"),
-        billingCountryCode: anyNamed("billingCountryCode"),
-        paymentIntentClientSecret: anyNamed("paymentIntentClientSecret"),
-        customerId: anyNamed("customerId"),
-        customerEphemeralKeySecret: anyNamed("customerEphemeralKeySecret"),
-        testEnv: anyNamed("testEnv"),
-      ),).thenAnswer((_) async => PaymentResult.completed);
+      when(
+        mockPaymentService.processOrderPayment(
+          paymentType: anyNamed("paymentType"),
+          params: anyNamed("params"),
+        ),
+      ).thenAnswer((_) async => PaymentResult.completed);
 
       when(mockAnalyticsService.logEvent(event: anyNamed("event")))
           .thenAnswer((_) async {});
@@ -765,15 +807,18 @@ Future<void> main() async {
       await Future<void>.delayed(const Duration(milliseconds: 500));
 
       // Assert
-      verify(mockBottomSheetService.showCustomSheet(
-        variant: anyNamed("variant"),
-        data: anyNamed("data"),
-        enableDrag: anyNamed("enableDrag"),
-        isScrollControlled: anyNamed("isScrollControlled"),
-      ),).called(1);
+      verify(
+        mockBottomSheetService.showCustomSheet(
+          variant: anyNamed("variant"),
+          data: anyNamed("data"),
+          enableDrag: anyNamed("enableDrag"),
+          isScrollControlled: anyNamed("isScrollControlled"),
+        ),
+      ).called(1);
     });
 
-    test("onBuyClick with multiple payment types user cancels selection", () async {
+    test("onBuyClick with multiple payment types user cancels selection",
+        () async {
       // Arrange
       final SheetRequest<BundleTopUpBottomRequest> request =
           SheetRequest<BundleTopUpBottomRequest>(
@@ -784,21 +829,22 @@ Future<void> main() async {
       );
 
       when(mockUserAuthenticationService.isUserLoggedIn).thenReturn(true);
-      when(mockUserAuthenticationService.walletAvailableBalance).thenReturn(100);
+      when(mockUserAuthenticationService.walletAvailableBalance)
+          .thenReturn(100);
 
       when(mockAppConfigurationService.getPaymentTypes)
           .thenReturn(<PaymentType>[PaymentType.wallet, PaymentType.card]);
 
       // Mock PaymentHelper.choosePaymentMethod to return null (user cancels)
-      when(mockBottomSheetService.showCustomSheet(
-        data: anyNamed("data"),
-        enableDrag: anyNamed("enableDrag"),
-        isScrollControlled: anyNamed("isScrollControlled"),
-        variant: anyNamed("variant"),
-      ),).thenAnswer(
-        (_) async => SheetResponse<PaymentType>(
-          
+      when(
+        mockBottomSheetService.showCustomSheet(
+          data: anyNamed("data"),
+          enableDrag: anyNamed("enableDrag"),
+          isScrollControlled: anyNamed("isScrollControlled"),
+          variant: anyNamed("variant"),
         ),
+      ).thenAnswer(
+        (_) async => SheetResponse<PaymentType>(),
       );
 
       viewModel = TopUpBottomSheetViewModel(
@@ -820,14 +866,17 @@ Future<void> main() async {
       await Future<void>.delayed(const Duration(milliseconds: 300));
 
       // Assert - no API call should be made
-      verifyNever(mockApiUserRepository.topUpBundle(
-        iccID: anyNamed("iccID"),
-        bundleCode: anyNamed("bundleCode"),
-        paymentType: anyNamed("paymentType"),
-      ),);
+      verifyNever(
+        mockApiUserRepository.topUpBundle(
+          iccID: anyNamed("iccID"),
+          bundleCode: anyNamed("bundleCode"),
+          paymentType: anyNamed("paymentType"),
+        ),
+      );
     });
 
-    test("initiatePaymentRequest success completes payment and logs analytics", () async {
+    test("initiatePaymentRequest success completes payment and logs analytics",
+        () async {
       // Arrange
       bool completerCalled = false;
       String? capturedOrderId;
@@ -840,22 +889,20 @@ Future<void> main() async {
         ),
       );
 
-      when(mockPaymentService.prepareCheckout(
-        paymentType: anyNamed("paymentType"),
-        publishableKey: anyNamed("publishableKey"),
-        merchantIdentifier: anyNamed("merchantIdentifier"),
-      ),).thenAnswer((_) async {});
+      when(
+        mockPaymentService.prepareCheckout(
+          paymentType: anyNamed("paymentType"),
+          publishableKey: anyNamed("publishableKey"),
+          merchantIdentifier: anyNamed("merchantIdentifier"),
+        ),
+      ).thenAnswer((_) async {});
 
-      when(mockPaymentService.processOrderPayment(
-        paymentType: anyNamed("paymentType"),
-        iccID: anyNamed("iccID"),
-        orderID: anyNamed("orderID"),
-        billingCountryCode: anyNamed("billingCountryCode"),
-        paymentIntentClientSecret: anyNamed("paymentIntentClientSecret"),
-        customerId: anyNamed("customerId"),
-        customerEphemeralKeySecret: anyNamed("customerEphemeralKeySecret"),
-        testEnv: anyNamed("testEnv"),
-      ),).thenAnswer((_) async => PaymentResult.completed);
+      when(
+        mockPaymentService.processOrderPayment(
+          paymentType: anyNamed("paymentType"),
+          params: anyNamed("params"),
+        ),
+      ).thenAnswer((_) async => PaymentResult.completed);
 
       when(mockAnalyticsService.logEvent(event: anyNamed("event")))
           .thenAnswer((_) async {});
@@ -870,36 +917,42 @@ Future<void> main() async {
 
       // Act
       await viewModel.initiatePaymentRequest(
-        paymentType: PaymentType.card,
-        orderID: "ORDER_SUCCESS_123",
-        publishableKey: "pk_test",
-        merchantIdentifier: "merchant_123",
-        paymentIntentClientSecret: "pi_secret",
-        customerId: "cus_123",
-        customerEphemeralKeySecret: "ek_secret",
-        billingCountryCode: "US",
+        params: PaymentRequestParams(
+          secretParams: PaymentRequestSecretParams(
+            paymentType: PaymentType.card,
+            publishableKey: "pk_test",
+            merchantIdentifier: "merchant_123",
+            paymentIntentClientSecret: "pi_secret",
+            customerEphemeralKeySecret: "ek_secret",
+            test: true,
+          ),
+          idParams: PaymentRequestIDParams(
+            orderID: "ORDER_SUCCESS_123",
+            customerId: "cus_123",
+            billingCountryCode: "US",
+            bundleCode: "",
+            bundleName: "",
+          ),
+        ),
         bundlePrice: r"$50.00",
         bundleCurrency: "USD",
-        test: true,
       );
 
       // Assert
-      verify(mockPaymentService.prepareCheckout(
-        paymentType: PaymentType.card,
-        publishableKey: "pk_test",
-        merchantIdentifier: "merchant_123",
-      ),).called(1);
+      verify(
+        mockPaymentService.prepareCheckout(
+          paymentType: PaymentType.card,
+          publishableKey: "pk_test",
+          merchantIdentifier: "merchant_123",
+        ),
+      ).called(1);
 
-      verify(mockPaymentService.processOrderPayment(
-        paymentType: PaymentType.card,
-        iccID: "test_iccid",
-        orderID: "ORDER_SUCCESS_123",
-        billingCountryCode: "US",
-        paymentIntentClientSecret: "pi_secret",
-        customerId: "cus_123",
-        customerEphemeralKeySecret: "ek_secret",
-        testEnv: true,
-      ),).called(1);
+      verify(
+        mockPaymentService.processOrderPayment(
+          paymentType: PaymentType.card,
+          params: anyNamed("params"),
+        ),
+      ).called(1);
 
       verify(mockAnalyticsService.logEvent(event: anyNamed("event"))).called(1);
 
@@ -907,7 +960,8 @@ Future<void> main() async {
       expect(capturedOrderId, "ORDER_SUCCESS_123");
     });
 
-    test("initiatePaymentRequest with exception closes sheet and cancels order", () async {
+    test("initiatePaymentRequest with exception closes sheet and cancels order",
+        () async {
       // Arrange
       bool completerCalled = false;
       final SheetRequest<BundleTopUpBottomRequest> request =
@@ -918,25 +972,26 @@ Future<void> main() async {
         ),
       );
 
-      when(mockPaymentService.prepareCheckout(
-        paymentType: anyNamed("paymentType"),
-        publishableKey: anyNamed("publishableKey"),
-        merchantIdentifier: anyNamed("merchantIdentifier"),
-      ),).thenAnswer((_) async {});
+      when(
+        mockPaymentService.prepareCheckout(
+          paymentType: anyNamed("paymentType"),
+          publishableKey: anyNamed("publishableKey"),
+          merchantIdentifier: anyNamed("merchantIdentifier"),
+        ),
+      ).thenAnswer((_) async {});
 
-      when(mockPaymentService.processOrderPayment(
-        paymentType: anyNamed("paymentType"),
-        iccID: anyNamed("iccID"),
-        orderID: anyNamed("orderID"),
-        billingCountryCode: anyNamed("billingCountryCode"),
-        paymentIntentClientSecret: anyNamed("paymentIntentClientSecret"),
-        customerId: anyNamed("customerId"),
-        customerEphemeralKeySecret: anyNamed("customerEphemeralKeySecret"),
-        testEnv: anyNamed("testEnv"),
-      ),).thenThrow(Exception("Payment failed"));
+      when(
+        mockPaymentService.processOrderPayment(
+          paymentType: anyNamed("paymentType"),
+          params: anyNamed("params"),
+        ),
+      ).thenThrow(Exception("Payment failed"));
 
       when(mockApiUserRepository.cancelOrder(orderID: anyNamed("orderID")))
-          .thenAnswer((_) async => Resource<EmptyResponse?>.success(null, message: "Cancelled"));
+          .thenAnswer(
+        (_) async =>
+            Resource<EmptyResponse?>.success(null, message: "Cancelled"),
+      );
 
       viewModel = TopUpBottomSheetViewModel(
         request: request,
@@ -947,20 +1002,29 @@ Future<void> main() async {
 
       // Act
       await viewModel.initiatePaymentRequest(
-        paymentType: PaymentType.card,
-        orderID: "ORDER_FAIL_456",
-        publishableKey: "pk_test",
-        merchantIdentifier: "merchant_123",
-        paymentIntentClientSecret: "pi_secret",
-        customerId: "cus_123",
-        customerEphemeralKeySecret: "ek_secret",
-        billingCountryCode: "US",
+        params: PaymentRequestParams(
+          secretParams: PaymentRequestSecretParams(
+            paymentType: PaymentType.card,
+            publishableKey: "pk_test",
+            merchantIdentifier: "merchant_123",
+            paymentIntentClientSecret: "pi_secret",
+            customerEphemeralKeySecret: "ek_secret",
+          ),
+          idParams: PaymentRequestIDParams(
+            orderID: "ORDER_FAIL_456",
+            customerId: "cus_123",
+            billingCountryCode: "US",
+            bundleCode: "",
+            bundleName: "",
+          ),
+        ),
         bundlePrice: r"$50.00",
         bundleCurrency: "USD",
       );
 
       // Assert
-      verify(mockApiUserRepository.cancelOrder(orderID: "ORDER_FAIL_456")).called(1);
+      verify(mockApiUserRepository.cancelOrder(orderID: "ORDER_FAIL_456"))
+          .called(1);
       expect(completerCalled, true);
     });
 
@@ -974,22 +1038,20 @@ Future<void> main() async {
         ),
       );
 
-      when(mockPaymentService.prepareCheckout(
-        paymentType: anyNamed("paymentType"),
-        publishableKey: anyNamed("publishableKey"),
-        merchantIdentifier: anyNamed("merchantIdentifier"),
-      ),).thenAnswer((_) async {});
+      when(
+        mockPaymentService.prepareCheckout(
+          paymentType: anyNamed("paymentType"),
+          publishableKey: anyNamed("publishableKey"),
+          merchantIdentifier: anyNamed("merchantIdentifier"),
+        ),
+      ).thenAnswer((_) async {});
 
-      when(mockPaymentService.processOrderPayment(
-        paymentType: anyNamed("paymentType"),
-        iccID: anyNamed("iccID"),
-        orderID: anyNamed("orderID"),
-        billingCountryCode: anyNamed("billingCountryCode"),
-        paymentIntentClientSecret: anyNamed("paymentIntentClientSecret"),
-        customerId: anyNamed("customerId"),
-        customerEphemeralKeySecret: anyNamed("customerEphemeralKeySecret"),
-        testEnv: anyNamed("testEnv"),
-      ),).thenAnswer((_) async => PaymentResult.completed);
+      when(
+        mockPaymentService.processOrderPayment(
+          paymentType: anyNamed("paymentType"),
+          params: anyNamed("params"),
+        ),
+      ).thenAnswer((_) async => PaymentResult.completed);
 
       when(mockAnalyticsService.logEvent(event: anyNamed("event")))
           .thenAnswer((_) async {});
@@ -1001,14 +1063,22 @@ Future<void> main() async {
 
       // Act
       await viewModel.initiatePaymentRequest(
-        paymentType: PaymentType.card,
-        orderID: "ORDER_IOS",
-        publishableKey: "pk_test",
-        merchantIdentifier: "merchant_123",
-        paymentIntentClientSecret: "pi_secret",
-        customerId: "cus_123",
-        customerEphemeralKeySecret: "ek_secret",
-        billingCountryCode: "US",
+        params: PaymentRequestParams(
+          secretParams: PaymentRequestSecretParams(
+            paymentType: PaymentType.card,
+            publishableKey: "pk_test",
+            merchantIdentifier: "merchant_123",
+            paymentIntentClientSecret: "pi_secret",
+            customerEphemeralKeySecret: "ek_secret",
+          ),
+          idParams: PaymentRequestIDParams(
+            orderID: "ORDER_IOS",
+            customerId: "cus_123",
+            billingCountryCode: "US",
+            bundleCode: "",
+            bundleName: "",
+          ),
+        ),
         bundlePrice: r"$50.00",
         bundleCurrency: "USD",
       );
@@ -1034,11 +1104,13 @@ Future<void> main() async {
 
       when(mockUserAuthenticationService.isUserLoggedIn).thenReturn(false);
 
-      when(mockApiUserRepository.topUpBundle(
-        iccID: anyNamed("iccID"),
-        bundleCode: anyNamed("bundleCode"),
-        paymentType: anyNamed("paymentType"),
-      ),).thenAnswer(
+      when(
+        mockApiUserRepository.topUpBundle(
+          iccID: anyNamed("iccID"),
+          bundleCode: anyNamed("bundleCode"),
+          paymentType: anyNamed("paymentType"),
+        ),
+      ).thenAnswer(
         (_) async {
           // Check viewState during API call
           expect(viewModel.viewState, ViewState.busy);
@@ -1052,22 +1124,20 @@ Future<void> main() async {
         },
       );
 
-      when(mockPaymentService.prepareCheckout(
-        paymentType: anyNamed("paymentType"),
-        publishableKey: anyNamed("publishableKey"),
-        merchantIdentifier: anyNamed("merchantIdentifier"),
-      ),).thenAnswer((_) async {});
+      when(
+        mockPaymentService.prepareCheckout(
+          paymentType: anyNamed("paymentType"),
+          publishableKey: anyNamed("publishableKey"),
+          merchantIdentifier: anyNamed("merchantIdentifier"),
+        ),
+      ).thenAnswer((_) async {});
 
-      when(mockPaymentService.processOrderPayment(
-        paymentType: anyNamed("paymentType"),
-        iccID: anyNamed("iccID"),
-        orderID: anyNamed("orderID"),
-        billingCountryCode: anyNamed("billingCountryCode"),
-        paymentIntentClientSecret: anyNamed("paymentIntentClientSecret"),
-        customerId: anyNamed("customerId"),
-        customerEphemeralKeySecret: anyNamed("customerEphemeralKeySecret"),
-        testEnv: anyNamed("testEnv"),
-      ),).thenAnswer((_) async => PaymentResult.completed);
+      when(
+        mockPaymentService.processOrderPayment(
+          paymentType: anyNamed("paymentType"),
+          params: anyNamed("params"),
+        ),
+      ).thenAnswer((_) async => PaymentResult.completed);
 
       when(mockAnalyticsService.logEvent(event: anyNamed("event")))
           .thenAnswer((_) async {});
@@ -1093,11 +1163,13 @@ Future<void> main() async {
       await Future<void>.delayed(const Duration(milliseconds: 300));
 
       // Assert
-      verify(mockApiUserRepository.topUpBundle(
-        iccID: anyNamed("iccID"),
-        bundleCode: anyNamed("bundleCode"),
-        paymentType: anyNamed("paymentType"),
-      ),).called(1);
+      verify(
+        mockApiUserRepository.topUpBundle(
+          iccID: anyNamed("iccID"),
+          bundleCode: anyNamed("bundleCode"),
+          paymentType: anyNamed("paymentType"),
+        ),
+      ).called(1);
     });
   });
 }

@@ -222,7 +222,8 @@ class HttpRequest {
     if (response.statusCode == 200 ||
         response.statusCode == 201 ||
         response.statusCode == 400 ||
-        response.statusCode == 404) {
+        response.statusCode == 404 ||
+        response.statusCode == 429) {
       ResponseMain<T>? responseMain;
       try {
         String result = await response.stream.bytesToString();

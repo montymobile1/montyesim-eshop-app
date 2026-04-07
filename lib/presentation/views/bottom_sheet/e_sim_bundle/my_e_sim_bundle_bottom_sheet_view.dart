@@ -92,8 +92,9 @@ class MyESimBundleBottomSheetView extends StatelessWidget {
                               verticalSpaceSmallMedium,
                               //qr code details title
                               BundleInfoRow(
-                                validity:
-                                    viewModel.state.item?.getValidityDisplay() ?? "",
+                                validity: viewModel.state.item
+                                        ?.getValidityDisplay() ??
+                                    "",
                                 expiryDate: DateTimeUtils.formatTimestampToDate(
                                   timestamp: int.parse(
                                     viewModel.state.item?.paymentDate ?? "0",
@@ -127,7 +128,8 @@ class MyESimBundleBottomSheetView extends StatelessWidget {
                                 viewModel,
                               ),
                               verticalSpaceMedium,
-                              buildPlanHistory(context, viewModel.state.item, viewModel),
+                              buildPlanHistory(
+                                  context, viewModel.state.item, viewModel,),
                             ],
                           ),
                         ),
@@ -200,15 +202,20 @@ class MyESimBundleBottomSheetView extends StatelessWidget {
                     ),
                   ),
                   (expiryDate != null && expiryDate.isNotEmpty)
-                      ? Column(
-                          children: <Widget>[
-                            verticalSpaceSmall,
-                            BundleInfoColumn(
-                              label: isRTL(context) ? "${LocaleKeys.esim_validity.tr()} eSIM" : LocaleKeys.esim_validity.tr(),
-                              value: expiryDate,
-                            ),
-                          ],
-                        )
+                      ? () {
+                          final String validityLabel = isRTL(context)
+                              ? "${LocaleKeys.esim_validity.tr()} eSIM"
+                              : LocaleKeys.esim_validity.tr();
+                          return Column(
+                            children: <Widget>[
+                              verticalSpaceSmall,
+                              BundleInfoColumn(
+                                label: validityLabel,
+                                value: expiryDate,
+                              ),
+                            ],
+                          );
+                        }()
                       : Container(),
                   buildInfoRow(
                     context: context,
@@ -306,11 +313,11 @@ class MyESimBundleBottomSheetView extends StatelessWidget {
                           fontColor: mainDarkTextColor(context: context),
                         ),
                       ).applyShimmer(
+                          params: ShimmerParams(
                         context: context,
                         enable: viewModel.state.consumptionLoading,
-                      ),
+                      ),),
                       verticalSpaceSmall,
-
                       Text(
                         "${viewModel.state.consumptionText}\n${LocaleKeys.data_consumed.tr()}",
                         textAlign: TextAlign.center,
@@ -320,9 +327,10 @@ class MyESimBundleBottomSheetView extends StatelessWidget {
                           fontColor: contentTextColor(context: context),
                         ).copyWith(fontSize: 10),
                       ).applyShimmer(
+                          params: ShimmerParams(
                         context: context,
                         enable: viewModel.state.consumptionLoading,
-                      ),
+                      ),),
                     ],
                   ),
                 ),
@@ -367,9 +375,10 @@ class MyESimBundleBottomSheetView extends StatelessWidget {
                   ),
                   maxLines: 2,
                 ).applyShimmer(
+                    params: ShimmerParams(
                   context: context,
                   enable: viewModel.state.consumptionLoading,
-                ),
+                ),),
                 Text(
                   LocaleKeys.unlimited.tr(),
                   style: captionTwoNormalTextStyle(
@@ -378,9 +387,10 @@ class MyESimBundleBottomSheetView extends StatelessWidget {
                   ),
                   maxLines: 2,
                 ).applyShimmer(
+                    params: ShimmerParams(
                   context: context,
                   enable: viewModel.state.consumptionLoading,
-                ),
+                ),),
               ],
             ),
             const Spacer(),
@@ -482,7 +492,8 @@ class MyESimBundleBottomSheetView extends StatelessWidget {
                       Text(
                         LocaleKeys.valid.tr(
                           namedArgs: <String, String>{
-                            "date": transaction?.bundle?.getValidityDisplay() ?? "",
+                            "date":
+                                transaction?.bundle?.getValidityDisplay() ?? "",
                           },
                         ),
                         style: captionTwoNormalTextStyle(

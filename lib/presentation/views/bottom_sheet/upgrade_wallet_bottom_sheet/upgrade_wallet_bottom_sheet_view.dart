@@ -86,17 +86,23 @@ class UpgradeWalletBottomSheetView extends StatelessWidget {
                         ),
                         verticalSpaceMedium,
                         MainInputField.formField(
-                          themeColor: themeColor,
-                          labelTitleText:
-                              LocaleKeys.upgradeWallet_hintText.tr(),
                           controller: viewModel.amountController,
-                          textInputType: const TextInputType.numberWithOptions(
-                            decimal: true,
+                          themeColor: themeColor,
+                          textConfig: MainInputFieldTextConfig(
+                            labelTitleText:
+                                LocaleKeys.upgradeWallet_hintText.tr(),
                           ),
-                          backGroundColor: mainWhiteTextColor(context: context),
-                          labelStyle: bodyNormalTextStyle(
-                            context: context,
-                            fontColor: mainDarkTextColor(context: context),
+                          appearanceConfig: MainInputFieldAppearanceConfig(
+                            backgroundColor: mainWhiteTextColor(context: context),
+                            labelStyle: bodyNormalTextStyle(
+                              context: context,
+                              fontColor: mainDarkTextColor(context: context),
+                            ),
+                          ),
+                          inputConfig: const MainInputFieldInputConfig(
+                            textInputType: TextInputType.numberWithOptions(
+                              decimal: true,
+                            ),
                           ),
                         ),
                         verticalSpaceMediumLarge,

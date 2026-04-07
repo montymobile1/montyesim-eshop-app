@@ -490,46 +490,55 @@ class PurchaseEsimBundleResponseModel {
   }
 
   static List<PurchaseEsimBundleResponseModel> mockItems() {
+    String mockBundleName = "Bundle name";
+    String mockIccid = "123123";
+    String mockOrderStatus = "active";
+    String mockPaymentDate = "1740667696";
+    String mockDisplayTitle = "Europe5GB10Days";
+    String mockDisplaySubtitle = "USD";
+    String mockValidityLabel = "Day";
+    String mockGprsLimitDisplay = "5 GB";
+
     return <PurchaseEsimBundleResponseModel>[
       PurchaseEsimBundleResponseModel(
-        iccid: "123123",
-        orderStatus: "active",
+        iccid: mockIccid,
+        orderStatus: mockOrderStatus,
         validity: 1740667696,
-        paymentDate: "1740667696",
+        paymentDate: mockPaymentDate,
         bundleExpired: false,
-        bundleName: "Bundle name",
-        displayTitle: "Europe5GB10Days",
-        displaySubtitle: "USD",
-        validityLabel: "Day",
-        gprsLimitDisplay: "5 GB",
+        bundleName: mockBundleName,
+        displayTitle: mockDisplayTitle,
+        displaySubtitle: mockDisplaySubtitle,
+        validityLabel: mockValidityLabel,
+        gprsLimitDisplay: mockGprsLimitDisplay,
         // icon: "https://placehold.co/600x400?bundle=None",
         countries: CountryResponseModel.getMockCountries(),
       ),
       PurchaseEsimBundleResponseModel(
-        iccid: "123123",
-        orderStatus: "active",
+        iccid: mockIccid,
+        orderStatus: mockOrderStatus,
         validity: 1740667696,
-        paymentDate: "1740667696",
+        paymentDate: mockPaymentDate,
         bundleExpired: false,
-        bundleName: "Bundle name",
-        displayTitle: "Europe5GB10Days",
-        displaySubtitle: "USD",
-        validityLabel: "Day",
-        gprsLimitDisplay: "5 GB",
+        bundleName: mockBundleName,
+        displayTitle: mockDisplayTitle,
+        displaySubtitle: mockDisplaySubtitle,
+        validityLabel: mockValidityLabel,
+        gprsLimitDisplay: mockGprsLimitDisplay,
         // icon: "https://placehold.co/600x400?bundle=None",
         countries: CountryResponseModel.getMockCountries(),
       ),
       PurchaseEsimBundleResponseModel(
-        iccid: "123123",
-        orderStatus: "active",
+        iccid: mockIccid,
+        orderStatus: mockOrderStatus,
         validity: 1740667696,
-        paymentDate: "1740667696",
+        paymentDate: mockPaymentDate,
         bundleExpired: false,
-        bundleName: "Bundle name",
-        displayTitle: "Europe5GB10Days",
-        displaySubtitle: "USD",
-        validityLabel: "Day",
-        gprsLimitDisplay: "5 GB",
+        bundleName: mockBundleName,
+        displayTitle: mockDisplayTitle,
+        displaySubtitle: mockDisplaySubtitle,
+        validityLabel: mockValidityLabel,
+        gprsLimitDisplay: mockGprsLimitDisplay,
         // icon: "https://placehold.co/600x400?bundle=None",
         countries: CountryResponseModel.getMockCountries(),
       ),

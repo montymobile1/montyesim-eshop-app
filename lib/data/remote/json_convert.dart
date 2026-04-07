@@ -55,21 +55,13 @@ class JsonConvert {
       if (type == "String") {
         return valueS as T;
       } else if (type == "int") {
-        final int? intValue = int.tryParse(valueS);
-        if (intValue == null) {
-          return double.tryParse(valueS)?.toInt() as T?;
-        } else {
-          return intValue as T;
-        }
+        return _parseIntValue<T>(valueS);
       } else if (type == "double") {
         return double.parse(valueS) as T;
       } else if (type == "DateTime") {
         return DateTime.parse(valueS) as T;
       } else if (type == "bool") {
-        if (valueS == "0" || valueS == "1") {
-          return (valueS == "1") as T;
-        }
-        return (valueS == "true") as T;
+        return _parseBoolValue<T>(valueS);
       } else {
         return null;
       }
@@ -79,5 +71,20 @@ class JsonConvert {
       }
       return null;
     }
+  }
+
+  T? _parseIntValue<T>(String valueS) {
+    final int? intValue = int.tryParse(valueS);
+    if (intValue == null) {
+      return double.tryParse(valueS)?.toInt() as T?;
+    }
+    return intValue as T;
+  }
+
+  T _parseBoolValue<T>(String valueS) {
+    if (valueS == "0" || valueS == "1") {
+      return (valueS == "1") as T;
+    }
+    return (valueS == "true") as T;
   }
 }

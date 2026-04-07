@@ -48,8 +48,10 @@ class BundleTitleContentView extends StatelessWidget {
               fontColor: contentTextColor(context: context),
             ),
           ).applyShimmer(
-            context: context,
-            enable: showShimmer,
+            params: ShimmerParams(
+              context: context,
+              enable: showShimmer,
+            ),
           ),
           verticalSpaceSmall,
         ],

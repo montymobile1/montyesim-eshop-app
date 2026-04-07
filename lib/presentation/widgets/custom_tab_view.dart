@@ -176,138 +176,186 @@ class _DataPlansTabViewState extends State<DataPlansTabView>
           top: widget.verticalPadding,
           child: Column(
             children: <Widget>[
-              PaddingWidget.applySymmetricPadding(
-                horizontal: widget.horizontalPadding,
-                child: SizedBox(
-                  height: widget.height,
-                  child: Stack(
-                    children: <Widget>[
-                      TabBar(
-                        controller: _tabController,
-                        indicatorPadding: const EdgeInsets.only(bottom: 2),
-                        indicator: widget.isIndicatorUnderlined
-                            ? null
-                            : BoxDecoration(
-                                borderRadius: BorderRadius.circular(
-                                  widget.borderRadius,
-                                ),
-                                color: widget.selectedTabColor ??
-                                    mainTabBackGroundColor(context: context),
-                              ),
-                        indicatorSize: TabBarIndicatorSize.tab,
-                        indicatorColor: widget.selectedTabColor,
-                        labelColor: widget.selectedLabelColor ??
-                            mainWhiteTextColor(context: context),
-                        unselectedLabelColor: widget.unSelectedLabelColor ??
-                            mainDarkTextColor(context: context),
-                        labelStyle: widget.selectedTabTextStyle ??
-                            captionOneBoldTextStyle(context: context),
-                        unselectedLabelStyle: widget.unSelectedTabTextStyle ??
-                            captionOneNormalTextStyle(context: context),
-                        tabs: widget.tabs,
-                      ),
-                      IgnorePointer(
-                        child: Transform.translate(
-                          offset: const Offset(0, 1),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              border: Border(
-                                bottom: BorderSide(
-                                  color: widget.backGroundColor,
-                                  width: 2,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              widget.isChildCollapsable
-                  ? ClipRect(
-                      child: AnimatedAlign(
-                        alignment: Alignment.topCenter,
-                        duration:
-                            childWidgetTabState == ChildWidgetTabState.show
-                                ? Duration.zero
-                                : const Duration(milliseconds: 400),
-                        heightFactor:
-                            childWidgetTabState == ChildWidgetTabState.hidden
-                                ? 0
-                                : 1,
-                        child: AnimatedContainer(
-                          duration:
-                              childWidgetTabState == ChildWidgetTabState.show
-                                  ? Duration.zero
-                                  : const Duration(milliseconds: 400),
-                          height:
-                              childWidgetTabState == ChildWidgetTabState.hidden
-                                  ? 0
-                                  : widget.childWidget == null
-                                      ? 0
-                                      : 200,
-                          child: widget.childWidget ??
-                              const SizedBox.shrink(), // your top content
-                        ),
-                      ),
-                    )
-                  : widget.childWidget ?? const SizedBox.shrink(),
-              // tab bar view here
-
-              Expanded(
-                child: PaddingWidget.applySymmetricPadding(
-                  horizontal: widget.horizontalPadding,
-                  child: TabBarView(
-                    controller: _tabController,
-                    physics: widget.isScrollable
-                        ? null
-                        : const NeverScrollableScrollPhysics(),
-                    children: widget.isChildCollapsable
-                        ? widget.tabViewsChildren.map((Widget child) {
-                            return NotificationListener<ScrollNotification>(
-                              onNotification:
-                                  (ScrollNotification notification) {
-                                if (notification is ScrollUpdateNotification) {
-                                  final double offset =
-                                      notification.metrics.pixels;
-
-                                  if (offset > 50 &&
-                                      childWidgetTabState !=
-                                          ChildWidgetTabState.hidden) {
-                                    setState(() {
-                                      childWidgetTabState =
-                                          ChildWidgetTabState.hidden;
-                                    });
-                                    // you can debounce this if needed
-                                  } else if (offset <= 50 &&
-                                      childWidgetTabState ==
-                                          ChildWidgetTabState.hidden) {
-                                    setState(() {
-                                      childWidgetTabState =
-                                          ChildWidgetTabState.showWithAnimation;
-                                    });
-                                  }
-                                }
-                                return false;
-                              },
-                              child: child,
-                            );
-                          }).toList()
-                        : widget.tabViewsChildren.map((Widget child) {
-                            return Center(
-                              child: child, // Center each tab content
-                            );
-                          }).toList(),
-                  ),
-                ),
-              ),
+              _buildTabBar(context),
+              _buildChildWidget(),
+              _buildTabBarView(),
             ],
           ),
         ),
       ),
     );
+  }
+
+  Widget _buildTabBar(BuildContext context) {
+    return PaddingWidget.applySymmetricPadding(
+      horizontal: widget.horizontalPadding,
+      child: SizedBox(
+        height: widget.height,
+        child: Stack(
+          children: <Widget>[
+            TabBar(
+              controller: _tabController,
+              indicatorPadding: const EdgeInsets.only(bottom: 2),
+              indicator: _buildTabIndicator(context),
+              indicatorSize: TabBarIndicatorSize.tab,
+              indicatorColor: widget.selectedTabColor,
+              labelColor: widget.selectedLabelColor ??
+                  mainWhiteTextColor(context: context),
+              unselectedLabelColor: widget.unSelectedLabelColor ??
+                  mainDarkTextColor(context: context),
+              labelStyle: widget.selectedTabTextStyle ??
+                  captionOneBoldTextStyle(context: context),
+              unselectedLabelStyle: widget.unSelectedTabTextStyle ??
+                  captionOneNormalTextStyle(context: context),
+              tabs: widget.tabs,
+            ),
+            _buildTabBorderOverlay(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Decoration? _buildTabIndicator(BuildContext context) {
+    if (widget.isIndicatorUnderlined) {
+      return null;
+    }
+    return BoxDecoration(
+      borderRadius: BorderRadius.circular(widget.borderRadius),
+      color: widget.selectedTabColor ?? mainTabBackGroundColor(context: context),
+    );
+  }
+
+  Widget _buildTabBorderOverlay() {
+    return IgnorePointer(
+      child: Transform.translate(
+        offset: const Offset(0, 1),
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border(
+              bottom: BorderSide(
+                color: widget.backGroundColor,
+                width: 2,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildChildWidget() {
+    if (widget.isChildCollapsable) {
+      return _buildCollapsableChildWidget();
+    }
+    return widget.childWidget ?? const SizedBox.shrink();
+  }
+
+  Widget _buildCollapsableChildWidget() {
+    final Duration animationDuration = _getAnimationDuration();
+    final double heightFactor = _getHeightFactor();
+    final double containerHeight = _getContainerHeight();
+
+    return ClipRect(
+      child: AnimatedAlign(
+        alignment: Alignment.topCenter,
+        duration: animationDuration,
+        heightFactor: heightFactor,
+        child: AnimatedContainer(
+          duration: animationDuration,
+          height: containerHeight,
+          child: widget.childWidget ?? const SizedBox.shrink(),
+        ),
+      ),
+    );
+  }
+
+  Duration _getAnimationDuration() {
+    return childWidgetTabState == ChildWidgetTabState.show
+        ? Duration.zero
+        : const Duration(milliseconds: 400);
+  }
+
+  double _getHeightFactor() {
+    return childWidgetTabState == ChildWidgetTabState.hidden ? 0 : 1;
+  }
+
+  double _getContainerHeight() {
+    if (childWidgetTabState == ChildWidgetTabState.hidden) {
+      return 0;
+    }
+    if (widget.childWidget == null) {
+      return 0;
+    }
+    return 200;
+  }
+
+  Widget _buildTabBarView() {
+    return Expanded(
+      child: PaddingWidget.applySymmetricPadding(
+        horizontal: widget.horizontalPadding,
+        child: TabBarView(
+          controller: _tabController,
+          physics: widget.isScrollable
+              ? null
+              : const NeverScrollableScrollPhysics(),
+          children: _buildTabViewChildren(),
+        ),
+      ),
+    );
+  }
+
+  List<Widget> _buildTabViewChildren() {
+    if (widget.isChildCollapsable) {
+      return _buildCollapsableTabViewChildren();
+    }
+    return _buildCenteredTabViewChildren();
+  }
+
+  List<Widget> _buildCollapsableTabViewChildren() {
+    return widget.tabViewsChildren
+        .map(_wrapWithScrollListener)
+        .toList();
+  }
+
+  List<Widget> _buildCenteredTabViewChildren() {
+    return widget.tabViewsChildren
+        .map((Widget child) => Center(child: child))
+        .toList();
+  }
+
+  Widget _wrapWithScrollListener(Widget child) {
+    return NotificationListener<ScrollNotification>(
+      onNotification: _handleScrollNotification,
+      child: child,
+    );
+  }
+
+  bool _handleScrollNotification(ScrollNotification notification) {
+    if (notification is ScrollUpdateNotification) {
+      _updateChildWidgetStateBasedOnScroll(notification.metrics.pixels);
+    }
+    return false;
+  }
+
+  void _updateChildWidgetStateBasedOnScroll(double offset) {
+    if (_shouldHideChildWidget(offset)) {
+      setState(() {
+        childWidgetTabState = ChildWidgetTabState.hidden;
+      });
+    } else if (_shouldShowChildWidget(offset)) {
+      setState(() {
+        childWidgetTabState = ChildWidgetTabState.showWithAnimation;
+      });
+    }
+  }
+
+  bool _shouldHideChildWidget(double offset) {
+    return offset > 50 && childWidgetTabState != ChildWidgetTabState.hidden;
+  }
+
+  bool _shouldShowChildWidget(double offset) {
+    return offset <= 50 && childWidgetTabState == ChildWidgetTabState.hidden;
   }
 
   @override

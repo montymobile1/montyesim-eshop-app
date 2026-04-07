@@ -40,6 +40,8 @@ class ExpansionListState extends State<ExpansionList<dynamic>> {
   bool expanded = false;
   String? selectedValue;
 
+  double get collapsedHeight => widget.smallVersion ? 40 : startingHeight;
+
   @override
   void initState() {
     super.initState();
@@ -52,11 +54,7 @@ class ExpansionListState extends State<ExpansionList<dynamic>> {
     return AnimatedContainer(
       padding: const EdgeInsets.symmetric(horizontal: 15),
       duration: const Duration(milliseconds: 180),
-      height: expanded
-          ? expandedHeight
-          : widget.smallVersion
-              ? 40
-              : startingHeight,
+      height: expanded ? expandedHeight : collapsedHeight,
       decoration: fieldDecoration.copyWith(
         boxShadow: expanded
             ? <BoxShadow>[
@@ -120,7 +118,8 @@ class ExpansionListState extends State<ExpansionList<dynamic>> {
       ..add(DoubleProperty("startingHeight", startingHeight))
       ..add(DoubleProperty("expandedHeight", expandedHeight))
       ..add(DiagnosticsProperty<bool>("expanded", expanded))
-      ..add(StringProperty("selectedValue", selectedValue));
+      ..add(StringProperty("selectedValue", selectedValue))
+      ..add(DoubleProperty("collapsedHeight", collapsedHeight));
   }
 }
 

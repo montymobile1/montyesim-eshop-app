@@ -13,6 +13,7 @@ import "package:esim_open_source/domain/repository/services/local_storage_servic
 import "package:esim_open_source/domain/repository/services/push_notification_service.dart";
 import "package:esim_open_source/domain/repository/services/redirections_handler_service.dart";
 import "package:esim_open_source/domain/repository/services/referral_info_service.dart";
+import "package:esim_open_source/domain/repository/services/analytics_service.dart";
 import "package:esim_open_source/domain/repository/services/social_login_service.dart";
 import "package:esim_open_source/domain/util/resource.dart";
 import "package:esim_open_source/presentation/enums/view_state.dart";
@@ -119,6 +120,7 @@ void main() async {
   late PushNotificationService pushNotificationService;
   late SocialLoginService socialLoginService;
   late AppConfigurationService appConfigurationService;
+  late AnalyticsService analyticsService;
 
   setUp(() async {
     await setupTest();
@@ -132,6 +134,7 @@ void main() async {
     pushNotificationService = locator<PushNotificationService>();
     socialLoginService = locator<SocialLoginService>();
     appConfigurationService = locator<AppConfigurationService>();
+    analyticsService = locator<AnalyticsService>();
     viewModel = TestableStartUpViewModel();
   });
 
@@ -209,6 +212,13 @@ void main() async {
     );
 
     when(locator<BundlesDataService>().hasError).thenReturn(false);
+
+    // Mock userEmailAddress for analytics tracking
+    when(userAuthenticationService.userEmailAddress)
+        .thenReturn("test@example.com");
+
+    // Mock analyticsService.setUserId for user tracking
+    when(analyticsService.setUserId(any)).thenAnswer((_) => Future<void>.value());
 
     await viewModel.refreshTokenTrigger();
 
@@ -395,6 +405,13 @@ void main() async {
       // Mock the redirections handler service
       when(redirectionsHandlerService.handleInitialRedirection(() {}))
           .thenAnswer((_) async {});
+
+      // Mock userEmailAddress for analytics tracking
+      when(userAuthenticationService.userEmailAddress)
+          .thenReturn("test@example.com");
+
+      // Mock analyticsService.setUserId for user tracking
+      when(analyticsService.setUserId(any)).thenAnswer((_) => Future<void>.value());
 
       await viewModel.handleStartUpLogic(FakeContext());
 

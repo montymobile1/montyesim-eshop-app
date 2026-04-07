@@ -49,9 +49,11 @@ class AccountInformationViewModel extends BaseModel {
   bool get isPhoneInputEnabled {
     switch (AppEnvironment.appEnvironmentHelper.loginType) {
       case LoginType.email:
+      case LoginType.emailAndPhoneAndEmailVerification:
         return true;
       case LoginType.phoneNumber:
       case LoginType.emailAndPhone:
+      case LoginType.emailAndPhoneAndBothVerification:
         return false;
     }
   }
@@ -63,6 +65,8 @@ class AccountInformationViewModel extends BaseModel {
       case LoginType.phoneNumber:
         return true;
       case LoginType.emailAndPhone:
+      case LoginType.emailAndPhoneAndBothVerification:
+      case LoginType.emailAndPhoneAndEmailVerification:
         return false;
     }
   }
@@ -80,7 +84,6 @@ class AccountInformationViewModel extends BaseModel {
       userEmail = userEmailAddress;
       _nameController.text = userFirstName;
       _familyNameController.text = userLastName;
-      _receiveUpdates = isNewsletterSubscribed;
       _emailController.text = userEmailAddress;
       phoneController.value = PhoneNumber(
         isoCode: parsed?.isoCode ?? IsoCode.LB,
@@ -149,7 +152,6 @@ class AccountInformationViewModel extends BaseModel {
             : "+${phoneController.value?.countryCode}${phoneController.value?.nsn}",
         firstName: _nameController.text,
         lastName: _familyNameController.text,
-        isNewsletterSubscribed: _receiveUpdates,
       ),
     );
 
@@ -182,20 +184,19 @@ class AccountInformationViewModel extends BaseModel {
   bool __saveButtonEnabled(bool isValidPhone) {
     switch (AppEnvironment.appEnvironmentHelper.loginType) {
       case LoginType.email:
-        return ((_receiveUpdates != isNewsletterSubscribed) ||
-                (_nameController.text != userFirstName) ||
+        return ((_nameController.text != userFirstName) ||
                 (_familyNameController.text != userLastName) ||
                 (userPhoneNumber != userMsisdn)) &&
             isValidPhone;
       case LoginType.phoneNumber:
-        return ((_receiveUpdates != isNewsletterSubscribed) ||
-                (_nameController.text != userFirstName) ||
+        return ((_nameController.text != userFirstName) ||
                 (_familyNameController.text != userLastName) ||
                 (_emailController.text != userEmailAddress)) &&
             isValidEmail;
       case LoginType.emailAndPhone:
-        return (_receiveUpdates != isNewsletterSubscribed) ||
-            (_nameController.text != userFirstName) ||
+      case LoginType.emailAndPhoneAndEmailVerification:
+      case LoginType.emailAndPhoneAndBothVerification:
+        return (_nameController.text != userFirstName) ||
             (_familyNameController.text != userLastName);
     }
   }

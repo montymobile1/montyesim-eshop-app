@@ -225,8 +225,10 @@ class ESimQrBottomSheet extends StatelessWidget {
                 data: viewModel.qrCodeValue,
                 size: 120,
               ).applyShimmer(
-                context: context,
-                enable: viewModel.isBusy,
+                params: ShimmerParams(
+                  context: context,
+                  enable: viewModel.isBusy,
+                ),
               ),
             )
           : Text(LocaleKeys.error_generating_qr_code.tr()),
@@ -247,9 +249,11 @@ class ESimQrBottomSheet extends StatelessWidget {
                 backgroundColor: myEsimIconButtonColor(context: context),
                 iconColor: mainWhiteTextColor(context: context),
               ).applyShimmer(
-                context: context,
-                enable: viewModel.isBusy,
-                borderRadius: 30,
+                params: ShimmerParams(
+                  context: context,
+                  enable: viewModel.isBusy,
+                  borderRadius: 30,
+                ),
               )
             : Container(),
         viewModel.activationCode != null ? horizontalSpaceSmall : Container(),
@@ -260,9 +264,11 @@ class ESimQrBottomSheet extends StatelessWidget {
                 backgroundColor: myEsimIconButtonColor(context: context),
                 iconColor: mainWhiteTextColor(context: context),
               ).applyShimmer(
-                context: context,
-                enable: viewModel.isBusy,
-                borderRadius: 30,
+                params: ShimmerParams(
+                  context: context,
+                  enable: viewModel.isBusy,
+                  borderRadius: 30,
+                ),
               )
             : Container(),
       ],
@@ -317,7 +323,9 @@ Widget buildInfoRow({
                 fontColor: contentTextColor(context: context),
               ),
               maxLines: 2,
-            ).applyShimmer(context: context, enable: isLoading),
+            ).applyShimmer(
+              params: ShimmerParams(context: context, enable: isLoading),
+            ),
           ],
         ),
       ),
@@ -327,9 +335,11 @@ Widget buildInfoRow({
           size: 20,
           color: secondaryIconButtonColor(context: context),
         ).applyShimmer(
-          context: context,
-          enable: isLoading,
-          borderRadius: 30,
+          params: ShimmerParams(
+            context: context,
+            enable: isLoading,
+            borderRadius: 30,
+          ),
         ),
         onPressed: () async {
           if (value.isNotEmpty) {

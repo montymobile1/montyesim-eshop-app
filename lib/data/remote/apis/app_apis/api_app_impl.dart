@@ -10,6 +10,7 @@ import "package:esim_open_source/data/remote/responses/app/faq_response.dart";
 import "package:esim_open_source/data/remote/responses/base_response_model.dart";
 import "package:esim_open_source/data/remote/responses/core/string_response.dart";
 import "package:esim_open_source/data/remote/responses/empty_response.dart";
+import "package:esim_open_source/domain/data/params/add_device_params.dart";
 import "package:esim_open_source/domain/data/api_app.dart";
 
 class APIAppImpl extends APIService implements APIApp {
@@ -28,33 +29,23 @@ class APIAppImpl extends APIService implements APIApp {
   void _initialise() {}
 
   @override
-  FutureOr<dynamic> addDevice({
-    required String fcmToken,
-    required String manufacturer,
-    required String deviceModel,
-    required String deviceOs,
-    required String deviceOsVersion,
-    required String appVersion,
-    required String ramSize,
-    required String screenResolution,
-    required bool isRooted,
-  }) async {
-    Map<String, dynamic> params = <String, dynamic>{
-      "fcm_token": fcmToken,
-      "manufacturer": manufacturer,
-      "device_model": deviceModel,
-      "os": deviceOs,
-      "os_version": deviceOsVersion,
-      "app_version": appVersion,
-      "ram_size": ramSize,
-      "screen_resolution": screenResolution,
-      "is_rooted": isRooted,
+  FutureOr<dynamic> addDevice(AddDeviceParams params) async {
+    Map<String, dynamic> requestParams = <String, dynamic>{
+      "fcm_token": params.fcmToken,
+      "manufacturer": params.manufacturer,
+      "device_model": params.deviceModel,
+      "os": params.deviceOs,
+      "os_version": params.deviceOsVersion,
+      "app_version": params.appVersion,
+      "ram_size": params.ramSize,
+      "screen_resolution": params.screenResolution,
+      "is_rooted": params.isRooted,
     };
 
     ResponseMain<EmptyResponse?> addDeviceResponse = await sendRequest(
       endPoint: createAPIEndpoint(
         endPoint: AppApis.addDevice,
-        parameters: params,
+        parameters: requestParams,
       ),
       fromJson: EmptyResponse.fromJson,
     );

@@ -25,6 +25,12 @@ class CountriesList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    int additionalItemCount = 0;
+    if (lastItemBottomPadding > 0) {
+      additionalItemCount = 1;
+    }
+    final int totalItemCount = countries.length + additionalItemCount;
+
     return countries.isEmpty
         ? Center(
             child: Text(
@@ -36,7 +42,7 @@ class CountriesList extends StatelessWidget {
             ),
           )
         : ListView.separated(
-            itemCount: countries.length + (lastItemBottomPadding > 0 ? 1 : 0),
+            itemCount: totalItemCount,
             separatorBuilder: (BuildContext context, int index) =>
                 verticalSpaceSmallMedium,
             itemBuilder: (BuildContext context, int index) {

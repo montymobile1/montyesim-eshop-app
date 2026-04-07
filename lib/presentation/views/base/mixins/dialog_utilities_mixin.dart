@@ -15,7 +15,9 @@ import "package:stacked_services/stacked_services.dart";
 
 mixin DialogUtilitiesMixin on BaseViewModel {
   DialogService get dialogService => locator<DialogService>();
+
   SnackbarService get snackBarService => locator<SnackbarService>();
+
   BottomSheetService get bottomSheetService => locator<BottomSheetService>();
 
   Future<DialogResponse<MainDialogResponse>?> showErrorMessageDialog(
@@ -76,20 +78,22 @@ mixin DialogUtilitiesMixin on BaseViewModel {
       _dialogContext = StackedService.navigatorKey?.currentContext;
 
       await showNativeDialog(
-        context: _dialogContext!,
-        titleText: LocaleKeys.noConnection_titleText.tr(),
-        contentText: LocaleKeys.noConnection_contentText.tr(),
-        buttons: <NativeButtonParams>[
-          NativeButtonParams(
-            buttonTitle: LocaleKeys.noConnection_buttonTitleText.tr(),
-            buttonAction: () {
-              _dialogContext = null;
-              Navigator.pop(
-                StackedService.navigatorKey!.currentContext!,
-              );
-            },
-          ),
-        ],
+        params: NativeDialogParams(
+          context: _dialogContext!,
+          titleText: LocaleKeys.noConnection_titleText.tr(),
+          contentText: LocaleKeys.noConnection_contentText.tr(),
+          buttons: <NativeButtonParams>[
+            NativeButtonParams(
+              buttonTitle: LocaleKeys.noConnection_buttonTitleText.tr(),
+              buttonAction: () {
+                _dialogContext = null;
+                Navigator.pop(
+                  StackedService.navigatorKey!.currentContext!,
+                );
+              },
+            ),
+          ],
+        ),
       );
     }
   }

@@ -7,6 +7,8 @@ import "package:esim_open_source/data/remote/responses/bundles/bundle_assign_res
 import "package:esim_open_source/di/locator.dart";
 import "package:esim_open_source/domain/repository/api_auth_repository.dart";
 import "package:esim_open_source/domain/repository/api_user_repository.dart";
+import "package:esim_open_source/domain/repository/services/analytics_service.dart";
+import "package:esim_open_source/domain/repository/services/payment_service.dart";
 import "package:esim_open_source/domain/use_case/base_use_case.dart";
 import "package:esim_open_source/domain/use_case/user/get_user_info_use_case.dart";
 import "package:esim_open_source/domain/use_case/user/top_up_wallet_use_case.dart";
@@ -14,6 +16,7 @@ import "package:esim_open_source/domain/util/resource.dart";
 import "package:esim_open_source/presentation/enums/bottomsheet_type.dart";
 import "package:esim_open_source/presentation/enums/payment_type.dart";
 import "package:esim_open_source/presentation/enums/view_state.dart";
+import "package:esim_open_source/presentation/models/payment_request_params.dart";
 import "package:esim_open_source/presentation/setup_bottom_sheet_ui.dart";
 import "package:esim_open_source/presentation/shared/action_helpers.dart";
 import "package:esim_open_source/presentation/shared/ui_helpers.dart";
@@ -122,7 +125,7 @@ class UpgradeWalletBottomSheetViewModel extends BaseModel {
     setViewState(ViewState.busy);
 
     Resource<BundleAssignResponseModel?> response =
-    await topUpWalletUseCase.execute(
+        await topUpWalletUseCase.execute(
       TopUpWalletParam(
         amount: amount,
         currencyCode: "",
@@ -132,27 +135,35 @@ class UpgradeWalletBottomSheetViewModel extends BaseModel {
       response,
       onSuccess: (Resource<BundleAssignResponseModel?> result) async {
         PaymentStatus paymentStatus =
-        PaymentStatus.fromString(result.data?.paymentStatus);
+            PaymentStatus.fromString(result.data?.paymentStatus);
         if (paymentStatus == PaymentStatus.completed) {
           return;
         }
         await PaymentHelper.checkTaxAmount(
           result: result,
-          onError: () => () async {
+          onError: () async {
             handleError(result);
           },
           onSuccess: () => initiatePaymentRequest(
-            paymentType: paymentType,
-            orderID: result.data?.orderId ?? "",
-            publishableKey: result.data?.publishableKey ?? "",
-            merchantIdentifier: result.data?.merchantIdentifier ?? "",
-            paymentIntentClientSecret:
-            result.data?.paymentIntentClientSecret ?? "",
-            customerId: result.data?.customerId ?? "",
-            customerEphemeralKeySecret:
-            result.data?.customerEphemeralKeySecret ?? "",
-            test: result.data?.testEnv ?? false,
-            billingCountryCode: result.data?.billingCountryCode ?? "",
+            params: PaymentRequestParams(
+              secretParams: PaymentRequestSecretParams(
+                paymentType: paymentType,
+                publishableKey: result.data?.publishableKey ?? "",
+                merchantIdentifier: result.data?.merchantIdentifier ?? "",
+                paymentIntentClientSecret:
+                    result.data?.paymentIntentClientSecret ?? "",
+                customerEphemeralKeySecret:
+                    result.data?.customerEphemeralKeySecret ?? "",
+                test: result.data?.testEnv ?? false,
+              ),
+              idParams: PaymentRequestIDParams(
+                orderID: result.data?.orderId ?? "",
+                customerId: result.data?.customerId ?? "",
+                billingCountryCode: result.data?.billingCountryCode ?? "",
+                bundleCode: "",
+                bundleName: "",
+              ),
+            ),
           ),
         );
       },
@@ -172,37 +183,40 @@ class UpgradeWalletBottomSheetViewModel extends BaseModel {
   }
 
   Future<void> initiatePaymentRequest({
-    required PaymentType paymentType,
-    required String orderID,
-    required String customerId,
-    required String publishableKey,
-    required String billingCountryCode,
-    required String merchantIdentifier,
-    required String paymentIntentClientSecret,
-    required String customerEphemeralKeySecret,
-    bool test = false,
+    required PaymentRequestParams params,
   }) async {
     try {
       await paymentService.prepareCheckout(
-        paymentType: paymentType,
-        publishableKey: publishableKey,
-        merchantIdentifier: merchantIdentifier,
+        paymentType: params.secretParams.paymentType,
+        publishableKey: params.secretParams.publishableKey,
+        merchantIdentifier: params.secretParams.merchantIdentifier,
       );
 
       PaymentResult paymentResult = await paymentService.processOrderPayment(
-        paymentType: paymentType,
-        testEnv: test,
-        customerId: customerId,
-        billingCountryCode: billingCountryCode,
-        paymentIntentClientSecret: paymentIntentClientSecret,
-        customerEphemeralKeySecret: customerEphemeralKeySecret,
+        paymentType: params.secretParams.paymentType,
+        params: ProcessOrderPaymentParams(
+          testEnv: params.secretParams.test,
+          customerId: params.idParams.customerId,
+          billingCountryCode: params.idParams.billingCountryCode,
+          paymentIntentClientSecret:
+              params.secretParams.paymentIntentClientSecret,
+          customerEphemeralKeySecret:
+              params.secretParams.customerEphemeralKeySecret,
+        ),
       );
 
       switch (paymentResult) {
         case PaymentResult.completed:
-          break;
+          analyticsService.logEvent(
+            event: AnalyticEvent.walletPaymentSuccessful(
+              bundleCode: params.idParams.bundleCode,
+              bundleName: params.idParams.bundleName,
+              user: userEmailAddress,
+              orderId: params.idParams.orderID,
+            ),
+          );
         case PaymentResult.canceled:
-          cancelOrder(orderID: orderID);
+          cancelOrder(orderID: params.idParams.orderID);
 
         case PaymentResult.otpRequested:
           //must send api for request otp , not implemented from backend
@@ -210,18 +224,18 @@ class UpgradeWalletBottomSheetViewModel extends BaseModel {
             VerifyPurchaseView.routeName,
             arguments: VerifyPurchaseViewArgs(
               iccid: "",
-              orderID: orderID,
+              orderID: params.idParams.orderID,
             ),
             preventDuplicates: false,
           );
 
           if (!result) {
-            cancelOrder(orderID: orderID);
+            cancelOrder(orderID: params.idParams.orderID);
           }
       }
     } on Exception catch (e) {
       showToast(e.toString().replaceAll("Exception:", ""));
-      unawaited(cancelOrder(orderID: orderID));
+      unawaited(cancelOrder(orderID: params.idParams.orderID));
       hideKeyboard();
       return;
     }

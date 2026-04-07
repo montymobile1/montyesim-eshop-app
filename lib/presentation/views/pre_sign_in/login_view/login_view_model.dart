@@ -1,5 +1,8 @@
 import "dart:async";
+import "dart:convert";
 import "dart:io";
+
+import "package:crypto/crypto.dart";
 
 import "package:esim_open_source/app/app.locator.dart";
 import "package:esim_open_source/data/remote/responses/auth/auth_response_model.dart";
@@ -10,6 +13,7 @@ import "package:esim_open_source/domain/repository/services/social_login_service
 import "package:esim_open_source/domain/use_case/auth/social_media_verify_login_use_case.dart";
 import "package:esim_open_source/domain/util/resource.dart";
 import "package:esim_open_source/presentation/enums/view_state.dart";
+import "package:esim_open_source/presentation/helpers/view_state_utils.dart";
 import "package:esim_open_source/presentation/shared/in_app_redirection_heper.dart";
 import "package:esim_open_source/presentation/views/base/base_model.dart";
 import "package:esim_open_source/presentation/views/pre_sign_in/continue_with_email_view/continue_with_email_view.dart";
@@ -61,6 +65,18 @@ class LoginViewModel extends BaseModel {
         setViewState(ViewState.idle);
       }
     });
+  }
+
+  @override
+  void onViewDidAppear() {
+    notifyListeners();
+    super.onViewDidAppear();
+  }
+
+  @override
+  void onDispose() {
+    super.onDispose();
+    setDefaultStatusBarColor();
   }
 
   Future<void> backButtonPressed() async {
@@ -134,6 +150,13 @@ class LoginViewModel extends BaseModel {
             platform: Platform.isAndroid ? "Android" : "iOS",
           ),
         );
+
+        final String? email = response.data?.userInfo?.email;
+        if (email != null && email.isNotEmpty) {
+          final String hashedEmail = _hashEmail(email);
+          await analyticsService.setUserId(hashedEmail);
+        }
+
         await navigateToHomePager(redirection: redirection);
       },
       onFailure: (Resource<AuthResponseModel> response) async {
@@ -143,5 +166,10 @@ class LoginViewModel extends BaseModel {
     );
 
     setViewState(ViewState.idle);
+  }
+
+  String _hashEmail(String email) {
+    final List<int> bytes = utf8.encode(email.toLowerCase());
+    return sha256.convert(bytes).toString();
   }
 }

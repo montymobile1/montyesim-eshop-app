@@ -260,89 +260,127 @@ class OtpTextFieldState extends State<OtpTextField> {
         focusNode: _focusNodes[index],
         enabled: widget.enabled,
         inputFormatters: widget.inputFormatters,
-        decoration: widget.hasCustomInputDecoration
-            ? widget.decoration
-            : InputDecoration(
-                counterText: "",
-                filled: widget.filled,
-                fillColor: widget.fillColor,
-                focusedBorder: widget.showFieldAsBox
-                    ? outlineBorder(widget.focusedBorderColor)
-                    : underlineInputBorder(widget.focusedBorderColor),
-                enabledBorder: widget.showFieldAsBox
-                    ? outlineBorder(widget.enabledBorderColor)
-                    : underlineInputBorder(widget.enabledBorderColor),
-                disabledBorder: widget.showFieldAsBox
-                    ? outlineBorder(widget.disabledBorderColor)
-                    : underlineInputBorder(widget.disabledBorderColor),
-                border: widget.showFieldAsBox
-                    ? outlineBorder(widget.borderColor)
-                    : underlineInputBorder(widget.borderColor),
-                contentPadding: widget.contentPadding,
-              ),
-
+        decoration: _buildInputDecoration(),
         obscureText: widget.obscureText,
-        onChanged: (String value1) {
-          String value2 = value1;
-          if (value1.length > 1) {
-            value2 = _verificationCode[index] == value1.characters.first
-                ? value1.characters.last
-                : value1.characters.first;
-          }
-          //save entered value in a list
-          String value = value2.keepOnlyDigits();
-          _verificationCode[index] = value;
-          onCodeChanged(verificationCode: value);
-          changeFocusToNextNodeWhenValueIsEntered(
-            value: value,
-            indexOfTextField: index,
-          );
-          if (value2 == value) {
-            changeFocusToPreviousNodeWhenValueIsRemoved(
-              value: value,
-              indexOfTextField: index,
-            );
-          }
-          onSubmit(verificationCode: _verificationCode);
-          if (_textControllers[index]?.text != value && value1.isNotEmpty) {
-            _textControllers[index]?.text = value;
-          }
-        },
-        contextMenuBuilder:
-            (BuildContext context, EditableTextState editableTextState) {
-          final List<ContextMenuButtonItem> buttonItems =
-              editableTextState.contextMenuButtonItems;
-          final ContextMenuButtonItem? old = buttonItems
-              .where(
-                (ContextMenuButtonItem e) =>
-                    e.type == ContextMenuButtonType.paste,
-              )
-              .firstOrNull;
-          if (old == null) {
-            return AdaptiveTextSelectionToolbar.editableText(
-              editableTextState: editableTextState,
-            );
-          }
-          final ContextMenuButtonItem current = old.copyWith(
-            onPressed: () async {
-              final ClipboardData? data =
-                  await Clipboard.getData(Clipboard.kTextPlain);
-              if (data == null) {
-                return;
-              }
-              handlePasteLogic(data.text?.keepOnlyDigits() ?? "");
-              editableTextState.hideToolbar();
-            },
-          );
-          buttonItems
-            ..remove(old)
-            ..add(current);
-          return AdaptiveTextSelectionToolbar.buttonItems(
-            anchors: editableTextState.contextMenuAnchors,
-            buttonItems: buttonItems,
-          );
-        },
+        onChanged: (String value1) => _handleTextFieldChanged(value1, index),
+        contextMenuBuilder: _buildContextMenu,
       ),
+    );
+  }
+
+  InputDecoration _buildInputDecoration() {
+    if (widget.hasCustomInputDecoration) {
+      return widget.decoration!;
+    }
+
+    return InputDecoration(
+      counterText: "",
+      filled: widget.filled,
+      fillColor: widget.fillColor,
+      focusedBorder: _getBorder(widget.focusedBorderColor),
+      enabledBorder: _getBorder(widget.enabledBorderColor),
+      disabledBorder: _getBorder(widget.disabledBorderColor),
+      border: _getBorder(widget.borderColor),
+      contentPadding: widget.contentPadding,
+    );
+  }
+
+  InputBorder _getBorder(Color color) {
+    return widget.showFieldAsBox
+        ? outlineBorder(color)
+        : underlineInputBorder(color);
+  }
+
+  void _handleTextFieldChanged(String value1, int index) {
+    final String value2 = _extractSingleCharacter(value1, index);
+    final String value = value2.keepOnlyDigits();
+
+    _verificationCode[index] = value;
+    onCodeChanged(verificationCode: value);
+
+    changeFocusToNextNodeWhenValueIsEntered(
+      value: value,
+      indexOfTextField: index,
+    );
+
+    if (value2 == value) {
+      changeFocusToPreviousNodeWhenValueIsRemoved(
+        value: value,
+        indexOfTextField: index,
+      );
+    }
+
+    onSubmit(verificationCode: _verificationCode);
+    _updateControllerIfNeeded(index, value, value1);
+  }
+
+  String _extractSingleCharacter(String value1, int index) {
+    if (value1.length <= 1) {
+      return value1;
+    }
+
+    return _verificationCode[index] == value1.characters.first
+        ? value1.characters.last
+        : value1.characters.first;
+  }
+
+  void _updateControllerIfNeeded(int index, String value, String value1) {
+    if (_textControllers[index]?.text != value && value1.isNotEmpty) {
+      _textControllers[index]?.text = value;
+    }
+  }
+
+  Widget _buildContextMenu(
+    BuildContext context,
+    EditableTextState editableTextState,
+  ) {
+    final List<ContextMenuButtonItem> buttonItems =
+        editableTextState.contextMenuButtonItems;
+    final ContextMenuButtonItem? pasteButton = _findPasteButton(buttonItems);
+
+    if (pasteButton == null) {
+      return AdaptiveTextSelectionToolbar.editableText(
+        editableTextState: editableTextState,
+      );
+    }
+
+    final ContextMenuButtonItem customPasteButton =
+        _createCustomPasteButton(pasteButton, editableTextState);
+
+    buttonItems
+      ..remove(pasteButton)
+      ..add(customPasteButton);
+
+    return AdaptiveTextSelectionToolbar.buttonItems(
+      anchors: editableTextState.contextMenuAnchors,
+      buttonItems: buttonItems,
+    );
+  }
+
+  ContextMenuButtonItem? _findPasteButton(
+    List<ContextMenuButtonItem> buttonItems,
+  ) {
+    return buttonItems
+        .where(
+          (ContextMenuButtonItem e) => e.type == ContextMenuButtonType.paste,
+        )
+        .firstOrNull;
+  }
+
+  ContextMenuButtonItem _createCustomPasteButton(
+    ContextMenuButtonItem original,
+    EditableTextState editableTextState,
+  ) {
+    return original.copyWith(
+      onPressed: () async {
+        final ClipboardData? data =
+            await Clipboard.getData(Clipboard.kTextPlain);
+        if (data == null) {
+          return;
+        }
+        handlePasteLogic(data.text?.keepOnlyDigits() ?? "");
+        editableTextState.hideToolbar();
+      },
     );
   }
 
@@ -401,26 +439,40 @@ class OtpTextFieldState extends State<OtpTextField> {
       _focusNodes[index] = FocusNode();
 
       if (Platform.isIOS) {
-        _focusNodes[index]?.addListener(() {
-          // Check if the node has lost focus
-          if (!(_focusNodes[index]?.hasFocus ?? true)) {
-            dev.log("Field $index lost focus");
-            // Here you can add your logic for when focus is lost
-          }
-
-          // Check if the node gained focus
-          if (_focusNodes[index]?.hasFocus ?? false) {
-            dev.log("Field $index gained focus");
-            if (_verificationCode[index] == null ||
-                (_verificationCode[index]?.isEmpty ?? true)) {
-              String newVal = " ";
-              _verificationCode[index] = newVal;
-              _textControllers[index]?.text = newVal;
-            }
-            // Here you can add your logic for when focus is gained
-          }
-        });
+        _attachIOSFocusListener(index);
       }
+    }
+  }
+
+  void _attachIOSFocusListener(int index) {
+    _focusNodes[index]?.addListener(() {
+      _handleFocusChange(index);
+    });
+  }
+
+  void _handleFocusChange(int index) {
+    final FocusNode? node = _focusNodes[index];
+
+    // Check if the node has lost focus
+    if (!(node?.hasFocus ?? true)) {
+      dev.log("Field $index lost focus");
+      // Here you can add your logic for when focus is lost
+    }
+
+    // Check if the node gained focus
+    if (node?.hasFocus ?? false) {
+      dev.log("Field $index gained focus");
+      _initializeFieldIfEmpty(index);
+      // Here you can add your logic for when focus is gained
+    }
+  }
+
+  void _initializeFieldIfEmpty(int index) {
+    if (_verificationCode[index] == null ||
+        (_verificationCode[index]?.isEmpty ?? true)) {
+      const String newVal = " ";
+      _verificationCode[index] = newVal;
+      _textControllers[index]?.text = newVal;
     }
   }
 

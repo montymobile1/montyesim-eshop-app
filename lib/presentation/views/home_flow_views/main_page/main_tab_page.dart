@@ -99,6 +99,13 @@ class _MainTabPageState extends State<MainTabPage>
     super.dispose();
   }
 
+  double _getFloatingActionButtonBottomPadding() {
+    if (Platform.isIOS) {
+      return AppEnvironment.isFromAppClip ? 20 : 60;
+    }
+    return 80;
+  }
+
   @override
   Widget build(BuildContext context) {
     final bool isKeyboardVisible =
@@ -116,11 +123,7 @@ class _MainTabPageState extends State<MainTabPage>
               },
               child: Container(
                 padding: EdgeInsets.only(
-                  bottom: Platform.isIOS
-                      ? AppEnvironment.isFromAppClip
-                          ? 20
-                          : 60
-                      : 80,
+                  bottom: _getFloatingActionButtonBottomPadding(),
                 ),
                 child: Lottie.asset(
                   "assets/lottie/whatsappLottie.json",
@@ -131,16 +134,18 @@ class _MainTabPageState extends State<MainTabPage>
             ),
       backgroundColor: whiteBackGroundColor(context: context),
       body: wrapBodyWithState(
-        context: context,
-        model: widget.viewModel,
-        child: AppEnvironment.isFromAppClip
-            ? DataPlansView()
-            : buildBottomNavigationBar(
-                context: context,
-                model: widget.viewModel,
-                isKeyboardVisible: isKeyboardVisible,
-                tabController: tabController,
-              ),
+        params: BodyStateWrapParams(
+          context: context,
+          model: widget.viewModel,
+          child: AppEnvironment.isFromAppClip
+              ? DataPlansView()
+              : buildBottomNavigationBar(
+                  context: context,
+                  model: widget.viewModel,
+                  isKeyboardVisible: isKeyboardVisible,
+                  tabController: tabController,
+                ),
+        ),
       ),
     );
   }

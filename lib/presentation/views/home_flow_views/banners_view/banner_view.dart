@@ -19,6 +19,15 @@ class BannerView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bool isLiveChat =
+        bannerView.bannersViewType == BannersViewTypes.liveChat;
+    final Color? textColor = isLiveChat
+        ? bannersViewModel.textColor ?? context.appColors.grey_900
+        : context.appColors.grey_900;
+    final Color? buttonColor = isLiveChat
+        ? bannersViewModel.buttonColor ?? context.appColors.baseWhite
+        : context.appColors.baseWhite;
+
     return GestureDetector(
       onTap: () => bannersViewModel.onViewTap(bannerView),
       child: PaddingWidget.applySymmetricPadding(
@@ -57,9 +66,7 @@ class BannerView extends StatelessWidget {
                     top: 10,
                     start: 20,
                     bottom: 5,
-                    end: bannerView.bannersViewType == BannersViewTypes.liveChat
-                        ? 0
-                        : 30,
+                    end: isLiveChat ? 0 : 30,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -80,22 +87,16 @@ class BannerView extends StatelessWidget {
                         ),
                         bannerView.bannersViewType != BannersViewTypes.none
                             ? MainButton.bannerButton(
-                                action: () =>
-                                    bannersViewModel.onViewTap(bannerView),
-                                themeColor: themeColor,
-                                title: bannerView.bannersViewType.buttonText,
-                                textColor: bannerView.bannersViewType ==
-                                        BannersViewTypes.liveChat
-                                    ? bannersViewModel.textColor ??
-                                        context.appColors.grey_900
-                                    : context.appColors.grey_900,
-                                buttonColor: bannerView.bannersViewType ==
-                                        BannersViewTypes.liveChat
-                                    ? bannersViewModel.buttonColor ??
-                                        context.appColors.baseWhite
-                                    : context.appColors.baseWhite,
-                                titleTextStyle:
-                                    captionTwoBoldTextStyle(context: context),
+                                params: BannerButtonParams(
+                                  action: () =>
+                                      bannersViewModel.onViewTap(bannerView),
+                                  themeColor: themeColor,
+                                  title: bannerView.bannersViewType.buttonText,
+                                  textColor: textColor,
+                                  buttonColor: buttonColor,
+                                  titleTextStyle:
+                                      captionTwoBoldTextStyle(context: context),
+                                ),
                               )
                             : Container(),
                       ],

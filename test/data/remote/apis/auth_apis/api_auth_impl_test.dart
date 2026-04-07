@@ -1,6 +1,7 @@
 import "package:esim_open_source/app/environment/app_environment.dart";
 import "package:esim_open_source/data/remote/apis/auth_apis/api_auth_impl.dart";
 import "package:esim_open_source/data/remote/auth_reload_interface.dart";
+import "package:esim_open_source/domain/data/params/update_user_info_params.dart";
 import "package:esim_open_source/data/remote/responses/base_response_model.dart";
 import "package:esim_open_source/data/remote/unauthorized_access_interface.dart";
 import "package:esim_open_source/domain/data/api_auth.dart";
@@ -173,13 +174,14 @@ void main() {
 
       try {
         await apiImpl.updateUserInfo(
-          email: "test@example.com",
-          msisdn: "+1234567890",
-          firstName: "John",
-          lastName: "Doe",
-          isNewsletterSubscribed: true,
-          currencyCode: "USD",
-          languageCode: "en",
+          request: UpdateUserInfoRequest(
+            email: "test@example.com",
+            msisdn: "+1234567890",
+            firstName: "John",
+            lastName: "Doe",
+            currencyCode: "USD",
+            languageCode: "en",
+          ),
         );
       } on Object catch (e) {
         expect(e.toString(), contains("No internet connection"));
@@ -193,7 +195,9 @@ void main() {
 
       try {
         await apiImpl.updateUserInfo(
-          email: "test@example.com",
+          request: UpdateUserInfoRequest(
+            email: "test@example.com",
+          ),
         );
       } on Object catch (e) {
         expect(e.toString(), contains("No internet connection"));

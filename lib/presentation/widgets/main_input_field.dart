@@ -126,196 +126,156 @@ class MainInputField extends StatefulWidget {
   static MainInputField securedPassword({
     required TextEditingController controller,
     required Color themeColor,
-    bool isReadOnly = false,
-    bool autofocus = false,
-    String? initialValue,
-    bool? isObscure,
-    void Function({required bool value})? onObscureChange,
-    bool? hideInternalObfuscator,
-    void Function()? enterPressed,
-    TextInputFormatter? formatter,
-    TextInputType? textInputType,
-    Iterable<String>? autofillHints,
-    bool? removeBorder,
-    TextStyle? inputTextStyle,
-    TextAlign? textAlign,
-    String? labelText,
-    TextStyle? labelStyle,
+    MainInputFieldTextConfig? textConfig,
+    MainInputFieldAppearanceConfig? appearanceConfig,
+    MainInputFieldBehaviorConfig? behaviorConfig,
+    MainInputFieldInputConfig? inputConfig,
+    MainInputFieldInteractionConfig? interactionConfig,
   }) {
     return MainInputField(
       controller: controller,
       hintText: LocaleKeys.password.tr(),
       password: true,
-      isReadOnly: isReadOnly,
+      isReadOnly: behaviorConfig?.isReadOnly ?? false,
       themeColor: themeColor,
-      autofocus: autofocus,
-      isObscure: isObscure,
-      onObscureChange: onObscureChange,
-      hideInternalObfuscator: hideInternalObfuscator ?? false,
-      initialValue: initialValue,
-      enterPressed: enterPressed,
-      formatter: formatter,
-      autofillHints: autofillHints,
-      textInputType: textInputType,
-      removeBorder: removeBorder ?? false,
-      inputTextStyle: inputTextStyle,
-      textAlign: textAlign,
-      labelText: labelText,
-      labelStyle: labelStyle,
+      autofocus: behaviorConfig?.autofocus ?? false,
+      isObscure: behaviorConfig?.isObscure,
+      onObscureChange: interactionConfig?.onObscureChange,
+      hideInternalObfuscator: behaviorConfig?.hideInternalObfuscator ?? false,
+      initialValue: textConfig?.initialValue,
+      enterPressed: interactionConfig?.enterPressed,
+      formatter: inputConfig?.formatter,
+      autofillHints: inputConfig?.autofillHints,
+      textInputType: inputConfig?.textInputType,
+      removeBorder: behaviorConfig?.removeBorder ?? false,
+      inputTextStyle: appearanceConfig?.inputTextStyle,
+      textAlign: inputConfig?.textAlign,
+      labelText: textConfig?.labelText,
+      labelStyle: appearanceConfig?.labelStyle,
     );
   }
 
   static MainInputField text({
     required TextEditingController controller,
     required Color themeColor,
-    String? hintText,
-    String? initialValue,
-    bool isReadOnly = false,
-    void Function()? enterPressed,
-    TextInputFormatter? formatter,
-    TextInputType? textInputType,
-    Iterable<String>? autofillHints,
-    bool autofocus = false,
-    bool? removeBorder,
-    TextStyle? inputTextStyle,
-    TextAlign? textAlign,
-    String? labelText,
-    TextStyle? labelStyle,
+    MainInputFieldTextConfig? textConfig,
+    MainInputFieldAppearanceConfig? appearanceConfig,
+    MainInputFieldBehaviorConfig? behaviorConfig,
+    MainInputFieldInputConfig? inputConfig,
+    MainInputFieldInteractionConfig? interactionConfig,
   }) {
     return MainInputField(
-      autofocus: autofocus,
+      autofocus: behaviorConfig?.autofocus ?? false,
       controller: controller,
-      textInputType: textInputType,
-      hintText: hintText,
-      isReadOnly: isReadOnly,
-      initialValue: initialValue,
-      enterPressed: enterPressed,
-      formatter: formatter,
+      textInputType: inputConfig?.textInputType,
+      hintText: textConfig?.hintText,
+      isReadOnly: behaviorConfig?.isReadOnly ?? false,
+      initialValue: textConfig?.initialValue,
+      enterPressed: interactionConfig?.enterPressed,
+      formatter: inputConfig?.formatter,
       themeColor: themeColor,
-      autofillHints: autofillHints,
-      removeBorder: removeBorder ?? false,
-      inputTextStyle: inputTextStyle,
-      textAlign: textAlign,
-      labelText: labelText,
-      labelStyle: labelStyle,
+      autofillHints: inputConfig?.autofillHints,
+      removeBorder: behaviorConfig?.removeBorder ?? false,
+      inputTextStyle: appearanceConfig?.inputTextStyle,
+      textAlign: inputConfig?.textAlign,
+      labelText: textConfig?.labelText,
+      labelStyle: appearanceConfig?.labelStyle,
     );
   }
 
   static MainInputField multiline({
     required TextEditingController controller,
     required Color themeColor,
-    String? hintText,
-    String? initialValue,
-    bool isReadOnly = false,
-    void Function()? enterPressed,
-    TextInputFormatter? formatter,
-    TextInputType? textInputType,
-    Iterable<String>? autofillHints,
-    bool autofocus = false,
-    bool? removeBorder,
-    TextStyle? inputTextStyle,
-    TextAlign? textAlign,
-    int? maxLines = 1,
+    MainInputFieldTextConfig? textConfig,
+    MainInputFieldAppearanceConfig? appearanceConfig,
+    MainInputFieldBehaviorConfig? behaviorConfig,
+    MainInputFieldInputConfig? inputConfig,
+    MainInputFieldInteractionConfig? interactionConfig,
   }) {
     return MainInputField(
-      autofocus: autofocus,
+      autofocus: behaviorConfig?.autofocus ?? false,
       controller: controller,
-      textInputType: textInputType ?? TextInputType.multiline,
-      hintText: hintText,
-      isReadOnly: isReadOnly,
-      initialValue: initialValue,
-      enterPressed: enterPressed,
-      formatter: formatter,
+      textInputType: inputConfig?.textInputType ?? TextInputType.multiline,
+      hintText: textConfig?.hintText,
+      isReadOnly: behaviorConfig?.isReadOnly ?? false,
+      initialValue: textConfig?.initialValue,
+      enterPressed: interactionConfig?.enterPressed,
+      formatter: inputConfig?.formatter,
       themeColor: themeColor,
-      autofillHints: autofillHints,
-      removeBorder: removeBorder ?? false,
-      inputTextStyle: inputTextStyle,
-      textAlign: textAlign,
-      maxLines: maxLines,
+      autofillHints: inputConfig?.autofillHints,
+      removeBorder: behaviorConfig?.removeBorder ?? false,
+      inputTextStyle: appearanceConfig?.inputTextStyle,
+      textAlign: inputConfig?.textAlign,
+      maxLines: inputConfig?.maxLines,
     );
   }
 
   static MainInputField formField({
     required TextEditingController controller,
     required Color themeColor,
-    String? labelTitleText,
-    String? hintText,
-    Color? backGroundColor,
-    String? errorMessage,
-    TextStyle? labelStyle,
-    TextStyle? hintLabelStyle,
-    TextInputType? textInputType,
-    int? maxLines,
-    double textFieldHeight = 55,
+    MainInputFieldTextConfig? textConfig,
+    MainInputFieldAppearanceConfig? appearanceConfig,
+    MainInputFieldInputConfig? inputConfig,
   }) =>
       MainInputField(
         themeColor: themeColor,
-        labelTitleText: labelTitleText,
-        hintText: hintText,
+        labelTitleText: textConfig?.labelTitleText,
+        hintText: textConfig?.hintText,
         controller: controller,
-        backgroundColor: backGroundColor,
-        errorMessage: errorMessage,
-        labelStyle: labelStyle,
+        backgroundColor: appearanceConfig?.backgroundColor,
+        errorMessage: textConfig?.errorMessage,
+        labelStyle: appearanceConfig?.labelStyle,
         enterPressed: () {
           FocusManager.instance.primaryFocus?.unfocus();
         },
-        textInputType: textInputType,
-        hintTextStyle: hintLabelStyle,
-        maxLines: maxLines ?? 1,
-        textFieldHeight: textFieldHeight,
+        textInputType: inputConfig?.textInputType,
+        hintTextStyle: appearanceConfig?.hintTextStyle,
+        maxLines: inputConfig?.maxLines ?? 1,
+        textFieldHeight: appearanceConfig?.textFieldHeight ?? 55,
       );
 
   static MainInputField promoCode({
     required TextEditingController controller,
     required Color themeColor,
-    required bool enabled,
-    String? hintText,
-    Color? backGroundColor,
-    String? message,
-    IconData? icon,
-    Color? color,
-    TextStyle? labelStyle,
-    TextStyle? hintLabelStyle,
-    TextInputType? textInputType,
-    double textFieldHeight = 45,
-    void Function({required String text})? onChanged,
+    MainInputFieldTextConfig? textConfig,
+    MainInputFieldAppearanceConfig? appearanceConfig,
+    MainInputFieldBehaviorConfig? behaviorConfig,
+    MainInputFieldInputConfig? inputConfig,
+    MainInputFieldInteractionConfig? interactionConfig,
   }) =>
       MainInputField(
-        isReadOnly: !enabled,
+        isReadOnly: behaviorConfig?.isReadOnly ?? false,
         themeColor: themeColor,
-        hintText: hintText,
+        hintText: textConfig?.hintText,
         controller: controller,
-        backgroundColor: backGroundColor,
-        errorMessage: message,
-        errorBorderColor: color,
-        errorIcon: icon,
-        labelStyle: labelStyle,
-        inputTextStyle: labelStyle,
+        backgroundColor: appearanceConfig?.backgroundColor,
+        errorMessage: textConfig?.errorMessage,
+        errorBorderColor: appearanceConfig?.errorColor,
+        errorIcon: appearanceConfig?.errorIcon,
+        labelStyle: appearanceConfig?.labelStyle,
+        inputTextStyle: appearanceConfig?.labelStyle,
         enterPressed: () {
           FocusManager.instance.primaryFocus?.unfocus();
         },
-        onChanged: onChanged,
-        textInputType: textInputType,
-        hintTextStyle: hintLabelStyle,
-        textFieldHeight: textFieldHeight,
+        onChanged: interactionConfig?.onChanged,
+        textInputType: inputConfig?.textInputType,
+        hintTextStyle: appearanceConfig?.hintTextStyle,
+        textFieldHeight: appearanceConfig?.textFieldHeight ?? 45,
       );
 
   static MainInputField searchField({
     required TextEditingController controller,
     required Color themeColor,
-    VoidCallback? onTap,
-    String? hintText,
-    Color? backGroundColor,
-    TextStyle? labelStyle,
-    VoidCallback? enterPressed,
-    bool clearSearchEnabled = false,
-    void Function({required String text})? onChanged,
+    MainInputFieldTextConfig? textConfig,
+    MainInputFieldAppearanceConfig? appearanceConfig,
+    MainInputFieldBehaviorConfig? behaviorConfig,
+    MainInputFieldInteractionConfig? interactionConfig,
   }) =>
       MainInputField(
         themeColor: themeColor,
         controller: controller,
-        backgroundColor: backGroundColor,
-        onTap: onTap,
+        backgroundColor: appearanceConfig?.backgroundColor,
+        onTap: interactionConfig?.onTap,
         prefixIcon: PaddingWidget.applyPadding(
           end: 10,
           child: Image.asset(
@@ -324,13 +284,13 @@ class MainInputField extends StatefulWidget {
             height: 15,
           ),
         ),
-        hintText: hintText,
+        hintText: textConfig?.hintText,
         enterPressed: () {
           FocusManager.instance.primaryFocus?.unfocus();
         },
-        labelStyle: labelStyle,
-        clearSearchEnabled: clearSearchEnabled,
-        onChanged: onChanged,
+        labelStyle: appearanceConfig?.labelStyle,
+        clearSearchEnabled: behaviorConfig?.clearSearchEnabled ?? false,
+        onChanged: interactionConfig?.onChanged,
       );
 
   @override
@@ -482,11 +442,7 @@ class _MainInputFieldState extends State<MainInputField> {
                   ? null
                   : <BoxShadow>[
                 BoxShadow(
-                  color: (widget.errorMessage == null ||
-                      widget.errorMessage == "")
-                      ? greyBackGroundColor(context: context)
-                      : widget.errorBorderColor ??
-                      errorTextColor(context: context),
+                  color: _getBoxShadowColor(context),
                   spreadRadius: 1,
                 ),
               ],
@@ -570,26 +526,7 @@ class _MainInputFieldState extends State<MainInputField> {
             ),
           ),
         ),
-        widget.errorMessage == null
-            ? const SizedBox.shrink()
-            : widget.errorMessage!.isEmpty
-            ? const SizedBox(
-          height: 30,
-        )
-            : SizedBox(
-          height: 30,
-          child: PaddingWidget.applySymmetricPadding(
-            vertical: 5,
-            child: Text(
-              widget.errorMessage!,
-              style: captionOneNormalTextStyle(
-                context: context,
-                fontColor: widget.errorBorderColor ??
-                    errorTextColor(context: context),
-              ),
-            ).textSupportsRTL(context),
-          ),
-        ),
+        _buildErrorMessageWidget(context),
       ],
     );
   }
@@ -598,94 +535,151 @@ class _MainInputFieldState extends State<MainInputField> {
     return widget.prefixIcon;
   }
 
-  Widget? getSuffixIcon(BuildContext context) {
-    // Handle clear search button
-    if (widget.clearSearchEnabled && hasText) {
-      return IconButton(
-        icon: Icon(
-          Icons.clear,
-          color: widget.themeColor,
-          size: 20,
-        ),
-        onPressed: () {
-          widget.controller.clear();
-          widget.onChanged?.call(text: "");
-        },
-      );
+  Widget _buildErrorMessageWidget(BuildContext context) {
+    if (widget.errorMessage == null) {
+      return const SizedBox.shrink();
     }
 
-    return widget.forceSuffixDirection
-        ? (Directionality.of(context) != TextDirection.rtl
-        ? (((widget.password && !widget.hideInternalObfuscator) ||
-        (widget.isObscure != null &&
-            !widget.hideInternalObfuscator))
-        ? IconButton(
+    if (widget.errorMessage!.isEmpty) {
+      return const SizedBox(height: 30);
+    }
+
+    return SizedBox(
+      height: 30,
+      child: PaddingWidget.applySymmetricPadding(
+        vertical: 5,
+        child: Text(
+          widget.errorMessage!,
+          style: captionOneNormalTextStyle(
+            context: context,
+            fontColor: widget.errorBorderColor ??
+                errorTextColor(context: context),
+          ),
+        ).textSupportsRTL(context),
+      ),
+    );
+  }
+
+  Color _getBoxShadowColor(BuildContext context) {
+    final bool hasNoError =
+        widget.errorMessage == null || widget.errorMessage == "";
+    if (hasNoError) {
+      return greyBackGroundColor(context: context);
+    }
+    return widget.errorBorderColor ?? errorTextColor(context: context);
+  }
+
+  Widget? getSuffixIcon(BuildContext context) {
+    if (_shouldShowClearButton()) {
+      return _buildClearButton();
+    }
+
+    if (widget.forceSuffixDirection) {
+      return _getSuffixIconWithForcedDirection(context);
+    }
+
+    return _getSuffixIconWithDefaultDirection(context);
+  }
+
+  bool _shouldShowClearButton() {
+    return widget.clearSearchEnabled && hasText;
+  }
+
+  Widget _buildClearButton() {
+    return IconButton(
       icon: Icon(
-        (widget.isObscure ?? !isPassword)
-            ? Icons.visibility_off
-            : Icons.visibility,
+        Icons.clear,
+        color: widget.themeColor,
+        size: 20,
+      ),
+      onPressed: () {
+        widget.controller.clear();
+        widget.onChanged?.call(text: "");
+      },
+    );
+  }
+
+  Widget? _getSuffixIconWithForcedDirection(BuildContext context) {
+    final bool isRtl = Directionality.of(context) == TextDirection.rtl;
+
+    if (isRtl) {
+      return usePrefixIconWidget(context);
+    }
+
+    return _getPasswordToggleOrSuffixIcon();
+  }
+
+  Widget? _getSuffixIconWithDefaultDirection(BuildContext context) {
+    if (_shouldShowPasswordToggle()) {
+      return _buildPasswordToggleButton();
+    }
+
+    if (_shouldShowErrorIcon()) {
+      return _buildErrorIcon(context);
+    }
+
+    return widget.suffixIcon;
+  }
+
+  bool _shouldShowPasswordToggle() {
+    return (widget.password && !widget.hideInternalObfuscator) ||
+        (widget.isObscure != null && !widget.hideInternalObfuscator);
+  }
+
+  Widget? _getPasswordToggleOrSuffixIcon() {
+    if (_shouldShowPasswordToggle()) {
+      return _buildPasswordToggleButton();
+    }
+    return widget.suffixIcon;
+  }
+
+  Widget _buildPasswordToggleButton() {
+    return IconButton(
+      icon: Icon(
+        _getPasswordToggleIcon(),
         color: widget.themeColor,
       ),
-      onPressed: () =>
-          setState(() {
-            isPassword = !isPassword;
-            widget.onObscureChange
-                ?.call(value: !(widget.isObscure ?? false));
-          }),
-    )
-        : widget.suffixIcon)
-        : usePrefixIconWidget(context))
-        : (((widget.password && !widget.hideInternalObfuscator) ||
-        (widget.isObscure != null && !widget.hideInternalObfuscator))
-        ? IconButton(
-      icon: Icon(
-        (widget.isObscure ?? !isPassword)
-            ? Icons.visibility_off
-            : Icons.visibility,
-        color: widget.themeColor,
-      ),
-      onPressed: () =>
-          setState(() {
-            isPassword = !isPassword;
-            widget.onObscureChange
-                ?.call(value: !(widget.isObscure ?? false));
-          }),
-    )
-        : widget.errorMessage != null
-        ? widget.errorMessage != ""
-        ? Icon(
+      onPressed: _handlePasswordToggle,
+    );
+  }
+
+  IconData _getPasswordToggleIcon() {
+    return (widget.isObscure ?? !isPassword)
+        ? Icons.visibility_off
+        : Icons.visibility;
+  }
+
+  void _handlePasswordToggle() {
+    setState(() {
+      isPassword = !isPassword;
+      widget.onObscureChange?.call(value: !(widget.isObscure ?? false));
+    });
+  }
+
+  bool _shouldShowErrorIcon() {
+    return widget.errorMessage != null && widget.errorMessage!.isNotEmpty;
+  }
+
+  Widget _buildErrorIcon(BuildContext context) {
+    return Icon(
       widget.errorIcon ?? Icons.error_outline,
-      color: widget.errorBorderColor ??
-          errorTextColor(context: context),
+      color: widget.errorBorderColor ?? errorTextColor(context: context),
       size: 16,
-    )
-        : widget.suffixIcon
-        : widget.suffixIcon);
+    );
   }
 
   Widget? getPrefixIcon(BuildContext context) {
-    return widget.forceSuffixDirection
-        ? (Directionality.of(context) == TextDirection.rtl
-        ? (((widget.password && !widget.hideInternalObfuscator) ||
-        (widget.isObscure != null &&
-            !widget.hideInternalObfuscator))
-        ? IconButton(
-      icon: Icon(
-        (widget.isObscure ?? !isPassword)
-            ? Icons.visibility_off
-            : Icons.visibility,
-        color: widget.themeColor,
-      ),
-      onPressed: () =>
-          setState(() {
-            isPassword = !isPassword;
-            widget.onObscureChange
-                ?.call(value: !(widget.isObscure ?? false));
-          }),
-    )
-        : widget.suffixIcon)
-        : usePrefixIconWidget(context))
-        : usePrefixIconWidget(context);
+    if (!widget.forceSuffixDirection) {
+      return usePrefixIconWidget(context);
+    }
+
+    final bool isRtl = Directionality.of(context) == TextDirection.rtl;
+
+    if (!isRtl) {
+      return usePrefixIconWidget(context);
+    }
+
+    return _getPasswordToggleOrSuffixIcon();
   }
 
   @override
@@ -694,4 +688,94 @@ class _MainInputFieldState extends State<MainInputField> {
     properties..add(DiagnosticsProperty<bool>("isPassword", isPassword))..add(
         DiagnosticsProperty<bool>("hasText", hasText),);
   }
+}
+
+/// Configuration class for text-related properties of MainInputField
+class MainInputFieldTextConfig {
+  const MainInputFieldTextConfig({
+    this.hintText,
+    this.labelText,
+    this.labelTitleText,
+    this.initialValue,
+    this.errorMessage,
+  });
+
+  final String? hintText;
+  final String? labelText;
+  final String? labelTitleText;
+  final String? initialValue;
+  final String? errorMessage;
+}
+
+/// Configuration class for appearance-related properties of MainInputField
+/// Combines style and visual properties
+class MainInputFieldAppearanceConfig {
+  const MainInputFieldAppearanceConfig({
+    this.labelStyle,
+    this.inputTextStyle,
+    this.hintTextStyle,
+    this.backgroundColor,
+    this.textFieldHeight,
+    this.errorColor,
+    this.errorIcon,
+  });
+
+  final TextStyle? labelStyle;
+  final TextStyle? inputTextStyle;
+  final TextStyle? hintTextStyle;
+  final Color? backgroundColor;
+  final double? textFieldHeight;
+  final Color? errorColor;
+  final IconData? errorIcon;
+}
+
+/// Configuration class for behavior-related properties of MainInputField
+class MainInputFieldBehaviorConfig {
+  const MainInputFieldBehaviorConfig({
+    this.isReadOnly = false,
+    this.autofocus = false,
+    this.isObscure,
+    this.hideInternalObfuscator,
+    this.removeBorder,
+    this.clearSearchEnabled,
+  });
+
+  final bool isReadOnly;
+  final bool autofocus;
+  final bool? isObscure;
+  final bool? hideInternalObfuscator;
+  final bool? removeBorder;
+  final bool? clearSearchEnabled;
+}
+
+/// Configuration class for input-related properties of MainInputField
+class MainInputFieldInputConfig {
+  const MainInputFieldInputConfig({
+    this.textInputType,
+    this.formatter,
+    this.autofillHints,
+    this.textAlign,
+    this.maxLines,
+  });
+
+  final TextInputType? textInputType;
+  final TextInputFormatter? formatter;
+  final Iterable<String>? autofillHints;
+  final TextAlign? textAlign;
+  final int? maxLines;
+}
+
+/// Configuration class for interaction callbacks of MainInputField
+class MainInputFieldInteractionConfig {
+  const MainInputFieldInteractionConfig({
+    this.enterPressed,
+    this.onChanged,
+    this.onTap,
+    this.onObscureChange,
+  });
+
+  final void Function()? enterPressed;
+  final void Function({required String text})? onChanged;
+  final VoidCallback? onTap;
+  final void Function({required bool value})? onObscureChange;
 }

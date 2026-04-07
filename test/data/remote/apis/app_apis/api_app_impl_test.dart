@@ -1,5 +1,6 @@
 import "package:esim_open_source/app/environment/app_environment.dart";
 import "package:esim_open_source/data/remote/apis/app_apis/api_app_impl.dart";
+import "package:esim_open_source/domain/data/params/add_device_params.dart";
 import "package:esim_open_source/domain/data/api_app.dart";
 import "package:esim_open_source/domain/repository/services/connectivity_service.dart";
 import "package:esim_open_source/domain/repository/services/local_storage_service.dart";
@@ -51,15 +52,17 @@ void main() {
       // Test actual implementation - expect connectivity exception since we stub to false
       try {
         await apiImpl.addDevice(
-          fcmToken: "test_token",
-          manufacturer: "test_manufacturer",
-          deviceModel: "test_model",
-          deviceOs: "test_os",
-          deviceOsVersion: "test_version",
-          appVersion: "test_app_version",
-          ramSize: "test_ram",
-          screenResolution: "test_resolution",
-          isRooted: false,
+          AddDeviceParams(
+            fcmToken: "test_token",
+            manufacturer: "test_manufacturer",
+            deviceModel: "test_model",
+            deviceOs: "test_os",
+            deviceOsVersion: "test_version",
+            appVersion: "test_app_version",
+            ramSize: "test_ram",
+            screenResolution: "test_resolution",
+            isRooted: false,
+          ),
         );
       } on Object catch (e) {
         expect(e.toString(), contains("No internet connection"));

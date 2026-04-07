@@ -24,80 +24,85 @@ class HomeLocalDataSource {
   Future<void> saveHomeData(HomeDataResponseModel data) async {
     _store.runInTransaction(TxMode.write, () {
       final HomeDataEntity homeData =
-          HomeDataEntity(lastUpdated: DateTime.now())
-            //save version
-            ..version = data.version;
+          HomeDataEntity(lastUpdated: DateTime.now())..version = data.version;
 
-      // Save regions
-      if (data.regions != null) {
-        for (final RegionsResponseModel region in data.regions!) {
-          final RegionEntity regionEntity = RegionEntity.fromModel(region);
-          homeData.regions.add(regionEntity);
-        }
-      }
-
-      // Save countries
-      if (data.countries != null) {
-        for (final CountryResponseModel country in data.countries!) {
-          final CountryEntity countryEntity = CountryEntity.fromModel(country);
-          homeData.countries.add(countryEntity);
-        }
-      }
-
-      // Save global bundles
-      if (data.globalBundles != null) {
-        for (final BundleResponseModel bundle in data.globalBundles!) {
-          final BundleEntity bundleEntity =
-              BundleEntity.fromModel(bundle, BundleType.global);
-
-          // Save bundle category if exists
-          if (bundle.bundleCategory != null) {
-            final BundleCategoryEntity categoryEntity =
-                BundleCategoryEntity.fromModel(bundle.bundleCategory!);
-            _bundleCategoryBox.put(categoryEntity);
-            bundleEntity.bundleCategory.target = categoryEntity;
-          }
-
-          // Link countries
-          if (bundle.countries != null) {
-            for (final CountryResponseModel country in bundle.countries!) {
-              final CountryEntity countryEntity = _findOrCreateCountry(country);
-              bundleEntity.countries.add(countryEntity);
-            }
-          }
-
-          homeData.bundles.add(bundleEntity);
-        }
-      }
-
-      // Save cruise bundles
-      if (data.cruiseBundles != null) {
-        for (final BundleResponseModel bundle in data.cruiseBundles!) {
-          final BundleEntity bundleEntity =
-              BundleEntity.fromModel(bundle, BundleType.cruise);
-
-          // Save bundle category if exists
-          if (bundle.bundleCategory != null) {
-            final BundleCategoryEntity categoryEntity =
-                BundleCategoryEntity.fromModel(bundle.bundleCategory!);
-            _bundleCategoryBox.put(categoryEntity);
-            bundleEntity.bundleCategory.target = categoryEntity;
-          }
-
-          // Link countries
-          if (bundle.countries != null) {
-            for (final CountryResponseModel country in bundle.countries!) {
-              final CountryEntity countryEntity = _findOrCreateCountry(country);
-              bundleEntity.countries.add(countryEntity);
-            }
-          }
-
-          homeData.bundles.add(bundleEntity);
-        }
-      }
+      _saveRegions(data.regions, homeData);
+      _saveCountries(data.countries, homeData);
+      _saveBundles(data.globalBundles, BundleType.global, homeData);
+      _saveBundles(data.cruiseBundles, BundleType.cruise, homeData);
 
       _homeDataBox.put(homeData);
     });
+  }
+
+  void _saveRegions(
+      List<RegionsResponseModel>? regions, HomeDataEntity homeData,) {
+    if (regions == null) {
+      return;
+    }
+
+    for (final RegionsResponseModel region in regions) {
+      final RegionEntity regionEntity = RegionEntity.fromModel(region);
+      homeData.regions.add(regionEntity);
+    }
+  }
+
+  void _saveCountries(
+      List<CountryResponseModel>? countries, HomeDataEntity homeData,) {
+    if (countries == null) {
+      return;
+    }
+
+    for (final CountryResponseModel country in countries) {
+      final CountryEntity countryEntity = CountryEntity.fromModel(country);
+      homeData.countries.add(countryEntity);
+    }
+  }
+
+  void _saveBundles(List<BundleResponseModel>? bundles, BundleType bundleType,
+      HomeDataEntity homeData,) {
+    if (bundles == null) {
+      return;
+    }
+
+    for (final BundleResponseModel bundle in bundles) {
+      final BundleEntity bundleEntity = _createBundleEntity(bundle, bundleType);
+      homeData.bundles.add(bundleEntity);
+    }
+  }
+
+  BundleEntity _createBundleEntity(
+      BundleResponseModel bundle, BundleType bundleType,) {
+    final BundleEntity bundleEntity = BundleEntity.fromModel(bundle, bundleType);
+
+    _attachBundleCategory(bundle, bundleEntity);
+    _linkBundleCountries(bundle, bundleEntity);
+
+    return bundleEntity;
+  }
+
+  void _attachBundleCategory(
+      BundleResponseModel bundle, BundleEntity bundleEntity,) {
+    if (bundle.bundleCategory == null) {
+      return;
+    }
+
+    final BundleCategoryEntity categoryEntity =
+        BundleCategoryEntity.fromModel(bundle.bundleCategory!);
+    _bundleCategoryBox.put(categoryEntity);
+    bundleEntity.bundleCategory.target = categoryEntity;
+  }
+
+  void _linkBundleCountries(
+      BundleResponseModel bundle, BundleEntity bundleEntity,) {
+    if (bundle.countries == null) {
+      return;
+    }
+
+    for (final CountryResponseModel country in bundle.countries!) {
+      final CountryEntity countryEntity = _findOrCreateCountry(country);
+      bundleEntity.countries.add(countryEntity);
+    }
   }
 
   CountryEntity _findOrCreateCountry(CountryResponseModel country) {

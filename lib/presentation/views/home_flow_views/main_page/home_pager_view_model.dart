@@ -1,5 +1,6 @@
 import "dart:developer";
 
+import "package:esim_open_source/presentation/helpers/view_state_utils.dart";
 import "package:esim_open_source/presentation/shared/haptic_feedback.dart";
 import "package:esim_open_source/presentation/shared/in_app_redirection_heper.dart";
 import "package:esim_open_source/presentation/views/base/main_base_model.dart";
@@ -10,6 +11,12 @@ class HomePagerViewModel extends MainBaseModel {
   FocusScopeNode? _currentFocus;
   LockableTabController? _tabController;
   InAppRedirection? redirection;
+
+  @override
+  void onViewDidAppear() {
+    super.onViewDidAppear();
+    setDefaultStatusBarColor();
+  }
 
   @override
   void onViewModelReady() {

@@ -1,6 +1,7 @@
 import "dart:async";
 
 import "package:esim_open_source/app/app.locator.dart";
+import "package:esim_open_source/domain/data/params/update_user_info_params.dart";
 import "package:esim_open_source/data/remote/responses/auth/auth_response_model.dart";
 import "package:esim_open_source/domain/repository/api_app_repository.dart";
 import "package:esim_open_source/domain/repository/api_auth_repository.dart";
@@ -51,7 +52,9 @@ class SocialMediaVerifyLoginUseCase
     SocialMediaVerifyLoginParams params,
   ) async {
     Resource<AuthResponseModel> response = await repository.updateUserInfo(
-      bearerToken: params.accessToken,
+      request: UpdateUserInfoRequest(
+        bearerToken: params.accessToken,
+      ),
     );
     AuthResponseModel? responseAuth = response.data?.copyWith(
       refreshToken: params.refreshToken,

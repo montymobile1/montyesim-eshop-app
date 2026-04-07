@@ -6,6 +6,64 @@ import "package:esim_open_source/presentation/widgets/padding_widget.dart";
 import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 
+class MainButtonParams {
+  MainButtonParams({
+    required this.title,
+    required this.onPressed,
+    required this.themeColor,
+    this.key,
+    this.isEnabled = true,
+    this.enabledBackgroundColor = Colors.white,
+    this.disabledBackgroundColor = Colors.transparent,
+    this.enabledTextColor,
+    this.disabledTextColor,
+    this.borderColor,
+    this.width,
+    this.height,
+    this.hideShadows,
+    this.containerPadding,
+    this.titleTextStyle,
+  });
+  final String title;
+  final VoidCallback onPressed;
+  final Color themeColor;
+  final Key? key;
+  final bool isEnabled;
+  final Color? enabledBackgroundColor;
+  final Color? disabledBackgroundColor;
+  final Color? enabledTextColor;
+  final Color? disabledTextColor;
+  final Color? borderColor;
+  final double? width;
+  final double? height;
+  final bool? hideShadows;
+  final EdgeInsets? containerPadding;
+  final TextStyle? titleTextStyle;
+}
+
+class BannerButtonParams {
+  BannerButtonParams({
+    required this.title,
+    required this.action,
+    required this.themeColor,
+    required this.textColor,
+    required this.buttonColor,
+    required this.titleTextStyle,
+    this.height = 38,
+    this.titleHorizontalPadding = 20,
+    this.hideShadows = true,
+  });
+  final String title;
+  final VoidCallback action;
+  final Color themeColor;
+  final Color? textColor;
+  final Color? buttonColor;
+  final TextStyle titleTextStyle;
+  final double height;
+  final double titleHorizontalPadding;
+  final bool hideShadows;
+}
+
 class MainButton extends StatelessWidget {
   const MainButton({
     required this.title,
@@ -56,91 +114,61 @@ class MainButton extends StatelessWidget {
   final double titleHorizontalPadding;
 
   static MainButton onlyText({
-    required String title,
-    required VoidCallback onPressed,
-    required Color themeColor,
-    Key? key,
-    bool isEnabled = true,
-    Color? enabledBackgroundColor = Colors.white,
-    Color? disabledBackgroundColor = Colors.transparent,
-    Color? enabledTextColor,
-    Color? disabledTextColor,
-    Color? borderColor,
-    double? width,
-    bool? hideShadows,
-    EdgeInsets? containerPadding,
-    TextStyle? titleTextStyle,
+    required MainButtonParams params,
   }) {
     return MainButton(
-      title: title,
-      onPressed: onPressed,
-      themeColor: themeColor,
-      isEnabled: isEnabled,
-      titleTextStyle: titleTextStyle,
-      enabledBackgroundColor: enabledBackgroundColor,
-      disabledBackgroundColor: disabledBackgroundColor,
-      enabledTextColor: enabledTextColor ?? themeColor,
-      disabledTextColor: disabledTextColor ?? themeColor,
-      borderColor: borderColor ?? Colors.transparent,
-      containerPadding: containerPadding ?? EdgeInsets.zero,
-      width: width ?? double.infinity,
-      hideShadows: hideShadows ?? true,
+      title: params.title,
+      onPressed: params.onPressed,
+      themeColor: params.themeColor,
+      isEnabled: params.isEnabled,
+      titleTextStyle: params.titleTextStyle,
+      enabledBackgroundColor: params.enabledBackgroundColor,
+      disabledBackgroundColor: params.disabledBackgroundColor,
+      enabledTextColor: params.enabledTextColor ?? params.themeColor,
+      disabledTextColor: params.disabledTextColor ?? params.themeColor,
+      borderColor: params.borderColor ?? Colors.transparent,
+      containerPadding: params.containerPadding ?? EdgeInsets.zero,
+      width: params.width ?? double.infinity,
+      hideShadows: params.hideShadows ?? true,
     );
   }
 
   static MainButton emptyBackground({
-    required String title,
-    required VoidCallback onPressed,
-    required Color themeColor,
-    Key? key,
-    bool isEnabled = true,
-    Color? enabledBackgroundColor = Colors.white,
-    Color? disabledBackgroundColor = Colors.transparent,
-    Color? enabledTextColor,
-    Color? disabledTextColor,
-    Color? borderColor,
-    double? width,
-    double? height,
-    bool? hideShadows,
-    EdgeInsets? containerPadding,
-    TextStyle? titleTextStyle,
+    required MainButtonParams params,
   }) {
     return MainButton(
-      title: title,
-      onPressed: onPressed,
-      themeColor: themeColor,
-      isEnabled: isEnabled,
-      enabledBackgroundColor: enabledBackgroundColor,
-      disabledBackgroundColor: disabledBackgroundColor,
-      enabledTextColor: enabledTextColor ?? themeColor,
-      disabledTextColor: disabledTextColor ?? themeColor,
-      borderColor: borderColor ?? themeColor,
-      containerPadding: containerPadding ?? EdgeInsets.zero,
-      width: width ?? double.infinity,
-      hideShadows: hideShadows,
-      height: height ?? 50,
-      titleTextStyle: titleTextStyle,
+      title: params.title,
+      onPressed: params.onPressed,
+      themeColor: params.themeColor,
+      isEnabled: params.isEnabled,
+      enabledBackgroundColor: params.enabledBackgroundColor,
+      disabledBackgroundColor: params.disabledBackgroundColor,
+      enabledTextColor: params.enabledTextColor ?? params.themeColor,
+      disabledTextColor: params.disabledTextColor ?? params.themeColor,
+      borderColor: params.borderColor ?? params.themeColor,
+      containerPadding: params.containerPadding ?? EdgeInsets.zero,
+      width: params.width ?? double.infinity,
+      hideShadows: params.hideShadows,
+      height: params.height ?? 50,
+      titleTextStyle: params.titleTextStyle,
     );
   }
 
   static MainButton continueWith({
-    required String image,
-    required String title,
-    required Color themeColor,
-    required Color textColor,
-    required Color buttonColor,
+    required MainButtonParams params,
     required VoidCallback action,
-    EdgeInsets containerPadding = EdgeInsets.zero,
-    TextStyle? titleTextStyle,
+    required Color buttonColor,
+    required Color textColor,
+    required String image,
     double leadingImageWidth = 25,
     double leadingImageHeight = 25,
   }) {
     return MainButton(
-      title: title,
+      title: params.title,
       borderRadius: 25,
       hideShadows: true,
       onPressed: action,
-      themeColor: themeColor,
+      themeColor: params.themeColor,
       enabledBackgroundColor: buttonColor,
       enabledTextColor: textColor,
       height: 53,
@@ -151,33 +179,25 @@ class MainButton extends StatelessWidget {
       ),
       horizontalPadding: 20,
       textAlignment: MainAxisAlignment.spaceBetween,
-      titleTextStyle: titleTextStyle,
-      containerPadding: containerPadding,
+      titleTextStyle: params.titleTextStyle,
+      containerPadding: params.containerPadding ?? EdgeInsets.zero,
     );
   }
 
   static MainButton bannerButton({
-    required String title,
-    required VoidCallback action,
-    required Color themeColor,
-    required Color? textColor,
-    required Color? buttonColor,
-    required TextStyle titleTextStyle,
-    double height = 38,
-    double titleHorizontalPadding = 20,
-    bool hideShadows = true,
+    required BannerButtonParams params,
   }) {
     return MainButton(
-      height: height,
-      title: title,
-      onPressed: action,
-      themeColor: themeColor,
-      hideShadows: hideShadows,
-      enabledTextColor: textColor,
-      enabledBackgroundColor: buttonColor,
-      titleTextStyle: titleTextStyle,
+      height: params.height,
+      title: params.title,
+      onPressed: params.action,
+      themeColor: params.themeColor,
+      hideShadows: params.hideShadows,
+      enabledTextColor: params.textColor,
+      enabledBackgroundColor: params.buttonColor,
+      titleTextStyle: params.titleTextStyle,
       rowMainAxisSize: MainAxisSize.min,
-      titleHorizontalPadding: titleHorizontalPadding,
+      titleHorizontalPadding: params.titleHorizontalPadding,
     );
   }
 

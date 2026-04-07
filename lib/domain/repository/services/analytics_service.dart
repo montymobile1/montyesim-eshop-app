@@ -53,6 +53,79 @@ sealed class AnalyticEvent {
         currency: currency,
       );
 
+  factory AnalyticEvent.bundleDetail({
+    required String bundleCode,
+    required String bundleName,
+    required String user,
+  }) =>
+      BundleDetailEvent(
+        "bundle_detail",
+        bundleCode: bundleCode,
+        bundleName: bundleName,
+        user: user,
+      );
+
+  factory AnalyticEvent.createOrder({
+    required String bundleCode,
+    required String bundleName,
+    required String user,
+    required String orderId,
+    required String method,
+  }) =>
+      CreateOrderEvent(
+        "create_order",
+        bundleCode: bundleCode,
+        bundleName: bundleName,
+        user: user,
+        orderId: orderId,
+        method: method,
+      );
+
+  factory AnalyticEvent.stripePay({
+    required String bundleCode,
+    required String bundleName,
+    required String user,
+    required String orderId,
+  }) =>
+      StripePaymentEvent(
+        "stripe_pay",
+        bundleCode: bundleCode,
+        bundleName: bundleName,
+        user: user,
+        orderId: orderId,
+        method: "Card",
+      );
+
+  factory AnalyticEvent.stripePaymentSuccessful({
+    required String bundleCode,
+    required String bundleName,
+    required String user,
+    required String orderId,
+  }) =>
+      StripePaymentEvent(
+        "stripe_payment_successful",
+        bundleCode: bundleCode,
+        bundleName: bundleName,
+        user: user,
+        orderId: orderId,
+        method: "Card",
+      );
+
+  factory AnalyticEvent.walletPaymentSuccessful({
+    required String bundleCode,
+    required String bundleName,
+    required String user,
+    required String orderId,
+  }) =>
+      StripePaymentEvent(
+        "wallet_payment_successful",
+        bundleCode: bundleCode,
+        bundleName: bundleName,
+        user: user,
+        orderId: orderId,
+        method: "Wallet",
+      );
+
   final String eventName;
   Map<String, Object>? get parameters;
 }
@@ -102,6 +175,78 @@ class PurchaseSuccessEvent extends AnalyticEvent {
       };
 }
 
+class BundleDetailEvent extends AnalyticEvent {
+  BundleDetailEvent(
+    super.eventName, {
+    required this.bundleCode,
+    required this.bundleName,
+    required this.user,
+  });
+
+  final String bundleCode;
+  final String bundleName;
+  final String user;
+
+  @override
+  Map<String, Object>? get parameters => <String, Object>{
+        "bundleCode": bundleCode,
+        "bundleName": bundleName,
+        "user": user,
+      };
+}
+
+class CreateOrderEvent extends AnalyticEvent {
+  CreateOrderEvent(
+    super.eventName, {
+    required this.bundleCode,
+    required this.bundleName,
+    required this.user,
+    required this.orderId,
+    required this.method,
+  });
+
+  final String bundleCode;
+  final String bundleName;
+  final String user;
+  final String orderId;
+  final String method;
+
+  @override
+  Map<String, Object>? get parameters => <String, Object>{
+        "bundleCode": bundleCode,
+        "bundleName": bundleName,
+        "user": user,
+        "orderId": orderId,
+        "method": method,
+      };
+}
+
+class StripePaymentEvent extends AnalyticEvent {
+  StripePaymentEvent(
+    super.eventName, {
+    required this.bundleCode,
+    required this.bundleName,
+    required this.user,
+    required this.orderId,
+    required this.method,
+  });
+
+  final String bundleCode;
+  final String bundleName;
+  final String user;
+  final String orderId;
+  final String method;
+
+  @override
+  Map<String, Object>? get parameters => <String, Object>{
+        "bundleCode": bundleCode,
+        "bundleName": bundleName,
+        "user": user,
+        "orderId": orderId,
+        "method": method,
+      };
+}
+
 abstract class AnalyticsService {
   Future<void> configure({
     bool firebaseAnalytics = true,
@@ -111,4 +256,6 @@ abstract class AnalyticsService {
   Future<void> logEvent({
     required AnalyticEvent event,
   });
+
+  Future<void> setUserId(String? hashedEmail);
 }

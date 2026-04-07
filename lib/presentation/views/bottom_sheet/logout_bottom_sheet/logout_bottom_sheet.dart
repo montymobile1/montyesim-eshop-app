@@ -103,14 +103,16 @@ class LogoutBottomSheet extends StatelessWidget {
                     ),
                     verticalSpaceSmall,
                     MainButton.onlyText(
-                      title: LocaleKeys.common_cancelButtonText.tr(),
-                      titleTextStyle: bodyMediumTextStyle(context: context),
-                      hideShadows: true,
-                      onPressed: () => completer(
-                        SheetResponse<EmptyBottomSheetResponse>(),
+                      params: MainButtonParams(
+                        title: LocaleKeys.common_cancelButtonText.tr(),
+                        titleTextStyle: bodyMediumTextStyle(context: context),
+                        hideShadows: true,
+                        onPressed: () => completer(
+                          SheetResponse<EmptyBottomSheetResponse>(),
+                        ),
+                        themeColor: themeColor,
+                        enabledTextColor: mainDarkTextColor(context: context),
                       ),
-                      themeColor: themeColor,
-                      enabledTextColor: mainDarkTextColor(context: context),
                     ),
                   ],
                 ),

@@ -14,6 +14,7 @@ class PaymentHelper {
   }) async {
     if (result.data == null) {
       onError();
+      return;
     }
 
     if (result.data?.isTaxExist() ?? false) {

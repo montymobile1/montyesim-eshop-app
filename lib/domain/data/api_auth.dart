@@ -1,16 +1,24 @@
 import "dart:async";
 
 import "package:esim_open_source/data/remote/auth_reload_interface.dart";
+import "package:esim_open_source/domain/data/params/update_user_info_params.dart";
 import "package:esim_open_source/data/remote/unauthorized_access_interface.dart";
 
 abstract interface class APIAuth {
   FutureOr<dynamic> login({
     required String? email,
     required String? phoneNumber,
+    String? otpChannel,
   });
 
   FutureOr<dynamic> resendOtp({
     required String email,
+  });
+
+  FutureOr<dynamic> resendOtpNewChannel({
+    required String? email,
+    required String? phone,
+    required String otpChannel,
   });
 
   FutureOr<dynamic> logout();
@@ -26,14 +34,7 @@ abstract interface class APIAuth {
   FutureOr<dynamic> deleteAccount();
 
   FutureOr<dynamic> updateUserInfo({
-    String? email,
-    String? msisdn,
-    String? firstName,
-    String? lastName,
-    bool? isNewsletterSubscribed,
-    String? currencyCode,
-    String? languageCode,
-    String? bearerToken,
+    required UpdateUserInfoRequest request,
   });
 
   FutureOr<dynamic> getUserInfo({

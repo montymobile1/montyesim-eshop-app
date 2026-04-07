@@ -1,6 +1,9 @@
 import "dart:async";
+import "dart:convert";
 import "dart:developer";
 import "dart:io";
+
+import "package:crypto/crypto.dart";
 
 import "package:esim_open_source/app/environment/app_environment.dart";
 import "package:esim_open_source/data/remote/responses/auth/auth_response_model.dart";
@@ -56,9 +59,11 @@ class StartUpViewModel extends BaseModel {
   Future<void> showDeviceCompromisedDialog(BuildContext context) async {
     if (context.mounted) {
       showNativeDialog(
-        context: context,
-        titleText: "Warning",
-        contentText: "Your device is compromised",
+        params: NativeDialogParams(
+          context: context,
+          titleText: "Warning",
+          contentText: "Your device is compromised",
+        ),
       );
     }
   }
@@ -102,6 +107,11 @@ class StartUpViewModel extends BaseModel {
 
       switch (response.resourceType) {
         case ResourceType.success:
+          final String email = userEmailAddress;
+          if (email.isNotEmpty) {
+            final String hashedEmail = _hashEmail(email);
+            await analyticsService.setUserId(hashedEmail);
+          }
           setViewState(ViewState.idle);
 
         case ResourceType.error:
@@ -149,5 +159,10 @@ class StartUpViewModel extends BaseModel {
     } on Object catch (e) {
       log(e.toString());
     }
+  }
+
+  String _hashEmail(String email) {
+    final List<int> bytes = utf8.encode(email.toLowerCase());
+    return sha256.convert(bytes).toString();
   }
 }

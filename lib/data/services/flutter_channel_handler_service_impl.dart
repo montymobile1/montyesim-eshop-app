@@ -57,7 +57,6 @@ class FlutterChannelHandlerServiceImpl implements FlutterChannelHandlerService {
   Future<bool> openEsimSetupForAndroid({
     required String smdpAddress,
     required String activationCode,
-    bool isSHAExist = true,
   }) async {
     try {
       String cardData = "LPA:1\$$smdpAddress\$$activationCode";
@@ -65,7 +64,6 @@ class FlutterChannelHandlerServiceImpl implements FlutterChannelHandlerService {
         "openEsimSetup",
         <String, String>{
           "cardData": cardData,
-          "isSHAExist": "$isSHAExist",
         },
       );
       if (!result) {

@@ -14,6 +14,7 @@ import "package:esim_open_source/presentation/shared/in_app_redirection_heper.da
 import "package:esim_open_source/presentation/views/base/base_model.dart";
 import "package:esim_open_source/presentation/views/pre_sign_in/verify_login_view/verify_login_view.dart";
 import "package:esim_open_source/translations/locale_keys.g.dart";
+import "package:esim_open_source/utils/display_message_helper.dart";
 import "package:flutter/material.dart";
 import "package:phone_input/phone_input_package.dart";
 import "package:stacked_services/stacked_services.dart";
@@ -45,6 +46,8 @@ class ContinueWithEmailViewModel extends BaseModel {
     switch (_localLoginType) {
       case LoginType.email:
       case LoginType.emailAndPhone:
+      case LoginType.emailAndPhoneAndEmailVerification:
+      case LoginType.emailAndPhoneAndBothVerification:
         return true;
       case LoginType.phoneNumber:
         return false;
@@ -57,9 +60,22 @@ class ContinueWithEmailViewModel extends BaseModel {
         return false;
       case LoginType.emailAndPhone:
       case LoginType.phoneNumber:
+      case LoginType.emailAndPhoneAndEmailVerification:
+      case LoginType.emailAndPhoneAndBothVerification:
         return true;
     }
   }
+
+
+  String get selectedOtpChannel => _state.selectedOtpChannel;
+
+  void selectOtpChannel(String channel) {
+    _state.selectedOtpChannel = channel;
+    _state.otpSendErrorMessage = null;
+    notifyListeners();
+  }
+
+  String? get otpSendErrorMessage => _state.otpSendErrorMessage;
 
   //#region Functions
   @override
@@ -71,6 +87,8 @@ class ContinueWithEmailViewModel extends BaseModel {
         break;
       case LoginType.email:
       case LoginType.emailAndPhone:
+      case LoginType.emailAndPhoneAndEmailVerification:
+      case LoginType.emailAndPhoneAndBothVerification:
         _state.emailController.addListener(_validateForm);
     }
   }
@@ -87,6 +105,8 @@ class ContinueWithEmailViewModel extends BaseModel {
         _state.isLoginEnabled =
             _state.isValidPhoneNumber && _state.isTermsChecked;
       case LoginType.emailAndPhone:
+      case LoginType.emailAndPhoneAndEmailVerification:
+      case LoginType.emailAndPhoneAndBothVerification:
         _state.isLoginEnabled = _state.emailErrorMessage == "" &&
             _state.isTermsChecked &&
             _state.isValidPhoneNumber;
@@ -108,6 +128,8 @@ class ContinueWithEmailViewModel extends BaseModel {
       case LoginType.phoneNumber:
         _state.isLoginEnabled = isValid && _state.isTermsChecked;
       case LoginType.emailAndPhone:
+      case LoginType.emailAndPhoneAndEmailVerification:
+      case LoginType.emailAndPhoneAndBothVerification:
         _state.isLoginEnabled =
             _state.emailErrorMessage == "" && isValid && _state.isTermsChecked;
     }
@@ -116,6 +138,11 @@ class ContinueWithEmailViewModel extends BaseModel {
   }
 
   Future<void>? loginButtonTapped() async {
+    await _loginWithEmail();
+  }
+
+  Future<void> loginButtonTappedWithChannel(String channel) async {
+    _state.selectedOtpChannel = channel;
     await _loginWithEmail();
   }
 
@@ -161,6 +188,16 @@ class ContinueWithEmailViewModel extends BaseModel {
   Future<void> _loginWithEmail() async {
     setViewState(ViewState.busy);
 
+    String? otpChannel;
+    switch (_localLoginType) {
+      case LoginType.emailAndPhoneAndEmailVerification:
+        otpChannel = "EMAIL";
+      case LoginType.emailAndPhoneAndBothVerification:
+        otpChannel = _state.selectedOtpChannel;
+      default:
+        otpChannel = null;
+    }
+
     Resource<OtpResponseModel?> loginResponse = await loginUseCase.execute(
       LoginParams(
         phoneNumber: _state.isValidPhoneNumber
@@ -168,6 +205,7 @@ class ContinueWithEmailViewModel extends BaseModel {
             : null,
         email:
             _state.emailErrorMessage == "" ? _state.emailController.text : null,
+        otpChannel: otpChannel,
       ),
     );
 
@@ -183,6 +221,8 @@ class ContinueWithEmailViewModel extends BaseModel {
               ? _state.emailController.text
               : null,
           otpExpiration: response.data?.otpExpiration,
+          localLoginType: _localLoginType,
+          otpChannel: _state.selectedOtpChannel,
         );
         debugPrint("args: $args");
 
@@ -193,6 +233,10 @@ class ContinueWithEmailViewModel extends BaseModel {
       },
       onFailure: (Resource<OtpResponseModel?> response) async {
         if (response.error?.errorCode == 429) {
+          if (response.message != null && response.message!.isNotEmpty) {
+            DisplayMessageHelper.toast(response.message!);
+          }
+
           final VerifyLoginViewArgs args = VerifyLoginViewArgs(
             redirection: redirection,
             phoneNumber: _state.isValidPhoneNumber
@@ -202,15 +246,22 @@ class ContinueWithEmailViewModel extends BaseModel {
                 ? _state.emailController.text
                 : null,
             otpExpiration: response.data?.otpExpiration,
+            localLoginType: _localLoginType,
+            otpChannel: _state.selectedOtpChannel,
           );
-          debugPrint("args: $args");
-
-          navigationService.navigateTo(
-            VerifyLoginView.routeName,
-            arguments: args,
-          );
+          navigationService.navigateTo(VerifyLoginView.routeName, arguments: args);
           return;
         }
+
+        if (_localLoginType == LoginType.emailAndPhoneAndBothVerification) {
+          _state.otpSendErrorMessage = response.message ??
+              (_state.selectedOtpChannel == "SMS"
+                  ? LocaleKeys.continueWithEmail_otpFailedViaSms.tr()
+                  : LocaleKeys.continueWithEmail_otpFailedViaEmail.tr());
+          notifyListeners();
+          return;
+        }
+
         handleError(response);
       },
     );
@@ -225,6 +276,8 @@ class ContinueWithEmailState {
   bool isLoginEnabled = false;
   String? emailErrorMessage;
   bool isValidPhoneNumber = false;
+  String selectedOtpChannel = "SMS";
+  String? otpSendErrorMessage;
 
   final TextEditingController emailController = TextEditingController();
 }

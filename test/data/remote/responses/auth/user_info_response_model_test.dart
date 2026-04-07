@@ -10,12 +10,10 @@ void main() {
       final Map<String, dynamic> json = <String, dynamic>{
         "is_verified": true,
         "referral_code": "REF123456",
-        "should_notify": true,
         "user_token": "token_abc123",
         "role_name": "premium_user",
         "balance": 150.75,
         "currency_code": "USD",
-        "is_newsletter_subscribed": false,
         "msisdn": "+1234567890",
         "first_name": "John",
         "last_name": "Doe",
@@ -31,12 +29,10 @@ void main() {
       // Assert
       expect(model.isVerified, true);
       expect(model.referralCode, "REF123456");
-      expect(model.shouldNotify, true);
       expect(model.userToken, "token_abc123");
       expect(model.roleName, "premium_user");
       expect(model.balance, 150.75);
       expect(model.currencyCode, "USD");
-      expect(model.isNewsletterSubscribed, false);
       expect(model.msisdn, "+1234567890");
       expect(model.firstName, "John");
       expect(model.lastName, "Doe");
@@ -59,11 +55,9 @@ void main() {
       expect(model.email, "test@example.com");
       expect(model.isVerified, isNull);
       expect(model.referralCode, isNull);
-      expect(model.shouldNotify, isNull);
       expect(model.userToken, isNull);
       expect(model.roleName, isNull);
       expect(model.currencyCode, isNull);
-      expect(model.isNewsletterSubscribed, isNull);
       expect(model.msisdn, isNull);
       expect(model.firstName, isNull);
       expect(model.lastName, isNull);
@@ -118,12 +112,10 @@ void main() {
       final UserInfoResponseModel model = UserInfoResponseModel(
         isVerified: true,
         referralCode: "REF789",
-        shouldNotify: false,
         userToken: "user_token_xyz",
         roleName: "admin",
         balance: 250.50,
         currencyCode: "EUR",
-        isNewsletterSubscribed: true,
         msisdn: "+9876543210",
         firstName: "Jane",
         lastName: "Smith",
@@ -136,12 +128,10 @@ void main() {
       // Assert
       expect(model.isVerified, true);
       expect(model.referralCode, "REF789");
-      expect(model.shouldNotify, false);
       expect(model.userToken, "user_token_xyz");
       expect(model.roleName, "admin");
       expect(model.balance, 250.50);
       expect(model.currencyCode, "EUR");
-      expect(model.isNewsletterSubscribed, true);
       expect(model.msisdn, "+9876543210");
       expect(model.firstName, "Jane");
       expect(model.lastName, "Smith");
@@ -156,12 +146,10 @@ void main() {
       final UserInfoResponseModel model = UserInfoResponseModel(
         isVerified: true,
         referralCode: "REF456",
-        shouldNotify: true,
         userToken: "token_123",
         roleName: "user",
         balance: 75.25,
         currencyCode: "GBP",
-        isNewsletterSubscribed: true,
         msisdn: "+4412345678",
         firstName: "Alice",
         lastName: "Johnson",
@@ -177,12 +165,10 @@ void main() {
       // Assert
       expect(json["is_verified"], true);
       expect(json["referral_code"], "REF456");
-      expect(json["should_notify"], true);
       expect(json["user_token"], "token_123");
       expect(json["role_name"], "user");
       expect(json["balance"], 75.25);
       expect(json["currency_code"], "GBP");
-      expect(json["is_newsletter_subscribed"], true);
       expect(json["msisdn"], "+4412345678");
       expect(json["first_name"], "Alice");
       expect(json["last_name"], "Johnson");
@@ -202,12 +188,10 @@ void main() {
       // Assert
       expect(json["is_verified"], isNull);
       expect(json["referral_code"], isNull);
-      expect(json["should_notify"], isNull);
       expect(json["user_token"], isNull);
       expect(json["role_name"], isNull);
       expect(json["balance"], isNull);
       expect(json["currency_code"], isNull);
-      expect(json["is_newsletter_subscribed"], isNull);
       expect(json["msisdn"], isNull);
       expect(json["first_name"], isNull);
       expect(json["last_name"], isNull);
@@ -265,8 +249,6 @@ void main() {
       // Arrange
       final Map<String, dynamic> json = <String, dynamic>{
         "is_verified": false,
-        "should_notify": false,
-        "is_newsletter_subscribed": true,
       };
 
       // Act
@@ -274,8 +256,6 @@ void main() {
 
       // Assert
       expect(model.isVerified, false);
-      expect(model.shouldNotify, false);
-      expect(model.isNewsletterSubscribed, true);
     });
 
     test("fromJson handles negative balance", () {
@@ -356,12 +336,10 @@ void main() {
       // Assert
       expect(model.isVerified, isNull);
       expect(model.referralCode, isNull);
-      expect(model.shouldNotify, isNull);
       expect(model.userToken, isNull);
       expect(model.roleName, isNull);
       expect(model.balance, isNull);
       expect(model.currencyCode, isNull);
-      expect(model.isNewsletterSubscribed, isNull);
       expect(model.msisdn, isNull);
       expect(model.firstName, isNull);
       expect(model.lastName, isNull);

@@ -69,16 +69,22 @@ class EditNameBottomSheetView extends StatelessWidget {
                 const SizedBox(height: 24),
 
                 MainInputField.formField(
-                  themeColor: themeColor,
-                  labelTitleText:
-                      LocaleKeys.accountInformation_namePlaceHolderText.tr(),
-                  hintText: viewModel.request.data?.name ?? "",
                   controller: viewModel.controller,
-                  textInputType: TextInputType.text,
-                  backGroundColor: context.appColors.baseWhite,
-                  labelStyle: bodyNormalTextStyle(
-                    context: context,
-                    fontColor: secondaryTextColor(context: context),
+                  themeColor: themeColor,
+                  textConfig: MainInputFieldTextConfig(
+                    labelTitleText:
+                        LocaleKeys.accountInformation_namePlaceHolderText.tr(),
+                    hintText: viewModel.request.data?.name ?? "",
+                  ),
+                  appearanceConfig: MainInputFieldAppearanceConfig(
+                    backgroundColor: context.appColors.baseWhite,
+                    labelStyle: bodyNormalTextStyle(
+                      context: context,
+                      fontColor: secondaryTextColor(context: context),
+                    ),
+                  ),
+                  inputConfig: const MainInputFieldInputConfig(
+                    textInputType: TextInputType.text,
                   ),
                 ),
                 const SizedBox(height: 24),

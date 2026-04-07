@@ -201,9 +201,11 @@ class VerifyPurchaseView extends StatelessWidget {
   String getVerifyLoginText() {
     switch (AppEnvironment.appEnvironmentHelper.loginType) {
       case LoginType.email:
+      case LoginType.emailAndPhoneAndEmailVerification:
         return LocaleKeys.verifyLogin_checkEmail.tr();
       case LoginType.phoneNumber:
       case LoginType.emailAndPhone:
+      case LoginType.emailAndPhoneAndBothVerification:
         return LocaleKeys.verifyLogin_checkPhone.tr();
     }
   }

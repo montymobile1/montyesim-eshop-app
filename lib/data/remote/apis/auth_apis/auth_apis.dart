@@ -6,6 +6,7 @@ enum AuthApis implements URlRequestBuilder {
   tmpLogin,
   logout,
   resendOtp,
+  resendOtpNewChannel,
   verifyOtp,
   refreshToken,
   deleteAccount,
@@ -24,6 +25,8 @@ enum AuthApis implements URlRequestBuilder {
         return "/api/v1/auth/logout";
       case AuthApis.resendOtp:
         return "/api/v1/auth/login";
+      case AuthApis.resendOtpNewChannel:
+        return "/api/v1/auth/resend-otp";
       case AuthApis.verifyOtp:
         return "/api/v1/auth/verify_otp";
       case AuthApis.refreshToken:
@@ -75,5 +78,14 @@ enum AuthApis implements URlRequestBuilder {
   }
 
   @override
-  Map<String, String> get headers => const <String, String>{};
+  Map<String, String> get headers {
+    switch (this) {
+      case AuthApis.resendOtpNewChannel:
+        return <String, String>{
+          "accept-language": "en",
+        };
+      default:
+        return const <String, String>{};
+    }
+  }
 }

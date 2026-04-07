@@ -89,9 +89,6 @@ class BaseModel extends ReactiveViewModel
 
   String get userEmailAddress => userAuthenticationService.userEmailAddress;
 
-  bool get isNewsletterSubscribed =>
-      userAuthenticationService.isNewsletterSubscribed;
-
   String get userMsisdn => userAuthenticationService.userPhoneNumber;
 
   bool get isArabic {
@@ -112,6 +109,7 @@ class BaseModel extends ReactiveViewModel
     await userAuthenticationService.clearUserInfo();
     locator<SocialLoginService>().logOut();
     addDeviceUseCase.execute(NoParams());
+    await analyticsService.setUserId(null);
   }
 
   void hideKeyboard() {

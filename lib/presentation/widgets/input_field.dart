@@ -133,9 +133,12 @@ class InputFieldState extends State<InputField> {
                         width: fieldHeight,
                         height: fieldHeight,
                         alignment: Alignment.center,
-                        child: Icon(
-                          isPassword ? Icons.visibility : Icons.visibility_off,
-                        ),
+                        child: () {
+                          final IconData visibilityIcon = isPassword
+                              ? Icons.visibility
+                              : Icons.visibility_off;
+                          return Icon(visibilityIcon);
+                        }(),
                       )
                     : Container(),
               ),

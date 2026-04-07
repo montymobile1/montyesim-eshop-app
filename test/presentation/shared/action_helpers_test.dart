@@ -2,12 +2,12 @@ import "dart:io";
 
 import "package:esim_open_source/data/remote/responses/device/device_info_response_model.dart";
 import "package:esim_open_source/data/remote/responses/empty_response.dart";
+import "package:esim_open_source/domain/data/params/add_device_params.dart";
 import "package:esim_open_source/domain/repository/api_device_repository.dart";
 import "package:esim_open_source/domain/repository/api_user_repository.dart";
 import "package:esim_open_source/domain/repository/services/device_info_service.dart";
 import "package:esim_open_source/domain/repository/services/local_storage_service.dart";
 import "package:esim_open_source/domain/repository/services/secure_storage_service.dart";
-import "package:esim_open_source/domain/use_case/app/add_device_use_case.dart";
 import "package:esim_open_source/domain/util/resource.dart";
 import "package:esim_open_source/presentation/shared/action_helpers.dart";
 import "package:flutter_test/flutter_test.dart";
@@ -283,14 +283,7 @@ Future<void> main() async {
         // Mock successful registration with all required parameters
         when(
           mockApiDeviceRepository.registerDevice(
-            fcmToken: anyNamed("fcmToken"),
-            deviceId: anyNamed("deviceId"),
-            platformTag: anyNamed("platformTag"),
-            osTag: anyNamed("osTag"),
-            appGuid: anyNamed("appGuid"),
-            version: anyNamed("version"),
-            userGuid: anyNamed("userGuid"),
-            deviceInfo: anyNamed("deviceInfo"),
+            params: anyNamed("params"),
           ),
         ).thenAnswer(
           (_) async => Resource<DeviceInfoResponseModel?>.success(
@@ -308,14 +301,7 @@ Future<void> main() async {
         // Verify API was called (via use case)
         verify(
           mockApiDeviceRepository.registerDevice(
-            fcmToken: anyNamed("fcmToken"),
-            deviceId: anyNamed("deviceId"),
-            platformTag: anyNamed("platformTag"),
-            osTag: anyNamed("osTag"),
-            appGuid: anyNamed("appGuid"),
-            version: anyNamed("version"),
-            userGuid: anyNamed("userGuid"),
-            deviceInfo: anyNamed("deviceInfo"),
+            params: anyNamed("params"),
           ),
         ).called(1);
       });
@@ -324,14 +310,7 @@ Future<void> main() async {
         // Mock error response
         when(
           mockApiDeviceRepository.registerDevice(
-            fcmToken: anyNamed("fcmToken"),
-            deviceId: anyNamed("deviceId"),
-            platformTag: anyNamed("platformTag"),
-            osTag: anyNamed("osTag"),
-            appGuid: anyNamed("appGuid"),
-            version: anyNamed("version"),
-            userGuid: anyNamed("userGuid"),
-            deviceInfo: anyNamed("deviceInfo"),
+            params: anyNamed("params"),
           ),
         ).thenAnswer(
           (_) async =>
@@ -347,14 +326,7 @@ Future<void> main() async {
         // Verify API was called
         verify(
           mockApiDeviceRepository.registerDevice(
-            fcmToken: anyNamed("fcmToken"),
-            deviceId: anyNamed("deviceId"),
-            platformTag: anyNamed("platformTag"),
-            osTag: anyNamed("osTag"),
-            appGuid: anyNamed("appGuid"),
-            version: anyNamed("version"),
-            userGuid: anyNamed("userGuid"),
-            deviceInfo: anyNamed("deviceInfo"),
+            params: anyNamed("params"),
           ),
         ).called(1);
       });
@@ -363,14 +335,7 @@ Future<void> main() async {
         // Mock loading response
         when(
           mockApiDeviceRepository.registerDevice(
-            fcmToken: anyNamed("fcmToken"),
-            deviceId: anyNamed("deviceId"),
-            platformTag: anyNamed("platformTag"),
-            osTag: anyNamed("osTag"),
-            appGuid: anyNamed("appGuid"),
-            version: anyNamed("version"),
-            userGuid: anyNamed("userGuid"),
-            deviceInfo: anyNamed("deviceInfo"),
+            params: anyNamed("params"),
           ),
         ).thenAnswer(
           (_) async => Resource<DeviceInfoResponseModel?>.loading(),
@@ -385,14 +350,7 @@ Future<void> main() async {
         // Verify API was called
         verify(
           mockApiDeviceRepository.registerDevice(
-            fcmToken: anyNamed("fcmToken"),
-            deviceId: anyNamed("deviceId"),
-            platformTag: anyNamed("platformTag"),
-            osTag: anyNamed("osTag"),
-            appGuid: anyNamed("appGuid"),
-            version: anyNamed("version"),
-            userGuid: anyNamed("userGuid"),
-            deviceInfo: anyNamed("deviceInfo"),
+            params: anyNamed("params"),
           ),
         ).called(1);
       });
@@ -400,14 +358,7 @@ Future<void> main() async {
       test("registerDevice with empty tokens", () async {
         when(
           mockApiDeviceRepository.registerDevice(
-            fcmToken: anyNamed("fcmToken"),
-            deviceId: anyNamed("deviceId"),
-            platformTag: anyNamed("platformTag"),
-            osTag: anyNamed("osTag"),
-            appGuid: anyNamed("appGuid"),
-            version: anyNamed("version"),
-            userGuid: anyNamed("userGuid"),
-            deviceInfo: anyNamed("deviceInfo"),
+            params: anyNamed("params"),
           ),
         ).thenAnswer(
           (_) async => Resource<DeviceInfoResponseModel?>.success(
@@ -423,14 +374,7 @@ Future<void> main() async {
 
         verify(
           mockApiDeviceRepository.registerDevice(
-            fcmToken: anyNamed("fcmToken"),
-            deviceId: anyNamed("deviceId"),
-            platformTag: anyNamed("platformTag"),
-            osTag: anyNamed("osTag"),
-            appGuid: anyNamed("appGuid"),
-            version: anyNamed("version"),
-            userGuid: anyNamed("userGuid"),
-            deviceInfo: anyNamed("deviceInfo"),
+            params: anyNamed("params"),
           ),
         ).called(1);
       });
@@ -833,14 +777,7 @@ Future<void> main() async {
       test("registerDevice with null response data", () async {
         when(
           mockApiDeviceRepository.registerDevice(
-            fcmToken: anyNamed("fcmToken"),
-            deviceId: anyNamed("deviceId"),
-            platformTag: anyNamed("platformTag"),
-            osTag: anyNamed("osTag"),
-            appGuid: anyNamed("appGuid"),
-            version: anyNamed("version"),
-            userGuid: anyNamed("userGuid"),
-            deviceInfo: anyNamed("deviceInfo"),
+            params: anyNamed("params"),
           ),
         ).thenAnswer(
           (_) async => Resource<DeviceInfoResponseModel?>.success(
@@ -856,14 +793,7 @@ Future<void> main() async {
 
         verify(
           mockApiDeviceRepository.registerDevice(
-            fcmToken: anyNamed("fcmToken"),
-            deviceId: anyNamed("deviceId"),
-            platformTag: anyNamed("platformTag"),
-            osTag: anyNamed("osTag"),
-            appGuid: anyNamed("appGuid"),
-            version: anyNamed("version"),
-            userGuid: anyNamed("userGuid"),
-            deviceInfo: anyNamed("deviceInfo"),
+            params: anyNamed("params"),
           ),
         ).called(1);
       });

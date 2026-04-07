@@ -10,11 +10,13 @@ import "package:esim_open_source/data/remote/responses/bundles/bundle_assign_res
 import "package:esim_open_source/data/remote/responses/bundles/bundle_response_model.dart";
 import "package:esim_open_source/domain/repository/services/analytics_service.dart";
 import "package:esim_open_source/domain/repository/services/local_storage_service.dart";
+import "package:esim_open_source/domain/repository/services/payment_service.dart";
 import "package:esim_open_source/domain/use_case/user/get_related_topup_use_case.dart";
 import "package:esim_open_source/domain/use_case/user/top_up_user_bundle_use_case.dart";
 import "package:esim_open_source/domain/util/resource.dart";
 import "package:esim_open_source/presentation/enums/payment_type.dart";
 import "package:esim_open_source/presentation/enums/view_state.dart";
+import "package:esim_open_source/presentation/models/payment_request_params.dart";
 import "package:esim_open_source/presentation/setup_bottom_sheet_ui.dart";
 import "package:esim_open_source/presentation/shared/action_helpers.dart";
 import "package:esim_open_source/presentation/shared/ui_helpers.dart";
@@ -195,22 +197,26 @@ class TopUpBottomSheetViewModel extends EsimBaseModel {
         setViewState(ViewState.idle);
         PaymentHelper.checkTaxAmount(
           result: result,
-          onError: () => () async {
+          onError: () async {
             handleError(result);
             cancelOrder(orderID: result.data?.orderId ?? "");
           },
           onSuccess: () => initiatePaymentRequest(
-            paymentType: paymentType,
-            orderID: result.data?.orderId ?? "",
-            publishableKey: result.data?.publishableKey ?? "",
-            merchantIdentifier: result.data?.merchantIdentifier ?? "",
-            paymentIntentClientSecret:
-                result.data?.paymentIntentClientSecret ?? "",
-            customerId: result.data?.customerId ?? "",
-            customerEphemeralKeySecret:
-                result.data?.customerEphemeralKeySecret ?? "",
-            test: result.data?.testEnv ?? false,
-            billingCountryCode: result.data?.billingCountryCode ?? "",
+            params: PaymentRequestParams(
+              secretParams: PaymentRequestSecretParams(
+                  paymentType: paymentType,
+                  publishableKey: result.data?.publishableKey ?? "",
+                  merchantIdentifier:result.data?.merchantIdentifier ?? "",
+                  paymentIntentClientSecret: result.data?.paymentIntentClientSecret ?? "",
+                  customerEphemeralKeySecret: result.data?.customerEphemeralKeySecret ?? "",
+                  test: result.data?.testEnv ?? false,),
+              idParams: PaymentRequestIDParams(
+                  orderID: result.data?.orderId ?? "",
+                  customerId: result.data?.customerId ?? "",
+                  billingCountryCode: result.data?.billingCountryCode ?? "",
+                  bundleCode: item.bundleCode ?? "",
+                  bundleName: item.bundleName ?? "",),
+            ),
             bundlePrice: bundlePriceDisplay,
             bundleCurrency: bundleCurrency,
           ),
@@ -231,38 +237,32 @@ class TopUpBottomSheetViewModel extends EsimBaseModel {
   }
 
   Future<void> initiatePaymentRequest({
-    required PaymentType paymentType,
-    required String orderID,
-    required String publishableKey,
-    required String merchantIdentifier,
-    required String paymentIntentClientSecret,
-    required String customerId,
-    required String customerEphemeralKeySecret,
-    required String billingCountryCode,
+    required PaymentRequestParams params,
     required String bundlePrice,
     required String bundleCurrency,
-    bool test = false,
   }) async {
     try {
       setViewState(ViewState.busy);
       await paymentService.prepareCheckout(
-        paymentType: paymentType,
-        publishableKey: publishableKey,
-        merchantIdentifier: merchantIdentifier,
+        paymentType: params.secretParams.paymentType,
+        publishableKey: params.secretParams.publishableKey,
+        merchantIdentifier: params.secretParams.merchantIdentifier,
       );
 
       await paymentService.processOrderPayment(
-        paymentType: paymentType,
-        iccID: request.data?.iccID ?? "",
-        orderID: orderID,
-        billingCountryCode: billingCountryCode,
-        paymentIntentClientSecret: paymentIntentClientSecret,
-        customerId: customerId,
-        customerEphemeralKeySecret: customerEphemeralKeySecret,
-        testEnv: test,
+        paymentType: params.secretParams.paymentType,
+        params: ProcessOrderPaymentParams(
+          iccID: request.data?.iccID ?? "",
+          orderID: params.idParams.orderID,
+          billingCountryCode: params.idParams.billingCountryCode,
+          paymentIntentClientSecret: params.secretParams.paymentIntentClientSecret,
+          customerId: params.idParams.customerId,
+          customerEphemeralKeySecret: params.secretParams.customerEphemeralKeySecret,
+          testEnv: params.secretParams.test,
+        ),
       );
     } on Exception catch (e) {
-      unawaited(cancelOrder(orderID: orderID));
+      unawaited(cancelOrder(orderID: params.idParams.orderID));
       closeBottomSheet();
       showToast(
         e.toString().replaceAll("Exception:", ""),
@@ -284,7 +284,7 @@ class TopUpBottomSheetViewModel extends EsimBaseModel {
       SheetResponse<MainBottomSheetResponse>(
         data: MainBottomSheetResponse(
           canceled: false,
-          tag: orderID,
+          tag: params.idParams.orderID,
         ),
       ),
     );

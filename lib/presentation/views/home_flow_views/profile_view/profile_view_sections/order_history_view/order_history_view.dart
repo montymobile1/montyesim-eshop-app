@@ -19,6 +19,7 @@ import "package:flutter/material.dart";
 
 class OrderHistoryView extends StatelessWidget {
   const OrderHistoryView({super.key});
+
   static const String routeName = "OrderHistoryView";
 
   @override
@@ -86,8 +87,10 @@ class OrderHistoryView extends StatelessWidget {
         width: double.infinity,
         height: 120,
       ).applyShimmer(
-        enable: true,
-        context: context,
+        params: ShimmerParams(
+          enable: true,
+          context: context,
+        ),
       ),
     );
   }
@@ -140,9 +143,11 @@ class OrderHistoryView extends StatelessWidget {
             ],
           ),
         ).applyShimmer(
-          context: context,
-          enable: viewModel.applyShimmer,
-          height: viewModel.shimmerHeight,
+          params: ShimmerParams(
+            context: context,
+            enable: viewModel.applyShimmer,
+            height: viewModel.shimmerHeight,
+          ),
         ),
       ),
     );

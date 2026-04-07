@@ -22,8 +22,6 @@ class UserAuthenticationService with ListenableServiceMixin {
   String get userLastName => _authModel.value?.userInfo?.lastName ?? "";
   String get userEmailAddress => _authModel.value?.userInfo?.email ?? "";
   String get userPhoneNumber => _authModel.value?.userInfo?.msisdn ?? "";
-  bool get isNewsletterSubscribed =>
-      _authModel.value?.userInfo?.shouldNotify ?? false;
   String get referralCode => _authModel.value?.userInfo?.referralCode ?? "";
   String get walletCurrencyCode =>
       _authModel.value?.userInfo?.currencyCode ?? "";

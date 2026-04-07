@@ -43,7 +43,9 @@ class TopUpButton extends StatelessWidget {
       themeColor: backgroundColor ?? enabledMainButtonColor(context: context),
       enabledTextColor:
           textColor ?? enabledMainButtonTextColor(context: context),
-    ).applyShimmer(enable: isLoading, context: context, height: 20);
+    ).applyShimmer(
+      params: ShimmerParams(enable: isLoading, context: context, height: 20),
+    );
   }
 
   @override

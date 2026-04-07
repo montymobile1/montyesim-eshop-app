@@ -144,143 +144,160 @@ class RedirectionsHandlerServiceImpl implements RedirectionsHandlerService {
     log("Redirection type: $redirectionCategoryType");
 
     switch (redirectionCategoryType) {
-      //Buy bundle
       case BuyBundle():
-        if (locator<NavigationRouter>()
-                .isPageVisible(PurchaseLoadingView.routeName) &&
-            !isClicked) {
-          unawaited(locator<PurchaseLoadingViewModel>().getOrderDetails());
-          return;
-        } else if (isClicked &&
-            !locator<NavigationRouter>()
-                .isPageVisible(PurchaseLoadingView.routeName)) {
-          unawaited(
-            bottomSheetService.showCustomSheet(
-              enableDrag: false,
-              isScrollControlled: true,
-              variant: BottomSheetType.bundleQrCode,
-              data: BundleQrBottomRequest(iccID: iccid),
-            ),
-          );
-        }
-        unawaited(refreshMyEsims());
-
-      // TOP UP
+        await _handleBuyBundleRedirection(iccid: iccid, isClicked: isClicked);
       case BuyTopUp():
-        // if (isClicked) {
-        //   unawaited(
-        //     bottomSheetService.showCustomSheet(
-        //       enableDrag: false,
-        //       isScrollControlled: true,
-        //       variant: BottomSheetType.bundleQrCode,
-        //       data: BundleQrBottomRequest(iccID: iccid),
-        //     ),
-        //   );
-        // }
         unawaited(refreshMyEsims());
-
-      // Consumption Bundle Detail
       case ConsumptionBundleDetail():
-        if (isClicked) {
-          unawaited(
-            bottomSheetService.showCustomSheet(
-              enableDrag: false,
-              isScrollControlled: true,
-              variant: BottomSheetType.bundleConsumption,
-              data: BundleConsumptionBottomRequest(
-                iccID: iccid,
-                isUnlimitedData: isUnlimitedData,
-                showTopUp: true,
-              ),
-            ),
-          );
-        }
-
+        await _handleConsumptionBundleDetailRedirection(
+          iccid: iccid,
+          isClicked: isClicked,
+          isUnlimitedData: isUnlimitedData,
+        );
       case PlanStarted():
         unawaited(refreshMyEsims());
-
       case WalletTopUpSuccess():
-        await GetUserInfoUseCase(locator<ApiAuthRepository>())
-            .execute(NoParams());
-        await showToast(
-          LocaleKeys.topUpWallet_success.tr(),
-        );
-
+        await _handleWalletTopUpSuccessRedirection();
       case WalletTopUpFailed():
-        await showToast(
-          LocaleKeys.topUpWallet_error.tr(),
-        );
-
+        await _handleWalletTopUpFailedRedirection();
       case CountriesTap():
-        if (!locator<NavigationRouter>().isPageVisible(HomePager.routeName)) {
-          log("Page not visible");
-          navigationService.clearStackAndShow(HomePager.routeName);
-        } else {
-          log("page visible");
-          changeMainTabSelection(newIndex: 0);
-          changeCruiseSelection(newIndex: 1);
-          changeTabSelection(newIndex: 0);
-        }
-
+        await _handleCountriesTapRedirection();
       case RegionsTap():
-        if (!locator<NavigationRouter>().isPageVisible(HomePager.routeName)) {
-          log("Page not visible");
-          navigationService.clearStackAndShow(HomePager.routeName);
-        } else {
-          log("page visible");
-          changeMainTabSelection(newIndex: 0);
-          changeCruiseSelection(newIndex: 1);
-          changeTabSelection(newIndex: 1);
-        }
-
+        await _handleRegionsTapRedirection();
       case ReferAndEarn():
-        log("Referral code saved");
-        showToast(
-          LocaleKeys.referral_code_activated.tr(),
-        );
-
-        if (!locator<UserAuthenticationService>().isUserLoggedIn) {
-          await Future<void>.delayed(const Duration(seconds: 1));
-          navigationService.navigateToLoginScreen();
-        }
-
+        await _handleReferAndEarnRedirection();
       case CountrySelected():
-        if (!locator<NavigationRouter>().isPageVisible(HomePager.routeName)) {
-          log("Page not visible");
-          navigationService.clearStackAndShow(HomePager.routeName);
-        } else {
-          log("page visible");
-          changeMainTabSelection(newIndex: 0);
-          changeCruiseSelection(newIndex: 1);
-          changeTabSelection(newIndex: 0);
-        }
-
-        locator<DataPlansViewModel>().navigateToCountryBundleByID(
-          redirectionCategoryType.countryCode,
-        );
-
+        await _handleCountrySelectedRedirection(redirectionCategoryType);
       case RegionSelected():
-        if (!locator<NavigationRouter>().isPageVisible(HomePager.routeName)) {
-          log("Page not visible");
-          navigationService.clearStackAndShow(HomePager.routeName);
-        } else {
-          log("page visible");
-          changeMainTabSelection(newIndex: 0);
-          changeCruiseSelection(newIndex: 1);
-          changeTabSelection(newIndex: 1);
-        }
-
-        locator<DataPlansViewModel>().navigateToRegionBundleByID(
-          redirectionCategoryType.regionCode,
-        );
-
+        await _handleRegionSelectedRedirection(redirectionCategoryType);
       case CashbackReward():
         showCashbackBottomSheet(cashbackPercent: cashbackPercent);
-
       case ShareBundleNotification():
       case RewardAvailable():
       case Empty():
       // do nothing
+    }
+  }
+
+  Future<void> _handleBuyBundleRedirection({
+    required String iccid,
+    required bool isClicked,
+  }) async {
+    if (locator<NavigationRouter>()
+            .isPageVisible(PurchaseLoadingView.routeName) &&
+        !isClicked) {
+      unawaited(locator<PurchaseLoadingViewModel>().getOrderDetails());
+      return;
+    } else if (isClicked &&
+        !locator<NavigationRouter>()
+            .isPageVisible(PurchaseLoadingView.routeName)) {
+      unawaited(
+        bottomSheetService.showCustomSheet(
+          enableDrag: false,
+          isScrollControlled: true,
+          variant: BottomSheetType.bundleQrCode,
+          data: BundleQrBottomRequest(iccID: iccid),
+        ),
+      );
+    }
+    unawaited(refreshMyEsims());
+  }
+
+  Future<void> _handleConsumptionBundleDetailRedirection({
+    required String iccid,
+    required bool isClicked,
+    required bool isUnlimitedData,
+  }) async {
+    if (isClicked) {
+      unawaited(
+        bottomSheetService.showCustomSheet(
+          enableDrag: false,
+          isScrollControlled: true,
+          variant: BottomSheetType.bundleConsumption,
+          data: BundleConsumptionBottomRequest(
+            iccID: iccid,
+            isUnlimitedData: isUnlimitedData,
+            showTopUp: true,
+          ),
+        ),
+      );
+    }
+  }
+
+  Future<void> _handleWalletTopUpSuccessRedirection() async {
+    await GetUserInfoUseCase(locator<ApiAuthRepository>()).execute(NoParams());
+    await showToast(LocaleKeys.topUpWallet_success.tr());
+  }
+
+  Future<void> _handleWalletTopUpFailedRedirection() async {
+    await showToast(LocaleKeys.topUpWallet_error.tr());
+  }
+
+  Future<void> _handleCountriesTapRedirection() async {
+    await _navigateToHomePagerAndSelectTab(
+      mainTabIndex: 0,
+      cruiseTabIndex: 1,
+      tabIndex: 0,
+    );
+  }
+
+  Future<void> _handleRegionsTapRedirection() async {
+    await _navigateToHomePagerAndSelectTab(
+      mainTabIndex: 0,
+      cruiseTabIndex: 1,
+      tabIndex: 1,
+    );
+  }
+
+  Future<void> _handleReferAndEarnRedirection() async {
+    log("Referral code saved");
+    showToast(LocaleKeys.referral_code_activated.tr());
+
+    if (!locator<UserAuthenticationService>().isUserLoggedIn) {
+      await Future<void>.delayed(const Duration(seconds: 1));
+      navigationService.navigateToLoginScreen();
+    }
+  }
+
+  Future<void> _handleCountrySelectedRedirection(
+    CountrySelected redirectionCategoryType,
+  ) async {
+    await _navigateToHomePagerAndSelectTab(
+      mainTabIndex: 0,
+      cruiseTabIndex: 1,
+      tabIndex: 0,
+    );
+    locator<DataPlansViewModel>().navigateToCountryBundleByID(
+      redirectionCategoryType.countryCode,
+    );
+  }
+
+  Future<void> _handleRegionSelectedRedirection(
+    RegionSelected redirectionCategoryType,
+  ) async {
+    await _navigateToHomePagerAndSelectTab(
+      mainTabIndex: 0,
+      cruiseTabIndex: 1,
+      tabIndex: 1,
+    );
+    locator<DataPlansViewModel>().navigateToRegionBundleByID(
+      redirectionCategoryType.regionCode,
+    );
+  }
+
+  Future<void> _navigateToHomePagerAndSelectTab({
+    required int mainTabIndex,
+    required int cruiseTabIndex,
+    required int tabIndex,
+  }) async {
+    if (!locator<NavigationRouter>().isPageVisible(HomePager.routeName)) {
+      log("Page not visible");
+      navigationService.clearStackAndShow(HomePager.routeName);
+    } else {
+      log("page visible");
+      changeMainTabSelection(newIndex: mainTabIndex);
+      changeCruiseSelection(newIndex: cruiseTabIndex);
+      changeTabSelection(newIndex: tabIndex);
     }
   }
 

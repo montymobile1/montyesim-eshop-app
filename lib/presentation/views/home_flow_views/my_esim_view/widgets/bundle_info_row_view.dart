@@ -24,12 +24,16 @@ class BundleInfoRow extends StatelessWidget {
         BundleInfoColumn(
           label: LocaleKeys.bundle_validity.tr(),
           value: validity,
-        ).applyShimmer(enable: isLoading, context: context),
+        ).applyShimmer(
+          params: ShimmerParams(enable: isLoading, context: context),
+        ),
         const Spacer(),
         BundleInfoColumn(
           label: LocaleKeys.last_purchase.tr(),
           value: expiryDate,
-        ).applyShimmer(enable: isLoading, context: context),
+        ).applyShimmer(
+          params: ShimmerParams(enable: isLoading, context: context),
+        ),
         const Spacer(),
       ],
     );

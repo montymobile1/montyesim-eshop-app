@@ -114,6 +114,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
           email: args.email,
           phoneNumber: args.phoneNumber,
           localLoginType: args.localLoginType,
+          otpChannel: args.otpChannel,
         ),
       );
 

@@ -93,66 +93,83 @@ class _EmptyPaginatedStateListViewState<T>
     log(
       "EmptyPaginatedStateListView: state: ${widget.paginationService.notifier}",
     );
-    return widget.paginationService.notifier.items.isEmpty &&
-            !widget.paginationService.notifier.isLoading
-        ? RefreshIndicator(
-            onRefresh: widget.onRefresh,
-            child: Center(child: widget.emptyStateWidget),
-          )
-        : widget.paginationService.notifier.isLoading &&
-                widget.paginationService.notifier.items.isEmpty
-            ? widget.loadingWidget ??
-                Center(
-                  child: SizedBox(
-                    width: 35,
-                    height: 35,
-                    child: getNativeIndicator(context),
-                  ),
-                )
-            : RefreshIndicator(
-                onRefresh: widget.onRefresh,
-                child: ListView.separated(
-                  shrinkWrap: true,
-                  itemCount: widget.paginationService.notifier.items.length +
-                      (widget.paginationService.notifier.hasMore ? 1 : 0),
-                  itemBuilder: (BuildContext context, int index) {
-                    if (index ==
-                            widget.paginationService.notifier.items.length &&
-                        widget.paginationService.notifier.hasMore &&
-                        !widget.paginationService.notifier.isLoading) {
-                      // Trigger loading of next page
-                      log("EmptyPaginatedStateListView load items");
-                      unawaited(widget.onLoadItems());
-                      // Return a loading indicator
-                      return const Center(
-                        child: Padding(
-                          padding: EdgeInsets.all(16),
-                          child: CircularProgressIndicator(),
-                        ),
-                      );
-                    }
 
-                    if (index ==
-                            widget.paginationService.notifier.items.length &&
-                        widget.paginationService.notifier.hasMore &&
-                        widget.paginationService.notifier.isLoading) {
-                      // Trigger loading of next page
-                      log("EmptyPaginatedStateListView load items");
-                      unawaited(widget.onLoadItems());
-                      // Return a loading indicator
-                      return const Center(
-                        child: Padding(
-                          padding: EdgeInsets.all(16),
-                          child: CircularProgressIndicator(),
-                        ),
-                      );
-                    }
-                    T item = widget.paginationService.notifier.items[index];
-                    return widget.builder(item);
-                  },
-                  separatorBuilder: widget.separatorBuilder,
-                ),
-              );
+    if (_shouldShowEmptyState()) {
+      return _buildEmptyState();
+    }
+
+    if (_shouldShowInitialLoading()) {
+      return _buildInitialLoadingState(context);
+    }
+
+    return _buildListView();
+  }
+
+  bool _shouldShowEmptyState() {
+    return widget.paginationService.notifier.items.isEmpty &&
+        !widget.paginationService.notifier.isLoading;
+  }
+
+  bool _shouldShowInitialLoading() {
+    return widget.paginationService.notifier.isLoading &&
+        widget.paginationService.notifier.items.isEmpty;
+  }
+
+  Widget _buildEmptyState() {
+    return RefreshIndicator(
+      onRefresh: widget.onRefresh,
+      child: Center(child: widget.emptyStateWidget),
+    );
+  }
+
+  Widget _buildInitialLoadingState(BuildContext context) {
+    return widget.loadingWidget ??
+        Center(
+          child: SizedBox(
+            width: 35,
+            height: 35,
+            child: getNativeIndicator(context),
+          ),
+        );
+  }
+
+  Widget _buildListView() {
+    return RefreshIndicator(
+      onRefresh: widget.onRefresh,
+      child: ListView.separated(
+        shrinkWrap: true,
+        itemCount: widget.paginationService.notifier.items.length +
+            (widget.paginationService.notifier.hasMore ? 1 : 0),
+        itemBuilder: _buildListItem,
+        separatorBuilder: widget.separatorBuilder,
+      ),
+    );
+  }
+
+  Widget _buildListItem(BuildContext context, int index) {
+    if (_isLoadMoreIndicatorIndex(index)) {
+      return _buildLoadMoreIndicator();
+    }
+
+    T item = widget.paginationService.notifier.items[index];
+    return widget.builder(item);
+  }
+
+  bool _isLoadMoreIndicatorIndex(int index) {
+    return index == widget.paginationService.notifier.items.length &&
+        widget.paginationService.notifier.hasMore;
+  }
+
+  Widget _buildLoadMoreIndicator() {
+    log("EmptyPaginatedStateListView load items");
+    unawaited(widget.onLoadItems());
+
+    return const Center(
+      child: Padding(
+        padding: EdgeInsets.all(16),
+        child: CircularProgressIndicator(),
+      ),
+    );
   }
 
   @override

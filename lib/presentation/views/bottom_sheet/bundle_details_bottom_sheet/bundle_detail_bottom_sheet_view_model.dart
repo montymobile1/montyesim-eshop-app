@@ -12,6 +12,7 @@ import "package:esim_open_source/di/locator.dart";
 import "package:esim_open_source/domain/repository/api_auth_repository.dart";
 import "package:esim_open_source/domain/repository/services/analytics_service.dart";
 import "package:esim_open_source/domain/repository/services/local_storage_service.dart";
+import "package:esim_open_source/domain/repository/services/payment_service.dart";
 import "package:esim_open_source/domain/use_case/auth/tmp_login_use_case.dart";
 import "package:esim_open_source/domain/use_case/base_use_case.dart";
 import "package:esim_open_source/domain/use_case/promotion/validate_promo_code_use_case.dart";
@@ -24,6 +25,7 @@ import "package:esim_open_source/presentation/enums/login_type.dart";
 import "package:esim_open_source/presentation/enums/payment_type.dart";
 import "package:esim_open_source/presentation/enums/view_state.dart";
 import "package:esim_open_source/presentation/extensions/helper_extensions.dart";
+import "package:esim_open_source/presentation/models/payment_request_params.dart";
 import "package:esim_open_source/presentation/setup_bottom_sheet_ui.dart";
 import "package:esim_open_source/presentation/shared/action_helpers.dart";
 import "package:esim_open_source/presentation/shared/ui_helpers.dart";
@@ -41,7 +43,6 @@ import "package:phone_input/phone_input_package.dart";
 import "package:stacked_services/stacked_services.dart";
 
 class BundleDetailBottomSheetViewModel extends BaseModel {
-
   //#region UseCases
   final TmpLoginUseCase tmpLoginUseCase = TmpLoginUseCase(locator());
   final GetBundleExistsUseCase getBundleExistsUseCase =
@@ -117,10 +118,11 @@ class BundleDetailBottomSheetViewModel extends BaseModel {
   bool get showPhoneInput {
     switch (AppEnvironment.appEnvironmentHelper.loginType) {
       case LoginType.email:
+      case LoginType.emailAndPhoneAndEmailVerification:
         return false;
       case LoginType.phoneNumber:
-        return true;
       case LoginType.emailAndPhone:
+      case LoginType.emailAndPhoneAndBothVerification:
         return true;
     }
   }
@@ -132,7 +134,7 @@ class BundleDetailBottomSheetViewModel extends BaseModel {
   void onViewModelReady() {
     super.onViewModelReady();
     _emailController.addListener(_validateForm);
-    _promoCodeController.addListener(notifyListeners);
+    _promoCodeController.addListener(_onPromoCodeTextChanged);
 
     if (_referralCode.isNotEmpty) {
       unawaited(validatePromoCode(_referralCode, isReferral: true));
@@ -164,23 +166,35 @@ class BundleDetailBottomSheetViewModel extends BaseModel {
     Color? fieldColor,
     String message = "",
   }) {
-    promoCodeMessage = message;
-    promoCodeFieldColor = fieldColor;
-    promoCodeFieldEnabled = isEnabled;
-    notifyListeners();
+    if (_promoCodeController.text.isNotEmpty) {
+      promoCodeMessage = message;
+      promoCodeFieldColor = fieldColor;
+      promoCodeFieldEnabled = isEnabled;
+      notifyListeners();
+    }
   }
 
   void _validateForm() {
     switch (AppEnvironment.appEnvironmentHelper.loginType) {
       case LoginType.email:
+      case LoginType.emailAndPhoneAndEmailVerification:
         final String emailAddress = _emailController.text.trim();
         _emailErrorMessage = _validateEmailAddress(emailAddress);
         _isLoginEnabled = _emailErrorMessage == "" && isTermsChecked;
       case LoginType.phoneNumber:
       case LoginType.emailAndPhone:
+      case LoginType.emailAndPhoneAndBothVerification:
         _isLoginEnabled = _isValidPhoneNumber && isTermsChecked;
     }
 
+    notifyListeners();
+  }
+
+  void _onPromoCodeTextChanged() {
+    if (_promoCodeController.text.isEmpty && promoCodeMessage.isNotEmpty) {
+      promoCodeMessage = "";
+      promoCodeFieldColor = null;
+    }
     notifyListeners();
   }
 
@@ -197,6 +211,13 @@ class BundleDetailBottomSheetViewModel extends BaseModel {
   }
 
   Future<void> buyNowPressed(BuildContext context) async {
+    analyticsService.logEvent(
+      event: AnalyticEvent.bundleDetail(
+        bundleCode: bundle?.bundleCode ?? "",
+        bundleName: bundle?.bundleName ?? "",
+        user: userEmailAddress,
+      ),
+    );
     // Show compatible sheet
     SheetResponse<EmptyBottomSheetResponse>? response =
         await bottomSheetService.showCustomSheet(
@@ -212,24 +233,28 @@ class BundleDetailBottomSheetViewModel extends BaseModel {
         bool bundleExists = await _checkIfBundleExists();
         if (bundleExists && context.mounted) {
           BundleExistsAction bundleExistsAction = await showNativeDialog(
-                context: context,
-                barrierDismissible: true,
-                titleText: LocaleKeys.bundleExistsView_titleText.tr(),
-                contentText: LocaleKeys.bundleExistsView_contentText.tr(),
-                buttons: <NativeButtonParams>[
-                  NativeButtonParams(
-                    buttonTitle: LocaleKeys.bundleExistsView_buttonOneText.tr(),
-                    buttonAction: () => navigationService.back(
-                      result: BundleExistsAction.buyNewEsim,
+                params: NativeDialogParams(
+                  context: context,
+                  barrierDismissible: true,
+                  titleText: LocaleKeys.bundleExistsView_titleText.tr(),
+                  contentText: LocaleKeys.bundleExistsView_contentText.tr(),
+                  buttons: <NativeButtonParams>[
+                    NativeButtonParams(
+                      buttonTitle:
+                          LocaleKeys.bundleExistsView_buttonOneText.tr(),
+                      buttonAction: () => navigationService.back(
+                        result: BundleExistsAction.buyNewEsim,
+                      ),
                     ),
-                  ),
-                  NativeButtonParams(
-                    buttonTitle: LocaleKeys.bundleExistsView_buttonTwoText.tr(),
-                    buttonAction: () => navigationService.back(
-                      result: BundleExistsAction.goToEsim,
+                    NativeButtonParams(
+                      buttonTitle:
+                          LocaleKeys.bundleExistsView_buttonTwoText.tr(),
+                      buttonAction: () => navigationService.back(
+                        result: BundleExistsAction.goToEsim,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ) ??
               BundleExistsAction.close;
           if (bundleExistsAction == BundleExistsAction.buyNewEsim) {
@@ -247,85 +272,104 @@ class BundleDetailBottomSheetViewModel extends BaseModel {
     }
   }
 
+  Future<List<PaymentType>> _refreshWalletAndValidatePaymentTypes(
+    List<PaymentType> paymentTypeList,
+  ) async {
+    if (!paymentTypeList.contains(PaymentType.wallet)) {
+      return paymentTypeList;
+    }
+
+    List<PaymentType> updatedList = paymentTypeList;
+
+    try {
+      Resource<AuthResponseModel?> response =
+          await GetUserInfoUseCase(locator<ApiAuthRepository>())
+              .execute(NoParams());
+
+      await handleResponse(
+        response,
+        onSuccess: (Resource<AuthResponseModel?> result) async {},
+        onFailure: (Resource<AuthResponseModel?> result) async {
+          updatedList = updatedList
+              .where((PaymentType element) => element != PaymentType.wallet)
+              .toList();
+        },
+      );
+    } on Object catch (_) {
+      updatedList = updatedList
+          .where((PaymentType element) => element != PaymentType.wallet)
+          .toList();
+    }
+
+    return updatedList;
+  }
+
+  List<PaymentType> _removeWalletIfInsufficientBalance(
+    List<PaymentType> paymentTypeList,
+    double price,
+  ) {
+    if (paymentTypeList.contains(PaymentType.wallet) &&
+        price > userAuthenticationService.walletAvailableBalance) {
+      return paymentTypeList
+          .where((PaymentType element) => element != PaymentType.wallet)
+          .toList();
+    }
+    return paymentTypeList;
+  }
+
+  Future<PaymentType?> _selectPaymentType(
+    List<PaymentType> paymentTypeList,
+    double price,
+  ) async {
+    if (paymentTypeList.length == 1) {
+      return _handleSinglePaymentType(paymentTypeList.first, price);
+    }
+
+    return PaymentHelper.choosePaymentMethod(paymentTypeList);
+  }
+
+  PaymentType? _handleSinglePaymentType(PaymentType paymentType, double price) {
+    if (paymentType == PaymentType.wallet) {
+      if (!isUserLoggedIn) {
+        return null;
+      }
+
+      final bool hasSufficientBalance =
+          userAuthenticationService.walletAvailableBalance >= price;
+
+      if (!hasSufficientBalance) {
+        unawaited(showToast(LocaleKeys.no_sufficient_balance_in_wallet.tr()));
+        return null;
+      }
+    }
+
+    return paymentType;
+  }
+
   Future<void> _continueToPurchase() async {
     List<PaymentType> paymentTypeList = AppEnvironment.appEnvironmentHelper
         .paymentTypeList(isUserLoggedIn: isUserLoggedIn);
     final double price = bundle?.price ?? 0;
 
-    //check 100% discount
     if (price == 0) {
-      //payment type does not matter
-      _triggerAssignFlow(
-        paymentType: PaymentType.card,
-      );
+      _triggerAssignFlow(paymentType: PaymentType.card);
       return;
     }
 
-    //refresh wallet in case wallet payment is allowed backend, if API fails remove wallet option from payment list
-    if (paymentTypeList.contains(PaymentType.wallet)) {
-      try {
-        Resource<AuthResponseModel?> response =
-            await GetUserInfoUseCase(locator<ApiAuthRepository>())
-                .execute(NoParams());
-
-        await handleResponse(
-          response,
-          onSuccess: (Resource<AuthResponseModel?> result) async {},
-          onFailure: (Resource<AuthResponseModel?> result) async {
-            paymentTypeList = paymentTypeList
-                .where((PaymentType element) => element != PaymentType.wallet)
-                .toList();
-          },
-        );
-      } on Object catch (_) {
-        paymentTypeList = paymentTypeList
-            .where((PaymentType element) => element != PaymentType.wallet)
-            .toList();
-      }
-    }
-
-    // check if amount in wallet covers the bundle price
-    if (paymentTypeList.contains(PaymentType.wallet) &&
-        price > userAuthenticationService.walletAvailableBalance) {
-      paymentTypeList = paymentTypeList
-          .where((PaymentType element) => element != PaymentType.wallet)
-          .toList();
-    }
+    paymentTypeList =
+        await _refreshWalletAndValidatePaymentTypes(paymentTypeList);
+    paymentTypeList =
+        _removeWalletIfInsufficientBalance(paymentTypeList, price);
 
     if (paymentTypeList.isEmpty) {
-      //no payment type available
       showToast(LocaleKeys.no_payment_method_available.tr());
       return;
     }
 
-    //choose payment method
-    if (paymentTypeList.length == 1) {
-      //check if it's wallet, then check if wallet available
-      PaymentType paymentType = paymentTypeList.first;
-
-      switch (paymentType) {
-        case PaymentType.wallet:
-          if (isUserLoggedIn) {
-            final bool hasSufficientBalance =
-                userAuthenticationService.walletAvailableBalance >= price;
-            if (!hasSufficientBalance) {
-              showToast(LocaleKeys.no_sufficient_balance_in_wallet.tr());
-              return;
-            }
-            _triggerAssignFlow(paymentType: paymentType);
-          } else {
-            //case not valid
-          }
-        case PaymentType.dcb:
-        case PaymentType.card:
-          _triggerAssignFlow(paymentType: paymentType);
-      }
-    } else {
-      PaymentType? paymentType =
-          await PaymentHelper.choosePaymentMethod(paymentTypeList);
-      if (paymentType != null) {
-        _triggerAssignFlow(paymentType: paymentType);
-      }
+    final PaymentType? paymentType =
+        await _selectPaymentType(paymentTypeList, price);
+    if (paymentType != null) {
+      _triggerAssignFlow(paymentType: paymentType);
     }
   }
 
@@ -355,7 +399,7 @@ class BundleDetailBottomSheetViewModel extends BaseModel {
         bearerToken: bearerToken,
         relatedSearch: (bundle?.isCruise ?? false)
             ? RelatedSearchRequestModel(
-                countries: [],
+                countries: <CountriesRequestModel>[],
               )
             : RelatedSearchRequestModel(
                 region: region,
@@ -368,6 +412,15 @@ class BundleDetailBottomSheetViewModel extends BaseModel {
     handleResponse(
       response,
       onSuccess: (Resource<BundleAssignResponseModel?> result) async {
+        analyticsService.logEvent(
+          event: AnalyticEvent.createOrder(
+            bundleCode: bundle?.bundleCode ?? "",
+            bundleName: bundle?.bundleName ?? "",
+            user: userEmailAddress,
+            orderId: result.data?.orderId ?? "",
+            method: paymentType.type,
+          ),
+        );
         PaymentStatus paymentStatus =
             PaymentStatus.fromString(result.data?.paymentStatus);
         if (paymentStatus == PaymentStatus.completed) {
@@ -379,23 +432,31 @@ class BundleDetailBottomSheetViewModel extends BaseModel {
         }
         await PaymentHelper.checkTaxAmount(
           result: result,
-          onError: () => () async {
+          onError: () async {
             handleError(result);
             cancelOrder(orderID: result.data?.orderId ?? "");
           },
           onSuccess: () => _initiatePaymentRequest(
-            paymentType: paymentType,
-            bearerToken: bearerToken,
-            orderID: result.data?.orderId ?? "",
-            publishableKey: result.data?.publishableKey ?? "",
-            merchantIdentifier: result.data?.merchantIdentifier ?? "",
-            paymentIntentClientSecret:
-                result.data?.paymentIntentClientSecret ?? "",
-            customerId: result.data?.customerId ?? "",
-            customerEphemeralKeySecret:
-                result.data?.customerEphemeralKeySecret ?? "",
-            test: result.data?.testEnv ?? false,
-            billingCountryCode: result.data?.billingCountryCode ?? "",
+            params: PaymentRequestParams(
+              secretParams: PaymentRequestSecretParams(
+                paymentType: paymentType,
+                publishableKey: result.data?.publishableKey ?? "",
+                merchantIdentifier: result.data?.merchantIdentifier ?? "",
+                paymentIntentClientSecret:
+                    result.data?.paymentIntentClientSecret ?? "",
+                customerEphemeralKeySecret:
+                    result.data?.customerEphemeralKeySecret ?? "",
+                bearerToken: bearerToken,
+                test: result.data?.testEnv ?? false,
+              ),
+              idParams: PaymentRequestIDParams(
+                orderID: result.data?.orderId ?? "",
+                customerId: result.data?.customerId ?? "",
+                billingCountryCode: result.data?.billingCountryCode ?? "",
+                bundleCode: bundle?.bundleCode ?? "",
+                bundleName: bundle?.bundleName ?? "",
+              ),
+            ),
           ),
         );
       },
@@ -414,47 +475,58 @@ class BundleDetailBottomSheetViewModel extends BaseModel {
   }
 
   Future<void> _initiatePaymentRequest({
-    required PaymentType paymentType,
-    required String orderID,
-    required String publishableKey,
-    required String merchantIdentifier,
-    required String paymentIntentClientSecret,
-    required String customerId,
-    required String customerEphemeralKeySecret,
-    required String billingCountryCode,
-    String? bearerToken,
-    bool test = false,
+    required PaymentRequestParams params,
   }) async {
     try {
       setViewState(ViewState.busy);
 
       await paymentService.prepareCheckout(
-        paymentType: paymentType,
-        publishableKey: publishableKey,
-        merchantIdentifier: merchantIdentifier,
+        paymentType: params.secretParams.paymentType,
+        publishableKey: params.secretParams.publishableKey,
+        merchantIdentifier: params.secretParams.merchantIdentifier,
       );
 
+      analyticsService.logEvent(
+        event: AnalyticEvent.stripePay(
+          bundleCode: bundle?.bundleCode ?? "",
+          bundleName: bundle?.bundleName ?? "",
+          user: userEmailAddress,
+          orderId: params.idParams.orderID,
+        ),
+      );
       PaymentResult paymentResult = await paymentService.processOrderPayment(
-        paymentType: paymentType,
-        orderID: orderID,
-        billingCountryCode: billingCountryCode,
-        paymentIntentClientSecret: paymentIntentClientSecret,
-        customerId: customerId,
-        customerEphemeralKeySecret: customerEphemeralKeySecret,
-        testEnv: test,
+        paymentType: params.secretParams.paymentType,
+        params: ProcessOrderPaymentParams(
+          orderID: params.idParams.orderID,
+          billingCountryCode: params.idParams.billingCountryCode,
+          paymentIntentClientSecret:
+              params.secretParams.paymentIntentClientSecret,
+          customerId: params.idParams.customerId,
+          customerEphemeralKeySecret:
+              params.secretParams.customerEphemeralKeySecret,
+          testEnv: params.secretParams.test,
+        ),
       );
 
       setViewState(ViewState.idle);
 
       switch (paymentResult) {
         case PaymentResult.completed:
+          analyticsService.logEvent(
+            event: AnalyticEvent.stripePaymentSuccessful(
+              bundleCode: bundle?.bundleCode ?? "",
+              bundleName: bundle?.bundleName ?? "",
+              user: userEmailAddress,
+              orderId: params.idParams.orderID,
+            ),
+          );
           _navigateToLoading(
-            orderID,
-            bearerToken,
+            params.idParams.orderID,
+            params.secretParams.bearerToken,
           );
 
         case PaymentResult.canceled:
-          cancelOrder(orderID: orderID);
+          cancelOrder(orderID: params.idParams.orderID);
 
         case PaymentResult.otpRequested:
           //must send api for request otp , not implemented from backend
@@ -462,18 +534,18 @@ class BundleDetailBottomSheetViewModel extends BaseModel {
             VerifyPurchaseView.routeName,
             arguments: VerifyPurchaseViewArgs(
               iccid: "",
-              orderID: orderID,
+              orderID: params.idParams.orderID,
             ),
             preventDuplicates: false,
           );
           debugPrint("result: $result");
           if (result) {
             _navigateToLoading(
-              orderID,
-              bearerToken,
+              params.idParams.orderID,
+              params.secretParams.bearerToken,
             );
           } else {
-            cancelOrder(orderID: orderID);
+            cancelOrder(orderID: params.idParams.orderID);
           }
       }
     } on Exception catch (e) {
@@ -481,7 +553,7 @@ class BundleDetailBottomSheetViewModel extends BaseModel {
         e.toString().replaceAll("Exception:", ""),
       );
       setViewState(ViewState.idle);
-      unawaited(cancelOrder(orderID: orderID));
+      unawaited(cancelOrder(orderID: params.idParams.orderID));
       return;
     }
   }

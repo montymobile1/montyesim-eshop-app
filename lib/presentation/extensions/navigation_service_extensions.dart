@@ -83,6 +83,8 @@ extension NavigationExtension on NavigationService {
         shouldShowSocialLoginScreen = true;
       case LoginType.phoneNumber:
       case LoginType.emailAndPhone:
+      case LoginType.emailAndPhoneAndEmailVerification:
+      case LoginType.emailAndPhoneAndBothVerification:
         shouldShowSocialLoginScreen = false;
     }
 

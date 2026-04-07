@@ -84,15 +84,21 @@ class DataPlansView extends StatelessWidget {
                     PaddingWidget.applySymmetricPadding(
                       horizontal: 15,
                       child: MainInputField.searchField(
-                        clearSearchEnabled: true,
-                        themeColor: themeColor,
                         controller: viewModel.searchTextFieldController,
-                        backGroundColor: whiteBackGroundColor(context: context),
-                        hintText: LocaleKeys.dataPlans_SearchPlaceHolderText
-                            .tr(),
-                        labelStyle: captionOneNormalTextStyle(
-                          context: context,
-                          fontColor: secondaryTextColor(context: context),
+                        themeColor: themeColor,
+                        textConfig: MainInputFieldTextConfig(
+                          hintText: LocaleKeys.dataPlans_SearchPlaceHolderText
+                              .tr(),
+                        ),
+                        appearanceConfig: MainInputFieldAppearanceConfig(
+                          backgroundColor: whiteBackGroundColor(context: context),
+                          labelStyle: captionOneNormalTextStyle(
+                            context: context,
+                            fontColor: secondaryTextColor(context: context),
+                          ),
+                        ),
+                        behaviorConfig: const MainInputFieldBehaviorConfig(
+                          clearSearchEnabled: true,
                         ),
                       ),
                     ),
@@ -122,6 +128,10 @@ class DataPlansView extends StatelessWidget {
     required DataPlansViewModel viewModel,
     required Widget? childWidget,
   }) {
+    final Widget? bannerWidget = DataPlansViewModel.cruiseTabBarSelectedIndex == 0 && viewModel.showBanner
+        ? childWidget
+        : null;
+
     return DataPlansTabView(
       horizontalPadding: 0,
       isChildCollapsable: true,
@@ -132,11 +142,7 @@ class DataPlansView extends StatelessWidget {
       selectedTabColor: mainTabBackGroundColor(context: context),
       selectedLabelColor: mainDarkTextColor(context: context),
       selectedTabTextStyle: captionOneMediumTextStyle(context: context),
-      childWidget: DataPlansViewModel.cruiseTabBarSelectedIndex == 0
-          ? viewModel.showBanner
-          ? childWidget
-          : null
-          : null,
+      childWidget: bannerWidget,
       tabs: <Tab>[
         Tab(
           text: LocaleKeys.dataPlans_onCruiseText.tr(),
@@ -281,15 +287,17 @@ class DataPlansView extends StatelessWidget {
       );
     } else {
       return MainButton.bannerButton(
-        title: LocaleKeys.profile_login.tr(),
-        action: () async {
-          viewModel.loginButtonTapped();
-        },
-        themeColor: themeColor,
-        titleHorizontalPadding: 15,
-        textColor: enabledMainButtonTextColor(context: context),
-        buttonColor: enabledMainButtonColor(context: context),
-        titleTextStyle: bodyMediumTextStyle(context: context),
+        params: BannerButtonParams(
+          title: LocaleKeys.profile_login.tr(),
+          action: () async {
+            viewModel.loginButtonTapped();
+          },
+          themeColor: themeColor,
+          titleHorizontalPadding: 15,
+          textColor: enabledMainButtonTextColor(context: context),
+          buttonColor: enabledMainButtonColor(context: context),
+          titleTextStyle: bodyMediumTextStyle(context: context),
+        ),
       );
     }
   }

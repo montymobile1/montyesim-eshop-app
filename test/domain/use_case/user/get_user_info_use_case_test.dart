@@ -119,7 +119,6 @@ Future<void> main() async {
           balance: 100,
           currencyCode: "EUR",
           referralCode: "ALICE123",
-          shouldNotify: true,
           isVerified: true,
           country: "France",
           language: "fr",

@@ -1,13 +1,13 @@
 import "package:esim_open_source/data/remote/responses/auth/auth_response_model.dart";
 import "package:esim_open_source/data/remote/responses/auth/otp_response_model.dart";
 import "package:esim_open_source/data/remote/responses/empty_response.dart";
+import "package:esim_open_source/domain/data/params/add_device_params.dart";
 import "package:esim_open_source/domain/repository/api_app_repository.dart";
 import "package:esim_open_source/domain/repository/api_auth_repository.dart";
 import "package:esim_open_source/domain/repository/api_promotion_repository.dart";
 import "package:esim_open_source/domain/repository/services/device_info_service.dart";
 import "package:esim_open_source/domain/repository/services/local_storage_service.dart";
 import "package:esim_open_source/domain/repository/services/secure_storage_service.dart";
-import "package:esim_open_source/domain/use_case/app/add_device_use_case.dart";
 import "package:esim_open_source/domain/util/resource.dart";
 import "package:esim_open_source/presentation/enums/view_state.dart";
 import "package:esim_open_source/presentation/shared/in_app_redirection_heper.dart";
@@ -115,15 +115,17 @@ Future<void> main() async {
     // Mock add device API call
     when(
       mockApiAppRepository.addDevice(
-        fcmToken: "test_utm",
-        manufacturer: "Apple",
-        deviceModel: "iPhone",
-        deviceOs: "iOS",
-        deviceOsVersion: "17.0",
-        appVersion: "1.0.0",
-        ramSize: "8GB",
-        screenResolution: "1170x2532",
-        isRooted: false,
+        AddDeviceParams(
+          fcmToken: "test_utm",
+          manufacturer: "Apple",
+          deviceModel: "iPhone",
+          deviceOs: "iOS",
+          deviceOsVersion: "17.0",
+          appVersion: "1.0.0",
+          ramSize: "8GB",
+          screenResolution: "1170x2532",
+          isRooted: false,
+        ),
       ),
     ).thenAnswer(
       (_) async => Resource<dynamic>.success(null, message: "Device added"),

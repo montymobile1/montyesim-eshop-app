@@ -4,6 +4,7 @@ import "package:esim_open_source/presentation/shared/in_app_redirection_heper.da
 import "package:esim_open_source/presentation/views/home_flow_views/main_page/home_pager_view_model.dart";
 import "package:esim_open_source/presentation/widgets/lockable_tab_bar.dart";
 import "package:flutter/material.dart";
+import "package:flutter/services.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:mockito/mockito.dart";
 
@@ -19,6 +20,11 @@ Future<void> main() async {
   late MockLockableTabController mockTabController;
 
   setUp(() async {
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(
+      const MethodChannel('plugins.sameer.com/statusbar'),
+      (MethodCall methodCall) async => null,
+    );
     await setupTest();
     onViewModelReadyMock(viewName: "HomePager");
     viewModel = HomePagerViewModel();
@@ -28,6 +34,11 @@ Future<void> main() async {
   });
 
   tearDown(() async {
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(
+      const MethodChannel('plugins.sameer.com/statusbar'),
+      null,
+    );
     await tearDownTest();
   });
 

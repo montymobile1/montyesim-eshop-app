@@ -66,8 +66,6 @@ void onViewModelReadyMock({
   when(locator<UserAuthenticationService>().userFirstName).thenReturn("");
   when(locator<UserAuthenticationService>().userLastName).thenReturn("");
   when(locator<UserAuthenticationService>().isUserLoggedIn).thenReturn(true);
-  when(locator<UserAuthenticationService>().isNewsletterSubscribed)
-      .thenReturn(true);
   when(locator<UserAuthenticationService>().userPhoneNumber)
       .thenReturn("expected");
   when(locator<UserAuthenticationService>().referralCode)

@@ -147,16 +147,21 @@ void main() {
 
     test("headers is empty map for all endpoints", () {
       for (final AuthApis api in AuthApis.values) {
-        expect(api.headers, const <String, String>{});
+        if (api == AuthApis.resendOtpNewChannel) {
+          expect(api.headers, {"accept-language": "en"});
+        } else {
+          expect(api.headers, const <String, String>{});
+        }
       }
     });
 
     test("all enum values are defined", () {
-      expect(AuthApis.values.length, 9);
+      expect(AuthApis.values.length, 10);
       expect(AuthApis.values, contains(AuthApis.login));
       expect(AuthApis.values, contains(AuthApis.tmpLogin));
       expect(AuthApis.values, contains(AuthApis.logout));
       expect(AuthApis.values, contains(AuthApis.resendOtp));
+      expect(AuthApis.values, contains(AuthApis.resendOtpNewChannel));
       expect(AuthApis.values, contains(AuthApis.verifyOtp));
       expect(AuthApis.values, contains(AuthApis.refreshToken));
       expect(AuthApis.values, contains(AuthApis.deleteAccount));

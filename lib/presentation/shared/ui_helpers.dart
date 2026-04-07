@@ -98,24 +98,38 @@ const BorderRadius charKeyboardItemBorderRadius =
 
 Future<void> showToast(
   String message, {
-  Toast toastLength = Toast.LENGTH_LONG,
-  int timeInSecForIosWeb = 1,
-  double? fontSize = 16.0,
-  ToastGravity? gravity = ToastGravity.BOTTOM,
-  Color backgroundColor = Colors.grey,
-  Color textColor = Colors.white,
-  bool webShowClose = false,
+  ToastParams? params,
 }) async {
   unawaited(
     Fluttertoast.showToast(
       msg: message,
-      toastLength: toastLength,
-      gravity: gravity,
-      timeInSecForIosWeb: timeInSecForIosWeb,
-      backgroundColor: backgroundColor,
-      textColor: textColor,
-      fontSize: fontSize,
-      webShowClose: webShowClose,
+      toastLength: params?.toastLength ?? Toast.LENGTH_LONG,
+      gravity: params?.gravity ?? ToastGravity.BOTTOM,
+      timeInSecForIosWeb: params?.timeInSecForIosWeb ?? 1,
+      backgroundColor: params?.backgroundColor ?? Colors.grey,
+      textColor: params?.textColor ?? Colors.white,
+      fontSize: params?.fontSize ?? 16.0,
+      webShowClose: params?.webShowClose ?? false,
     ),
   );
+}
+
+class ToastParams {
+  ToastParams({
+    this.toastLength = Toast.LENGTH_LONG,
+    this.timeInSecForIosWeb = 1,
+    this.fontSize = 16.0,
+    this.gravity = ToastGravity.BOTTOM,
+    this.backgroundColor = Colors.grey,
+    this.textColor = Colors.white,
+    this.webShowClose = false,
+});
+
+  Toast toastLength;
+  int timeInSecForIosWeb;
+  double fontSize;
+  ToastGravity gravity;
+  Color backgroundColor;
+  Color textColor;
+  bool webShowClose;
 }

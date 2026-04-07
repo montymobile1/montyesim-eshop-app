@@ -22,7 +22,7 @@ Future<void> main() async {
           Builder(
             builder: (BuildContext context) {
               return Scaffold(
-                appBar: myAppBar(context, title: "Test Title"),
+                appBar: myAppBar(context, params: AppBarParams(title: "Test Title"),),
                 body: const SizedBox(),
               );
             },
@@ -41,7 +41,7 @@ Future<void> main() async {
           Builder(
             builder: (BuildContext context) {
               return Scaffold(
-                appBar: myAppBar(context, title: "My App"),
+                appBar: myAppBar(context, params: AppBarParams(title: "My App")),
                 body: const SizedBox(),
               );
             },
@@ -60,7 +60,7 @@ Future<void> main() async {
           Builder(
             builder: (BuildContext context) {
               return Scaffold(
-                appBar: myAppBar(context),
+                appBar: myAppBar(context, params: AppBarParams()),
                 body: const SizedBox(),
               );
             },
@@ -83,7 +83,7 @@ Future<void> main() async {
           Builder(
             builder: (BuildContext context) {
               return Scaffold(
-                appBar: myAppBar(context, title: "Test"),
+                appBar: myAppBar(context, params: AppBarParams(title: "Test")),
                 body: const SizedBox(),
               );
             },
@@ -102,7 +102,7 @@ Future<void> main() async {
           Builder(
             builder: (BuildContext context) {
               return Scaffold(
-                appBar: myAppBar(context, title: "Test", removeBackButton: true),
+                appBar: myAppBar(context, params: AppBarParams(title: "Test", removeBackButton: true)),
                 body: const SizedBox(),
               );
             },
@@ -126,8 +126,10 @@ Future<void> main() async {
               return Scaffold(
                 appBar: myAppBar(
                   context,
-                  title: "Test",
-                  backButtonIcon: const Icon(Icons.close),
+                  params: AppBarParams(
+                    title: "Test",
+                    backButtonIcon: const Icon(Icons.close),
+                  ),
                 ),
                 body: const SizedBox(),
               );
@@ -149,8 +151,10 @@ Future<void> main() async {
               return Scaffold(
                 appBar: myAppBar(
                   context,
-                  title: "Centered",
-                  centerTitle: true,
+                  params: AppBarParams(
+                    title: "Centered",
+                    centerTitle: true,
+                  ),
                 ),
                 body: const SizedBox(),
               );
@@ -175,13 +179,15 @@ Future<void> main() async {
               return Scaffold(
                 appBar: myAppBar(
                   context,
-                  title: "Actions",
-                  actionList: <Widget>[
-                    IconButton(
-                      icon: const Icon(Icons.settings),
-                      onPressed: () {},
-                    ),
-                  ],
+                  params: AppBarParams(
+                    title: "Actions",
+                    actionList: <Widget>[
+                      IconButton(
+                        icon: const Icon(Icons.settings),
+                        onPressed: () {},
+                      ),
+                    ],
+                  ),
                 ),
                 body: const SizedBox(),
               );
@@ -203,8 +209,10 @@ Future<void> main() async {
               return Scaffold(
                 appBar: myAppBar(
                   context,
-                  title: "Border",
-                  showBorder: true,
+                  params: AppBarParams(
+                    title: "Border",
+                    showBorder: true,
+                  ),
                 ),
                 body: const SizedBox(),
               );
@@ -229,7 +237,9 @@ Future<void> main() async {
               return Scaffold(
                 appBar: myAppBar(
                   context,
-                  title: "No Border",
+                  params: AppBarParams(
+                    title: "No Border",
+                  ),
                 ),
                 body: const SizedBox(),
               );
@@ -254,8 +264,10 @@ Future<void> main() async {
               return Scaffold(
                 appBar: myAppBar(
                   context,
-                  title: "Custom Color",
-                  backgroundColor: Colors.red,
+                  params: AppBarParams(
+                    title: "Custom Color",
+                    backgroundColor: Colors.red,
+                  ),
                 ),
                 body: const SizedBox(),
               );
@@ -280,8 +292,10 @@ Future<void> main() async {
               return Scaffold(
                 appBar: myAppBar(
                   context,
-                  title: "Custom Button Color",
-                  backButtonColor: Colors.green,
+                  params: AppBarParams(
+                    title: "Custom Button Color",
+                    backButtonColor: Colors.green,
+                  ),
                 ),
                 body: const SizedBox(),
               );
@@ -308,10 +322,12 @@ Future<void> main() async {
               return Scaffold(
                 appBar: myAppBar(
                   context,
-                  title: "Back Press",
-                  onBackPress: () {
-                    backPressed = true;
-                  },
+                  params: AppBarParams(
+                    title: "Back Press",
+                    onBackPress: () {
+                      backPressed = true;
+                    },
+                  ),
                 ),
                 body: const SizedBox(),
               );
@@ -336,8 +352,10 @@ Future<void> main() async {
               return Scaffold(
                 appBar: myAppBar(
                   context,
-                  title: "Leading",
-                  leading: const Text("Custom"),
+                  params: AppBarParams(
+                    title: "Leading",
+                    leading: const Text("Custom"),
+                  ),
                 ),
                 body: const SizedBox(),
               );
@@ -364,8 +382,10 @@ Future<void> main() async {
               return Scaffold(
                 appBar: myAppBar(
                   context,
-                  title: "Styled Title",
-                  customTitleStyle: customStyle,
+                  params: AppBarParams(
+                    title: "Styled Title",
+                    customTitleStyle: customStyle,
+                  ),
                 ),
                 body: const SizedBox(),
               );
@@ -391,8 +411,10 @@ Future<void> main() async {
               return Scaffold(
                 appBar: myAppBar(
                   context,
-                  title: "Width Test",
-                  removeBackButton: true,
+                  params: AppBarParams(
+                    title: "Width Test",
+                    removeBackButton: true,
+                  ),
                 ),
                 body: const SizedBox(),
               );
@@ -417,8 +439,10 @@ Future<void> main() async {
               return Scaffold(
                 appBar: myAppBar(
                   context,
-                  title: "Leading Width",
-                  leadingWidthAndroid: 100,
+                  params: AppBarParams(
+                    title: "Leading Width",
+                    leadingWidthAndroid: 100,
+                  ),
                 ),
                 body: const SizedBox(),
               );
@@ -451,7 +475,7 @@ Future<void> main() async {
         createTestableWidget(
           Builder(
             builder: (BuildContext context) {
-              final PreferredSizeWidget appBar = myAppBar(context, title: "iOS Title");
+              final PreferredSizeWidget appBar = myAppBar(context, params: AppBarParams(title: "iOS Title"));
 
               if (Platform.isIOS) {
                 return CupertinoPageScaffold(
@@ -482,8 +506,10 @@ Future<void> main() async {
             builder: (BuildContext context) {
               final PreferredSizeWidget appBar = myAppBar(
                 context,
-                title: "Centered iOS",
-                centerTitle: true,
+                params: AppBarParams(
+                  title: "Centered iOS",
+                  centerTitle: true,
+                ),
               );
 
               if (Platform.isIOS) {

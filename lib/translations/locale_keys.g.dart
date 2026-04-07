@@ -101,6 +101,16 @@ abstract class  LocaleKeys {
   static const String verifyLogin_buttonTitleText = "verifyLogin_buttonTitleText";
   static const String verifyLogin_checkEmail = "verifyLogin_checkEmail";
   static const String verifyLogin_resendCode = "verifyLogin_resendCode";
+  static const String verifyLogin_resendViaEmail = "verifyLogin_resendViaEmail";
+  static const String verifyLogin_resendViaSms = "verifyLogin_resendViaSms";
+  static const String continueWithEmail_otpViaSms = "continueWithEmail_otpViaSms";
+  static const String continueWithEmail_otpViaEmail = "continueWithEmail_otpViaEmail";
+  static const String continueWithEmail_otpChannelLabel = "continueWithEmail_otpChannelLabel";
+  static const String continueWithEmail_otpFailedViaSms = "continueWithEmail_otpFailedViaSms";
+  static const String continueWithEmail_otpFailedViaEmail = "continueWithEmail_otpFailedViaEmail";
+  static const String continueWithEmail_signInViaEmail = "continueWithEmail_signInViaEmail";
+  static const String continueWithEmail_signInViaSms = "continueWithEmail_signInViaSms";
+  static const String continueWithEmail_or = "continueWithEmail_or";
   static const String verifyLogin_wrongCode = "verifyLogin_wrongCode";
   static const String notificationView_title = "notificationView_title";
   static const String notificationView_emptyTitle = "notificationView_emptyTitle";
@@ -239,7 +249,6 @@ abstract class  LocaleKeys {
   static const String error_generating_qr_code = "error_generating_qr_code";
   static const String copied_to_clipboard = "copied_to_clipboard";
   static const String top_up_plan = "top_up_plan";
-  static const String validity = "validity";
   static const String faq_not_available = "faq_not_available";
   static const String your_message_has_been_sent = "your_message_has_been_sent";
   static const String second = "second";
@@ -278,6 +287,7 @@ abstract class  LocaleKeys {
   static const String qr_code = "qr_code";
   static const String install = "install";
   static const String goToSettings = "goToSettings";
+  static const String validity = "validity";
   static const String qr_code_details = "qr_code_details";
   static const String supportedCountries_availableInText = "supportedCountries_availableInText";
   static const String supportedCountries_availableNetworks = "supportedCountries_availableNetworks";
@@ -357,6 +367,9 @@ abstract class  LocaleKeys {
   static const String appClip_currencyTitle = "appClip_currencyTitle";
   static const String appClip_languageTitle = "appClip_languageTitle";
   static const String loginView_continueWithPhone = "loginView_continueWithPhone";
+  static const String loginView_instructionText_emailPhone = "loginView_instructionText_emailPhone";
+  static const String loginView_instructionText_email = "loginView_instructionText_email";
+  static const String loginView_instructionText_phone = "loginView_instructionText_phone";
   static const String continueWithEmailView_SubTitleTextPhone = "continueWithEmailView_SubTitleTextPhone";
   static const String verifyLogin_buttonTitleTextPhone = "verifyLogin_buttonTitleTextPhone";
   static const String verifyLogin_checkPhone = "verifyLogin_checkPhone";
@@ -389,4 +402,5 @@ abstract class  LocaleKeys {
   static const String validity_year = "validity_year";
   static const String validity_year_plural = "validity_year_plural";
   static const String primaryBundle = "primaryBundle";
+
 }

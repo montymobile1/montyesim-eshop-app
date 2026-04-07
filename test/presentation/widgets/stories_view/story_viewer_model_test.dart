@@ -1,6 +1,7 @@
 import "package:esim_open_source/presentation/widgets/stories_view/story_item.dart";
 import "package:esim_open_source/presentation/widgets/stories_view/story_viewer_model.dart";
 import "package:flutter/material.dart";
+import "package:flutter/services.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:mockito/mockito.dart";
 import "package:stacked_services/stacked_services.dart";
@@ -18,6 +19,11 @@ Future<void> main() async {
     late Function()? onCompleteCalled;
 
     setUp(() async {
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(
+        const MethodChannel('plugins.sameer.com/statusbar'),
+        (MethodCall methodCall) async => null,
+      );
       await setupTest();
       onViewModelReadyMock();
       onCompleteCalled = () {};
@@ -38,6 +44,11 @@ Future<void> main() async {
     });
 
     tearDown(() async {
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(
+        const MethodChannel('plugins.sameer.com/statusbar'),
+        null,
+      );
       await tearDownTest();
     });
 

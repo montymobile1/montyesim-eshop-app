@@ -35,10 +35,12 @@ class RegionsList extends StatelessWidget {
               ),
             ),
           )
-        : ListView.separated(
-            itemCount: regions.length + (lastItemBottomPadding > 0 ? 1 : 0),
-            separatorBuilder: (BuildContext context, int index) =>
-                verticalSpaceSmallMedium,
+        : () {
+            final int itemCount = regions.length + (lastItemBottomPadding > 0 ? 1 : 0);
+            return ListView.separated(
+              itemCount: itemCount,
+              separatorBuilder: (BuildContext context, int index) =>
+                  verticalSpaceSmallMedium,
             itemBuilder: (BuildContext context, int index) {
               if (index == regions.length) {
                 //reach the end
@@ -57,6 +59,7 @@ class RegionsList extends StatelessWidget {
               );
             },
           );
+          }();
   }
 
   @override

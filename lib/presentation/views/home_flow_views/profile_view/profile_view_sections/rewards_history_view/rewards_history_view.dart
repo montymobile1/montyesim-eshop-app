@@ -18,6 +18,7 @@ import "package:flutter/material.dart";
 
 class RewardsHistoryView extends StatelessWidget {
   const RewardsHistoryView({super.key});
+
   static const String routeName = "RewardsHistoryView";
 
   @override
@@ -66,15 +67,17 @@ class RewardsHistoryView extends StatelessWidget {
                             EnvironmentImages.emptyRewardHistory.fullImagePath,
                         content: LocaleKeys.rewardHistory_emptyContentText.tr(),
                         button: MainButton.bannerButton(
-                          title: LocaleKeys.rewardHistory_referTypeTitle
-                              .tr() /*viewModel.selectedType.titleText*/,
-                          action: () async => viewModel.onEmptyStateTapped(),
-                          themeColor: themeColor,
-                          textColor:
-                              enabledMainButtonTextColor(context: context),
-                          buttonColor: enabledMainButtonColor(context: context),
-                          titleTextStyle: captionOneBoldTextStyle(
-                            context: context,
+                          params: BannerButtonParams(
+                            title: LocaleKeys.rewardHistory_referTypeTitle
+                                .tr() /*viewModel.selectedType.titleText*/,
+                            action: () async => viewModel.onEmptyStateTapped(),
+                            themeColor: themeColor,
+                            textColor:
+                                enabledMainButtonTextColor(context: context),
+                            buttonColor: enabledMainButtonColor(context: context),
+                            titleTextStyle: captionOneBoldTextStyle(
+                              context: context,
+                            ),
                           ),
                         ),
                       ),
@@ -86,8 +89,10 @@ class RewardsHistoryView extends StatelessWidget {
                       rewardHistoryModel:
                           viewModel.filteredRewardHistory[index],
                     ).applyShimmer(
-                      context: context,
-                      enable: viewModel.applyShimmer,
+                      params: ShimmerParams(
+                        context: context,
+                        enable: viewModel.applyShimmer,
+                      ),
                     ),
                   ),
                 ),
@@ -99,67 +104,67 @@ class RewardsHistoryView extends StatelessWidget {
     );
   }
 
-  // Widget rewardHistoryTypeWidget(
-  //   BuildContext context,
-  //   RewardsHistoryViewModel viewModel,
-  // ) {
-  //   return PaddingWidget.applySymmetricPadding(
-  //     horizontal: 15,
-  //     child: SizedBox(
-  //       height: 30,
-  //       child: Align(
-  //         alignment: Alignment.centerLeft,
-  //         child: ListView.separated(
-  //           shrinkWrap: true,
-  //           scrollDirection: Axis.horizontal,
-  //           itemCount: RewardHistoryType.values.length,
-  //           separatorBuilder: (BuildContext context, int index) {
-  //             if (RewardHistoryType.values[index] == RewardHistoryType.none) {
-  //               return const SizedBox.shrink();
-  //             }
-  //             return const SizedBox(width: 10);
-  //           },
-  //           itemBuilder: (BuildContext context, int index) {
-  //             if (RewardHistoryType.values[index] == RewardHistoryType.none) {
-  //               return const SizedBox.shrink();
-  //             }
-  //             return GestureDetector(
-  //               onTap: () {
-  //                 viewModel.changeSelectedType(RewardHistoryType.values[index]);
-  //               },
-  //               child: DecoratedBox(
-  //                 decoration: BoxDecoration(
-  //                   color: RewardHistoryType.values[index] ==
-  //                           viewModel.selectedType
-  //                       ? enabledMainButtonColor(context: context)
-  //                       : mainWhiteTextColor(context: context),
-  //                   border: Border.all(
-  //                     color: mainBorderColor(context: context),
-  //                   ),
-  //                   borderRadius: BorderRadius.circular(15),
-  //                 ),
-  //                 child: PaddingWidget.applySymmetricPadding(
-  //                   vertical: 5,
-  //                   horizontal: 10,
-  //                   child: Center(
-  //                     child: Text(
-  //                       RewardHistoryType.values[index].titleText,
-  //                       style: captionTwoNormalTextStyle(context: context)
-  //                           .copyWith(
-  //                         color: RewardHistoryType.values[index] ==
-  //                                 viewModel.selectedType
-  //                             ? mainWhiteTextColor(context: context)
-  //                             : contentTextColor(context: context),
-  //                       ),
-  //                     ),
-  //                   ),
-  //                 ),
-  //               ),
-  //             );
-  //           },
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
+// Widget rewardHistoryTypeWidget(
+//   BuildContext context,
+//   RewardsHistoryViewModel viewModel,
+// ) {
+//   return PaddingWidget.applySymmetricPadding(
+//     horizontal: 15,
+//     child: SizedBox(
+//       height: 30,
+//       child: Align(
+//         alignment: Alignment.centerLeft,
+//         child: ListView.separated(
+//           shrinkWrap: true,
+//           scrollDirection: Axis.horizontal,
+//           itemCount: RewardHistoryType.values.length,
+//           separatorBuilder: (BuildContext context, int index) {
+//             if (RewardHistoryType.values[index] == RewardHistoryType.none) {
+//               return const SizedBox.shrink();
+//             }
+//             return const SizedBox(width: 10);
+//           },
+//           itemBuilder: (BuildContext context, int index) {
+//             if (RewardHistoryType.values[index] == RewardHistoryType.none) {
+//               return const SizedBox.shrink();
+//             }
+//             return GestureDetector(
+//               onTap: () {
+//                 viewModel.changeSelectedType(RewardHistoryType.values[index]);
+//               },
+//               child: DecoratedBox(
+//                 decoration: BoxDecoration(
+//                   color: RewardHistoryType.values[index] ==
+//                           viewModel.selectedType
+//                       ? enabledMainButtonColor(context: context)
+//                       : mainWhiteTextColor(context: context),
+//                   border: Border.all(
+//                     color: mainBorderColor(context: context),
+//                   ),
+//                   borderRadius: BorderRadius.circular(15),
+//                 ),
+//                 child: PaddingWidget.applySymmetricPadding(
+//                   vertical: 5,
+//                   horizontal: 10,
+//                   child: Center(
+//                     child: Text(
+//                       RewardHistoryType.values[index].titleText,
+//                       style: captionTwoNormalTextStyle(context: context)
+//                           .copyWith(
+//                         color: RewardHistoryType.values[index] ==
+//                                 viewModel.selectedType
+//                             ? mainWhiteTextColor(context: context)
+//                             : contentTextColor(context: context),
+//                       ),
+//                     ),
+//                   ),
+//                 ),
+//               ),
+//             );
+//           },
+//         ),
+//       ),
+//     ),
+//   );
+// }
 }

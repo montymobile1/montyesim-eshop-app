@@ -136,7 +136,9 @@ class TopUpBottomSheet extends StatelessWidget {
             unawaited(viewModel.onBuyClick(index: index));
           },
           isLoading: viewModel.applyShimmer,
-          icon: item.isCruise? EnvironmentImages.globalFlag.fullImagePath: item.icon ?? "",
+          icon: item.isCruise
+              ? EnvironmentImages.globalFlag.fullImagePath
+              : item.icon ?? "",
         );
       },
     );
@@ -202,8 +204,9 @@ class EsimBundleTopUpWidget extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                CountryFlagImage(icon: icon)
-                    .applyShimmer(context: context, enable: isLoading),
+                CountryFlagImage(icon: icon).applyShimmer(
+                  params: ShimmerParams(context: context, enable: isLoading),
+                ),
                 horizontalSpaceSmall,
                 Expanded(
                   child: Text(
@@ -215,9 +218,11 @@ class EsimBundleTopUpWidget extends StatelessWidget {
                           regionCountryBundleTitleTextColor(context: context),
                     ),
                   ).applyShimmer(
-                    context: context,
-                    enable: isLoading,
-                    width: 50,
+                    params: ShimmerParams(
+                      context: context,
+                      enable: isLoading,
+                      width: 50,
+                    ),
                   ),
                 ),
                 showUnlimitedData
@@ -229,7 +234,10 @@ class EsimBundleTopUpWidget extends StatelessWidget {
                           context: context,
                           fontColor: bundleDataPriceTextColor(context: context),
                         ),
-                      ).textSupportsRTL(context).applyShimmer(context: context, enable: isLoading),
+                      ).textSupportsRTL(context).applyShimmer(
+                          params: ShimmerParams(
+                              context: context, enable: isLoading,),
+                        ),
               ],
             ),
             const BundleDivider(),
@@ -239,7 +247,9 @@ class EsimBundleTopUpWidget extends StatelessWidget {
                 context: context,
                 fontColor: contentTextColor(context: context),
               ),
-            ).applyShimmer(context: context, enable: isLoading),
+            ).applyShimmer(
+              params: ShimmerParams(context: context, enable: isLoading),
+            ),
             verticalSpaceMedium,
             // Price Button
             Row(
@@ -257,7 +267,9 @@ class EsimBundleTopUpWidget extends StatelessWidget {
                   titleTextStyle: captionOneMediumTextStyle(
                     context: context,
                   ),
-                ).applyShimmer(context: context, enable: isLoading),
+                ).applyShimmer(
+                  params: ShimmerParams(context: context, enable: isLoading),
+                ),
               ],
             ),
           ],

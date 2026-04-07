@@ -12,13 +12,15 @@ class CountryFlagImage extends StatelessWidget {
     this.width,
     this.height,
   });
+
   final String icon;
   final double? width;
   final double? height;
 
   @override
   Widget build(BuildContext context) {
-    if (icon.startsWith("assets/")) { // for local icons
+    if (icon.startsWith("assets/")) {
+      // for local icons
       if (icon.toLowerCase().endsWith(".svg")) {
         return SvgPicture.asset(
           icon,
@@ -28,13 +30,14 @@ class CountryFlagImage extends StatelessWidget {
             width: width ?? 30,
             height: height ?? 30,
           ).applyShimmer(
-            enable: true,
-            context: context,
-            borderRadius: 30,
+            params: ShimmerParams(
+              enable: true,
+              context: context,
+              borderRadius: 30,
+            ),
           ),
         );
-      }
-      else {
+      } else {
         return Image.asset(
           icon,
           width: width ?? 30,
@@ -50,20 +53,26 @@ class CountryFlagImage extends StatelessWidget {
 
     return CachedImage.network(
       imagePath: icon,
-      width: width ?? 30,
-      height: height ?? 30,
-      errorWidget: SvgPicture.asset(
-        EnvironmentImages.globalFlag.fullImagePath,
+      dimensions: ImageDimensions(
         width: width ?? 30,
         height: height ?? 30,
       ),
-      placeholder: SizedBox(
-        width: width ?? 30,
-        height: height ?? 30,
-      ).applyShimmer(
-        enable: true,
-        context: context,
-        borderRadius: 30,
+      widgets: ImageWidgets(
+        errorWidget: SvgPicture.asset(
+          EnvironmentImages.globalFlag.fullImagePath,
+          width: width ?? 30,
+          height: height ?? 30,
+        ),
+        placeholder: SizedBox(
+          width: width ?? 30,
+          height: height ?? 30,
+        ).applyShimmer(
+          params: ShimmerParams(
+            enable: true,
+            context: context,
+            borderRadius: 30,
+          ),
+        ),
       ),
     );
   }

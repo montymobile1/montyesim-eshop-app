@@ -5,6 +5,8 @@ import "package:esim_open_source/app/environment/app_environment.dart";
 import "package:esim_open_source/data/remote/request/device/device_info_request_model.dart";
 import "package:esim_open_source/data/remote/responses/empty_response.dart";
 import "package:esim_open_source/di/locator.dart";
+import "package:esim_open_source/domain/data/params/add_device_params.dart";
+import "package:esim_open_source/domain/data/params/register_device_params.dart";
 import "package:esim_open_source/domain/repository/api_app_repository.dart";
 import "package:esim_open_source/domain/repository/api_device_repository.dart";
 import "package:esim_open_source/domain/repository/services/device_info_service.dart";
@@ -13,30 +15,6 @@ import "package:esim_open_source/domain/repository/services/secure_storage_servi
 import "package:esim_open_source/domain/use_case/base_use_case.dart";
 import "package:esim_open_source/domain/util/resource.dart";
 import "package:esim_open_source/utils/generation_helper.dart";
-
-class AddDeviceParams {
-  AddDeviceParams({
-    required this.fcmToken,
-    required this.manufacturer,
-    required this.deviceModel,
-    required this.deviceOs,
-    required this.deviceOsVersion,
-    required this.appVersion,
-    required this.ramSize,
-    required this.screenResolution,
-    required this.isRooted,
-  });
-
-  String fcmToken;
-  final String manufacturer;
-  final String deviceModel;
-  final String deviceOs;
-  final String deviceOsVersion;
-  String appVersion;
-  final String ramSize;
-  final String screenResolution;
-  bool isRooted;
-}
 
 class AddDeviceUseCase implements UseCase<Resource<EmptyResponse?>, NoParams> {
   AddDeviceUseCase(
@@ -70,6 +48,7 @@ class AddDeviceUseCase implements UseCase<Resource<EmptyResponse?>, NoParams> {
               .isNotEmpty) {
         unawaited(
           await deviceRepository.registerDevice(
+              params: RegisterDeviceParams(
             fcmToken: fcmToken,
             deviceId: uniqueDeviceID,
             platformTag: DeviceInfoRequestModel.platformTag,
@@ -84,23 +63,13 @@ class AddDeviceUseCase implements UseCase<Resource<EmptyResponse?>, NoParams> {
             deviceInfo: DeviceInfoRequestModel(
               deviceName: deviceParams.deviceModel,
             ),
-          ),
+          ),),
         );
       }
     } on Object catch (ex) {
       log(ex.toString());
     }
 
-    return await repository.addDevice(
-      fcmToken: deviceParams.fcmToken,
-      manufacturer: deviceParams.manufacturer,
-      deviceModel: deviceParams.deviceModel,
-      deviceOs: deviceParams.deviceOs,
-      deviceOsVersion: deviceParams.deviceOsVersion,
-      appVersion: deviceParams.appVersion,
-      ramSize: deviceParams.ramSize,
-      screenResolution: deviceParams.screenResolution,
-      isRooted: deviceParams.isRooted,
-    );
+    return await repository.addDevice(deviceParams);
   }
 }

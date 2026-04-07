@@ -1,3 +1,4 @@
+import "package:esim_open_source/domain/data/params/update_user_info_params.dart";
 import "package:esim_open_source/data/remote/responses/auth/auth_response_model.dart";
 import "package:esim_open_source/domain/repository/api_auth_repository.dart";
 import "package:esim_open_source/domain/repository/services/app_configuration_service.dart";
@@ -43,7 +44,6 @@ Future<void> main() async {
         msisdn: "+9876543210",
         firstName: "John",
         lastName: "Doe",
-        isNewsletterSubscribed: true,
         currencyCode: "USD",
         languageCode: "en",
       );
@@ -60,13 +60,7 @@ Future<void> main() async {
       );
 
       when(mockRepository.updateUserInfo(
-        email: anyNamed("email"),
-        msisdn: anyNamed("msisdn"),
-        firstName: anyNamed("firstName"),
-        lastName: anyNamed("lastName"),
-        isNewsletterSubscribed: anyNamed("isNewsletterSubscribed"),
-        currencyCode: anyNamed("currencyCode"),
-        languageCode: anyNamed("languageCode"),
+        request: argThat(isA<UpdateUserInfoRequest>(), named: "request"),
       ),).thenAnswer((_) async => expectedResponse);
 
       // Act
@@ -77,13 +71,7 @@ Future<void> main() async {
       expect(result.data, isNotNull);
 
       verify(mockRepository.updateUserInfo(
-        email: anyNamed("email"),
-        msisdn: anyNamed("msisdn"),
-        firstName: "John",
-        lastName: "Doe",
-        isNewsletterSubscribed: true,
-        currencyCode: "USD",
-        languageCode: "en",
+        request: argThat(isA<UpdateUserInfoRequest>(), named: "request"),
       ),).called(1);
     });
 
@@ -105,13 +93,7 @@ Future<void> main() async {
       );
 
       when(mockRepository.updateUserInfo(
-        email: anyNamed("email"),
-        msisdn: anyNamed("msisdn"),
-        firstName: anyNamed("firstName"),
-        lastName: anyNamed("lastName"),
-        isNewsletterSubscribed: anyNamed("isNewsletterSubscribed"),
-        currencyCode: anyNamed("currencyCode"),
-        languageCode: anyNamed("languageCode"),
+        request: argThat(isA<UpdateUserInfoRequest>(), named: "request"),
       ),).thenAnswer((_) async => expectedResponse);
 
       // Act
@@ -121,13 +103,7 @@ Future<void> main() async {
       expect(result.resourceType, equals(ResourceType.success));
 
       verify(mockRepository.updateUserInfo(
-        email: anyNamed("email"),
-        msisdn: anyNamed("msisdn"),
-        firstName: "Jane",
-        lastName: "Smith",
-        isNewsletterSubscribed: anyNamed("isNewsletterSubscribed"),
-        currencyCode: anyNamed("currencyCode"),
-        languageCode: anyNamed("languageCode"),
+        request: argThat(isA<UpdateUserInfoRequest>(), named: "request"),
       ),).called(1);
     });
 
@@ -144,13 +120,7 @@ Future<void> main() async {
       );
 
       when(mockRepository.updateUserInfo(
-        email: anyNamed("email"),
-        msisdn: anyNamed("msisdn"),
-        firstName: anyNamed("firstName"),
-        lastName: anyNamed("lastName"),
-        isNewsletterSubscribed: anyNamed("isNewsletterSubscribed"),
-        currencyCode: anyNamed("currencyCode"),
-        languageCode: anyNamed("languageCode"),
+        request: argThat(isA<UpdateUserInfoRequest>(), named: "request"),
       ),).thenAnswer((_) async => expectedResponse);
 
       // Act
@@ -174,13 +144,7 @@ Future<void> main() async {
       );
 
       when(mockRepository.updateUserInfo(
-        email: anyNamed("email"),
-        msisdn: anyNamed("msisdn"),
-        firstName: anyNamed("firstName"),
-        lastName: anyNamed("lastName"),
-        isNewsletterSubscribed: anyNamed("isNewsletterSubscribed"),
-        currencyCode: anyNamed("currencyCode"),
-        languageCode: anyNamed("languageCode"),
+        request: argThat(isA<UpdateUserInfoRequest>(), named: "request"),
       ),).thenAnswer((_) async => expectedResponse);
 
       // Act
@@ -194,7 +158,6 @@ Future<void> main() async {
     test("execute handles newsletter subscription toggle", () async {
       // Arrange
       final UpdateUserInfoParams params = UpdateUserInfoParams(
-        isNewsletterSubscribed: false,
       );
 
       final AuthResponseModel authResponse = AuthResponseModel(
@@ -208,13 +171,7 @@ Future<void> main() async {
       );
 
       when(mockRepository.updateUserInfo(
-        email: anyNamed("email"),
-        msisdn: anyNamed("msisdn"),
-        firstName: anyNamed("firstName"),
-        lastName: anyNamed("lastName"),
-        isNewsletterSubscribed: anyNamed("isNewsletterSubscribed"),
-        currencyCode: anyNamed("currencyCode"),
-        languageCode: anyNamed("languageCode"),
+        request: argThat(isA<UpdateUserInfoRequest>(), named: "request"),
       ),).thenAnswer((_) async => expectedResponse);
 
       // Act
@@ -224,13 +181,7 @@ Future<void> main() async {
       expect(result.resourceType, equals(ResourceType.success));
 
       verify(mockRepository.updateUserInfo(
-        email: anyNamed("email"),
-        msisdn: anyNamed("msisdn"),
-        firstName: anyNamed("firstName"),
-        lastName: anyNamed("lastName"),
-        isNewsletterSubscribed: false,
-        currencyCode: anyNamed("currencyCode"),
-        languageCode: anyNamed("languageCode"),
+        request: argThat(isA<UpdateUserInfoRequest>(), named: "request"),
       ),).called(1);
     });
 
@@ -252,13 +203,7 @@ Future<void> main() async {
       );
 
       when(mockRepository.updateUserInfo(
-        email: anyNamed("email"),
-        msisdn: anyNamed("msisdn"),
-        firstName: anyNamed("firstName"),
-        lastName: anyNamed("lastName"),
-        isNewsletterSubscribed: anyNamed("isNewsletterSubscribed"),
-        currencyCode: anyNamed("currencyCode"),
-        languageCode: anyNamed("languageCode"),
+        request: argThat(isA<UpdateUserInfoRequest>(), named: "request"),
       ),).thenAnswer((_) async => expectedResponse);
 
       // Act
@@ -268,13 +213,7 @@ Future<void> main() async {
       expect(result.resourceType, equals(ResourceType.success));
 
       verify(mockRepository.updateUserInfo(
-        email: anyNamed("email"),
-        msisdn: anyNamed("msisdn"),
-        firstName: anyNamed("firstName"),
-        lastName: anyNamed("lastName"),
-        isNewsletterSubscribed: anyNamed("isNewsletterSubscribed"),
-        currencyCode: "EUR",
-        languageCode: "es",
+        request: argThat(isA<UpdateUserInfoRequest>(), named: "request"),
       ),).called(1);
     });
 
@@ -291,13 +230,7 @@ Future<void> main() async {
       );
 
       when(mockRepository.updateUserInfo(
-        email: anyNamed("email"),
-        msisdn: anyNamed("msisdn"),
-        firstName: anyNamed("firstName"),
-        lastName: anyNamed("lastName"),
-        isNewsletterSubscribed: anyNamed("isNewsletterSubscribed"),
-        currencyCode: anyNamed("currencyCode"),
-        languageCode: anyNamed("languageCode"),
+        request: argThat(isA<UpdateUserInfoRequest>(), named: "request"),
       ),).thenAnswer((_) async => expectedResponse);
 
       // Act
@@ -321,13 +254,7 @@ Future<void> main() async {
       );
 
       when(mockRepository.updateUserInfo(
-        email: anyNamed("email"),
-        msisdn: anyNamed("msisdn"),
-        firstName: anyNamed("firstName"),
-        lastName: anyNamed("lastName"),
-        isNewsletterSubscribed: anyNamed("isNewsletterSubscribed"),
-        currencyCode: anyNamed("currencyCode"),
-        languageCode: anyNamed("languageCode"),
+        request: argThat(isA<UpdateUserInfoRequest>(), named: "request"),
       ),).thenAnswer((_) async => expectedResponse);
 
       // Act

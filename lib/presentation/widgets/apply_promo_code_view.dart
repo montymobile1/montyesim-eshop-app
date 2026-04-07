@@ -76,19 +76,25 @@ class ApplyPromoCode extends StatelessWidget {
                       children: <Widget>[
                         verticalSpaceSmallMedium,
                         MainInputField.promoCode(
-                          enabled: isFieldEnabled,
                           controller: controller,
                           themeColor: themeColor,
-                          hintText: LocaleKeys.promoCodeView_titleText.tr(),
-                          hintLabelStyle: captionOneNormalTextStyle(
-                            context: context,
-                            fontColor: secondaryTextColor(context: context),
+                          textConfig: MainInputFieldTextConfig(
+                            hintText: LocaleKeys.promoCodeView_titleText.tr(),
+                            errorMessage: message,
                           ),
-                          backGroundColor:
-                              whiteBackGroundColor(context: context),
-                          message: message,
-                          icon: textFieldIcon,
-                          color: textFieldBorderColor,
+                          appearanceConfig: MainInputFieldAppearanceConfig(
+                            backgroundColor:
+                                whiteBackGroundColor(context: context),
+                            hintTextStyle: captionOneNormalTextStyle(
+                              context: context,
+                              fontColor: secondaryTextColor(context: context),
+                            ),
+                            errorIcon: textFieldIcon,
+                            errorColor: textFieldBorderColor,
+                          ),
+                          behaviorConfig: MainInputFieldBehaviorConfig(
+                            isReadOnly: !isFieldEnabled,
+                          ),
                         ),
                         //verticalSpaceSmall,
                         MainButton(

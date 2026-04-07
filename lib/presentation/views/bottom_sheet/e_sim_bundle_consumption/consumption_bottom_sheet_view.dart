@@ -1,4 +1,5 @@
-import "package:easy_localization/easy_localization.dart" show StringTranslateExtension;
+import "package:easy_localization/easy_localization.dart"
+    show StringTranslateExtension;
 import "package:esim_open_source/di/locator.dart";
 import "package:esim_open_source/presentation/extensions/shimmer_extensions.dart";
 import "package:esim_open_source/presentation/setup_bottom_sheet_ui.dart";
@@ -124,86 +125,115 @@ class ConsumptionBottomSheetView extends StatelessWidget {
       child: Stack(
         alignment: Alignment.center,
         children: <Widget>[
-          viewModel.state.errorMessage != null
-              ? Container()
-              : isUnlimitedData
-                  ? Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text(
-                          LocaleKeys.unlimited.tr(),
-                          style: unlimitedBoldTextStyle(
-                            context: context,
-                            fontColor: mainDarkTextColor(context: context),
-                          ),
-                        ),
-                        Text(
-                          LocaleKeys.unlimited_data_bundle.tr(),
-                          style: unlimitedDataBundleTextStyle(
-                            context: context,
-                            fontColor: mainDarkTextColor(context: context),
-                          ),
-                        ),
-                      ],
-                    )
-                  : SizedBox(
-                      width: 230,
-                      height: 230,
-                      child: AnimatedCircularProgressIndicator(
-                        targetValue: viewModel.state.consumption,
-                        valueColor: consumptionValueColor(context: context),
-                        backgroundColor:
-                            consumptionBackgroundColor(context: context),
-                        isLoading: viewModel.isBusy,
-                      ),
-                    ),
-          viewModel.state.errorMessage != null
-              ? Text(viewModel.state.errorMessage ?? "")
-              : isUnlimitedData
-                  ? Container()
-                  : Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text(
-                          viewModel.state.percentageUI,
-                          textAlign: TextAlign.center,
-                          style: headerOneBoldTextStyle(
-                            context: context,
-                            fontColor: mainDarkTextColor(context: context),
-                          ),
-                        ).applyShimmer(
-                          context: context,
-                          enable: viewModel.isBusy,
-                        ),
-                        verticalSpaceSmall,
-                        Text(
-                          viewModel.state.consumptionText,
-                          textAlign: TextAlign.center,
-                          textDirection: TextDirection.ltr,
-                          style: captionTwoNormalTextStyle(
-                            context: context,
-                            fontColor: contentTextColor(context: context),
-                          ),
-                        ).applyShimmer(
-                          context: context,
-                          enable: viewModel.isBusy,
-                        ),
-                        verticalSpaceTiniest,
-                        Text(
-                          LocaleKeys.data_consumed.tr(),
-                          textAlign: TextAlign.center,
-                          style: captionTwoNormalTextStyle(
-                            context: context,
-                            fontColor: contentTextColor(context: context),
-                          ).copyWith(fontSize: 10),
-                        ).applyShimmer(
-                          context: context,
-                          enable: viewModel.isBusy,
-                        ),
-                      ],
-                    ),
+          _buildBackgroundWidget(context, viewModel, isUnlimitedData),
+          _buildOverlayWidget(context, viewModel, isUnlimitedData),
         ],
       ),
+    );
+  }
+
+  Widget _buildBackgroundWidget(
+    BuildContext context,
+    ConsumptionBottomSheetViewModel viewModel,
+    bool isUnlimitedData,
+  ) {
+    if (viewModel.state.errorMessage != null) {
+      return Container();
+    }
+
+    if (isUnlimitedData) {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text(
+            LocaleKeys.unlimited.tr(),
+            style: unlimitedBoldTextStyle(
+              context: context,
+              fontColor: mainDarkTextColor(context: context),
+            ),
+          ),
+          Text(
+            LocaleKeys.unlimited_data_bundle.tr(),
+            style: unlimitedDataBundleTextStyle(
+              context: context,
+              fontColor: mainDarkTextColor(context: context),
+            ),
+          ),
+        ],
+      );
+    }
+
+    return SizedBox(
+      width: 230,
+      height: 230,
+      child: AnimatedCircularProgressIndicator(
+        targetValue: viewModel.state.consumption,
+        valueColor: consumptionValueColor(context: context),
+        backgroundColor: consumptionBackgroundColor(context: context),
+        isLoading: viewModel.isBusy,
+      ),
+    );
+  }
+
+  Widget _buildOverlayWidget(
+    BuildContext context,
+    ConsumptionBottomSheetViewModel viewModel,
+    bool isUnlimitedData,
+  ) {
+    if (viewModel.state.errorMessage != null) {
+      return Text(viewModel.state.errorMessage ?? "");
+    }
+
+    if (isUnlimitedData) {
+      return Container();
+    }
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Text(
+          viewModel.state.percentageUI,
+          textAlign: TextAlign.center,
+          style: headerOneBoldTextStyle(
+            context: context,
+            fontColor: mainDarkTextColor(context: context),
+          ),
+        ).applyShimmer(
+          params: ShimmerParams(
+            context: context,
+            enable: viewModel.isBusy,
+          ),
+        ),
+        verticalSpaceSmall,
+        Text(
+          viewModel.state.consumptionText,
+          textAlign: TextAlign.center,
+          textDirection: TextDirection.ltr,
+          style: captionTwoNormalTextStyle(
+            context: context,
+            fontColor: contentTextColor(context: context),
+          ),
+        ).applyShimmer(
+          params: ShimmerParams(
+            context: context,
+            enable: viewModel.isBusy,
+          ),
+        ),
+        verticalSpaceTiniest,
+        Text(
+          LocaleKeys.data_consumed.tr(),
+          textAlign: TextAlign.center,
+          style: captionTwoNormalTextStyle(
+            context: context,
+            fontColor: contentTextColor(context: context),
+          ).copyWith(fontSize: 10),
+        ).applyShimmer(
+          params: ShimmerParams(
+            context: context,
+            enable: viewModel.isBusy,
+          ),
+        ),
+      ],
     );
   }
 

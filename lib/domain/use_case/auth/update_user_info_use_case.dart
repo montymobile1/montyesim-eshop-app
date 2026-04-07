@@ -2,6 +2,7 @@ import "dart:async";
 
 import "package:esim_open_source/app/app.locator.dart";
 import "package:esim_open_source/app/environment/app_environment.dart";
+import "package:esim_open_source/domain/data/params/update_user_info_params.dart";
 import "package:esim_open_source/data/remote/responses/auth/auth_response_model.dart";
 import "package:esim_open_source/domain/repository/api_app_repository.dart";
 import "package:esim_open_source/domain/repository/api_auth_repository.dart";
@@ -18,7 +19,6 @@ class UpdateUserInfoParams {
     this.msisdn,
     this.firstName,
     this.lastName,
-    this.isNewsletterSubscribed,
     this.currencyCode,
     this.languageCode,
   });
@@ -27,7 +27,6 @@ class UpdateUserInfoParams {
   final String? msisdn;
   final String? firstName;
   final String? lastName;
-  final bool? isNewsletterSubscribed;
   final String? currencyCode;
   final String? languageCode;
 }
@@ -55,6 +54,8 @@ class UpdateUserInfoUseCase
     switch (AppEnvironment.appEnvironmentHelper.loginType) {
       case LoginType.email:
       case LoginType.emailAndPhone:
+      case LoginType.emailAndPhoneAndEmailVerification:
+      case LoginType.emailAndPhoneAndBothVerification:
         email = null;
       case LoginType.phoneNumber:
         email = params.email;
@@ -64,20 +65,23 @@ class UpdateUserInfoUseCase
 
     switch (AppEnvironment.appEnvironmentHelper.loginType) {
       case LoginType.email:
+      case LoginType.emailAndPhoneAndEmailVerification:
         msisdn = params.msisdn;
       case LoginType.emailAndPhone:
+      case LoginType.emailAndPhoneAndBothVerification:
       case LoginType.phoneNumber:
         msisdn = null;
     }
 
     Resource<AuthResponseModel> response = await repository.updateUserInfo(
-      email: email,
-      msisdn: msisdn,
-      firstName: params.firstName,
-      lastName: params.lastName,
-      isNewsletterSubscribed: params.isNewsletterSubscribed,
-      currencyCode: params.currencyCode,
-      languageCode: params.languageCode,
+      request: UpdateUserInfoRequest(
+        email: email,
+        msisdn: msisdn,
+        firstName: params.firstName,
+        lastName: params.lastName,
+        currencyCode: params.currencyCode,
+        languageCode: params.languageCode,
+      ),
     );
 
     await userAuthenticationService.updateUserResponse(response.data);

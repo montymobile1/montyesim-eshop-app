@@ -39,7 +39,10 @@ class ESimStatusHeader extends StatelessWidget {
             status,
             style: captionOneMediumTextStyle(context: context)
                 .copyWith(color: statusTextColor, fontSize: 11),
-          ).applyShimmer(enable: isLoading, context: context, width: 50),
+          ).applyShimmer(
+            params:
+                ShimmerParams(enable: isLoading, context: context, width: 50),
+          ),
         ),
         MainButton(
           height: 30,
@@ -62,7 +65,10 @@ class ESimStatusHeader extends StatelessWidget {
             }
           },
           themeColor: themeColor,
-        ).applyShimmer(enable: isLoading, context: context, height: 20),
+        ).applyShimmer(
+          params:
+              ShimmerParams(enable: isLoading, context: context, height: 20),
+        ),
       ],
     );
   }

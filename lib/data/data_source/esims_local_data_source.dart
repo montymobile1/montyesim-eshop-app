@@ -32,69 +32,113 @@ class EsimsLocalDataSource {
     clearCache();
     _store.runInTransaction(TxMode.write, () {
       for (final PurchaseEsimBundleResponseModel data in dataList) {
-        final EsimEntity esimData = EsimEntity.fromModel(data);
-
-        // Save bundle category
-        if (data.bundleCategory != null) {
-          final EsimBundleCategoryEntity categoryEntity =
-              EsimBundleCategoryEntity.fromModel(data.bundleCategory!);
-          esimData.bundleCategory.target = categoryEntity;
-        }
-
-        // Save countries
-        if (data.countries != null) {
-          for (final CountryResponseModel country in data.countries!) {
-            final EsimCountryEntity countryEntity =
-                EsimCountryEntity.fromModel(country);
-            esimData.countries.add(countryEntity);
-          }
-        }
-
-        // Save transactions history
-        if (data.transactionHistory != null) {
-          for (final TransactionHistoryResponseModel transaction
-              in data.transactionHistory!) {
-            final TransactionHistoryEntity transactionHistoryEntity =
-                TransactionHistoryEntity.fromModel(transaction);
-
-            if (transaction.bundle != null) {
-              final EsimBundleEntity bundleEntity = EsimBundleEntity.fromModel(
-                transaction.bundle!,
-                BundleType.global,
-              );
-
-              // Save bundle category if exists
-              if (transaction.bundle?.bundleCategory != null) {
-                final EsimBundleCategoryEntity categoryEntity =
-                    EsimBundleCategoryEntity.fromModel(
-                  transaction.bundle!.bundleCategory!,
-                );
-                _bundleCategoryBox.put(categoryEntity);
-                bundleEntity.bundleCategory.target = categoryEntity;
-              }
-
-              // Link countries
-              if (transaction.bundle!.countries != null) {
-                for (final CountryResponseModel country
-                    in transaction.bundle!.countries!) {
-                  final EsimCountryEntity countryEntity =
-                      _findOrCreateCountry(country);
-                  bundleEntity.countries.add(countryEntity);
-                }
-              }
-
-              transactionHistoryEntity.bundle.target = bundleEntity;
-            }
-
-            esimData.transactionHistory.add(transactionHistoryEntity);
-          }
-        }
-
+        final EsimEntity esimData = _createEsimEntity(data);
         _esimBox.put(esimData);
       }
     });
 
     log("Purchased Esim Saved to db");
+  }
+
+  EsimEntity _createEsimEntity(PurchaseEsimBundleResponseModel data) {
+    final EsimEntity esimData = EsimEntity.fromModel(data);
+    _attachBundleCategory(esimData, data.bundleCategory);
+    _attachCountries(esimData, data.countries);
+    _attachTransactionHistory(esimData, data.transactionHistory);
+    return esimData;
+  }
+
+  void _attachBundleCategory(
+    EsimEntity esimData,
+    dynamic bundleCategory,
+  ) {
+    if (bundleCategory != null) {
+      final EsimBundleCategoryEntity categoryEntity =
+          EsimBundleCategoryEntity.fromModel(bundleCategory);
+      esimData.bundleCategory.target = categoryEntity;
+    }
+  }
+
+  void _attachCountries(
+    EsimEntity esimData,
+    List<CountryResponseModel>? countries,
+  ) {
+    if (countries == null) {
+      return;
+    }
+    for (final CountryResponseModel country in countries) {
+      final EsimCountryEntity countryEntity =
+          EsimCountryEntity.fromModel(country);
+      esimData.countries.add(countryEntity);
+    }
+  }
+
+  void _attachTransactionHistory(
+    EsimEntity esimData,
+    List<TransactionHistoryResponseModel>? transactionHistory,
+  ) {
+    if (transactionHistory == null) {
+      return;
+    }
+    for (final TransactionHistoryResponseModel transaction
+        in transactionHistory) {
+      final TransactionHistoryEntity transactionEntity =
+          _createTransactionEntity(transaction);
+      esimData.transactionHistory.add(transactionEntity);
+    }
+  }
+
+  TransactionHistoryEntity _createTransactionEntity(
+    TransactionHistoryResponseModel transaction,
+  ) {
+    final TransactionHistoryEntity transactionEntity =
+        TransactionHistoryEntity.fromModel(transaction);
+
+    if (transaction.bundle != null) {
+      final EsimBundleEntity bundleEntity = _createBundleEntity(
+        transaction.bundle!,
+      );
+      transactionEntity.bundle.target = bundleEntity;
+    }
+
+    return transactionEntity;
+  }
+
+  EsimBundleEntity _createBundleEntity(dynamic bundle) {
+    final EsimBundleEntity bundleEntity = EsimBundleEntity.fromModel(
+      bundle,
+      BundleType.global,
+    );
+
+    _attachBundleCategoryToBundle(bundleEntity, bundle.bundleCategory);
+    _attachCountriesToBundle(bundleEntity, bundle.countries);
+
+    return bundleEntity;
+  }
+
+  void _attachBundleCategoryToBundle(
+    EsimBundleEntity bundleEntity,
+    dynamic bundleCategory,
+  ) {
+    if (bundleCategory != null) {
+      final EsimBundleCategoryEntity categoryEntity =
+          EsimBundleCategoryEntity.fromModel(bundleCategory);
+      _bundleCategoryBox.put(categoryEntity);
+      bundleEntity.bundleCategory.target = categoryEntity;
+    }
+  }
+
+  void _attachCountriesToBundle(
+    EsimBundleEntity bundleEntity,
+    List<CountryResponseModel>? countries,
+  ) {
+    if (countries == null) {
+      return;
+    }
+    for (final CountryResponseModel country in countries) {
+      final EsimCountryEntity countryEntity = _findOrCreateCountry(country);
+      bundleEntity.countries.add(countryEntity);
+    }
   }
 
   EsimCountryEntity _findOrCreateCountry(CountryResponseModel country) {

@@ -45,18 +45,16 @@ class StoryViewer extends StatelessWidget {
     BuildContext context,
     StoryViewerViewModel viewModel,
   ) =>
-      Scaffold(
+      AnnotatedRegion<SystemUiOverlayStyle>(
+        value: const SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+          statusBarIconBrightness: Brightness.light,
+          statusBarBrightness: Brightness.light,
+        ),
+        child: Scaffold(
         body: GestureDetector(
-          onTapDown: (TapDownDetails details) async {
-            await Future<void>.delayed(const Duration(milliseconds: 400),
-                () async {
-              if (!_isHolding) {
-                if (context.mounted) {
-                  await viewModel.onTapDown(context, details);
-                }
-              }
-            });
-          },
+          onTapDown: (TapDownDetails details) =>
+              _handleTapDown(context, viewModel, details),
           onLongPressStart: (_) {
             _isHolding = true;
             viewModel.pauseStory();
@@ -75,12 +73,8 @@ class StoryViewer extends StatelessWidget {
               _isDraggingDown = true;
             }
           },
-          onVerticalDragEnd: (DragEndDetails details) {
-            if (_isDraggingDown && details.primaryVelocity! > 0) {
-              // If the drag was downward and the velocity is positive (downward drag)
-              viewModel.closeView();
-            }
-          },
+          onVerticalDragEnd: (DragEndDetails details) =>
+              _handleVerticalDragEnd(viewModel, details),
           child: Stack(
             children: <Widget>[
               PageView.builder(
@@ -107,11 +101,7 @@ class StoryViewer extends StatelessWidget {
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 2),
                           child: LinearProgressIndicator(
-                            value: index < viewModel.currentIndex
-                                ? 1
-                                : index == viewModel.currentIndex
-                                    ? viewModel.progress
-                                    : 0,
+                            value: _calculateProgressValue(viewModel, index),
                             backgroundColor:
                                 storyViewerArgs.indicatorBackgroundColor,
                             valueColor: AlwaysStoppedAnimation<Color>(
@@ -131,7 +121,46 @@ class StoryViewer extends StatelessWidget {
             ],
           ),
         ),
+      ),
       );
+
+  Future<void> _handleTapDown(
+    BuildContext context,
+    StoryViewerViewModel viewModel,
+    TapDownDetails details,
+  ) async {
+    await Future<void>.delayed(const Duration(milliseconds: 400), () async {
+      if (_isHolding) {
+        return;
+      }
+
+      if (context.mounted) {
+        await viewModel.onTapDown(context, details);
+      }
+    });
+  }
+
+  void _handleVerticalDragEnd(
+    StoryViewerViewModel viewModel,
+    DragEndDetails details,
+  ) {
+    final bool isDownwardDrag =
+        _isDraggingDown && details.primaryVelocity! > 0;
+
+    if (isDownwardDrag) {
+      viewModel.closeView();
+    }
+  }
+
+  double _calculateProgressValue(StoryViewerViewModel viewModel, int index) {
+    if (index < viewModel.currentIndex) {
+      return 1;
+    }
+    if (index == viewModel.currentIndex) {
+      return viewModel.progress;
+    }
+    return 0;
+  }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {

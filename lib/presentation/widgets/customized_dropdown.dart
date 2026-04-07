@@ -28,6 +28,13 @@ class MyDropDown extends StatelessWidget {
   final bool triggerActionSheet;
   final Widget? underline;
 
+  bool get _hasValidSelection =>
+      selectedValueIndex >= 0 && valueList.length > selectedValueIndex;
+
+  String get _selectedValue => _hasValidSelection ? valueList[selectedValueIndex] : "";
+
+  String? get _selectedValueOrNull => _hasValidSelection ? valueList[selectedValueIndex] : null;
+
   @override
   Widget build(BuildContext context) {
     if (Platform.isIOS) {
@@ -42,8 +49,7 @@ class MyDropDown extends StatelessWidget {
       return GestureDetector(
         behavior: HitTestBehavior.translucent,
         onTap: () async => <Future<void>>{triggerActionSheetCall(context)},
-        child:
-            (selectedValueIndex >= 0 && valueList.length > selectedValueIndex)
+        child: _hasValidSelection
                 ? Padding(
                     padding: const EdgeInsets.all(8),
                     child: Column(
@@ -52,10 +58,7 @@ class MyDropDown extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Text(
-                              (selectedValueIndex >= 0 &&
-                                      valueList.length > selectedValueIndex)
-                                  ? valueList[selectedValueIndex]
-                                  : "",
+                              _selectedValue,
                               style: TextStyle(
                                 color: Theme.of(context)
                                     .colorScheme
@@ -128,10 +131,7 @@ class MyDropDown extends StatelessWidget {
         hint: emptyWidget,
         dropdownColor: Theme.of(context).colorScheme.cBackground(context),
         iconEnabledColor: Theme.of(context).colorScheme.cForeground(context),
-        value:
-            (selectedValueIndex >= 0 && valueList.length > selectedValueIndex)
-                ? valueList[selectedValueIndex]
-                : null,
+        value: _selectedValueOrNull,
         items: valueList.map((String value) {
           return DropdownMenuItem<String>(
             value: value,

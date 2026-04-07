@@ -159,7 +159,6 @@ class MyESimViewModel extends BaseModel {
 
       if (Platform.isAndroid) {
         // unawaited(
-        //TODO MAHDI add SHAExist from API when it comes
         await locator<FlutterChannelHandlerService>().openEsimSetupForAndroid(
           smdpAddress: item.smdpAddress ?? "",
           activationCode: item.activationCode ?? "",

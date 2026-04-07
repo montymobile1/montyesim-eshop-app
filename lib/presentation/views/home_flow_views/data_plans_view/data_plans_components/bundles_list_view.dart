@@ -38,7 +38,9 @@ class BundlesListView extends StatelessWidget {
         }
 
         return EsimBundleWidget(
-          icon: bundles[index].isCruise? EnvironmentImages.globalFlag.fullImagePath : bundles[index].icon ?? "",
+          icon: bundles[index].isCruise
+              ? EnvironmentImages.globalFlag.fullImagePath
+              : bundles[index].icon ?? "",
           title: bundles[index].bundleName ?? "",
           data: bundles[index].gprsLimitDisplay ?? "",
           showUnlimitedData: bundles[index].unlimited ?? false,
@@ -51,11 +53,13 @@ class BundlesListView extends StatelessWidget {
               "price": bundles[index].priceDisplay ?? "",
             },
           ),
-          availableCountries: <CountryResponseModel>[],
+          // availableCountries: const <CountryResponseModel>[],
           onPriceButtonClick: () => onBundleSelected.call(bundles[index]),
         ).applyShimmer(
-          context: context,
-          enable: showShimmer,
+          params: ShimmerParams(
+            context: context,
+            enable: showShimmer,
+          ),
         );
       },
     );
@@ -74,6 +78,11 @@ class BundlesListView extends StatelessWidget {
       ..add(IterableProperty<BundleResponseModel>("bundles", bundles))
       ..add(DiagnosticsProperty<bool>("showShimmer", showShimmer))
       ..add(IntProperty("lastItemBottomPadding", lastItemBottomPadding))
-      ..add(DiagnosticsProperty<bool>("hideSupportedCountries", hideSupportedCountries));
+      ..add(
+        DiagnosticsProperty<bool>(
+          "hideSupportedCountries",
+          hideSupportedCountries,
+        ),
+      );
   }
 }

@@ -1,11 +1,11 @@
 import "package:esim_open_source/data/remote/responses/auth/auth_response_model.dart";
 import "package:esim_open_source/data/remote/responses/empty_response.dart";
+import "package:esim_open_source/domain/data/params/add_device_params.dart";
 import "package:esim_open_source/domain/repository/api_app_repository.dart";
 import "package:esim_open_source/domain/repository/api_auth_repository.dart";
 import "package:esim_open_source/domain/repository/services/device_info_service.dart";
 import "package:esim_open_source/domain/repository/services/local_storage_service.dart";
 import "package:esim_open_source/domain/repository/services/secure_storage_service.dart";
-import "package:esim_open_source/domain/use_case/app/add_device_use_case.dart";
 import "package:esim_open_source/domain/use_case/auth/verify_otp_use_case.dart";
 import "package:esim_open_source/domain/util/resource.dart";
 import "package:flutter_test/flutter_test.dart";
@@ -61,17 +61,7 @@ Future<void> main() async {
     when(mockDeviceInfoService.deviceID).thenAnswer((_) async => "mock_device_id");
 
     // Mock ApiAppRepository addDevice to return success
-    when(mockAppRepository.addDevice(
-      fcmToken: anyNamed("fcmToken"),
-      manufacturer: anyNamed("manufacturer"),
-      deviceModel: anyNamed("deviceModel"),
-      deviceOs: anyNamed("deviceOs"),
-      deviceOsVersion: anyNamed("deviceOsVersion"),
-      appVersion: anyNamed("appVersion"),
-      ramSize: anyNamed("ramSize"),
-      screenResolution: anyNamed("screenResolution"),
-      isRooted: anyNamed("isRooted"),
-    ),).thenAnswer((_) async => TestDataFactory.createSuccessResource<EmptyResponse?>(data: EmptyResponse()));
+    when(mockAppRepository.addDevice(any)).thenAnswer((_) async => TestDataFactory.createSuccessResource<EmptyResponse?>(data: EmptyResponse()));
   });
 
   tearDown(() async {

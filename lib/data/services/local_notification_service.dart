@@ -38,13 +38,13 @@ class LocalNotificationService {
 
     /// Note: permissions aren't requested here just to demonstrate that can be
     /// done later
-    final DarwinInitializationSettings initializationSettingsIOS =
-        const DarwinInitializationSettings(
+    const DarwinInitializationSettings initializationSettingsIOS =
+        DarwinInitializationSettings(
       requestAlertPermission: false,
       requestBadgePermission: false,
       requestSoundPermission: false,
     );
-    final InitializationSettings initializationSettings =
+    const InitializationSettings initializationSettings =
         InitializationSettings(
       android: initializationSettingsAndroid,
       iOS: initializationSettingsIOS,

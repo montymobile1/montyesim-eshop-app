@@ -64,10 +64,9 @@ class ContinueWithEmailView extends StatelessWidget {
             vertical: 10,
             horizontal: 20,
             child: SizedBox(
-              height: screenHeight,
               width: double.infinity,
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   Align(
                     alignment: Alignment.centerLeft,
@@ -97,32 +96,41 @@ class ContinueWithEmailView extends StatelessWidget {
                       ),
                       verticalSpaceSmall,
                       Text(
-                        getContinueWithEmailSubtitleText(),
+                        getLoginInstructionText(),
                         style: bodyNormalTextStyle(
                           context: context,
                           fontColor: secondaryTextColor(context: context),
                         ),
                       ),
+                      verticalSpaceSmall,
                       verticalSpace(
-                        localLoginType == LoginType.emailAndPhone ? 60 : 90,
+                        (localLoginType == LoginType.emailAndPhone ||
+                            localLoginType == LoginType.emailAndPhoneAndEmailVerification ||
+                            localLoginType == LoginType.emailAndPhoneAndBothVerification) ? 60 : 90,
                       ),
                       viewModel.showEmailField
                           ? MainInputField.formField(
-                              themeColor: themeColor,
-                              labelTitleText: LocaleKeys
-                                  .continueWithEmailView_emailTitleField
-                                  .tr(),
-                              hintText: LocaleKeys
-                                  .continueWithEmailView_emailPlaceholder
-                                  .tr(),
                               controller: viewModel.state?.emailController ??
                                   TextEditingController(),
-                              textInputType: TextInputType.emailAddress,
-                              errorMessage: viewModel.state?.emailErrorMessage,
-                              backGroundColor: context.appColors.baseWhite,
-                              labelStyle: bodyNormalTextStyle(
-                                context: context,
-                                fontColor: secondaryTextColor(context: context),
+                              themeColor: themeColor,
+                              textConfig: MainInputFieldTextConfig(
+                                labelTitleText: LocaleKeys
+                                    .continueWithEmailView_emailTitleField
+                                    .tr(),
+                                hintText: LocaleKeys
+                                    .continueWithEmailView_emailPlaceholder
+                                    .tr(),
+                                errorMessage: viewModel.state?.emailErrorMessage,
+                              ),
+                              appearanceConfig: MainInputFieldAppearanceConfig(
+                                backgroundColor: context.appColors.baseWhite,
+                                labelStyle: bodyNormalTextStyle(
+                                  context: context,
+                                  fontColor: secondaryTextColor(context: context),
+                                ),
+                              ),
+                              inputConfig: const MainInputFieldInputConfig(
+                                textInputType: TextInputType.emailAddress,
                               ),
                             )
                           : Container(),
@@ -197,28 +205,91 @@ class ContinueWithEmailView extends StatelessWidget {
                         ),
                       ),
                       verticalSpaceLarge,
-                      MainButton(
-                        title: LocaleKeys.continueWithEmailView_titleText.tr(),
-                        onPressed: () async {
-                          viewModel.loginButtonTapped();
-                        },
-                        themeColor: themeColor,
-                        height: 53,
-                        hideShadows: true,
-                        isEnabled: viewModel.state?.isLoginEnabled ?? false,
-                        enabledTextColor:
-                            enabledMainButtonTextColor(context: context),
-                        disabledTextColor:
-                            disabledMainButtonTextColor(context: context),
-                        disabledBackgroundColor:
-                            disabledMainButtonColor(context: context),
-                        enabledBackgroundColor:
-                            enabledMainButtonColor(context: context),
-                      ),
+                      if (localLoginType == LoginType.emailAndPhoneAndBothVerification)
+                        Column(
+                          children: <Widget>[
+                            MainButton(
+                              title: LocaleKeys.continueWithEmail_signInViaEmail.tr(),
+                              onPressed: () async {
+                                viewModel.loginButtonTappedWithChannel("EMAIL");
+                              },
+                              themeColor: themeColor,
+                              height: 53,
+                              hideShadows: true,
+                              isEnabled: viewModel.state?.isLoginEnabled ?? false,
+                              enabledTextColor:
+                                  enabledMainButtonTextColor(context: context),
+                              disabledTextColor:
+                                  disabledMainButtonTextColor(context: context),
+                              disabledBackgroundColor:
+                                  disabledMainButtonColor(context: context),
+                              enabledBackgroundColor:
+                                  enabledMainButtonColor(context: context),
+                            ),
+                            verticalSpaceSmall,
+                            Center(
+                              child: Text(
+                                LocaleKeys.continueWithEmail_or.tr(),
+                                style: bodyNormalTextStyle(
+                                  context: context,
+                                  fontColor: secondaryTextColor(context: context),
+                                ),
+                              ),
+                            ),
+                            verticalSpaceSmall,
+                            MainButton(
+                              title: LocaleKeys.continueWithEmail_signInViaSms.tr(),
+                              onPressed: () async {
+                                viewModel.loginButtonTappedWithChannel("SMS");
+                              },
+                              themeColor: themeColor,
+                              height: 53,
+                              hideShadows: true,
+                              isEnabled: viewModel.state?.isLoginEnabled ?? false,
+                              enabledTextColor:
+                                  enabledMainButtonTextColor(context: context),
+                              disabledTextColor:
+                                  disabledMainButtonTextColor(context: context),
+                              disabledBackgroundColor:
+                                  disabledMainButtonColor(context: context),
+                              enabledBackgroundColor:
+                                  enabledMainButtonColor(context: context),
+                            ),
+                            if (viewModel.otpSendErrorMessage != null)
+                              Padding(
+                                padding: const EdgeInsets.only(top: 12),
+                                child: Text(
+                                  viewModel.otpSendErrorMessage!,
+                                  style: captionOneNormalTextStyle(
+                                    context: context,
+                                    fontColor: errorTextColor(context: context),
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                          ],
+                        )
+                      else
+                        MainButton(
+                          title: LocaleKeys.continueWithEmailView_titleText.tr(),
+                          onPressed: () async {
+                            viewModel.loginButtonTapped();
+                          },
+                          themeColor: themeColor,
+                          height: 53,
+                          hideShadows: true,
+                          isEnabled: viewModel.state?.isLoginEnabled ?? false,
+                          enabledTextColor:
+                              enabledMainButtonTextColor(context: context),
+                          disabledTextColor:
+                              disabledMainButtonTextColor(context: context),
+                          disabledBackgroundColor:
+                              disabledMainButtonColor(context: context),
+                          enabledBackgroundColor:
+                              enabledMainButtonColor(context: context),
+                        ),
                     ],
                   ),
-                  const SizedBox.shrink(),
-                  const SizedBox.shrink(),
                 ],
               ),
             ),
@@ -265,7 +336,22 @@ class ContinueWithEmailView extends StatelessWidget {
         return LocaleKeys.continueWithEmailView_SubTitleText.tr();
       case LoginType.phoneNumber:
       case LoginType.emailAndPhone:
+      case LoginType.emailAndPhoneAndEmailVerification:
+      case LoginType.emailAndPhoneAndBothVerification:
         return LocaleKeys.continueWithEmailView_SubTitleTextPhone.tr();
+    }
+  }
+
+  String getLoginInstructionText() {
+    switch (localLoginType) {
+      case LoginType.email:
+        return LocaleKeys.loginView_instructionText_email.tr();
+      case LoginType.phoneNumber:
+        return LocaleKeys.loginView_instructionText_phone.tr();
+      case LoginType.emailAndPhone:
+      case LoginType.emailAndPhoneAndEmailVerification:
+      case LoginType.emailAndPhoneAndBothVerification:
+        return LocaleKeys.loginView_instructionText_emailPhone.tr();
     }
   }
 

@@ -46,7 +46,9 @@ class BundleHeaderView extends StatelessWidget {
           icon: imagePath ?? "",
           width: 30,
           height: 30,
-        ).applyShimmer(enable: isLoading, context: context),
+        ).applyShimmer(
+          params: ShimmerParams(enable: isLoading, context: context),
+        ),
         horizontalSpaceSmall,
         Expanded(
           child: Column(
@@ -65,9 +67,11 @@ class BundleHeaderView extends StatelessWidget {
                       ),
                     ),
               ).applyShimmer(
-                enable: isLoading,
-                context: context,
-                height: 10,
+                params: ShimmerParams(
+                  enable: isLoading,
+                  context: context,
+                  height: 10,
+                ),
               ),
               isLoading ? verticalSpaceSmall : Container(),
               Text(
@@ -81,9 +85,11 @@ class BundleHeaderView extends StatelessWidget {
                       fontColor: contentTextColor(context: context),
                     ),
               ).applyShimmer(
-                enable: isLoading,
-                context: context,
-                height: 10,
+                params: ShimmerParams(
+                  enable: isLoading,
+                  context: context,
+                  height: 10,
+                ),
               ),
             ],
           ),
@@ -115,9 +121,11 @@ class BundleHeaderView extends StatelessWidget {
                                   ),
                                 ),
                           ).applyShimmer(
-                            enable: isLoading,
-                            context: context,
-                            height: 20,
+                            params: ShimmerParams(
+                              enable: isLoading,
+                              context: context,
+                              height: 20,
+                            ),
                           ),
                     hasNavArrow && !isLoading
                         ? horizontalSpaceSmall

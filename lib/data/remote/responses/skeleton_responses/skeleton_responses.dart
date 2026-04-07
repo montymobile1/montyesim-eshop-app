@@ -11,11 +11,7 @@ class BaseAPIResponse<T> {
     code = json["code"] ?? "";
     success = json["success"] ?? false;
     version = json["version"] ?? "";
-    data = json["data"] == null
-        ? null
-        : json["data"] is List
-            ? List<T>.from(json["data"].map((dynamic e) => fromJsonT(e)))
-            : fromJsonT(json["data"]);
+    data = _parseData(json["data"], fromJsonT);
     result = ApiResponseResultEnum.success;
   }
 
@@ -27,11 +23,7 @@ class BaseAPIResponse<T> {
     code = json["code"] ?? "";
     success = json["success"] ?? false;
     version = json["version"] ?? "";
-    data = json["data"] == null
-        ? null
-        : json["data"] is List
-            ? List<T>.from(json["data"].map((dynamic e) => fromJsonT(e)))
-            : fromJsonT(json["data"]);
+    data = _parseData(json["data"], fromJsonT);
     result = ApiResponseResultEnum.failure;
   }
 
@@ -51,6 +43,18 @@ class BaseAPIResponse<T> {
   dynamic data;
   String? version;
   late ApiResponseResultEnum result;
+
+  dynamic _parseData(dynamic jsonData, T Function(Map<String, dynamic>) fromJsonT) {
+    if (jsonData == null) {
+      return null;
+    }
+
+    if (jsonData is List) {
+      return List<T>.from(jsonData.map((dynamic e) => fromJsonT(e)));
+    }
+
+    return fromJsonT(jsonData);
+  }
 }
 
 class FactModel {

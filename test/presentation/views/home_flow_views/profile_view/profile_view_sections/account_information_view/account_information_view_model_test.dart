@@ -1,3 +1,4 @@
+import "package:esim_open_source/domain/data/params/update_user_info_params.dart";
 import "package:esim_open_source/data/remote/responses/auth/auth_response_model.dart";
 import "package:esim_open_source/domain/repository/api_auth_repository.dart";
 import "package:esim_open_source/domain/repository/services/app_configuration_service.dart";
@@ -10,6 +11,7 @@ import "package:mockito/mockito.dart";
 import "../../../../../../helpers/view_helper.dart";
 import "../../../../../../helpers/view_model_helper.dart";
 import "../../../../../../locator_test.dart";
+import "../../../../../../locator_test.mocks.dart";
 
 Future<void> main() async {
   await prepareTest();
@@ -138,27 +140,35 @@ Future<void> main() async {
     });
 
     test("saveButtonTapped executes successfully", () async {
+      // Get mocks from locator
+      final MockApiAuthRepository mockApiAuthRepository =
+          locator<ApiAuthRepository>() as MockApiAuthRepository;
+
+      // Mock the services
       when(locator<AppConfigurationService>().getLoginType)
           .thenReturn(LoginType.email);
-      when(locator<ApiAuthRepository>().updateUserInfo(
-        msisdn: anyNamed("msisdn"),
-        firstName: anyNamed("firstName"),
-        lastName: anyNamed("lastName"),
-        email: anyNamed("email"),
-        isNewsletterSubscribed: anyNamed("isNewsletterSubscribed"),
-      ),).thenAnswer(
-        (_) async => Resource<AuthResponseModel>.success(
+
+      // Mock API call
+      when(
+        mockApiAuthRepository.updateUserInfo(
+          request: argThat(isA<UpdateUserInfoRequest>(), named: "request"),
+        ),
+      ).thenAnswer(
+            (_) async => Resource<AuthResponseModel>.success(
           AuthResponseModel(),
           message: "",
         ),
       );
 
+      // Fill in the view model form fields
       viewModel.nameController.text = "John";
       viewModel.familyNameController.text = "Doe";
       viewModel.emailController.text = "test@example.com";
 
+      // Call the method
       await viewModel.saveButtonTapped();
 
+      // Assert
       expect(viewModel.viewState.name, isA<String>());
     });
 

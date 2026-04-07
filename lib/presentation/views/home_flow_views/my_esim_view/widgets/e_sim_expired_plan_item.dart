@@ -77,12 +77,18 @@ class ESimExpiredPlanItem extends StatelessWidget {
                     Text(
                       LocaleKeys.last_purchase.tr(),
                       style: captionTwoBoldTextStyle(context: context),
-                    ).applyShimmer(context: context, enable: isLoading),
+                    ).applyShimmer(
+                      params:
+                          ShimmerParams(context: context, enable: isLoading),
+                    ),
                     horizontalSpaceSmall,
                     Text(
                       expiryDate,
                       style: captionTwoNormalTextStyle(context: context),
-                    ).applyShimmer(context: context, enable: isLoading),
+                    ).applyShimmer(
+                      params:
+                          ShimmerParams(context: context, enable: isLoading),
+                    ),
                   ],
                 ),
               ),

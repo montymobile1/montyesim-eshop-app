@@ -70,8 +70,8 @@ class NotificationsView extends StatelessWidget {
                           child: NotificationView(
                             notificationsModel: item,
                           ).applyShimmer(
-                            context: context,
-                            enable: viewModel.isBusy,
+                            params: ShimmerParams(context: context,
+                            enable: viewModel.isBusy,),
                           ),
                         );
                       },

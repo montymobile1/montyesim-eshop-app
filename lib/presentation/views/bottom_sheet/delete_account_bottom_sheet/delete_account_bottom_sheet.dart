@@ -121,19 +121,25 @@ class DeleteAccountBottomSheet extends StatelessWidget {
                                 validateRequired: true,
                               )
                             : MainInputField.formField(
-                                themeColor: themeColor,
-                                errorMessage: viewModel.emailErrorMessage,
-                                labelTitleText: LocaleKeys
-                                    .deleteAccount_placeHolderText
-                                    .tr(),
                                 controller: viewModel.emailController,
-                                textInputType: TextInputType.emailAddress,
-                                backGroundColor:
-                                    mainWhiteTextColor(context: context),
-                                labelStyle: bodyNormalTextStyle(
-                                  context: context,
-                                  fontColor:
-                                      mainDarkTextColor(context: context),
+                                themeColor: themeColor,
+                                textConfig: MainInputFieldTextConfig(
+                                  labelTitleText: LocaleKeys
+                                      .deleteAccount_placeHolderText
+                                      .tr(),
+                                  errorMessage: viewModel.emailErrorMessage,
+                                ),
+                                appearanceConfig: MainInputFieldAppearanceConfig(
+                                  backgroundColor:
+                                      mainWhiteTextColor(context: context),
+                                  labelStyle: bodyNormalTextStyle(
+                                    context: context,
+                                    fontColor:
+                                        mainDarkTextColor(context: context),
+                                  ),
+                                ),
+                                inputConfig: const MainInputFieldInputConfig(
+                                  textInputType: TextInputType.emailAddress,
                                 ),
                               ),
                         verticalSpaceMediumLarge,
@@ -161,17 +167,19 @@ class DeleteAccountBottomSheet extends StatelessWidget {
                         ),
                         verticalSpaceSmall,
                         MainButton.onlyText(
-                          title: LocaleKeys.common_cancelButtonText.tr(),
-                          titleTextStyle: bodyMediumTextStyle(
-                            context: context,
-                            fontColor: mainDarkTextColor(context: context),
+                          params: MainButtonParams(
+                            title: LocaleKeys.common_cancelButtonText.tr(),
+                            titleTextStyle: bodyMediumTextStyle(
+                              context: context,
+                              fontColor: mainDarkTextColor(context: context),
+                            ),
+                            hideShadows: true,
+                            onPressed: () => completer(
+                              SheetResponse<EmptyBottomSheetResponse>(),
+                            ),
+                            themeColor: themeColor,
+                            enabledTextColor: mainDarkTextColor(context: context),
                           ),
-                          hideShadows: true,
-                          onPressed: () => completer(
-                            SheetResponse<EmptyBottomSheetResponse>(),
-                          ),
-                          themeColor: themeColor,
-                          enabledTextColor: mainDarkTextColor(context: context),
                         ),
                       ],
                     ),
@@ -188,9 +196,11 @@ class DeleteAccountBottomSheet extends StatelessWidget {
   String getConfirmText() {
     switch (AppEnvironment.appEnvironmentHelper.loginType) {
       case LoginType.email:
+      case LoginType.emailAndPhoneAndEmailVerification:
         return LocaleKeys.deleteAccount_ConfirmText.tr();
       case LoginType.phoneNumber:
       case LoginType.emailAndPhone:
+      case LoginType.emailAndPhoneAndBothVerification:
         return LocaleKeys.deleteAccount_ConfirmTextPhone.tr();
     }
   }

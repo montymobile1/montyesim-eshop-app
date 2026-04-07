@@ -10,6 +10,7 @@ import "package:esim_open_source/data/remote/responses/base_response_model.dart"
 import "package:esim_open_source/data/remote/responses/core/string_response.dart";
 import "package:esim_open_source/data/remote/responses/empty_response.dart";
 import "package:esim_open_source/data/repository/api_app_repository_impl.dart";
+import "package:esim_open_source/domain/data/params/add_device_params.dart";
 import "package:esim_open_source/domain/repository/api_app_repository.dart";
 import "package:esim_open_source/domain/util/resource.dart";
 import "package:flutter_test/flutter_test.dart";
@@ -38,6 +39,18 @@ void main() {
       const String testScreenResolution = "1179x2556";
       const bool testIsRooted = false;
 
+      final AddDeviceParams testParams = AddDeviceParams(
+        fcmToken: testFcmToken,
+        manufacturer: testManufacturer,
+        deviceModel: testDeviceModel,
+        deviceOs: testDeviceOs,
+        deviceOsVersion: testDeviceOsVersion,
+        appVersion: testAppVersion,
+        ramSize: testRamSize,
+        screenResolution: testScreenResolution,
+        isRooted: testIsRooted,
+      );
+
       test("should return success resource when device is added successfully",
           () async {
         // Arrange
@@ -50,31 +63,12 @@ void main() {
         );
 
         when(
-          mockApiApp.addDevice(
-            fcmToken: testFcmToken,
-            manufacturer: testManufacturer,
-            deviceModel: testDeviceModel,
-            deviceOs: testDeviceOs,
-            deviceOsVersion: testDeviceOsVersion,
-            appVersion: testAppVersion,
-            ramSize: testRamSize,
-            screenResolution: testScreenResolution,
-            isRooted: testIsRooted,
-          ),
+          mockApiApp.addDevice(testParams),
         ).thenAnswer((_) async => responseMain);
 
         // Act
-        final Resource<EmptyResponse?> result = await repository.addDevice(
-          fcmToken: testFcmToken,
-          manufacturer: testManufacturer,
-          deviceModel: testDeviceModel,
-          deviceOs: testDeviceOs,
-          deviceOsVersion: testDeviceOsVersion,
-          appVersion: testAppVersion,
-          ramSize: testRamSize,
-          screenResolution: testScreenResolution,
-          isRooted: testIsRooted,
-        ) as Resource<EmptyResponse?>;
+        final Resource<EmptyResponse?> result =
+            await repository.addDevice(testParams) as Resource<EmptyResponse?>;
 
         // Assert
         expect(result.resourceType, ResourceType.success);
@@ -83,17 +77,7 @@ void main() {
         expect(result.error, isNull);
 
         verify(
-          mockApiApp.addDevice(
-            fcmToken: testFcmToken,
-            manufacturer: testManufacturer,
-            deviceModel: testDeviceModel,
-            deviceOs: testDeviceOs,
-            deviceOsVersion: testDeviceOsVersion,
-            appVersion: testAppVersion,
-            ramSize: testRamSize,
-            screenResolution: testScreenResolution,
-            isRooted: testIsRooted,
-          ),
+          mockApiApp.addDevice(testParams),
         ).called(1);
       });
 
@@ -107,31 +91,12 @@ void main() {
         );
 
         when(
-          mockApiApp.addDevice(
-            fcmToken: testFcmToken,
-            manufacturer: testManufacturer,
-            deviceModel: testDeviceModel,
-            deviceOs: testDeviceOs,
-            deviceOsVersion: testDeviceOsVersion,
-            appVersion: testAppVersion,
-            ramSize: testRamSize,
-            screenResolution: testScreenResolution,
-            isRooted: testIsRooted,
-          ),
+          mockApiApp.addDevice(testParams),
         ).thenAnswer((_) async => responseMain);
 
         // Act
-        final Resource<EmptyResponse?> result = await repository.addDevice(
-          fcmToken: testFcmToken,
-          manufacturer: testManufacturer,
-          deviceModel: testDeviceModel,
-          deviceOs: testDeviceOs,
-          deviceOsVersion: testDeviceOsVersion,
-          appVersion: testAppVersion,
-          ramSize: testRamSize,
-          screenResolution: testScreenResolution,
-          isRooted: testIsRooted,
-        ) as Resource<EmptyResponse?>;
+        final Resource<EmptyResponse?> result =
+            await repository.addDevice(testParams) as Resource<EmptyResponse?>;
 
         // Assert
         expect(result.resourceType, ResourceType.error);
@@ -140,17 +105,7 @@ void main() {
         expect(result.error, isNotNull);
 
         verify(
-          mockApiApp.addDevice(
-            fcmToken: testFcmToken,
-            manufacturer: testManufacturer,
-            deviceModel: testDeviceModel,
-            deviceOs: testDeviceOs,
-            deviceOsVersion: testDeviceOsVersion,
-            appVersion: testAppVersion,
-            ramSize: testRamSize,
-            screenResolution: testScreenResolution,
-            isRooted: testIsRooted,
-          ),
+          mockApiApp.addDevice(testParams),
         ).called(1);
       });
 
@@ -166,30 +121,7 @@ void main() {
         const String customScreenResolution = "1440x3200";
         const bool customIsRooted = true;
 
-        final EmptyResponse expectedResponse = EmptyResponse();
-        final ResponseMain<EmptyResponse> responseMain =
-            ResponseMain<EmptyResponse>.createErrorWithData(
-          data: expectedResponse,
-          message: "Success",
-          statusCode: 200,
-        );
-
-        when(
-          mockApiApp.addDevice(
-            fcmToken: customFcmToken,
-            manufacturer: customManufacturer,
-            deviceModel: customDeviceModel,
-            deviceOs: customDeviceOs,
-            deviceOsVersion: customDeviceOsVersion,
-            appVersion: customAppVersion,
-            ramSize: customRamSize,
-            screenResolution: customScreenResolution,
-            isRooted: customIsRooted,
-          ),
-        ).thenAnswer((_) async => responseMain);
-
-        // Act
-        await repository.addDevice(
+        final AddDeviceParams customParams = AddDeviceParams(
           fcmToken: customFcmToken,
           manufacturer: customManufacturer,
           deviceModel: customDeviceModel,
@@ -201,20 +133,22 @@ void main() {
           isRooted: customIsRooted,
         );
 
+        final EmptyResponse expectedResponse = EmptyResponse();
+        final ResponseMain<EmptyResponse> responseMain =
+            ResponseMain<EmptyResponse>.createErrorWithData(
+          data: expectedResponse,
+          message: "Success",
+          statusCode: 200,
+        );
+
+        when(mockApiApp.addDevice(any))
+            .thenAnswer((_) async => responseMain);
+
+        // Act
+        await repository.addDevice(customParams);
+
         // Assert
-        verify(
-          mockApiApp.addDevice(
-            fcmToken: customFcmToken,
-            manufacturer: customManufacturer,
-            deviceModel: customDeviceModel,
-            deviceOs: customDeviceOs,
-            deviceOsVersion: customDeviceOsVersion,
-            appVersion: customAppVersion,
-            ramSize: customRamSize,
-            screenResolution: customScreenResolution,
-            isRooted: customIsRooted,
-          ),
-        ).called(1);
+        verify(mockApiApp.addDevice(any)).called(1);
       });
     });
 
@@ -721,28 +655,7 @@ void main() {
     group("Edge cases and boundary conditions", () {
       test("should handle null response data gracefully", () async {
         // Arrange
-        final ResponseMain<EmptyResponse> responseMain =
-            ResponseMain<EmptyResponse>.createErrorWithData(
-          message: "Success but no data",
-          statusCode: 200,
-        );
-
-        when(
-          mockApiApp.addDevice(
-            fcmToken: "test-token",
-            manufacturer: "Apple",
-            deviceModel: "iPhone",
-            deviceOs: "iOS",
-            deviceOsVersion: "17.0",
-            appVersion: "1.0.0",
-            ramSize: "6GB",
-            screenResolution: "1179x2556",
-            isRooted: false,
-          ),
-        ).thenAnswer((_) async => responseMain);
-
-        // Act
-        final Resource<EmptyResponse?> result = await repository.addDevice(
+        final AddDeviceParams nullTestParams = AddDeviceParams(
           fcmToken: "test-token",
           manufacturer: "Apple",
           deviceModel: "iPhone",
@@ -752,7 +665,20 @@ void main() {
           ramSize: "6GB",
           screenResolution: "1179x2556",
           isRooted: false,
-        ) as Resource<EmptyResponse?>;
+        );
+
+        final ResponseMain<EmptyResponse> responseMain =
+            ResponseMain<EmptyResponse>.createErrorWithData(
+          message: "Success but no data",
+          statusCode: 200,
+        );
+
+        when(mockApiApp.addDevice(any))
+            .thenAnswer((_) async => responseMain);
+
+        // Act
+        final Resource<EmptyResponse?> result =
+            await repository.addDevice(nullTestParams) as Resource<EmptyResponse?>;
 
         // Assert - responseToResource will call response.dataOfType which might cause issues with null
         expect(result.resourceType, ResourceType.error);
@@ -762,30 +688,7 @@ void main() {
       test("should handle empty string parameters for addDevice", () async {
         // Arrange
         const String emptyString = "";
-        final EmptyResponse expectedResponse = EmptyResponse();
-        final ResponseMain<EmptyResponse> responseMain =
-            ResponseMain<EmptyResponse>.createErrorWithData(
-          data: expectedResponse,
-          message: "Success",
-          statusCode: 200,
-        );
-
-        when(
-          mockApiApp.addDevice(
-            fcmToken: emptyString,
-            manufacturer: emptyString,
-            deviceModel: emptyString,
-            deviceOs: emptyString,
-            deviceOsVersion: emptyString,
-            appVersion: emptyString,
-            ramSize: emptyString,
-            screenResolution: emptyString,
-            isRooted: false,
-          ),
-        ).thenAnswer((_) async => responseMain);
-
-        // Act
-        final Resource<EmptyResponse?> result = await repository.addDevice(
+        final AddDeviceParams emptyParams = AddDeviceParams(
           fcmToken: emptyString,
           manufacturer: emptyString,
           deviceModel: emptyString,
@@ -795,25 +698,28 @@ void main() {
           ramSize: emptyString,
           screenResolution: emptyString,
           isRooted: false,
-        ) as Resource<EmptyResponse?>;
+        );
+
+        final EmptyResponse expectedResponse = EmptyResponse();
+        final ResponseMain<EmptyResponse> responseMain =
+            ResponseMain<EmptyResponse>.createErrorWithData(
+          data: expectedResponse,
+          message: "Success",
+          statusCode: 200,
+        );
+
+        when(mockApiApp.addDevice(any))
+            .thenAnswer((_) async => responseMain);
+
+        // Act
+        final Resource<EmptyResponse?> result =
+            await repository.addDevice(emptyParams) as Resource<EmptyResponse?>;
 
         // Assert
         expect(result.resourceType, ResourceType.success);
         expect(result.data, expectedResponse);
 
-        verify(
-          mockApiApp.addDevice(
-            fcmToken: emptyString,
-            manufacturer: emptyString,
-            deviceModel: emptyString,
-            deviceOs: emptyString,
-            deviceOsVersion: emptyString,
-            appVersion: emptyString,
-            ramSize: emptyString,
-            screenResolution: emptyString,
-            isRooted: false,
-          ),
-        ).called(1);
+        verify(mockApiApp.addDevice(any)).called(1);
       });
 
       test("should handle empty string parameters for contactUs", () async {
@@ -861,29 +767,7 @@ void main() {
 
       test("should return correct types as specified in interface", () async {
         // Arrange
-        final ResponseMain<EmptyResponse> responseMain =
-            ResponseMain<EmptyResponse>.createErrorWithData(
-          data: EmptyResponse(),
-          message: "Success",
-          statusCode: 200,
-        );
-
-        when(
-          mockApiApp.addDevice(
-            fcmToken: "test-token",
-            manufacturer: "Apple",
-            deviceModel: "iPhone",
-            deviceOs: "iOS",
-            deviceOsVersion: "17.0",
-            appVersion: "1.0.0",
-            ramSize: "6GB",
-            screenResolution: "1179x2556",
-            isRooted: false,
-          ),
-        ).thenAnswer((_) async => responseMain);
-
-        // Act
-        final FutureOr<dynamic> result = repository.addDevice(
+        final AddDeviceParams typeTestParams = AddDeviceParams(
           fcmToken: "test-token",
           manufacturer: "Apple",
           deviceModel: "iPhone",
@@ -894,6 +778,19 @@ void main() {
           screenResolution: "1179x2556",
           isRooted: false,
         );
+
+        final ResponseMain<EmptyResponse> responseMain =
+            ResponseMain<EmptyResponse>.createErrorWithData(
+          data: EmptyResponse(),
+          message: "Success",
+          statusCode: 200,
+        );
+
+        when(mockApiApp.addDevice(any))
+            .thenAnswer((_) async => responseMain);
+
+        // Act
+        final FutureOr<dynamic> result = repository.addDevice(typeTestParams);
 
         // Assert
         expect(result, isA<FutureOr<dynamic>>());

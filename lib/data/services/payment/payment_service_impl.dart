@@ -64,49 +64,15 @@ class PaymentServiceImpl extends PaymentService {
   @override
   Future<PaymentResult> processOrderPayment({
     required PaymentType paymentType,
-    required String billingCountryCode,
-    required String paymentIntentClientSecret,
-    required String customerId,
-    required String customerEphemeralKeySecret,
-    String merchantDisplayName = "Esim",
-    bool testEnv = false,
-    String? iccID,
-    String? orderID,
+    required ProcessOrderPaymentParams params,
   }) async {
     switch (paymentType) {
       case PaymentType.wallet:
-        return walletPayment.processOrderPayment(
-          billingCountryCode: billingCountryCode,
-          paymentIntentClientSecret: paymentIntentClientSecret,
-          customerId: customerId,
-          customerEphemeralKeySecret: customerEphemeralKeySecret,
-          merchantDisplayName: merchantDisplayName,
-          testEnv: testEnv,
-          iccID: iccID,
-          orderID: orderID,
-        );
+        return walletPayment.processOrderPayment(params: params);
       case PaymentType.dcb:
-        return dcbPayment.processOrderPayment(
-          billingCountryCode: billingCountryCode,
-          paymentIntentClientSecret: paymentIntentClientSecret,
-          customerId: customerId,
-          customerEphemeralKeySecret: customerEphemeralKeySecret,
-          merchantDisplayName: merchantDisplayName,
-          testEnv: testEnv,
-          iccID: iccID,
-          orderID: orderID,
-        );
+        return dcbPayment.processOrderPayment(params: params);
       case PaymentType.card:
-        return stripePayment.processOrderPayment(
-          billingCountryCode: billingCountryCode,
-          paymentIntentClientSecret: paymentIntentClientSecret,
-          customerId: customerId,
-          customerEphemeralKeySecret: customerEphemeralKeySecret,
-          merchantDisplayName: merchantDisplayName,
-          testEnv: testEnv,
-          iccID: iccID,
-          orderID: orderID,
-        );
+        return stripePayment.processOrderPayment(params: params);
     }
   }
 

@@ -73,6 +73,11 @@ class _SupportedCountriesCardState extends State<SupportedCountriesCard> {
                 itemCount: widget.countries.length,
                 itemBuilder: (BuildContext context, int index) {
                   final CountryResponseModel country = widget.countries[index];
+                  final bool hasOperators = !(country.operatorList?.isEmpty ?? true);
+                  final IconData expansionIcon = _isExpanded
+                      ? Icons.keyboard_arrow_up
+                      : Icons.keyboard_arrow_down;
+
                   return AbsorbPointer(
                     absorbing: country.operatorList?.isEmpty ?? true,
                     child: ExpansionTile(
@@ -86,14 +91,9 @@ class _SupportedCountriesCardState extends State<SupportedCountriesCard> {
                           _isExpanded = isExpanded;
                         });
                       },
-                      trailing: country.operatorList?.isEmpty ?? true
-                          ? const SizedBox.shrink()
-                          : Icon(
-                              _isExpanded
-                                  ? Icons.keyboard_arrow_up
-                                  : Icons.keyboard_arrow_down,
-                              size: 20,
-                            ),
+                      trailing: hasOperators
+                          ? Icon(expansionIcon, size: 20)
+                          : const SizedBox.shrink(),
                       tilePadding: const EdgeInsets.symmetric(horizontal: 12),
                       title: Row(
                         children: <Widget>[

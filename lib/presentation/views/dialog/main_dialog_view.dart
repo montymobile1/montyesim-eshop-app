@@ -63,173 +63,238 @@ class MainBasicDialog extends StatelessWidget {
               Stack(
         clipBehavior: Clip.none,
         children: <Widget>[
-          Container(
-            padding: EdgeInsets.only(
-              left: 16,
-              right: 16,
-              top: (request.iconType != DialogIconType.none ? 45 : 45),
-              bottom: 16,
+          _buildMainContainer(context, request, model),
+          _buildCloseButton(context, request, model),
+          _buildTopIcon(context, request, model),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMainContainer(
+    BuildContext context,
+    MainDialogRequest request,
+    MainDialogViewModel model,
+  ) {
+    return Container(
+      padding: const EdgeInsets.only(
+        left: 16,
+        right: 16,
+        top: 45,
+        bottom: 16,
+      ),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.cBackground(context),
+        borderRadius: BorderRadius.circular(15),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          _buildTitle(context, request),
+          _buildDescription(context, request),
+          _buildMainButton(request, model),
+          _buildSecondaryButton(request, model),
+          _buildCancelButton(context, request, model),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTitle(BuildContext context, MainDialogRequest request) {
+    if (request.title == null) return Container();
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        Text(
+          request.title!,
+          style: headerThreeMediumTextStyle(context: context),
+        ),
+        verticalSpaceTiny,
+      ],
+    );
+  }
+
+  Widget _buildDescription(BuildContext context, MainDialogRequest request) {
+    if (request.description == null) return Container();
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        Text(
+          request.description!,
+          style: request.descriptionTextStyle ??
+              headerThreeMediumTextStyle(
+                context: context,
+                fontColor: contentTextColor(context: context),
+              ),
+          textAlign: TextAlign.center,
+        ),
+        verticalSpaceSmall,
+      ],
+    );
+  }
+
+  Widget _buildMainButton(
+    MainDialogRequest request,
+    MainDialogViewModel model,
+  ) {
+    if (request.mainButtonTitle == null) return Container();
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        MainButton(
+          title: request.mainButtonTitle!,
+          themeColor: request.mainButtonColor ?? model.themeColor,
+          onPressed: () => model.mainButtonClicked(
+            completer: completer,
+            request: request,
+          ),
+        ),
+        verticalSpaceSmall,
+      ],
+    );
+  }
+
+  Widget _buildSecondaryButton(
+    MainDialogRequest request,
+    MainDialogViewModel model,
+  ) {
+    if (request.secondaryButtonTitle == null) return Container();
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        MainButton(
+          title: request.secondaryButtonTitle!,
+          themeColor: request.secondaryButtonColor ?? model.themeColor,
+          onPressed: () => model.secondaryButtonClicked(
+            completer: completer,
+            request: request,
+          ),
+        ),
+        verticalSpaceSmall,
+      ],
+    );
+  }
+
+  Widget _buildCancelButton(
+    BuildContext context,
+    MainDialogRequest request,
+    MainDialogViewModel model,
+  ) {
+    if (!request.showCancelButton) return Container();
+
+    return Column(
+      children: <Widget>[
+        request.informativeOnly
+            ? _buildInformativeButton(request, model)
+            : _buildCancelGesture(context, request, model),
+        verticalSpaceTiniest,
+      ],
+    );
+  }
+
+  Widget _buildInformativeButton(
+    MainDialogRequest request,
+    MainDialogViewModel model,
+  ) {
+    return MainButton(
+      themeColor: model.themeColor,
+      title: request.cancelText ?? LocaleKeys.ok.tr(),
+      onPressed: () => model.mainButtonClicked(
+        completer: completer,
+        request: request,
+      ),
+    );
+  }
+
+  Widget _buildCancelGesture(
+    BuildContext context,
+    MainDialogRequest request,
+    MainDialogViewModel model,
+  ) {
+    return GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onTap: () => model.cancelClicked(completer),
+      child: Align(
+        child: Text(
+          request.cancelText ?? LocaleKeys.cancel.tr(),
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w300,
+            color: Theme.of(context).colorScheme.cHintTextColor(context),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCloseButton(
+    BuildContext context,
+    MainDialogRequest request,
+    MainDialogViewModel model,
+  ) {
+    if (!request.hideXButton) return const SizedBox(height: 0);
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: <Widget>[
+        IconButton(
+          icon: const Icon(
+            Icons.close_sharp,
+            size: 30,
+          ),
+          color: Theme.of(context).colorScheme.cForeground(context),
+          onPressed: () => model.closeClicked(completer),
+          enableFeedback: true,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTopIcon(
+    BuildContext context,
+    MainDialogRequest request,
+    MainDialogViewModel model,
+  ) {
+    if (request.iconType == DialogIconType.none) {
+      return const SizedBox(height: 0);
+    }
+
+    return Positioned(
+      top: -30,
+      left: 0,
+      right: 0,
+      child: Container(
+        padding: const EdgeInsets.all(4),
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.cBackground(context),
+          shape: BoxShape.circle,
+          boxShadow: <BoxShadow>[
+            BoxShadow(
+              color: Theme.of(context)
+                  .colorScheme
+                  .cHintTextColor(context)
+                  .withAlpha(20),
+              spreadRadius: 2,
+              blurRadius: 3,
             ),
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.cBackground(context),
-              borderRadius: BorderRadius.circular(15),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                request.title != null
-                    ? Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          Text(
-                            request.title ?? "",
-                            style: headerThreeMediumTextStyle(context: context),
-                          ),
-                          verticalSpaceTiny,
-                        ],
-                      )
-                    : Container(),
-                request.description != null
-                    ? Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          Text(
-                            request.description ?? "",
-                            style: request.descriptionTextStyle ??
-                                headerThreeMediumTextStyle(
-                                  context: context,
-                                  fontColor: contentTextColor(context: context),
-                                ),
-                            textAlign: TextAlign.center,
-                          ),
-                          verticalSpaceSmall,
-                        ],
-                      )
-                    : Container(),
-                request.mainButtonTitle != null
-                    ? Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          MainButton(
-                            title: request.mainButtonTitle ?? "",
-                            themeColor:
-                                request.mainButtonColor ?? model.themeColor,
-                            onPressed: () => model.mainButtonClicked(
-                              completer: completer,
-                              request: request,
-                            ),
-                          ),
-                          verticalSpaceSmall,
-                        ],
-                      )
-                    : Container(),
-                request.secondaryButtonTitle != null
-                    ? Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          MainButton(
-                            title: request.secondaryButtonTitle ?? "",
-                            themeColor: request.secondaryButtonColor ??
-                                model.themeColor,
-                            onPressed: () => model.secondaryButtonClicked(
-                              completer: completer,
-                              request: request,
-                            ),
-                          ),
-                          verticalSpaceSmall,
-                        ],
-                      )
-                    : Container(),
-                request.showCancelButton
-                    ? Column(
-                        children: <Widget>[
-                          request.informativeOnly
-                              ? MainButton(
-                                  themeColor: model.themeColor,
-                                  title:
-                                      request.cancelText ?? LocaleKeys.ok.tr(),
-                                  onPressed: () => model.mainButtonClicked(
-                                    completer: completer,
-                                    request: request,
-                                  ),
-                                )
-                              : GestureDetector(
-                                  behavior: HitTestBehavior.translucent,
-                                  onTap: () => model.cancelClicked(completer),
-                                  child: Align(
-                                    child: Text(
-                                      request.cancelText ??
-                                          LocaleKeys.cancel.tr(),
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w300,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .cHintTextColor(context),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                          verticalSpaceTiniest,
-                        ],
-                      )
-                    : Container(),
-              ],
+          ],
+        ),
+        child: ClipOval(
+          child: SizedBox.fromSize(
+            size: const Size.fromRadius(30),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: getImageFromType(
+                request.iconType,
+                model.themeColor,
+              ),
             ),
           ),
-          request.hideXButton
-              ? Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    IconButton(
-                      icon: const Icon(
-                        Icons.close_sharp,
-                        size: 30,
-                      ),
-                      color: Theme.of(context).colorScheme.cForeground(context),
-                      onPressed: () => model.closeClicked(completer),
-                      enableFeedback: true,
-                    ),
-                  ],
-                )
-              : const SizedBox(height: 0),
-          request.iconType != DialogIconType.none
-              ? Positioned(
-                  top: -30,
-                  left: 0,
-                  right: 0,
-                  child: Container(
-                    padding: const EdgeInsets.all(4), // Border width
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.cBackground(context),
-                      shape: BoxShape.circle,
-                      boxShadow: <BoxShadow>[
-                        BoxShadow(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .cHintTextColor(context)
-                              .withAlpha(20),
-                          spreadRadius: 2,
-                          blurRadius: 3,
-                        ),
-                      ],
-                    ),
-                    child: ClipOval(
-                      child: SizedBox.fromSize(
-                        size: const Size.fromRadius(30), // Image radius
-                        child: Padding(
-                          padding: const EdgeInsets.all(16),
-                          child: getImageFromType(
-                            request.iconType,
-                            model.themeColor,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                )
-              : const SizedBox(height: 0),
-        ],
+        ),
       ),
     );
   }

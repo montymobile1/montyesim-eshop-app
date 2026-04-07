@@ -1,6 +1,7 @@
 import "dart:async";
 import "dart:developer";
 
+import "package:esim_open_source/domain/repository/services/payment_service.dart";
 import "package:esim_open_source/presentation/enums/payment_type.dart";
 import "package:flutter_stripe/flutter_stripe.dart";
 
@@ -32,14 +33,7 @@ class StripePayment {
   }
 
   Future<PaymentResult> processOrderPayment({
-    required String billingCountryCode,
-    required String paymentIntentClientSecret,
-    required String customerId,
-    required String customerEphemeralKeySecret,
-    String merchantDisplayName = "Esim",
-    bool testEnv = false,
-    String? iccID,
-    String? orderID,
+    required ProcessOrderPaymentParams params,
   }) async {
     try {
       // 1. create payment
@@ -47,7 +41,7 @@ class StripePayment {
       final BillingDetails billingDetails = BillingDetails(
         address: Address(
           city: null,
-          country: billingCountryCode,
+          country: params.billingCountryCode,
           line1: null,
           line2: null,
           postalCode: null,
@@ -59,16 +53,16 @@ class StripePayment {
       await Stripe.instance.initPaymentSheet(
         paymentSheetParameters: SetupPaymentSheetParameters(
           // Main params
-          paymentIntentClientSecret: paymentIntentClientSecret,
-          merchantDisplayName: merchantDisplayName,
-          customerId: customerId,
-          customerEphemeralKeySecret: customerEphemeralKeySecret,
+          paymentIntentClientSecret: params.paymentIntentClientSecret,
+          merchantDisplayName: params.merchantDisplayName,
+          customerId: params.customerId,
+          customerEphemeralKeySecret: params.customerEphemeralKeySecret,
           applePay: PaymentSheetApplePay(
-            merchantCountryCode: billingCountryCode,
+            merchantCountryCode: params.billingCountryCode,
           ),
           googlePay: PaymentSheetGooglePay(
-            merchantCountryCode: billingCountryCode,
-            testEnv: testEnv,
+            merchantCountryCode: params.billingCountryCode,
+            testEnv: params.testEnv,
           ),
           billingDetails: billingDetails,
         ),

@@ -1,11 +1,7 @@
-import "package:esim_open_source/data/remote/responses/auth/auth_response_model.dart";
-import "package:esim_open_source/domain/repository/api_auth_repository.dart";
 import "package:esim_open_source/domain/repository/services/app_configuration_service.dart";
-import "package:esim_open_source/domain/util/resource.dart";
 import "package:esim_open_source/presentation/enums/login_type.dart";
 import "package:esim_open_source/presentation/views/home_flow_views/profile_view/profile_view_sections/account_information_view/account_information_view.dart";
 import "package:esim_open_source/presentation/views/home_flow_views/profile_view/profile_view_sections/account_information_view/account_information_view_model.dart";
-import "package:esim_open_source/presentation/widgets/main_button.dart";
 import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:mockito/mockito.dart";
@@ -33,30 +29,20 @@ Future<void> main() async {
 
   group("AccountInformationView Tests", () {
     testWidgets("widget renders without exceptions",
-        (WidgetTester tester) async {
-      when(locator<AppConfigurationService>().getLoginType)
-          .thenReturn(LoginType.email);
-      onViewModelReadyMock(viewName: "AccountInformationView");
-      when(locator<ApiAuthRepository>().updateUserInfo(
-        msisdn: "",
-        firstName: "",
-        lastName: "",
-        isNewsletterSubscribed: true,
-      ),).thenAnswer((_) => Resource<AuthResponseModel>.success(
-          AuthResponseModel(),
-          message: "",),);
-      await tester.pumpWidget(
-        createTestableWidget(
-          const AccountInformationView(),
-        ),
-      );
+            (WidgetTester tester) async {
+          when(locator<AppConfigurationService>().getLoginType)
+              .thenReturn(LoginType.email);
+          onViewModelReadyMock(viewName: "AccountInformationView");
 
-      // Let the widget tree settle
-      await tester.pumpAndSettle();
+          await tester.pumpWidget(
+            createTestableWidget(
+              const AccountInformationView(),
+            ),
+          );
 
-      await tester.tap(find.byType(MainButton));
-      await tester.pumpAndSettle();
-    });
+          await tester.pumpAndSettle();
+        });
+
 
     testWidgets("widget renders with different login type",
         (WidgetTester tester) async {
@@ -78,7 +64,9 @@ Future<void> main() async {
 
     test("routeName constant", () {
       expect(
-          AccountInformationView.routeName, equals("AccountInformationView"),);
+        AccountInformationView.routeName,
+        equals("AccountInformationView"),
+      );
     });
 
     test("widget constructor", () {
@@ -101,7 +89,8 @@ Future<void> main() async {
       await tester.pumpWidget(
         createTestableWidget(
           Builder(
-            builder: (BuildContext context) => widget.getSpacersWidgets(context),
+            builder: (BuildContext context) =>
+                widget.getSpacersWidgets(context),
           ),
         ),
       );

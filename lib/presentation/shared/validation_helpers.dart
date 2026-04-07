@@ -20,7 +20,7 @@ Future<bool> isInstallButtonEnabled() async {
         await locator<DeviceInfoService>().deviceData;
     bool supportsEsim = await FlutterEsim().isSupportESim(null);
     String currentOSVersion = deviceData["version.release"];
-    if (currentOSVersion.compareTo("15") >= 0 && supportsEsim) {
+    if (currentOSVersion.compareTo("10") >= 0 && supportsEsim) {
       return true;
     }
   }

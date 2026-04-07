@@ -89,14 +89,16 @@ class EmptyCurrentPlansContent extends StatelessWidget {
       content: Padding(
         padding: const EdgeInsets.only(top: 15),
         child: MainButton.bannerButton(
-          height: 50,
-          action: onCheckOurPlansClick,
-          themeColor: themeColor,
-          titleHorizontalPadding: 30,
-          title: LocaleKeys.check_plans_text.tr(),
-          textColor: mainWhiteTextColor(context: context),
-          buttonColor: emptyStateButtonColor(context: context),
-          titleTextStyle: captionOneMediumTextStyle(context: context),
+          params: BannerButtonParams(
+            height: 50,
+            action: onCheckOurPlansClick,
+            themeColor: themeColor,
+            titleHorizontalPadding: 30,
+            title: LocaleKeys.check_plans_text.tr(),
+            textColor: mainWhiteTextColor(context: context),
+            buttonColor: emptyStateButtonColor(context: context),
+            titleTextStyle: captionOneMediumTextStyle(context: context),
+          ),
         ),
       ),
     );
@@ -131,14 +133,16 @@ class EmptyExpiredPlansContent extends StatelessWidget {
       content: Padding(
         padding: const EdgeInsets.only(top: 15),
         child: MainButton.bannerButton(
-          height: 50,
-          action: onCheckOurPlansClick,
-          themeColor: themeColor,
-          titleHorizontalPadding: 30,
-          title: LocaleKeys.check_plans_text.tr(),
-          textColor: mainWhiteTextColor(context: context),
-          buttonColor: emptyStateButtonColor(context: context),
-          titleTextStyle: captionOneMediumTextStyle(context: context),
+          params: BannerButtonParams(
+            height: 50,
+            action: onCheckOurPlansClick,
+            themeColor: themeColor,
+            titleHorizontalPadding: 30,
+            title: LocaleKeys.check_plans_text.tr(),
+            textColor: mainWhiteTextColor(context: context),
+            buttonColor: emptyStateButtonColor(context: context),
+            titleTextStyle: captionOneMediumTextStyle(context: context),
+          ),
         ),
       ),
     );

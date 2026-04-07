@@ -13,6 +13,7 @@ import "package:flutter/material.dart";
 
 class MyWalletView extends StatelessWidget {
   const MyWalletView({super.key});
+
   static const String routeName = "MyWalletView";
 
   @override
@@ -71,8 +72,10 @@ class MyWalletView extends StatelessWidget {
                                 fontColor: titleTextColor(context: context),
                               ),
                             ).applyShimmer(
-                              context: context,
-                              enable: viewModel.applyShimmer,
+                              params: ShimmerParams(
+                                context: context,
+                                enable: viewModel.applyShimmer,
+                              ),
                             ),
                           ],
                         ),

@@ -73,10 +73,12 @@ class CashbackRewardBottomSheet extends StatelessWidget {
                         color: context.appColors.primary_25,
                         enableBorder: false,
                         child: CachedImage(
-                          width: 45,
-                          height: 45,
                           imagePath: request.data?.imagePath ?? "",
                           source: ImageSource.local,
+                          dimensions: const ImageDimensions(
+                            width: 45,
+                            height: 45,
+                          ),
                         ),
                       ),
                       Text(

@@ -53,7 +53,6 @@ class BundleDetailBottomSheetView extends StatelessWidget {
         Widget? childWidget,
         double screenHeight,
       ) {
-        final BundleResponseModel? bundle = viewModel.bundle;
         return KeyboardDismissOnTap(
           child: PaddingWidget.applySymmetricPadding(
             vertical: 15,
@@ -75,81 +74,17 @@ class BundleDetailBottomSheetView extends StatelessWidget {
                     child: SingleChildScrollView(
                       child: Column(
                         children: <Widget>[
-                          BundleHeaderView(
-                            imagePath: (bundle?.isCruise ??
-                                    false)
-                                ? EnvironmentImages.globalFlag.fullImagePath
-                                : bundle?.icon,
-                            title: bundle?.displayTitle ?? "",
-                            subTitle: bundle?.displaySubtitle ?? "",
-                            dataValue: "",
-                            countryPrice: "",
-                            hasNavArrow: false,
-                            isLoading: false,
-                            showUnlimitedData: false,
-                          ),
+                          _buildBundleHeader(viewModel.bundle),
                           const DividerLine(),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              (bundle?.unlimited ?? false)
-                                  ? const UnlimitedDataWidget()
-                                  : Text(
-                                      bundle?.gprsLimitDisplay ?? "",
-                                textDirection: TextDirection.ltr,
-                                      style: headerTwoMediumTextStyle(
-                                        context: context,
-                                        fontColor: bundleDataPriceTextColor(
-                                          context: context,
-                                        ),
-                                      ),
-                                    ),
-                              Text(
-                                bundle?.priceDisplay ?? "",
-                                style: headerTwoMediumTextStyle(
-                                  context: context,
-                                  fontColor: bundleDataPriceTextColor(
-                                    context: context,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
+                          _buildDataAndPrice(context, viewModel.bundle),
                           const DividerLine(),
                           BundleValidityView(
-                            bundleValidity: bundle?.getValidityDisplay() ?? "",
+                            bundleValidity: viewModel.bundle?.getValidityDisplay() ?? "",
                             bundleExpiryDate: "",
                           ),
                           verticalSpaceSmall,
-                          if (bundle?.bundleCategory?.type?.toLowerCase() !=
-                                  AppEnvironment
-                                      .appEnvironmentHelper.cruiseIdentifier &&
-                              (bundle?.countries?.isNotEmpty ?? false))
-                            SupportedCountriesCard(
-                              countries:
-                                  (bundle?.bundleCategory?.isCruise ?? false)
-                                      ? <CountryResponseModel>[]
-                                      : bundle?.countries ??
-                                          <CountryResponseModel>[],
-                            ),
-                          if (viewModel.isPromoCodeEnabled &&
-                              viewModel.isUserLoggedIn)
-                            PaddingWidget.applySymmetricPadding(
-                              vertical: 10,
-                              child: ApplyPromoCode(
-                                callback: viewModel.validatePromoCode,
-                                message: viewModel.promoCodeMessage,
-                                isFieldEnabled: viewModel.promoCodeFieldEnabled,
-                                textFieldBorderColor:
-                                    viewModel.promoCodeFieldColor ??
-                                        greyBackGroundColor(context: context),
-                                textFieldIcon: viewModel.promoCodeFieldIcon,
-                                buttonText: viewModel.promoCodeButtonText,
-                                controller: viewModel.promoCodeController,
-                                isExpanded: viewModel.isPromoCodeExpanded,
-                                expandedCallBack: viewModel.expandedCallBack,
-                              ),
-                            ),
+                          _buildCountriesCard(viewModel.bundle),
+                          _buildPromoCodeSection(context, viewModel),
                           BundleTitleContentView(
                             titleText:
                                 LocaleKeys.bundleDetails_planTypeText.tr(),
@@ -168,138 +103,270 @@ class BundleDetailBottomSheetView extends StatelessWidget {
                                 .bundleDetails_activationPolicy_Value
                                 .tr(),
                           ),
-                          if (!viewModel.isUserLoggedIn)
-                            PaddingWidget.applySymmetricPadding(
-                              horizontal: 5,
-                              child: Column(
-                                children: <Widget>[
-                                  viewModel.showPhoneInput
-                                      ? Column(
-                                          children: <Widget>[
-                                            PaddingWidget.applySymmetricPadding(
-                                              vertical: 5,
-                                              child: Text(
-                                                LocaleKeys
-                                                    .phoneInput_placeHolder
-                                                    .tr(),
-                                                style:
-                                                    captionOneMediumTextStyle(
-                                                  context: context,
-                                                  fontColor: secondaryTextColor(
-                                                    context: context,
-                                                  ),
-                                                ),
-                                              ).textSupportsRTL(context),
-                                            ),
-                                            MyPhoneInput(
-                                              onChanged: (
-                                                String code,
-                                                String phoneNumber, {
-                                                required bool isValid,
-                                              }) {
-                                                viewModel.validateNumber(
-                                                  code: code,
-                                                  number: phoneNumber,
-                                                  isValid: isValid,
-                                                );
-                                              },
-                                              phoneController:
-                                                  viewModel.phoneController,
-                                              validateRequired: true,
-                                            ),
-                                          ],
-                                        )
-                                      : MainInputField.formField(
-                                          textFieldHeight: 50,
-                                          themeColor: themeColor,
-                                          labelTitleText: LocaleKeys
-                                              .continueWithEmailView_emailTitleField
-                                              .tr(),
-                                          hintText: LocaleKeys
-                                              .continueWithEmailView_emailPlaceholder
-                                              .tr(),
-                                          controller: viewModel.emailController,
-                                          textInputType:
-                                              TextInputType.emailAddress,
-                                          errorMessage:
-                                              viewModel.emailErrorMessage,
-                                          backGroundColor: whiteBackGroundColor(
-                                            context: context,
-                                          ),
-                                          labelStyle: bodyNormalTextStyle(
-                                            context: context,
-                                            fontColor: secondaryTextColor(
-                                              context: context,
-                                            ),
-                                          ),
-                                        ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      viewModel.updateTermsSelections();
-                                    },
-                                    child: Row(
-                                      children: <Widget>[
-                                        Align(
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(
-                                              right: 10,
-                                              bottom: 10,
-                                              top: 10,
-                                            ),
-                                            child: Image.asset(
-                                              width: 17,
-                                              viewModel.isTermsChecked
-                                                  ? EnvironmentImages
-                                                      .checkBoxSelected
-                                                      .fullImagePath
-                                                  : EnvironmentImages
-                                                      .checkBoxUnselected
-                                                      .fullImagePath,
-                                            ),
-                                          ),
-                                        ),
-                                        horizontalSpaceSmall,
-                                        termsAndConditionTappableWidget(
-                                          context,
-                                          viewModel,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
+                          _buildGuestUserSection(context, viewModel),
                           verticalSpaceSmallMedium,
                         ],
                       ),
                     ),
                   ),
                   const Spacer(),
-                  MainButton(
-                    hideShadows: true,
-                    themeColor: themeColor,
-                    onPressed: () async => viewModel.buyNowPressed(context),
-                    isEnabled: viewModel.isPurchaseButtonEnabled,
-                    title: LocaleKeys.bundleInfo_priceText.tr(
-                      namedArgs: <String, String>{
-                        "price": viewModel.bundle?.priceDisplay ?? "",
-                      },
-                    ),
-                    enabledTextColor:
-                        enabledMainButtonTextColor(context: context),
-                    enabledBackgroundColor:
-                        enabledMainButtonColor(context: context),
-                    disabledTextColor:
-                        disabledMainButtonTextColor(context: context),
-                    disabledBackgroundColor:
-                        disabledMainButtonColor(context: context),
-                  ),
+                  _buildPurchaseButton(context, viewModel),
                 ],
               ),
             ),
           ),
         );
       },
+    );
+  }
+
+  Widget _buildBundleHeader(BundleResponseModel? bundle) {
+    return BundleHeaderView(
+      imagePath: _getBundleHeaderImagePath(bundle),
+      title: bundle?.displayTitle ?? "",
+      subTitle: bundle?.displaySubtitle ?? "",
+      dataValue: "",
+      countryPrice: "",
+      hasNavArrow: false,
+      isLoading: false,
+      showUnlimitedData: false,
+    );
+  }
+
+  String? _getBundleHeaderImagePath(BundleResponseModel? bundle) {
+    final bool isCruise = bundle?.isCruise ?? false;
+    return isCruise ? EnvironmentImages.globalFlag.fullImagePath : bundle?.icon;
+  }
+
+  Widget _buildDataAndPrice(BuildContext context, BundleResponseModel? bundle) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        _buildDataWidget(context, bundle),
+        _buildPriceWidget(context, bundle),
+      ],
+    );
+  }
+
+  Widget _buildDataWidget(BuildContext context, BundleResponseModel? bundle) {
+    final bool isUnlimited = bundle?.unlimited ?? false;
+    if (isUnlimited) {
+      return const UnlimitedDataWidget();
+    }
+    return Text(
+      bundle?.gprsLimitDisplay ?? "",
+      textDirection: TextDirection.ltr,
+      style: headerTwoMediumTextStyle(
+        context: context,
+        fontColor: bundleDataPriceTextColor(context: context),
+      ),
+    );
+  }
+
+  Widget _buildPriceWidget(BuildContext context, BundleResponseModel? bundle) {
+    return Text(
+      bundle?.priceDisplay ?? "",
+      style: headerTwoMediumTextStyle(
+        context: context,
+        fontColor: bundleDataPriceTextColor(context: context),
+      ),
+    );
+  }
+
+  Widget _buildCountriesCard(BundleResponseModel? bundle) {
+    if (!_shouldShowCountriesCard(bundle)) {
+      return const SizedBox.shrink();
+    }
+    return SupportedCountriesCard(
+      countries: _getCountriesToDisplay(bundle),
+    );
+  }
+
+  bool _shouldShowCountriesCard(BundleResponseModel? bundle) {
+    final bool isNotCruiseType = bundle?.bundleCategory?.type?.toLowerCase() !=
+        AppEnvironment.appEnvironmentHelper.cruiseIdentifier;
+    final bool hasCountries = bundle?.countries?.isNotEmpty ?? false;
+    return isNotCruiseType && hasCountries;
+  }
+
+  List<CountryResponseModel> _getCountriesToDisplay(BundleResponseModel? bundle) {
+    final bool isCruiseCategory = bundle?.bundleCategory?.isCruise ?? false;
+    if (isCruiseCategory) {
+      return <CountryResponseModel>[];
+    }
+    return bundle?.countries ?? <CountryResponseModel>[];
+  }
+
+  Widget _buildPromoCodeSection(
+    BuildContext context,
+    BundleDetailBottomSheetViewModel viewModel,
+  ) {
+    if (!_shouldShowPromoCode(viewModel)) {
+      return const SizedBox.shrink();
+    }
+    return PaddingWidget.applySymmetricPadding(
+      vertical: 10,
+      child: ApplyPromoCode(
+        callback: viewModel.validatePromoCode,
+        message: viewModel.promoCodeMessage,
+        isFieldEnabled: viewModel.promoCodeFieldEnabled,
+        textFieldBorderColor:
+            viewModel.promoCodeFieldColor ??
+                greyBackGroundColor(context: context),
+        textFieldIcon: viewModel.promoCodeFieldIcon,
+        buttonText: viewModel.promoCodeButtonText,
+        controller: viewModel.promoCodeController,
+        isExpanded: viewModel.isPromoCodeExpanded,
+        expandedCallBack: viewModel.expandedCallBack,
+      ),
+    );
+  }
+
+  bool _shouldShowPromoCode(BundleDetailBottomSheetViewModel viewModel) {
+    return viewModel.isPromoCodeEnabled && viewModel.isUserLoggedIn;
+  }
+
+  Widget _buildGuestUserSection(
+    BuildContext context,
+    BundleDetailBottomSheetViewModel viewModel,
+  ) {
+    if (viewModel.isUserLoggedIn) {
+      return const SizedBox.shrink();
+    }
+    return PaddingWidget.applySymmetricPadding(
+      horizontal: 5,
+      child: Column(
+        children: <Widget>[
+          _buildEmailOrPhoneInput(context, viewModel),
+          _buildTermsCheckbox(context, viewModel),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildEmailOrPhoneInput(
+    BuildContext context,
+    BundleDetailBottomSheetViewModel viewModel,
+  ) {
+    if (viewModel.showPhoneInput) {
+      return _buildPhoneInput(context, viewModel);
+    }
+    return _buildEmailInput(context, viewModel);
+  }
+
+  Widget _buildPhoneInput(
+    BuildContext context,
+    BundleDetailBottomSheetViewModel viewModel,
+  ) {
+    return Column(
+      children: <Widget>[
+        PaddingWidget.applySymmetricPadding(
+          vertical: 5,
+          child: Text(
+            LocaleKeys.phoneInput_placeHolder.tr(),
+            style: captionOneMediumTextStyle(
+              context: context,
+              fontColor: secondaryTextColor(context: context),
+            ),
+          ).textSupportsRTL(context),
+        ),
+        MyPhoneInput(
+          onChanged: (
+            String code,
+            String phoneNumber, {
+            required bool isValid,
+          }) {
+            viewModel.validateNumber(
+              code: code,
+              number: phoneNumber,
+              isValid: isValid,
+            );
+          },
+          phoneController: viewModel.phoneController,
+          validateRequired: true,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildEmailInput(
+    BuildContext context,
+    BundleDetailBottomSheetViewModel viewModel,
+  ) {
+    return MainInputField.formField(
+      controller: viewModel.emailController,
+      themeColor: themeColor,
+      textConfig: MainInputFieldTextConfig(
+        labelTitleText: LocaleKeys.continueWithEmailView_emailTitleField.tr(),
+        hintText: LocaleKeys.continueWithEmailView_emailPlaceholder.tr(),
+        errorMessage: viewModel.emailErrorMessage,
+      ),
+      appearanceConfig: MainInputFieldAppearanceConfig(
+        backgroundColor: whiteBackGroundColor(context: context),
+        textFieldHeight: 50,
+        labelStyle: bodyNormalTextStyle(
+          context: context,
+          fontColor: secondaryTextColor(context: context),
+        ),
+      ),
+      inputConfig: const MainInputFieldInputConfig(
+        textInputType: TextInputType.emailAddress,
+      ),
+    );
+  }
+
+  Widget _buildTermsCheckbox(
+    BuildContext context,
+    BundleDetailBottomSheetViewModel viewModel,
+  ) {
+    return GestureDetector(
+      onTap: viewModel.updateTermsSelections,
+      child: Row(
+        children: <Widget>[
+          Align(
+            child: Padding(
+              padding: const EdgeInsets.only(
+                right: 10,
+                bottom: 10,
+                top: 10,
+              ),
+              child: Image.asset(
+                width: 17,
+                _getCheckboxImagePath(viewModel.isTermsChecked),
+              ),
+            ),
+          ),
+          horizontalSpaceSmall,
+          termsAndConditionTappableWidget(context, viewModel),
+        ],
+      ),
+    );
+  }
+
+  String _getCheckboxImagePath(bool isChecked) {
+    return isChecked
+        ? EnvironmentImages.checkBoxSelected.fullImagePath
+        : EnvironmentImages.checkBoxUnselected.fullImagePath;
+  }
+
+  Widget _buildPurchaseButton(
+    BuildContext context,
+    BundleDetailBottomSheetViewModel viewModel,
+  ) {
+    return MainButton(
+      hideShadows: true,
+      themeColor: themeColor,
+      onPressed: () async => viewModel.buyNowPressed(context),
+      isEnabled: viewModel.isPurchaseButtonEnabled,
+      title: LocaleKeys.bundleInfo_priceText.tr(
+        namedArgs: <String, String>{
+          "price": viewModel.bundle?.priceDisplay ?? "",
+        },
+      ),
+      enabledTextColor: enabledMainButtonTextColor(context: context),
+      enabledBackgroundColor: enabledMainButtonColor(context: context),
+      disabledTextColor: disabledMainButtonTextColor(context: context),
+      disabledBackgroundColor: disabledMainButtonColor(context: context),
     );
   }
 

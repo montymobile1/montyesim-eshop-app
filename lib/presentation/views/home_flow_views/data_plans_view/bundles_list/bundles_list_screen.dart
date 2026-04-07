@@ -64,19 +64,27 @@ class BundlesListScreen extends StatelessWidget {
                         horizontal: 15,
                         vertical: 10,
                         child: MainInputField.searchField(
-                          clearSearchEnabled: true,
-                          themeColor: themeColor,
                           controller: viewModel.searchTextFieldController,
-                          backGroundColor: context.appColors.baseWhite,
-                          hintText:
-                              LocaleKeys.dataPlans_SearchPlaceHolderText.tr(),
-                          labelStyle: captionOneNormalTextStyle(
-                            context: context,
-                            fontColor: secondaryTextColor(context: context),
+                          themeColor: themeColor,
+                          textConfig: MainInputFieldTextConfig(
+                            hintText:
+                                LocaleKeys.dataPlans_SearchPlaceHolderText.tr(),
                           ),
-                          enterPressed: () => <dynamic, dynamic>{},
-                          onTap: () =>
-                              viewModel.setSearchFocused(focused: true),
+                          appearanceConfig: MainInputFieldAppearanceConfig(
+                            backgroundColor: context.appColors.baseWhite,
+                            labelStyle: captionOneNormalTextStyle(
+                              context: context,
+                              fontColor: secondaryTextColor(context: context),
+                            ),
+                          ),
+                          behaviorConfig: const MainInputFieldBehaviorConfig(
+                            clearSearchEnabled: true,
+                          ),
+                          interactionConfig: MainInputFieldInteractionConfig(
+                            enterPressed: () => <dynamic, dynamic>{},
+                            onTap: () =>
+                                viewModel.setSearchFocused(focused: true),
+                          ),
                         ),
                       )
                     : const SizedBox.shrink(),

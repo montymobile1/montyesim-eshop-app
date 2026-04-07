@@ -159,14 +159,16 @@ class EsimBundleWidget extends StatelessWidget {
               Container(
                 alignment: Alignment.centerLeft,
                 child: MainButton.bannerButton(
-                  title: priceButtonText,
-                  action: onPriceButtonClick,
-                  height: 42,
-                  themeColor: themeColor,
-                  textColor: enabledMainButtonTextColor(context: context),
-                  buttonColor: enabledMainButtonColor(context: context),
-                  titleTextStyle: captionOneBoldTextStyle(
-                    context: context,
+                  params: BannerButtonParams(
+                    title: priceButtonText,
+                    action: onPriceButtonClick,
+                    height: 42,
+                    themeColor: themeColor,
+                    textColor: enabledMainButtonTextColor(context: context),
+                    buttonColor: enabledMainButtonColor(context: context),
+                    titleTextStyle: captionOneBoldTextStyle(
+                      context: context,
+                    ),
                   ),
                 ),
               ),

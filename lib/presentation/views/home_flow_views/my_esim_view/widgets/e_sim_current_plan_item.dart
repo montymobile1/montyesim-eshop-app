@@ -125,14 +125,16 @@ class ESimCurrentPlanItem extends StatelessWidget {
                   : Container(),
               verticalSpaceSmallMedium,
               buildBundleButtons(
-                context: context,
-                showInstallButton: showInstallButton,
-                showTopUpButton: showTopUpButton,
-                onQrClick: onQrCodeClick,
-                onConsumptionClick: onConsumptionClick,
-                onTopUpClick: onTopUpClick,
-                onInstallClick: onInstallClick,
-                isLoading: isLoading,
+                params: BundleButtonsParams(
+                  context: context,
+                  showInstallButton: showInstallButton,
+                  showTopUpButton: showTopUpButton,
+                  onQrClick: onQrCodeClick,
+                  onConsumptionClick: onConsumptionClick,
+                  onTopUpClick: onTopUpClick,
+                  onInstallClick: onInstallClick,
+                  isLoading: isLoading,
+                ),
               ),
             ],
           ),
@@ -204,140 +206,229 @@ class ESimCurrentPlanItem extends StatelessWidget {
 }
 
 Widget buildBundleButtons({
+  required BundleButtonsParams params,
+}) {
+  return params.showInstallButton
+      ? _buildInstallModeButtons(
+          context: params.context,
+          onQrClick: params.onQrClick,
+          onConsumptionClick: params.onConsumptionClick,
+          onTopUpClick: params.onTopUpClick,
+          onInstallClick: params.onInstallClick,
+          isLoading: params.isLoading,
+          showTopUpButton: params.showTopUpButton,
+        )
+      : _buildStandardModeButtons(
+          context: params.context,
+          onQrClick: params.onQrClick,
+          onConsumptionClick: params.onConsumptionClick,
+          onTopUpClick: params.onTopUpClick,
+          isLoading: params.isLoading,
+          showTopUpButton: params.showTopUpButton,
+        );
+}
+
+VoidCallback _wrapWithConnectivityCheck(VoidCallback callback) {
+  return () async {
+    if (await locator<ConnectivityService>().isConnected()) {
+      callback.call();
+    }
+  };
+}
+
+Widget _buildInstallModeButtons({
   required BuildContext context,
-  required void Function() onQrClick,
-  required void Function() onConsumptionClick,
-  required void Function() onTopUpClick,
-  required void Function() onInstallClick,
+  required VoidCallback onQrClick,
+  required VoidCallback onConsumptionClick,
+  required VoidCallback onTopUpClick,
+  required VoidCallback onInstallClick,
   required bool isLoading,
-  required bool showInstallButton,
   required bool showTopUpButton,
 }) {
-  if (showInstallButton) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: <Widget>[
-        showTopUpButton
-            ? TopUpButton(
-                onClick: () async {
-                  if (await locator<ConnectivityService>().isConnected()) {
-                    onTopUpClick.call();
-                  }
-                },
-                isLoading: isLoading,
-              )
-            : Container(),
-        MainButton(
-          title: LocaleKeys.install.tr(),
-          onPressed: onInstallClick,
-          hideShadows: true,
-          height: 40,
-          horizontalPadding: 15,
-          enabledTextColor: mainWhiteTextColor(context: context),
-          titleTextStyle: captionOneMediumTextStyle(context: context)
-              .copyWith(color: mainWhiteTextColor(context: context)),
-          leadingWidget: Padding(
-            padding: const EdgeInsets.only(right: 4),
-            child: Icon(
-              size: 20,
-              Icons.install_mobile,
-              color: mainWhiteTextColor(context: context),
-            ),
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    children: <Widget>[
+      if (showTopUpButton)
+        TopUpButton(
+          onClick: _wrapWithConnectivityCheck(onTopUpClick),
+          isLoading: isLoading,
+        )
+      else
+        Container(),
+      _buildInstallButton(context: context, onInstallClick: onInstallClick)
+          .applyShimmer(
+        params: ShimmerParams(enable: isLoading, context: context, height: 20),
+      ),
+      _buildCircularButton(
+        context: context,
+        icon: Icons.bar_chart,
+        onPressed: _wrapWithConnectivityCheck(onConsumptionClick),
+      ).applyShimmer(
+        params: ShimmerParams(enable: isLoading, context: context),
+      ),
+      _buildCircularButton(
+        context: context,
+        icon: Icons.qr_code,
+        onPressed: onQrClick,
+      ).applyShimmer(
+        params: ShimmerParams(enable: isLoading, context: context),
+      ),
+    ],
+  );
+}
+
+Widget _buildStandardModeButtons({
+  required BuildContext context,
+  required VoidCallback onQrClick,
+  required VoidCallback onConsumptionClick,
+  required VoidCallback onTopUpClick,
+  required bool isLoading,
+  required bool showTopUpButton,
+}) {
+  return Column(
+    children: <Widget>[
+      Row(
+        children: <Widget>[
+          _buildQrButton(context: context, onPressed: onQrClick).applyShimmer(
+            params:
+                ShimmerParams(enable: isLoading, context: context, height: 20),
           ),
-          themeColor: themeColor,
-        ).applyShimmer(enable: isLoading, context: context, height: 20),
-        CircularIconButton(
-          icon: Icons.bar_chart,
-          borderRadius:
-              AppEnvironment.appEnvironmentHelper.environmentCornerRadius,
-          iconColor: iconButtonColor(context: context),
-          onPressed: () async {
-            if (await locator<ConnectivityService>().isConnected()) {
-              onConsumptionClick.call();
-            }
-          },
-        ).applyShimmer(enable: isLoading, context: context),
-        CircularIconButton(
-          icon: Icons.qr_code,
-          borderRadius:
-              AppEnvironment.appEnvironmentHelper.environmentCornerRadius,
-          onPressed: onQrClick,
-          iconColor: iconButtonColor(context: context),
-        ).applyShimmer(enable: isLoading, context: context),
-      ],
-    );
-  } else {
-    return Column(
-      children: <Widget>[
+          horizontalSpaceSmallMedium,
+          _buildConsumptionButton(
+            context: context,
+            onPressed: _wrapWithConnectivityCheck(onConsumptionClick),
+          ).applyShimmer(
+            params:
+                ShimmerParams(enable: isLoading, context: context, height: 20),
+          ),
+        ],
+      ),
+      verticalSpaceSmall,
+      if (isLoading) verticalSpaceSmall,
+      if (showTopUpButton)
         Row(
           children: <Widget>[
-            MainButton(
-              title: LocaleKeys.qr_code.tr(),
-              onPressed: onQrClick,
-              hideShadows: true,
-              height: 40,
-              horizontalPadding: 15,
-              titleTextStyle: captionOneMediumTextStyle(context: context),
-              leadingWidget: Padding(
-                padding: const EdgeInsets.only(right: 4),
-                child: Icon(
-                  size: 20,
-                  Icons.qr_code,
-                  color: iconButtonColor(context: context),
-                ),
-              ),
-              borderColor: mainBorderColor(context: context),
-              enabledBackgroundColor: mainWhiteTextColor(context: context),
-              themeColor: themeColor,
-              enabledTextColor: iconButtonColor(context: context),
-            ).applyShimmer(enable: isLoading, context: context, height: 20),
-            horizontalSpaceSmallMedium,
-            MainButton(
-              title: LocaleKeys.consumption.tr(),
-              onPressed: () async {
-                if (await locator<ConnectivityService>().isConnected()) {
-                  onConsumptionClick.call();
-                }
-              },
-              hideShadows: true,
-              height: 40,
-              horizontalPadding: 15,
-              titleTextStyle: captionOneMediumTextStyle(
-                context: context,
-              ),
-              leadingWidget: Padding(
-                padding: const EdgeInsets.only(right: 4),
-                child: Icon(
-                  size: 20,
-                  Icons.bar_chart,
-                  color: iconButtonColor(context: context),
-                ),
-              ),
-              borderColor: mainBorderColor(context: context),
-              enabledBackgroundColor: mainWhiteTextColor(context: context),
-              themeColor: themeColor,
-              enabledTextColor: iconButtonColor(context: context),
-            ).applyShimmer(enable: isLoading, context: context, height: 20),
+            TopUpButton(
+              isLoading: isLoading,
+              onClick: _wrapWithConnectivityCheck(onTopUpClick),
+            ),
+            const Spacer(),
           ],
         ),
-        verticalSpaceSmall,
-        isLoading ? verticalSpaceSmall : Container(),
-        showTopUpButton
-            ? Row(
-                children: <Widget>[
-                  TopUpButton(
-                    isLoading: isLoading,
-                    onClick: () async {
-                      if (await locator<ConnectivityService>().isConnected()) {
-                        onTopUpClick.call();
-                      }
-                    },
-                  ),
-                  const Spacer(),
-                ],
-              )
-            : Container(),
-      ],
-    );
-  }
+    ],
+  );
+}
+
+Widget _buildInstallButton({
+  required BuildContext context,
+  required VoidCallback onInstallClick,
+}) {
+  return MainButton(
+    title: LocaleKeys.install.tr(),
+    onPressed: onInstallClick,
+    hideShadows: true,
+    height: 40,
+    horizontalPadding: 15,
+    enabledTextColor: mainWhiteTextColor(context: context),
+    titleTextStyle: captionOneMediumTextStyle(context: context)
+        .copyWith(color: mainWhiteTextColor(context: context)),
+    leadingWidget: Padding(
+      padding: const EdgeInsets.only(right: 4),
+      child: Icon(
+        size: 20,
+        Icons.install_mobile,
+        color: mainWhiteTextColor(context: context),
+      ),
+    ),
+    themeColor: themeColor,
+  );
+}
+
+Widget _buildCircularButton({
+  required BuildContext context,
+  required IconData icon,
+  required VoidCallback onPressed,
+}) {
+  return CircularIconButton(
+    icon: icon,
+    borderRadius: AppEnvironment.appEnvironmentHelper.environmentCornerRadius,
+    iconColor: iconButtonColor(context: context),
+    onPressed: onPressed,
+  );
+}
+
+Widget _buildQrButton({
+  required BuildContext context,
+  required VoidCallback onPressed,
+}) {
+  return MainButton(
+    title: LocaleKeys.qr_code.tr(),
+    onPressed: onPressed,
+    hideShadows: true,
+    height: 40,
+    horizontalPadding: 15,
+    titleTextStyle: captionOneMediumTextStyle(context: context),
+    leadingWidget: Padding(
+      padding: const EdgeInsets.only(right: 4),
+      child: Icon(
+        size: 20,
+        Icons.qr_code,
+        color: iconButtonColor(context: context),
+      ),
+    ),
+    borderColor: mainBorderColor(context: context),
+    enabledBackgroundColor: mainWhiteTextColor(context: context),
+    themeColor: themeColor,
+    enabledTextColor: iconButtonColor(context: context),
+  );
+}
+
+Widget _buildConsumptionButton({
+  required BuildContext context,
+  required VoidCallback onPressed,
+}) {
+  return MainButton(
+    title: LocaleKeys.consumption.tr(),
+    onPressed: onPressed,
+    hideShadows: true,
+    height: 40,
+    horizontalPadding: 15,
+    titleTextStyle: captionOneMediumTextStyle(
+      context: context,
+    ),
+    leadingWidget: Padding(
+      padding: const EdgeInsets.only(right: 4),
+      child: Icon(
+        size: 20,
+        Icons.bar_chart,
+        color: iconButtonColor(context: context),
+      ),
+    ),
+    borderColor: mainBorderColor(context: context),
+    enabledBackgroundColor: mainWhiteTextColor(context: context),
+    themeColor: themeColor,
+    enabledTextColor: iconButtonColor(context: context),
+  );
+}
+
+class BundleButtonsParams {
+  BundleButtonsParams({
+    required this.context,
+    required this.onQrClick,
+    required this.onConsumptionClick,
+    required this.onTopUpClick,
+    required this.onInstallClick,
+    required this.isLoading,
+    required this.showInstallButton,
+    required this.showTopUpButton,
+  });
+
+  final BuildContext context;
+  final void Function() onQrClick;
+  final void Function() onConsumptionClick;
+  final void Function() onTopUpClick;
+  final void Function() onInstallClick;
+  final bool isLoading;
+  final bool showInstallButton;
+  final bool showTopUpButton;
 }

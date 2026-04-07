@@ -1,5 +1,5 @@
 import "package:device_info_plus/device_info_plus.dart";
-import "package:esim_open_source/domain/use_case/app/add_device_use_case.dart";
+import "package:esim_open_source/domain/data/params/add_device_params.dart";
 
 abstract class DeviceInfoService {
   Future<String> get deviceID;

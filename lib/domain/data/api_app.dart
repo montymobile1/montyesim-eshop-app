@@ -1,17 +1,9 @@
 import "dart:async";
 
+import "package:esim_open_source/domain/data/params/add_device_params.dart";
+
 abstract interface class APIApp {
-  FutureOr<dynamic> addDevice({
-    required String fcmToken,
-    required String manufacturer,
-    required String deviceModel,
-    required String deviceOs,
-    required String deviceOsVersion,
-    required String appVersion,
-    required String ramSize,
-    required String screenResolution,
-    required bool isRooted,
-  });
+  FutureOr<dynamic> addDevice(AddDeviceParams params);
 
   FutureOr<dynamic> getFaq();
 

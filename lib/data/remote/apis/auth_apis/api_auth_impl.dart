@@ -6,10 +6,12 @@ import "package:esim_open_source/data/remote/auth_reload_interface.dart";
 import "package:esim_open_source/data/remote/http_request.dart";
 import "package:esim_open_source/data/remote/responses/auth/auth_response_model.dart";
 import "package:esim_open_source/data/remote/responses/auth/otp_response_model.dart";
+import "package:esim_open_source/data/remote/responses/auth/resend_otp_response_model.dart";
 import "package:esim_open_source/data/remote/responses/base_response_model.dart";
 import "package:esim_open_source/data/remote/responses/empty_response.dart";
 import "package:esim_open_source/data/remote/unauthorized_access_interface.dart";
 import "package:esim_open_source/domain/data/api_auth.dart";
+import "package:esim_open_source/domain/data/params/update_user_info_params.dart";
 
 class APIAuthImpl extends APIService implements APIAuth {
   APIAuthImpl._privateConstructor() : super.privateConstructor();
@@ -30,10 +32,12 @@ class APIAuthImpl extends APIService implements APIAuth {
   FutureOr<ResponseMain<OtpResponseModel?>> login({
     required String? email,
     required String? phoneNumber,
+    String? otpChannel,
   }) async {
     Map<String, String> params = <String, String>{
       if (email != null) "email": email,
       if (phoneNumber != null) "phone": phoneNumber,
+      if (otpChannel != null) "otp_channel": otpChannel,
     };
 
     ResponseMain<OtpResponseModel?> loginResponse = await sendRequest(
@@ -73,6 +77,29 @@ class APIAuthImpl extends APIService implements APIAuth {
         parameters: params,
       ),
       fromJson: EmptyResponse.fromJson,
+    );
+
+    return resendOtpResponse;
+  }
+
+  @override
+  FutureOr<ResponseMain<ResendOtpResponseModel?>> resendOtpNewChannel({
+    required String? email,
+    required String? phone,
+    required String otpChannel,
+  }) async {
+    Map<String, dynamic> params = <String, dynamic>{
+      if (email != null) "email": email,
+      if (phone != null) "phone": phone,
+      "otp_channel": otpChannel,
+    };
+
+    ResponseMain<ResendOtpResponseModel?> resendOtpResponse = await sendRequest(
+      endPoint: createAPIEndpoint(
+        endPoint: AuthApis.resendOtpNewChannel,
+        parameters: params,
+      ),
+      fromJson: ResendOtpResponseModel.fromJson,
     );
 
     return resendOtpResponse;
@@ -119,27 +146,19 @@ class APIAuthImpl extends APIService implements APIAuth {
 
   @override
   FutureOr<ResponseMain<AuthResponseModel>> updateUserInfo({
-    String? email,
-    String? msisdn,
-    String? firstName,
-    String? lastName,
-    bool? isNewsletterSubscribed,
-    String? bearerToken,
-    String? currencyCode,
-    String? languageCode,
+    required UpdateUserInfoRequest request,
   }) async {
     Map<String, String> headers = <String, String>{
-      "Authorization": "Bearer $bearerToken",
+      "Authorization": "Bearer ${request.bearerToken}",
     };
 
     Map<String, dynamic> params = <String, dynamic>{
-      if (email != null) "email": email,
-      if (msisdn != null) "msisdn": msisdn,
-      if (firstName != null) "first_name": firstName,
-      if (lastName != null) "last_name": lastName,
-      if (isNewsletterSubscribed != null) "should_notify": isNewsletterSubscribed,
-      if (currencyCode != null) "currency": currencyCode, //?? getSelectedCurrencyCode(),
-      if (languageCode != null) "language": languageCode , //?? LanguageEnum.fromCode(locator<LocalStorageService>().languageCode).languageText,
+      if (request.email != null) "email": request.email,
+      if (request.msisdn != null) "msisdn": request.msisdn,
+      if (request.firstName != null) "first_name": request.firstName,
+      if (request.lastName != null) "last_name": request.lastName,
+      if (request.currencyCode != null) "currency": request.currencyCode, //?? getSelectedCurrencyCode(),
+      if (request.languageCode != null) "language": request.languageCode , //?? LanguageEnum.fromCode(locator<LocalStorageService>().languageCode).languageText,
     };
 
     ResponseMain<AuthResponseModel> authResponse = await sendRequest(
@@ -147,7 +166,7 @@ class APIAuthImpl extends APIService implements APIAuth {
         parameters: params,
         endPoint: AuthApis.updateUserInfo,
         additionalHeaders:
-            (bearerToken?.isNotEmpty ?? false) ? headers : <String, String>{},
+            (request.bearerToken?.isNotEmpty ?? false) ? headers : <String, String>{},
       ),
       fromJson: AuthResponseModel.fromAPIJson,
     );

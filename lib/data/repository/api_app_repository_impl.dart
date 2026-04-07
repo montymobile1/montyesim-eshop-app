@@ -9,6 +9,7 @@ import "package:esim_open_source/data/remote/responses/app/dynamic_page_response
 import "package:esim_open_source/data/remote/responses/app/faq_response.dart";
 import "package:esim_open_source/data/remote/responses/core/string_response.dart";
 import "package:esim_open_source/data/remote/responses/empty_response.dart";
+import "package:esim_open_source/domain/data/params/add_device_params.dart";
 import "package:esim_open_source/domain/data/api_app.dart";
 import "package:esim_open_source/domain/repository/api_app_repository.dart";
 import "package:esim_open_source/domain/repository/services/local_storage_service.dart";
@@ -24,29 +25,9 @@ class ApiAppRepositoryImpl implements ApiAppRepository {
       ValueStream<Resource<List<BannerResponseModel>?>>();
 
   @override
-  FutureOr<Resource<EmptyResponse?>> addDevice({
-    required String fcmToken,
-    required String manufacturer,
-    required String deviceModel,
-    required String deviceOs,
-    required String deviceOsVersion,
-    required String appVersion,
-    required String ramSize,
-    required String screenResolution,
-    required bool isRooted,
-  }) async {
+  FutureOr<Resource<EmptyResponse?>> addDevice(AddDeviceParams params) async {
     return responseToResource(
-      apiApp.addDevice(
-        fcmToken: fcmToken,
-        manufacturer: manufacturer,
-        deviceModel: deviceModel,
-        deviceOs: deviceOs,
-        deviceOsVersion: deviceOsVersion,
-        appVersion: appVersion,
-        ramSize: ramSize,
-        screenResolution: screenResolution,
-        isRooted: isRooted,
-      ),
+      apiApp.addDevice(params),
     );
   }
 

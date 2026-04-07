@@ -51,10 +51,10 @@ FutureOr<Resource<T>> responseToResource<T>(FutureOr<dynamic> request) async {
       );
     }
     return Resource<T>.error(
-      response.title ?? "",
+      response.message ?? response.title ?? "",
       data: response.data,
       error: GeneralError(
-        message: response.title ?? "",
+        message: response.message ?? response.title ?? "",
         errorCode: response.responseCode,
       ),
     );

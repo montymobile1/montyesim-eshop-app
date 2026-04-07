@@ -1,11 +1,12 @@
+import "package:esim_open_source/domain/data/params/update_user_info_params.dart";
 import "package:esim_open_source/data/remote/responses/auth/auth_response_model.dart";
 import "package:esim_open_source/data/remote/responses/empty_response.dart";
+import "package:esim_open_source/domain/data/params/add_device_params.dart";
 import "package:esim_open_source/domain/repository/api_app_repository.dart";
 import "package:esim_open_source/domain/repository/api_auth_repository.dart";
 import "package:esim_open_source/domain/repository/services/device_info_service.dart";
 import "package:esim_open_source/domain/repository/services/local_storage_service.dart";
 import "package:esim_open_source/domain/repository/services/secure_storage_service.dart";
-import "package:esim_open_source/domain/use_case/app/add_device_use_case.dart";
 import "package:esim_open_source/domain/use_case/auth/social_media_verify_login_use_case.dart";
 import "package:esim_open_source/domain/util/resource.dart";
 import "package:flutter_test/flutter_test.dart";
@@ -65,17 +66,7 @@ Future<void> main() async {
         _,) async => "mock_device_id",);
 
     // Mock ApiAppRepository addDevice to return success
-    when(mockAppRepository.addDevice(
-      fcmToken: anyNamed("fcmToken"),
-      manufacturer: anyNamed("manufacturer"),
-      deviceModel: anyNamed("deviceModel"),
-      deviceOs: anyNamed("deviceOs"),
-      deviceOsVersion: anyNamed("deviceOsVersion"),
-      appVersion: anyNamed("appVersion"),
-      ramSize: anyNamed("ramSize"),
-      screenResolution: anyNamed("screenResolution"),
-      isRooted: anyNamed("isRooted"),
-    ),).thenAnswer((_) async =>
+    when(mockAppRepository.addDevice(any)).thenAnswer((_) async =>
         TestDataFactory.createSuccessResource<EmptyResponse?>(
             data: EmptyResponse(),),);
   });
@@ -104,14 +95,7 @@ Future<void> main() async {
       );
 
       when(mockRepository.updateUserInfo(
-        bearerToken: anyNamed("bearerToken"),
-        email: anyNamed("email"),
-        msisdn: anyNamed("msisdn"),
-        firstName: anyNamed("firstName"),
-        lastName: anyNamed("lastName"),
-        isNewsletterSubscribed: anyNamed("isNewsletterSubscribed"),
-        currencyCode: anyNamed("currencyCode"),
-        languageCode: anyNamed("languageCode"),
+        request: argThat(isA<UpdateUserInfoRequest>(), named: "request"),
       ),).thenAnswer((_) async => expectedResponse);
 
       // Act
@@ -121,7 +105,7 @@ Future<void> main() async {
       expect(result.resourceType, equals(ResourceType.success));
       expect(result.data, isNotNull);
 
-      verify(mockRepository.updateUserInfo(bearerToken: "social_access_token"))
+      verify(mockRepository.updateUserInfo(request: argThat(isA<UpdateUserInfoRequest>(), named: "request")))
           .called(1);
     });
 
@@ -138,14 +122,7 @@ Future<void> main() async {
       );
 
       when(mockRepository.updateUserInfo(
-        bearerToken: anyNamed("bearerToken"),
-        email: anyNamed("email"),
-        msisdn: anyNamed("msisdn"),
-        firstName: anyNamed("firstName"),
-        lastName: anyNamed("lastName"),
-        isNewsletterSubscribed: anyNamed("isNewsletterSubscribed"),
-        currencyCode: anyNamed("currencyCode"),
-        languageCode: anyNamed("languageCode"),
+        request: argThat(isA<UpdateUserInfoRequest>(), named: "request"),
       ),).thenAnswer((_) async => expectedResponse);
 
       // Act
@@ -155,7 +132,7 @@ Future<void> main() async {
       expect(result.resourceType, equals(ResourceType.error));
       expect(result.message, equals("Failed to verify social login"));
 
-      verify(mockRepository.updateUserInfo(bearerToken: "invalid_token"))
+      verify(mockRepository.updateUserInfo(request: argThat(isA<UpdateUserInfoRequest>(), named: "request")))
           .called(1);
     });
 
@@ -173,14 +150,7 @@ Future<void> main() async {
       );
 
       when(mockRepository.updateUserInfo(
-        bearerToken: anyNamed("bearerToken"),
-        email: anyNamed("email"),
-        msisdn: anyNamed("msisdn"),
-        firstName: anyNamed("firstName"),
-        lastName: anyNamed("lastName"),
-        isNewsletterSubscribed: anyNamed("isNewsletterSubscribed"),
-        currencyCode: anyNamed("currencyCode"),
-        languageCode: anyNamed("languageCode"),
+        request: argThat(isA<UpdateUserInfoRequest>(), named: "request"),
       ),).thenAnswer((_) async => expectedResponse);
 
       // Act
@@ -206,14 +176,7 @@ Future<void> main() async {
       );
 
       when(mockRepository.updateUserInfo(
-        bearerToken: anyNamed("bearerToken"),
-        email: anyNamed("email"),
-        msisdn: anyNamed("msisdn"),
-        firstName: anyNamed("firstName"),
-        lastName: anyNamed("lastName"),
-        isNewsletterSubscribed: anyNamed("isNewsletterSubscribed"),
-        currencyCode: anyNamed("currencyCode"),
-        languageCode: anyNamed("languageCode"),
+        request: argThat(isA<UpdateUserInfoRequest>(), named: "request"),
       ),).thenAnswer((_) async => expectedResponse);
 
       // Act
@@ -238,14 +201,7 @@ Future<void> main() async {
       );
 
       when(mockRepository.updateUserInfo(
-        bearerToken: anyNamed("bearerToken"),
-        email: anyNamed("email"),
-        msisdn: anyNamed("msisdn"),
-        firstName: anyNamed("firstName"),
-        lastName: anyNamed("lastName"),
-        isNewsletterSubscribed: anyNamed("isNewsletterSubscribed"),
-        currencyCode: anyNamed("currencyCode"),
-        languageCode: anyNamed("languageCode"),
+        request: argThat(isA<UpdateUserInfoRequest>(), named: "request"),
       ),).thenAnswer((_) async => expectedResponse);
 
       // Act
@@ -271,14 +227,7 @@ Future<void> main() async {
       );
 
       when(mockRepository.updateUserInfo(
-        bearerToken: anyNamed("bearerToken"),
-        email: anyNamed("email"),
-        msisdn: anyNamed("msisdn"),
-        firstName: anyNamed("firstName"),
-        lastName: anyNamed("lastName"),
-        isNewsletterSubscribed: anyNamed("isNewsletterSubscribed"),
-        currencyCode: anyNamed("currencyCode"),
-        languageCode: anyNamed("languageCode"),
+        request: argThat(isA<UpdateUserInfoRequest>(), named: "request"),
       ),).thenAnswer((_) async => expectedResponse);
 
       // Act

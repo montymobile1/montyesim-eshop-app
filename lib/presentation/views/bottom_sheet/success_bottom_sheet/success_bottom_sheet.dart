@@ -62,10 +62,12 @@ class SuccessBottomSheet extends StatelessWidget {
                         ),
                       ),
                       CachedImage(
-                        width: 65,
-                        height: 65,
                         imagePath: request.data?.imagePath ?? "",
                         source: ImageSource.local,
+                        dimensions: const ImageDimensions(
+                          width: 65,
+                          height: 65,
+                        ),
                       ),
                       Text(
                         viewModel.request.data?.title ?? "",

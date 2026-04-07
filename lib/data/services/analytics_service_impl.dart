@@ -62,6 +62,14 @@ class AnalyticsServiceImpl extends AnalyticsService {
     }
   }
 
+  @override
+  Future<void> setUserId(String? hashedEmail) async {
+    if (_useFirebaseAnalytics) {
+      await _firebaseAppEvents.setUserId(id: hashedEmail);
+      log("Analytics user ID set");
+    }
+  }
+
   Future<void> logFireBaseEvent({
     required AnalyticEvent event,
   }) async {

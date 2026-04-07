@@ -3,8 +3,8 @@ import "dart:io";
 
 import "package:android_id/android_id.dart";
 import "package:device_info_plus/device_info_plus.dart";
+import "package:esim_open_source/domain/data/params/add_device_params.dart";
 import "package:esim_open_source/domain/repository/services/device_info_service.dart";
-import "package:esim_open_source/domain/use_case/app/add_device_use_case.dart";
 import "package:flutter/foundation.dart";
 import "package:flutter/services.dart";
 import "package:package_info_plus/package_info_plus.dart";
@@ -12,6 +12,9 @@ import "package:safe_device/safe_device.dart";
 
 class DeviceInfoServiceImpl implements DeviceInfoService {
   DeviceInfoServiceImpl._privateConstructor();
+
+  String appIsRooted = "app.isRooted";
+  String appVersion = "app.version";
 
   static final DeviceInfoPlugin _deviceInfoPlugin = DeviceInfoPlugin();
   Map<String, dynamic> _deviceData = <String, dynamic>{};
@@ -65,7 +68,7 @@ class DeviceInfoServiceImpl implements DeviceInfoService {
   @override
   Future<bool> get isRooted async {
     await _deviceInfoCompleter?.future;
-    return _deviceData["app.isRooted"];
+    return _deviceData[appIsRooted];
   }
 
   @override
@@ -79,10 +82,10 @@ class DeviceInfoServiceImpl implements DeviceInfoService {
       deviceOsVersion: Platform.isIOS
           ? _deviceData["systemVersion"]
           : _deviceData["version.release"],
-      appVersion: _deviceData["app.version"],
+      appVersion: _deviceData[appVersion],
       ramSize: "",
       screenResolution: "",
-      isRooted: _deviceData["app.isRooted"],
+      isRooted: _deviceData[appIsRooted],
     );
   }
 
@@ -144,10 +147,10 @@ class DeviceInfoServiceImpl implements DeviceInfoService {
     bool isDevelopmentModeEnable,
   ) {
     return <String, dynamic>{
-      "app.isRooted": isRooted,
+      appIsRooted: isRooted,
       "app.name": packageInfo.appName,
       "app.packageName": packageInfo.packageName,
-      "app.version": packageInfo.version,
+      appVersion: packageInfo.version,
       "app.buildNumber": packageInfo.buildNumber,
       "version.securityPatch": build.version.securityPatch,
       "version.sdkInt": build.version.sdkInt,
@@ -187,10 +190,10 @@ class DeviceInfoServiceImpl implements DeviceInfoService {
     bool isDevelopmentModeEnable,
   ) {
     return <String, dynamic>{
-      "app.isRooted": isRooted,
+      appIsRooted: isRooted,
       "app.name": packageInfo.appName,
       "app.packageName": packageInfo.packageName,
-      "app.version": packageInfo.version,
+      appVersion: packageInfo.version,
       "app.buildNumber": packageInfo.buildNumber,
       "name": data.name,
       "systemName": data.systemName,

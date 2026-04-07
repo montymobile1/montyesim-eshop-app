@@ -5,10 +5,12 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:async' as _i3;
 
-import 'package:esim_open_source/data/remote/auth_reload_interface.dart' as _i5;
+import 'package:esim_open_source/data/remote/auth_reload_interface.dart' as _i6;
 import 'package:esim_open_source/data/remote/unauthorized_access_interface.dart'
-    as _i4;
+    as _i5;
 import 'package:esim_open_source/domain/data/api_auth.dart' as _i2;
+import 'package:esim_open_source/domain/data/params/update_user_info_params.dart'
+    as _i4;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: type=lint
@@ -43,6 +45,22 @@ class MockAPIAuth extends _i1.Mock implements _i2.APIAuth {
       )) as _i3.FutureOr<dynamic>);
 
   @override
+  _i3.FutureOr<dynamic> resendOtpNewChannel({
+    required String? email,
+    required String? phone,
+    required String? otpChannel,
+  }) =>
+      (super.noSuchMethod(Invocation.method(
+        #resendOtpNewChannel,
+        [],
+        {
+          #email: email,
+          #phone: phone,
+          #otpChannel: otpChannel,
+        },
+      )) as _i3.FutureOr<dynamic>);
+
+  @override
   _i3.FutureOr<dynamic> verifyOtp({
     String? email,
     String? phoneNumber,
@@ -63,8 +81,17 @@ class MockAPIAuth extends _i1.Mock implements _i2.APIAuth {
       )) as _i3.FutureOr<dynamic>);
 
   @override
+  _i3.FutureOr<dynamic> updateUserInfo(
+          {required _i4.UpdateUserInfoRequest? request}) =>
+      (super.noSuchMethod(Invocation.method(
+        #updateUserInfo,
+        [],
+        {#request: request},
+      )) as _i3.FutureOr<dynamic>);
+
+  @override
   void addUnauthorizedAccessListener(
-          _i4.UnauthorizedAccessListener? unauthorizedAccessCallBack) =>
+          _i5.UnauthorizedAccessListener? unauthorizedAccessCallBack) =>
       super.noSuchMethod(
         Invocation.method(
           #addUnauthorizedAccessListener,
@@ -75,7 +102,7 @@ class MockAPIAuth extends _i1.Mock implements _i2.APIAuth {
 
   @override
   void removeUnauthorizedAccessListener(
-          _i4.UnauthorizedAccessListener? unauthorizedAccessCallBack) =>
+          _i5.UnauthorizedAccessListener? unauthorizedAccessCallBack) =>
       super.noSuchMethod(
         Invocation.method(
           #removeUnauthorizedAccessListener,
@@ -86,7 +113,7 @@ class MockAPIAuth extends _i1.Mock implements _i2.APIAuth {
 
   @override
   void addAuthReloadListenerCallBack(
-          _i5.AuthReloadListener? authReloadListener) =>
+          _i6.AuthReloadListener? authReloadListener) =>
       super.noSuchMethod(
         Invocation.method(
           #addAuthReloadListenerCallBack,
@@ -97,7 +124,7 @@ class MockAPIAuth extends _i1.Mock implements _i2.APIAuth {
 
   @override
   void removeAuthReloadListenerCallBack(
-          _i5.AuthReloadListener? authReloadListener) =>
+          _i6.AuthReloadListener? authReloadListener) =>
       super.noSuchMethod(
         Invocation.method(
           #removeAuthReloadListenerCallBack,

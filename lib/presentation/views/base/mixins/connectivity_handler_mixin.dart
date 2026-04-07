@@ -60,27 +60,28 @@ mixin ConnectivityHandlerMixin on BaseViewModel implements ConnectionListener {
       if (this is DialogUtilitiesMixin) {
         (this as DialogUtilitiesMixin).closeConnectionDialog();
       }
-    } else {
-      if (this is NavigationHelperMixin) {
-        await (this as NavigationHelperMixin).navigationService
-            .clearTillFirstAndShow(HomePager.routeName);
-      }
+      return;
+    }
 
-      int? index = locator<HomePagerViewModel>().getSelectedTabIndex();
-      if (index == 1 && isUserLoggedIn) {
-        locator<HomePagerViewModel>().lockTabBar = true;
-        return;
-      }
+    if (this is NavigationHelperMixin) {
+      await (this as NavigationHelperMixin).navigationService
+          .clearTillFirstAndShow(HomePager.routeName);
+    }
 
-      if(!isUserLoggedIn){
-        return;
-      }
+    if (!isUserLoggedIn) {
+      return;
+    }
 
-      if (navigationRouter.isPageVisible(routeName)) {
-        log("Pop displayed by: $routeName");
-        if (this is DialogUtilitiesMixin) {
-          (this as DialogUtilitiesMixin).showNoConnectionDialog(routeName);
-        }
+    int? index = locator<HomePagerViewModel>().getSelectedTabIndex();
+    if (index == 1) {
+      locator<HomePagerViewModel>().lockTabBar = true;
+      return;
+    }
+
+    if (navigationRouter.isPageVisible(routeName)) {
+      log("Pop displayed by: $routeName");
+      if (this is DialogUtilitiesMixin) {
+        (this as DialogUtilitiesMixin).showNoConnectionDialog(routeName);
       }
     }
   }

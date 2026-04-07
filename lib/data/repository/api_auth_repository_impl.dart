@@ -3,9 +3,11 @@ import "dart:async";
 import "package:esim_open_source/data/remote/auth_reload_interface.dart";
 import "package:esim_open_source/data/remote/responses/auth/auth_response_model.dart";
 import "package:esim_open_source/data/remote/responses/auth/otp_response_model.dart";
+import "package:esim_open_source/data/remote/responses/auth/resend_otp_response_model.dart";
 import "package:esim_open_source/data/remote/responses/empty_response.dart";
 import "package:esim_open_source/data/remote/unauthorized_access_interface.dart";
 import "package:esim_open_source/domain/data/api_auth.dart";
+import "package:esim_open_source/domain/data/params/update_user_info_params.dart";
 import "package:esim_open_source/domain/repository/api_auth_repository.dart";
 import "package:esim_open_source/domain/util/resource.dart";
 
@@ -18,9 +20,10 @@ class ApiAuthRepositoryImpl implements ApiAuthRepository {
   FutureOr<Resource<OtpResponseModel?>> login({
     required String? email,
     required String? phoneNumber,
+    String? otpChannel,
   }) async {
     return responseToResource(
-      apiAuth.login(email: email, phoneNumber: phoneNumber),
+      apiAuth.login(email: email, phoneNumber: phoneNumber, otpChannel: otpChannel),
     );
   }
 
@@ -68,25 +71,11 @@ class ApiAuthRepositoryImpl implements ApiAuthRepository {
 
   @override
   FutureOr<Resource<AuthResponseModel>> updateUserInfo({
-    String? email,
-    String? msisdn,
-    String? firstName,
-    String? lastName,
-    bool? isNewsletterSubscribed,
-    String? currencyCode,
-    String? languageCode,
-    String? bearerToken,
+    required UpdateUserInfoRequest request,
   }) async {
     return responseToResource(
       apiAuth.updateUserInfo(
-        email: email,
-        msisdn: msisdn,
-        firstName: firstName,
-        lastName: lastName,
-        isNewsletterSubscribed: isNewsletterSubscribed,
-        currencyCode: currencyCode,
-        languageCode: languageCode,
-        bearerToken: bearerToken,
+        request: request,
       ),
     );
   }
@@ -136,6 +125,21 @@ class ApiAuthRepositoryImpl implements ApiAuthRepository {
       apiAuth.tmpLogin(
         email: email,
         phone: phone,
+      ),
+    );
+  }
+
+  @override
+  FutureOr<Resource<ResendOtpResponseModel?>> resendOtpNewChannel({
+    required String? email,
+    required String? phone,
+    required String otpChannel,
+  }) async {
+    return responseToResource(
+      apiAuth.resendOtpNewChannel(
+        email: email,
+        phone: phone,
+        otpChannel: otpChannel,
       ),
     );
   }

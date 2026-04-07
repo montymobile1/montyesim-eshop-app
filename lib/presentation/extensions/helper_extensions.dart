@@ -145,9 +145,11 @@ extension RTLExtension on Widget {
 
     return Transform(
       alignment: Alignment.center,
-      transform: Matrix4.identity()..scale(isRTL ? -1.0 : 1.0, 1),
+      transform: Matrix4.identity()
+        ..scaleByDouble(isRTL ? -1.0 : 1.0, 1, 1, 1),
       child: this,
     );
+
   }
 
   Widget textSupportsRTL(BuildContext context, {bool reverse = false}) {

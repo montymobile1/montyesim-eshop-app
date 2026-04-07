@@ -26,6 +26,7 @@ class VerifyLoginViewArgs {
     required this.otpExpiration,
     this.redirection,
     this.localLoginType,
+    this.otpChannel,
   });
 
   final String? email;
@@ -33,6 +34,7 @@ class VerifyLoginViewArgs {
   final int? otpExpiration;
   final InAppRedirection? redirection;
   final LoginType? localLoginType;
+  final String? otpChannel;
 }
 
 class VerifyLoginView extends StatelessWidget {
@@ -41,11 +43,13 @@ class VerifyLoginView extends StatelessWidget {
     required this.phoneNumber,
     this.redirection,
     LoginType? localLoginType,
+    this.otpChannel,
     super.key,
   }) : _localLoginType = localLoginType;
 
   final String? email;
   final String? phoneNumber;
+  final String? otpChannel;
   static const String routeName = "VerifyLoginView";
   final InAppRedirection? redirection;
   final LoginType? _localLoginType;
@@ -74,7 +78,9 @@ class VerifyLoginView extends StatelessWidget {
       viewModel: locator<VerifyLoginViewModel>()
         ..email = email
         ..phoneNumber = phoneNumber
-        ..redirection = redirection,
+        ..redirection = redirection
+        ..loginType = localLoginType
+        ..otpChannel = otpChannel,
       builder: (
         BuildContext context,
         VerifyLoginViewModel viewModel,
@@ -157,7 +163,7 @@ class VerifyLoginView extends StatelessWidget {
               ),
               verticalSpaceLarge,
               MainButton(
-                title: getVerifyLoginMainButtonText(),
+                title: getVerifyLoginMainButtonText(viewModel),
                 onPressed: () async {
                   viewModel.verifyButtonTapped();
                 },
@@ -189,10 +195,75 @@ class VerifyLoginView extends StatelessWidget {
     BuildContext context,
     VerifyLoginViewModel viewModel,
   ) {
+    if (localLoginType == LoginType.emailAndPhoneAndBothVerification) {
+      return Column(
+        children: <Widget>[
+          _buildResendCodeWidget(
+            context,
+            viewModel,
+            viewModel.otpChannel == "EMAIL"
+                ? LocaleKeys.verifyLogin_checkEmail.tr()
+                : LocaleKeys.verifyLogin_checkPhone.tr(),
+            () async {
+              viewModel.resendCodeViaChannel(viewModel.otpChannel!);
+            },
+          ),
+          if (viewModel.canSwitchOtpChannel) ...<Widget>[
+            verticalSpaceSmall,
+            Center(
+              child: Text(
+                LocaleKeys.continueWithEmail_or.tr(),
+                style: bodyNormalTextStyle(
+                  context: context,
+                  fontColor: secondaryTextColor(context: context),
+                ),
+              ),
+            ),
+            verticalSpaceSmall,
+            MainButton(
+              title: viewModel.otpChannel == "EMAIL"
+                  ? LocaleKeys.continueWithEmail_signInViaSms.tr()
+                  : LocaleKeys.continueWithEmail_signInViaEmail.tr(),
+              onPressed: () async {
+                viewModel.resendViaAlternateChannel();
+              },
+              themeColor: themeColor,
+              height: 53,
+              hideShadows: true,
+              enabledTextColor:
+                  enabledMainButtonTextColor(context: context),
+              disabledTextColor:
+                  disabledMainButtonTextColor(context: context),
+              disabledBackgroundColor:
+                  disabledMainButtonColor(context: context),
+              enabledBackgroundColor:
+                  enabledMainButtonColor(context: context),
+            ),
+          ],
+        ],
+      );
+    } else {
+      return _buildResendCodeWidget(
+        context,
+        viewModel,
+        getResendCodeText(),
+        () async {
+          viewModel.resendCodeButtonTapped();
+        },
+      );
+    }
+  }
+
+  Widget _buildResendCodeWidget(
+    BuildContext context,
+    VerifyLoginViewModel viewModel,
+    String checkText,
+    Future<void> Function() onResendTap,
+  ) {
     return Text.rich(
       textAlign: TextAlign.center,
       TextSpan(
-        text: getResendCodeText(),
+        text: checkText,
         style: captionOneNormalTextStyle(
           context: context,
           fontColor: secondaryTextColor(context: context),
@@ -206,7 +277,7 @@ class VerifyLoginView extends StatelessWidget {
             ),
             recognizer: TapGestureRecognizer()
               ..onTap = () async {
-                viewModel.resendCodeButtonTapped();
+                await onResendTap();
               },
           ),
         ],
@@ -217,9 +288,11 @@ class VerifyLoginView extends StatelessWidget {
   String getResendCodeText() {
     switch (localLoginType) {
       case LoginType.email:
+      case LoginType.emailAndPhoneAndEmailVerification:
         return LocaleKeys.verifyLogin_checkEmail.tr();
       case LoginType.phoneNumber:
       case LoginType.emailAndPhone:
+      case LoginType.emailAndPhoneAndBothVerification:
         return LocaleKeys.verifyLogin_checkPhone.tr();
     }
   }
@@ -227,20 +300,29 @@ class VerifyLoginView extends StatelessWidget {
   String getVerifyLoginTitleText() {
     switch (localLoginType) {
       case LoginType.email:
+      case LoginType.emailAndPhoneAndEmailVerification:
         return LocaleKeys.verifyLogin_titleText.tr();
       case LoginType.phoneNumber:
       case LoginType.emailAndPhone:
+      case LoginType.emailAndPhoneAndBothVerification:
         return LocaleKeys.verifyLogin_titleTextPhone.tr();
     }
   }
 
-  String getVerifyLoginMainButtonText() {
+  String getVerifyLoginMainButtonText(VerifyLoginViewModel viewModel) {
     switch (localLoginType) {
       case LoginType.email:
         return LocaleKeys.verifyLogin_buttonTitleText.tr();
       case LoginType.phoneNumber:
       case LoginType.emailAndPhone:
         return LocaleKeys.verifyLogin_buttonTitleTextPhone.tr();
+      case LoginType.emailAndPhoneAndBothVerification:
+        debugPrint("🔴🔴 channel is ${viewModel.otpChannel}");
+        return viewModel.otpChannel == "EMAIL"
+            ? LocaleKeys.verifyLogin_buttonTitleText.tr()
+            : LocaleKeys.verifyLogin_buttonTitleTextPhone.tr();
+      case LoginType.emailAndPhoneAndEmailVerification:
+        return LocaleKeys.verifyLogin_buttonTitleText.tr();
     }
   }
 

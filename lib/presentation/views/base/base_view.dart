@@ -45,6 +45,7 @@ class BaseView<T extends BaseModel> extends HookWidget {
     this.enableBottomSafeArea = true,
     this.isBottomSheetView = false,
   });
+
   //done
 
   static BaseView<T> bottomSheetBuilder<T extends BaseModel>({
@@ -113,69 +114,63 @@ class BaseView<T extends BaseModel> extends HookWidget {
   @override
   Widget build(BuildContext context) {
     viewModel.routeName = routeName;
-    if (isReactive) {
-      return stacked.ViewModelBuilder<T>.reactive(
-        viewModelBuilder: () => viewModel,
-        onDispose: (T viewModel) => viewModel.onDispose(),
-        fireOnViewModelReadyOnce: fireOnViewModelReadyOnce,
-        disposeViewModel: disposeViewModel,
-        onViewModelReady: (T viewModel) {
-          if (onViewModelReady != null) {
-            onViewModelReady?.call(viewModel);
-          } else {
-            viewModel.onViewModelReady();
-          }
-        },
-        builder: (BuildContext context, T viewModel, Widget? child) {
-          return Stack(
-            children: <Widget>[
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: _getChild(context, viewModel, child),
-              ),
-              viewModel.isBusy && !hideLoader
-                  ? Container(
-                      width: double.infinity,
-                      height: double.infinity,
-                      color: Colors.black.withValues(alpha: 0.3),
-                    )
-                  : Container(),
-            ],
-          );
-        },
-      );
+    return isReactive ? _buildReactiveView() : _buildNonReactiveView();
+  }
+
+  Widget _buildReactiveView() {
+    return stacked.ViewModelBuilder<T>.reactive(
+      viewModelBuilder: () => viewModel,
+      onDispose: (T viewModel) => viewModel.onDispose(),
+      fireOnViewModelReadyOnce: fireOnViewModelReadyOnce,
+      disposeViewModel: disposeViewModel,
+      onViewModelReady: _handleViewModelReady,
+      builder: _buildViewModelContent,
+    );
+  }
+
+  Widget _buildNonReactiveView() {
+    return stacked.ViewModelBuilder<T>.nonReactive(
+      viewModelBuilder: () => viewModel,
+      fireOnViewModelReadyOnce: fireOnViewModelReadyOnce,
+      disposeViewModel: disposeViewModel,
+      onDispose: (T viewModel) => viewModel.onDispose(),
+      onViewModelReady: _handleViewModelReady,
+      builder: _buildViewModelContent,
+    );
+  }
+
+  void _handleViewModelReady(T viewModel) {
+    if (onViewModelReady != null) {
+      onViewModelReady?.call(viewModel);
     } else {
-      return stacked.ViewModelBuilder<T>.nonReactive(
-        viewModelBuilder: () => viewModel,
-        fireOnViewModelReadyOnce: fireOnViewModelReadyOnce,
-        disposeViewModel: disposeViewModel,
-        onDispose: (T viewModel) => viewModel.onDispose(),
-        onViewModelReady: (T viewModel) {
-          if (onViewModelReady != null) {
-            onViewModelReady?.call(viewModel);
-          } else {
-            viewModel.onViewModelReady();
-          }
-        },
-        builder: (BuildContext context, T viewModel, Widget? child) {
-          return Stack(
-            children: <Widget>[
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: _getChild(context, viewModel, child),
-              ),
-              viewModel.isBusy && !hideLoader
-                  ? Container(
-                      width: double.infinity,
-                      height: double.infinity,
-                      color: Colors.black.withValues(alpha: 0.3),
-                    )
-                  : Container(),
-            ],
-          );
-        },
-      );
+      viewModel.onViewModelReady();
     }
+  }
+
+  Widget _buildViewModelContent(
+    BuildContext context,
+    T viewModel,
+    Widget? child,
+  ) {
+    return Stack(
+      children: <Widget>[
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: _getChild(context, viewModel, child),
+        ),
+        _buildLoadingOverlay(viewModel),
+      ],
+    );
+  }
+
+  Widget _buildLoadingOverlay(T viewModel) {
+    return viewModel.isBusy && !hideLoader
+        ? Container(
+            width: double.infinity,
+            height: double.infinity,
+            color: Colors.black.withValues(alpha: 0.3),
+          )
+        : Container();
   }
 
   Widget _getChild(BuildContext context, T viewModel, Widget? child) {
@@ -198,16 +193,18 @@ class BaseView<T extends BaseModel> extends HookWidget {
           ),
           child: SafeArea(
             child: wrapBodyWithState(
-              context: context,
-              hideLoader: hideLoader,
-              noDataWidget: noDataWidget?.call(viewModel),
-              model: viewModel,
-              disableInteractionWhileBusy: disableInteractionWhileBusy,
-              child: builder(
-                context,
-                viewModel,
-                staticChild,
-                _getScreenHeight(context),
+              params: BodyStateWrapParams(
+                context: context,
+                hideLoader: hideLoader,
+                noDataWidget: noDataWidget?.call(viewModel),
+                model: viewModel,
+                disableInteractionWhileBusy: disableInteractionWhileBusy,
+                child: builder(
+                  context,
+                  viewModel,
+                  staticChild,
+                  _getScreenHeight(context),
+                ),
               ),
             ),
           ),
@@ -225,14 +222,16 @@ class BaseView<T extends BaseModel> extends HookWidget {
           : customAppBar ??
               myAppBar(
                 context,
-                removeBackButton: hideBackButton?.call(viewModel) ?? false,
-                backgroundColor: appBarBackgroundColor,
-                leadingWidthAndroid: appBarLeadingForAndroid,
-                backButtonIcon: backButtonIcon,
-                leading: appBarLeading?.call(viewModel),
-                title: appBarTitle?.call(viewModel),
-                centerTitle: appBarCenterTitle,
-                actionList: appBarActionList?.call(viewModel),
+                params: AppBarParams(
+                  removeBackButton: hideBackButton?.call(viewModel) ?? false,
+                  backgroundColor: appBarBackgroundColor,
+                  leadingWidthAndroid: appBarLeadingForAndroid,
+                  backButtonIcon: backButtonIcon,
+                  leading: appBarLeading?.call(viewModel),
+                  title: appBarTitle?.call(viewModel),
+                  centerTitle: appBarCenterTitle,
+                  actionList: appBarActionList?.call(viewModel),
+                ),
               ),
       body: Stack(
         children: <Widget>[
@@ -260,16 +259,18 @@ class BaseView<T extends BaseModel> extends HookWidget {
                       ? Colors.transparent
                       : backgroundColor ?? context.appColors.baseWhite!,
                   child: wrapBodyWithState(
-                    context: context,
-                    hideLoader: hideLoader,
-                    noDataWidget: noDataWidget?.call(viewModel),
-                    model: viewModel,
-                    disableInteractionWhileBusy: disableInteractionWhileBusy,
-                    child: builder(
-                      context,
-                      viewModel,
-                      staticChild,
-                      _getScreenHeight(context),
+                    params: BodyStateWrapParams(
+                      context: context,
+                      hideLoader: hideLoader,
+                      noDataWidget: noDataWidget?.call(viewModel),
+                      model: viewModel,
+                      disableInteractionWhileBusy: disableInteractionWhileBusy,
+                      child: builder(
+                        context,
+                        viewModel,
+                        staticChild,
+                        _getScreenHeight(context),
+                      ),
                     ),
                   ),
                 ),

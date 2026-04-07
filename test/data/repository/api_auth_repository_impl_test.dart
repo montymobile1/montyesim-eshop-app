@@ -10,6 +10,7 @@ import "package:esim_open_source/data/remote/responses/empty_response.dart";
 import "package:esim_open_source/data/remote/unauthorized_access_interface.dart";
 import "package:esim_open_source/data/repository/api_auth_repository_impl.dart";
 import "package:esim_open_source/domain/data/api_auth.dart";
+import "package:esim_open_source/domain/data/params/update_user_info_params.dart";
 import "package:esim_open_source/domain/repository/api_auth_repository.dart";
 import "package:esim_open_source/domain/util/resource.dart";
 import "package:flutter_test/flutter_test.dart";
@@ -574,46 +575,38 @@ void main() {
       const String testPhone = "+9876543210";
       const String testFirstName = "John";
       const String testLastName = "Doe";
-      const bool testIsNewsletterSubscribed = true;
       const String testCurrencyCode = "USD";
       const String testLanguageCode = "en";
 
-      test("should return success resource when user info update succeeds",
-          () async {
+      test("should return success resource when user info update succeeds", () async {
         // Arrange
         final AuthResponseModel expectedResponse = AuthResponseModel(
           accessToken: "updated-token",
           refreshToken: "updated-refresh",
         );
         final ResponseMain<AuthResponseModel> responseMain =
-            ResponseMain<AuthResponseModel>.createErrorWithData(
+        ResponseMain<AuthResponseModel>.createErrorWithData(
           data: expectedResponse,
           message: "User info updated successfully",
           statusCode: 200,
         );
 
+        // Use anyNamed("request") to match any UpdateUserInfoRequest
         when(
-          mockApiAuth.updateUserInfo(
-            email: testEmail,
-            msisdn: testPhone,
-            firstName: testFirstName,
-            lastName: testLastName,
-            isNewsletterSubscribed: testIsNewsletterSubscribed,
-            currencyCode: testCurrencyCode,
-            languageCode: testLanguageCode,
-          ),
+          mockApiAuth.updateUserInfo(request: anyNamed("request")),
         ).thenAnswer((_) async => responseMain);
 
         // Act
         final Resource<AuthResponseModel> result =
-            await repository.updateUserInfo(
-          email: testEmail,
-          msisdn: testPhone,
-          firstName: testFirstName,
-          lastName: testLastName,
-          isNewsletterSubscribed: testIsNewsletterSubscribed,
-          currencyCode: testCurrencyCode,
-          languageCode: testLanguageCode,
+        await repository.updateUserInfo(
+          request: UpdateUserInfoRequest(
+            email: testEmail,
+            msisdn: testPhone,
+            firstName: testFirstName,
+            lastName: testLastName,
+            currencyCode: testCurrencyCode,
+            languageCode: testLanguageCode,
+          ),
         ) as Resource<AuthResponseModel>;
 
         // Assert
@@ -622,51 +615,33 @@ void main() {
         expect(result.message, "User info updated successfully");
         expect(result.error, isNull);
 
-        verify(
-          mockApiAuth.updateUserInfo(
-            email: testEmail,
-            msisdn: testPhone,
-            firstName: testFirstName,
-            lastName: testLastName,
-            isNewsletterSubscribed: testIsNewsletterSubscribed,
-            currencyCode: testCurrencyCode,
-            languageCode: testLanguageCode,
-          ),
-        ).called(1);
+        verify(mockApiAuth.updateUserInfo(request: anyNamed("request"))).called(1);
       });
 
-      test("should return error resource when user info update fails",
-          () async {
+      test("should return error resource when user info update fails", () async {
         // Arrange
         final ResponseMain<AuthResponseModel> responseMain =
-            ResponseMain<AuthResponseModel>.createErrorWithData(
+        ResponseMain<AuthResponseModel>.createErrorWithData(
           statusCode: 422,
           developerMessage: "Invalid email format",
           title: "Invalid email format",
         );
 
         when(
-          mockApiAuth.updateUserInfo(
-            email: testEmail,
-            msisdn: testPhone,
-            firstName: testFirstName,
-            lastName: testLastName,
-            isNewsletterSubscribed: testIsNewsletterSubscribed,
-            currencyCode: testCurrencyCode,
-            languageCode: testLanguageCode,
-          ),
+          mockApiAuth.updateUserInfo(request: anyNamed("request")),
         ).thenAnswer((_) async => responseMain);
 
         // Act
         final Resource<AuthResponseModel> result =
-            await repository.updateUserInfo(
-          email: testEmail,
-          msisdn: testPhone,
-          firstName: testFirstName,
-          lastName: testLastName,
-          isNewsletterSubscribed: testIsNewsletterSubscribed,
-          currencyCode: testCurrencyCode,
-          languageCode: testLanguageCode,
+        await repository.updateUserInfo(
+          request: UpdateUserInfoRequest(
+            email: testEmail,
+            msisdn: testPhone,
+            firstName: testFirstName,
+            lastName: testLastName,
+            currencyCode: testCurrencyCode,
+            languageCode: testLanguageCode,
+          ),
         ) as Resource<AuthResponseModel>;
 
         // Assert
@@ -674,17 +649,7 @@ void main() {
         expect(result.message, "Invalid email format");
         expect(result.data, isNull);
 
-        verify(
-          mockApiAuth.updateUserInfo(
-            email: testEmail,
-            msisdn: testPhone,
-            firstName: testFirstName,
-            lastName: testLastName,
-            isNewsletterSubscribed: testIsNewsletterSubscribed,
-            currencyCode: testCurrencyCode,
-            languageCode: testLanguageCode,
-          ),
-        ).called(1);
+        verify(mockApiAuth.updateUserInfo(request: anyNamed("request"))).called(1);
       });
 
       test("should handle partial user info updates", () async {
@@ -693,38 +658,32 @@ void main() {
           accessToken: "updated-token",
         );
         final ResponseMain<AuthResponseModel> responseMain =
-            ResponseMain<AuthResponseModel>.createErrorWithData(
+        ResponseMain<AuthResponseModel>.createErrorWithData(
           data: expectedResponse,
           message: "Partial update successful",
           statusCode: 200,
         );
 
         when(
-          mockApiAuth.updateUserInfo(
-            firstName: testFirstName,
-            isNewsletterSubscribed: testIsNewsletterSubscribed,
-          ),
+          mockApiAuth.updateUserInfo(request: anyNamed("request")),
         ).thenAnswer((_) async => responseMain);
 
         // Act
         final Resource<AuthResponseModel> result =
-            await repository.updateUserInfo(
-          firstName: testFirstName,
-          isNewsletterSubscribed: testIsNewsletterSubscribed,
+        await repository.updateUserInfo(
+          request: UpdateUserInfoRequest(
+            firstName: testFirstName,
+          ),
         ) as Resource<AuthResponseModel>;
 
         // Assert
         expect(result.resourceType, ResourceType.success);
         expect(result.message, "Partial update successful");
 
-        verify(
-          mockApiAuth.updateUserInfo(
-            firstName: testFirstName,
-            isNewsletterSubscribed: testIsNewsletterSubscribed,
-          ),
-        ).called(1);
+        verify(mockApiAuth.updateUserInfo(request: anyNamed("request"))).called(1);
       });
     });
+
 
     group("getUserInfo", () {
       const String testBearerToken = "bearer-token-123";

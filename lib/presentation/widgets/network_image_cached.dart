@@ -8,60 +8,85 @@ import "package:path/path.dart" as path;
 
 enum ImageSource { network, local }
 
+class ImageDimensions {
+  const ImageDimensions({
+    this.width,
+    this.height,
+    this.fit = BoxFit.cover,
+  });
+
+  final double? width;
+  final double? height;
+  final BoxFit? fit;
+}
+
+class ImageWidgets {
+  const ImageWidgets({
+    this.placeholder,
+    this.errorWidget,
+  });
+
+  final Widget? placeholder;
+  final Widget? errorWidget;
+}
+
+class ImageAnimations {
+  const ImageAnimations({
+    this.fadeInDuration = const Duration(milliseconds: 300),
+    this.placeholderFadeInDuration = const Duration(milliseconds: 300),
+    this.errorFadeInDuration = const Duration(milliseconds: 300),
+  });
+
+  final Duration? fadeInDuration;
+  final Duration placeholderFadeInDuration;
+  final Duration errorFadeInDuration;
+}
+
 class CachedImage extends StatelessWidget {
   const CachedImage({
     required this.imagePath,
     required this.source,
     super.key,
-    this.width,
-    this.height,
-    this.fit = BoxFit.cover,
-    this.placeholder,
-    this.errorWidget,
-    this.fadeInDuration = const Duration(milliseconds: 300),
-    this.placeholderFadeInDuration = const Duration(milliseconds: 300),
-    this.errorFadeInDuration = const Duration(milliseconds: 300),
+    ImageDimensions? dimensions,
+    ImageWidgets? widgets,
+    ImageAnimations? animations,
     this.svgColor,
     this.repeat = true,
-  });
+  })  : _dimensions = dimensions ?? const ImageDimensions(),
+        _widgets = widgets ?? const ImageWidgets(),
+        _animations = animations ?? const ImageAnimations();
 
   final String imagePath;
   final ImageSource source;
-  final double? width;
-  final double? height;
-  final BoxFit? fit;
-  final Widget? placeholder;
-  final Widget? errorWidget;
-  final Duration? fadeInDuration;
-  final Duration placeholderFadeInDuration;
-  final Duration errorFadeInDuration;
+  final ImageDimensions _dimensions;
+  final ImageWidgets _widgets;
+  final ImageAnimations _animations;
   final Color? svgColor;
   final bool? repeat;
 
+  double? get width => _dimensions.width;
+  double? get height => _dimensions.height;
+  BoxFit? get fit => _dimensions.fit;
+  Widget? get placeholder => _widgets.placeholder;
+  Widget? get errorWidget => _widgets.errorWidget;
+  Duration? get fadeInDuration => _animations.fadeInDuration;
+  Duration get placeholderFadeInDuration => _animations.placeholderFadeInDuration;
+  Duration get errorFadeInDuration => _animations.errorFadeInDuration;
+
   static CachedImage local({
     required String imagePath,
-    double? width,
-    double? height,
-    BoxFit? fit = BoxFit.cover,
-    Widget? placeholder,
-    Widget? errorWidget,
-    Duration? fadeInDuration = const Duration(milliseconds: 300),
-    Duration placeholderFadeInDuration = const Duration(milliseconds: 300),
-    Duration errorFadeInDuration = const Duration(milliseconds: 300),
+    ImageDimensions? dimensions,
+    ImageWidgets? widgets,
+    ImageAnimations? animations,
     Color? svgColor,
     bool? repeat = true,
   }) {
     return CachedImage(
       imagePath: imagePath,
       source: ImageSource.local,
-      width: width,
-      height: height,
-      fit: fit,
-      placeholder: placeholder,
-      errorWidget: errorWidget,
-      fadeInDuration: fadeInDuration,
-      placeholderFadeInDuration: placeholderFadeInDuration,
-      errorFadeInDuration: errorFadeInDuration,
+      dimensions: dimensions,
+      widgets: widgets,
+      animations: animations,
       svgColor: svgColor,
       repeat: repeat,
     );
@@ -69,28 +94,18 @@ class CachedImage extends StatelessWidget {
 
   static CachedImage network({
     required String imagePath,
-    double? width,
-    double? height,
-    BoxFit? fit = BoxFit.cover,
-    Widget? placeholder,
-    Widget? errorWidget,
-    Duration? fadeInDuration = const Duration(milliseconds: 300),
-    Duration placeholderFadeInDuration = const Duration(milliseconds: 300),
-    Duration errorFadeInDuration = const Duration(milliseconds: 300),
+    ImageDimensions? dimensions,
+    ImageWidgets? widgets,
+    ImageAnimations? animations,
     Color? svgColor,
     bool? repeat = true,
   }) {
     return CachedImage(
       imagePath: imagePath,
       source: ImageSource.network,
-      width: width,
-      height: height,
-      fit: fit,
-      placeholder: placeholder,
-      errorWidget: errorWidget,
-      fadeInDuration: fadeInDuration,
-      placeholderFadeInDuration: placeholderFadeInDuration,
-      errorFadeInDuration: errorFadeInDuration,
+      dimensions: dimensions,
+      widgets: widgets,
+      animations: animations,
       svgColor: svgColor,
       repeat: repeat,
     );
@@ -111,6 +126,7 @@ class CachedImage extends StatelessWidget {
   }
 
   Widget _buildSvgImage() {
+    String svgImage = "SVG Image";
     if (source == ImageSource.network) {
       return SvgPicture.network(
         imagePath,
@@ -121,7 +137,7 @@ class CachedImage extends StatelessWidget {
             ? ColorFilter.mode(svgColor!, BlendMode.srcIn)
             : null,
         placeholderBuilder: (BuildContext context) => _buildPlaceholder(),
-        semanticsLabel: "SVG Image",
+        semanticsLabel: svgImage,
       );
     } else if (imagePath.startsWith("assets/")) {
       return SvgPicture.asset(
@@ -133,7 +149,7 @@ class CachedImage extends StatelessWidget {
             ? ColorFilter.mode(svgColor!, BlendMode.srcIn)
             : null,
         placeholderBuilder: (BuildContext context) => _buildPlaceholder(),
-        semanticsLabel: "SVG Image",
+        semanticsLabel: svgImage,
       );
     } else {
       return SvgPicture.file(
@@ -145,7 +161,7 @@ class CachedImage extends StatelessWidget {
             ? ColorFilter.mode(svgColor!, BlendMode.srcIn)
             : null,
         placeholderBuilder: (BuildContext context) => _buildPlaceholder(),
-        semanticsLabel: "SVG Image",
+        semanticsLabel: svgImage,
       );
     }
   }
@@ -364,20 +380,20 @@ class CachedImage extends StatelessWidget {
       ..add(DiagnosticsProperty<bool?>("repeat", repeat))
       ..add(StringProperty("imagePath", imagePath))
       ..add(EnumProperty<ImageSource>("source", source))
-      ..add(DoubleProperty("width", width))
-      ..add(DoubleProperty("height", height))
-      ..add(EnumProperty<BoxFit?>("fit", fit))
-      ..add(DiagnosticsProperty<Duration?>("fadeInDuration", fadeInDuration))
+      ..add(DoubleProperty("width", _dimensions.width))
+      ..add(DoubleProperty("height", _dimensions.height))
+      ..add(EnumProperty<BoxFit?>("fit", _dimensions.fit))
+      ..add(DiagnosticsProperty<Duration?>("fadeInDuration", _animations.fadeInDuration))
       ..add(
         DiagnosticsProperty<Duration>(
           "placeholderFadeInDuration",
-          placeholderFadeInDuration,
+          _animations.placeholderFadeInDuration,
         ),
       )
       ..add(
         DiagnosticsProperty<Duration>(
           "errorFadeInDuration",
-          errorFadeInDuration,
+          _animations.errorFadeInDuration,
         ),
       )
       ..add(ColorProperty("svgColor", svgColor));

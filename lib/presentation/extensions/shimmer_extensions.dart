@@ -5,30 +5,23 @@ import "package:shimmer/shimmer.dart";
 /// Shimmer Extensions
 extension ShimmerEffect on Widget {
   Widget applyShimmer({
-    required BuildContext context,
-    required bool enable,
-    bool disabled = true,
-    double borderRadius = 12,
-    Color? baseColor,
-    Color? highlightColor,
-    double? height,
-    double? width,
+    required ShimmerParams params,
   }) {
-    if (enable) {
+    if (params.enable) {
       return Shimmer.fromColors(
-        baseColor: baseColor ?? greyBackGroundColor(context: context),
-        highlightColor: highlightColor ?? mainShimmerColor(context: context),
-        enabled: enable,
+        baseColor: params.baseColor ?? greyBackGroundColor(context: params.context),
+        highlightColor: params.highlightColor ?? mainShimmerColor(context: params.context),
+        enabled: params.enable,
         child: Container(
-          height: height,
-          width: width,
+          height: params.height,
+          width: params.width,
           decoration: BoxDecoration(
             color: Colors.grey,
-            borderRadius: BorderRadius.circular(borderRadius),
+            borderRadius: BorderRadius.circular(params.borderRadius),
           ),
           child: this,
         ),
-      ).disabled(disabled: disabled);
+      ).disabled(disabled: params.disabled);
     } else {
       return this;
     }
@@ -37,4 +30,26 @@ extension ShimmerEffect on Widget {
   Widget disabled({bool disabled = true}) {
     return IgnorePointer(ignoring: disabled, child: this);
   }
+}
+
+class ShimmerParams {
+  ShimmerParams({
+    required this.context,
+    required this.enable,
+    this.disabled = true,
+    this.borderRadius = 12,
+    this.baseColor,
+    this.highlightColor,
+    this.height,
+    this.width,
+  });
+
+  final BuildContext context;
+  final bool enable;
+  final bool disabled;
+  final double borderRadius;
+  final Color? baseColor;
+  final Color? highlightColor;
+  final double? height;
+  final double? width;
 }

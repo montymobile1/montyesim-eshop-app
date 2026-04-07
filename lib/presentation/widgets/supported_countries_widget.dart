@@ -90,9 +90,11 @@ class SupportedCountriesWidget extends StatelessWidget {
               ],
             ),
           ).applyShimmer(
-            enable: isLoading,
-            context: context,
-            height: 20,
+            params: ShimmerParams(
+              enable: isLoading,
+              context: context,
+              height: 20,
+            ),
           );
   }
 
