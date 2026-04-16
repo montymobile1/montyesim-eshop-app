@@ -261,7 +261,7 @@
   "bundleInfo_priceText": "{price} - Acheter maintenant",
   "bundleInfo_validityText": "Validité",
   "supportedCountries_tittleText": "Pays supportés",
-  "supportedCountries_card_tittleText": "Pays supportés ries}",
+  "supportedCountries_card_tittleText": "Pays supportés {countries}",
   "promoCodeView_titleText": "Appliquer un code promo ou de parrainage",
   "promoCodeView_buttonText": "Appliquer le code promo",
   "promoCodeView_cancelButtonText": "Annuler le code promo",

@@ -335,6 +335,7 @@ class VerifyLoginView extends StatelessWidget {
       )
       ..add(StringProperty("email", email))
       ..add(StringProperty("phoneNumber", phoneNumber))
-      ..add(EnumProperty<LoginType>("localLoginType", localLoginType));
+      ..add(EnumProperty<LoginType>("localLoginType", localLoginType))
+      ..add(StringProperty("otpChannel", otpChannel));
   }
 }

@@ -94,7 +94,7 @@ dependencies:
   phone_input: ^1.0.0
   flutter_html: ^3.0.0
   json_annotation: ^4.9.0
-  flutter_stripe: ^12.1.1
+  flutter_stripe: ^12.6.0
   shared_preferences: ^2.5.4
   safe_device: ^1.3.8
   objectbox: ^5.0.4

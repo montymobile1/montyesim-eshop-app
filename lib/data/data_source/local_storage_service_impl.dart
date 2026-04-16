@@ -82,7 +82,7 @@ class LocalStorageServiceImpl implements LocalStorageService {
       LocalStorageKeys.hasPreviouslyStarted,
     ];
     _authResponse = null;
-    for (final key in LocalStorageKeys.values) {
+    for (final LocalStorageKeys key in LocalStorageKeys.values) {
       if (!exceptionKeys.contains(key)) {
         await _sharedPrefs.remove(key.value);
       }

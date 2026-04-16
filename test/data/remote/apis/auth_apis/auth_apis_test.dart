@@ -148,7 +148,7 @@ void main() {
     test("headers is empty map for all endpoints", () {
       for (final AuthApis api in AuthApis.values) {
         if (api == AuthApis.resendOtpNewChannel) {
-          expect(api.headers, {"accept-language": "en"});
+          expect(api.headers, <String, String>{"accept-language": "en"});
         } else {
           expect(api.headers, const <String, String>{});
         }

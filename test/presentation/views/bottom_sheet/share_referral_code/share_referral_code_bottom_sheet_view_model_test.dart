@@ -1,3 +1,4 @@
+import "package:esim_open_source/app/environment/app_environment.dart";
 import "package:esim_open_source/domain/repository/services/dynamic_linking_service.dart";
 import "package:esim_open_source/domain/repository/services/referral_info_service.dart";
 import "package:esim_open_source/presentation/reactive_service/user_authentication_service.dart";
@@ -61,6 +62,9 @@ Future<void> main() async {
     });
 
     test("shareButtonTapped line coverage", () async {
+      // Enable BranchIO so generateBranchLink is called
+      AppEnvironment.appEnvironmentHelper.enableBranchIO = true;
+
       // Setup mocks for shareButtonTapped method
       when(mockUserAuthService.referralCode).thenReturn("TEST123");
       when(mockReferralInfoService.getReferralAmountAndCurrency)
@@ -82,6 +86,9 @@ Future<void> main() async {
           referUserID: anyNamed("referUserID"),
         ),
       ).called(1);
+
+      // Restore default
+      AppEnvironment.appEnvironmentHelper.enableBranchIO = false;
     });
   });
 }

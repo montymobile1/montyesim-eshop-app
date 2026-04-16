@@ -70,7 +70,7 @@ Future<void> main() async {
 
       when(mockRepository.registerDevice(
         params: anyNamed("params"),
-      )).thenAnswer((_) async => expectedResponse);
+      ),).thenAnswer((_) async => expectedResponse);
 
       // Act
       final Resource<DeviceInfoResponseModel?> result =
@@ -82,7 +82,7 @@ Future<void> main() async {
 
       verify(mockRepository.registerDevice(
         params: anyNamed("params"),
-      )).called(1);
+      ),).called(1);
     });
 
     test("execute returns error when registration fails", () async {
@@ -97,7 +97,7 @@ Future<void> main() async {
 
       when(mockRepository.registerDevice(
         params: anyNamed("params"),
-      )).thenAnswer((_) async => expectedResponse);
+      ),).thenAnswer((_) async => expectedResponse);
 
       // Act
       final Resource<DeviceInfoResponseModel?> result =
@@ -129,7 +129,7 @@ Future<void> main() async {
 
         when(mockRepository.registerDevice(
           params: anyNamed("params"),
-        )).thenAnswer((_) async => expectedResponse);
+        ),).thenAnswer((_) async => expectedResponse);
 
         // Act
         final Resource<DeviceInfoResponseModel?> result =
@@ -149,7 +149,7 @@ Future<void> main() async {
 
       when(mockRepository.registerDevice(
         params: anyNamed("params"),
-      )).thenThrow(Exception("Network error"));
+      ),).thenThrow(Exception("Network error"));
 
       // Act & Assert
       expect(

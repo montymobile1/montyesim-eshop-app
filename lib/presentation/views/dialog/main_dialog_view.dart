@@ -101,7 +101,9 @@ class MainBasicDialog extends StatelessWidget {
   }
 
   Widget _buildTitle(BuildContext context, MainDialogRequest request) {
-    if (request.title == null) return Container();
+    if (request.title == null) {
+      return Container();
+    }
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -116,7 +118,9 @@ class MainBasicDialog extends StatelessWidget {
   }
 
   Widget _buildDescription(BuildContext context, MainDialogRequest request) {
-    if (request.description == null) return Container();
+    if (request.description == null) {
+      return Container();
+    }
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -139,7 +143,9 @@ class MainBasicDialog extends StatelessWidget {
     MainDialogRequest request,
     MainDialogViewModel model,
   ) {
-    if (request.mainButtonTitle == null) return Container();
+    if (request.mainButtonTitle == null) {
+      return Container();
+    }
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -161,7 +167,9 @@ class MainBasicDialog extends StatelessWidget {
     MainDialogRequest request,
     MainDialogViewModel model,
   ) {
-    if (request.secondaryButtonTitle == null) return Container();
+    if (request.secondaryButtonTitle == null) {
+      return Container();
+    }
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -184,7 +192,9 @@ class MainBasicDialog extends StatelessWidget {
     MainDialogRequest request,
     MainDialogViewModel model,
   ) {
-    if (!request.showCancelButton) return Container();
+    if (!request.showCancelButton) {
+      return Container();
+    }
 
     return Column(
       children: <Widget>[
@@ -236,7 +246,9 @@ class MainBasicDialog extends StatelessWidget {
     MainDialogRequest request,
     MainDialogViewModel model,
   ) {
-    if (!request.hideXButton) return const SizedBox(height: 0);
+    if (!request.hideXButton) {
+      return const SizedBox(height: 0);
+    }
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,

@@ -10,8 +10,8 @@ import "package:esim_open_source/data/remote/responses/app/faq_response.dart";
 import "package:esim_open_source/data/remote/responses/base_response_model.dart";
 import "package:esim_open_source/data/remote/responses/core/string_response.dart";
 import "package:esim_open_source/data/remote/responses/empty_response.dart";
-import "package:esim_open_source/domain/data/params/add_device_params.dart";
 import "package:esim_open_source/domain/data/api_app.dart";
+import "package:esim_open_source/domain/data/params/add_device_params.dart";
 
 class APIAppImpl extends APIService implements APIApp {
   APIAppImpl._privateConstructor() : super.privateConstructor();

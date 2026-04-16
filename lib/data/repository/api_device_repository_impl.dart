@@ -12,7 +12,7 @@ class ApiDeviceRepositoryImpl implements ApiDeviceRepository {
 
   @override
   FutureOr<Resource<DeviceInfoResponseModel?>> registerDevice({
-    required RegisterDeviceParams params
+    required RegisterDeviceParams params,
   }) {
     return responseToResource(
       apiDevice.registerDevice(

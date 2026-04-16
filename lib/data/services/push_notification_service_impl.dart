@@ -137,7 +137,7 @@ class PushNotificationServiceImpl implements PushNotificationService {
     AndroidNotification android,
     Map<String, dynamic> data,
   ) async {
-    final localNotificationService = LocalNotificationService.getInstance();
+    final Future<LocalNotificationService> localNotificationService = LocalNotificationService.getInstance();
 
     if (android.imageUrl != null) {
       await localNotificationService
@@ -162,7 +162,7 @@ class PushNotificationServiceImpl implements PushNotificationService {
   }
 
   Future<void> _setupLocalNotificationListener() async {
-    final localNotificationService = await LocalNotificationService.getInstance();
+    final LocalNotificationService localNotificationService = await LocalNotificationService.getInstance();
     localNotificationService.selectNotificationSubject.stream.listen(
       (Map<String, dynamic>? payload) async {
         _serialiseAndNavigate(payload, false, true);

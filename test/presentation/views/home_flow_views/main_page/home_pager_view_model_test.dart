@@ -22,7 +22,7 @@ Future<void> main() async {
   setUp(() async {
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(
-      const MethodChannel('plugins.sameer.com/statusbar'),
+      const MethodChannel("plugins.sameer.com/statusbar"),
       (MethodCall methodCall) async => null,
     );
     await setupTest();
@@ -36,7 +36,7 @@ Future<void> main() async {
   tearDown(() async {
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(
-      const MethodChannel('plugins.sameer.com/statusbar'),
+      const MethodChannel("plugins.sameer.com/statusbar"),
       null,
     );
     await tearDownTest();

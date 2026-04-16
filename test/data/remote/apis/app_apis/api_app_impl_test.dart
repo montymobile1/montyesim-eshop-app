@@ -1,7 +1,7 @@
 import "package:esim_open_source/app/environment/app_environment.dart";
 import "package:esim_open_source/data/remote/apis/app_apis/api_app_impl.dart";
-import "package:esim_open_source/domain/data/params/add_device_params.dart";
 import "package:esim_open_source/domain/data/api_app.dart";
+import "package:esim_open_source/domain/data/params/add_device_params.dart";
 import "package:esim_open_source/domain/repository/services/connectivity_service.dart";
 import "package:esim_open_source/domain/repository/services/local_storage_service.dart";
 import "package:flutter_test/flutter_test.dart";

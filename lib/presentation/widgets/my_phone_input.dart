@@ -66,10 +66,10 @@ class MyPhoneInput extends StatelessWidget {
   }
 
   PhoneNumberInputValidator? _buildValidator() {
-    final emptyValidator = validateEmpty
+    final String? Function(PhoneNumber? phoneNumber) emptyValidator = validateEmpty
         ? PhoneValidator.required()
         : PhoneValidator.none;
-    final validValidator = validateRequired
+    final String? Function(PhoneNumber? phoneNumber) validValidator = validateRequired
         ? PhoneValidator.valid()
         : PhoneValidator.none;
     return PhoneValidator.compose(

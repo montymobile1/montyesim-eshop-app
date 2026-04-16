@@ -6,6 +6,6 @@ abstract class FlutterChannelHandlerService {
   });
   Future<void> openEsimSetupForAndroid({
     required String smdpAddress,
-    required String activationCode
+    required String activationCode,
   });
 }
