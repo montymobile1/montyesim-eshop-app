@@ -28,7 +28,7 @@ class TopUpUserBundleParam {
   TopUpUserBundleParam({
     required this.iccID,
     required this.bundleCode,
-    this.paymentType = "Card",
+    required this.paymentType,
   });
 
   final String iccID;

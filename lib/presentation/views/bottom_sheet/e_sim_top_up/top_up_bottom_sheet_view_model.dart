@@ -190,7 +190,7 @@ class TopUpBottomSheetViewModel extends EsimBaseModel {
 
     setViewState(ViewState.busy);
     Resource<BundleAssignResponseModel?> response = await topUpUserBundleUseCase
-        .execute(TopUpUserBundleParam(iccID: iccId, bundleCode: bundleCode));
+        .execute(TopUpUserBundleParam(iccID: iccId, bundleCode: bundleCode, paymentType: paymentType.type));
     handleResponse(
       response,
       onSuccess: (Resource<BundleAssignResponseModel?> result) async {
@@ -229,6 +229,7 @@ class TopUpBottomSheetViewModel extends EsimBaseModel {
             response.error?.message,
             LocaleKeys.processing.tr(),
           );
+          closeBottomSheet();
           return;
         }
         handleError(response);

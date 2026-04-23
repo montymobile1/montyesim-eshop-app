@@ -2,6 +2,7 @@ import "package:esim_open_source/data/remote/responses/bundles/bundle_assign_res
 import "package:esim_open_source/domain/repository/api_user_repository.dart";
 import "package:esim_open_source/domain/use_case/user/top_up_user_bundle_use_case.dart";
 import "package:esim_open_source/domain/util/resource.dart";
+import "package:esim_open_source/presentation/enums/payment_type.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:mockito/mockito.dart";
 
@@ -86,6 +87,7 @@ Future<void> main() async {
       final TopUpUserBundleParam params = TopUpUserBundleParam(
         iccID: testIccID,
         bundleCode: bundleCode,
+        paymentType: PaymentType.card.type,
       );
 
       final Resource<BundleAssignResponseModel?> expectedResponse =
@@ -121,7 +123,7 @@ Future<void> main() async {
       final TopUpUserBundleParam params = TopUpUserBundleParam(
         iccID: testIccID,
         bundleCode: bundleCode,
-        // paymentType defaults to "Card"
+        paymentType: PaymentType.card.type,
       );
 
       final BundleAssignResponseModel mockResponse = BundleAssignResponseModel(
@@ -211,6 +213,7 @@ Future<void> main() async {
       final TopUpUserBundleParam params = TopUpUserBundleParam(
         iccID: invalidIccID,
         bundleCode: bundleCode,
+        paymentType: PaymentType.card.type,
       );
 
       final Resource<BundleAssignResponseModel?> expectedResponse =
@@ -279,6 +282,7 @@ Future<void> main() async {
       final TopUpUserBundleParam params = TopUpUserBundleParam(
         iccID: testIccID,
         bundleCode: bundleCode,
+        paymentType: PaymentType.card.type,
       );
 
       when(mockRepository.topUpBundle(
@@ -308,6 +312,7 @@ Future<void> main() async {
       final TopUpUserBundleParam params = TopUpUserBundleParam(
         iccID: testIccID,
         bundleCode: bundleCode,
+        paymentType: PaymentType.card.type,
       );
 
       final Resource<BundleAssignResponseModel?> expectedResponse =

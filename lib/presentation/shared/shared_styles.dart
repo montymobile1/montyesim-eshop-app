@@ -1,3 +1,6 @@
+import "dart:io";
+
+import "package:esim_open_source/app/environment/app_environment.dart";
 import "package:esim_open_source/presentation/extensions/context_extension.dart";
 import "package:flutter/material.dart";
 
@@ -75,7 +78,8 @@ Color enabledMainWhiteButtonColor({required BuildContext context}) =>
     context.appColors.baseWhite!;
 
 Color googleButtonColor({required BuildContext context}) =>
-    context.appColors.secondary_600!;
+    Platform.isIOS &&
+        AppEnvironment.appEnvironmentHelper.enableAppleSignIn? context.appColors.grey_700! : context.appColors.secondary_600!;
 
 Color facebookButtonColor({required BuildContext context}) =>
     context.appColors.primaryAlt_500!;
