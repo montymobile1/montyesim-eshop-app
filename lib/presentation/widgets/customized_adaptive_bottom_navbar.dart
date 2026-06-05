@@ -82,6 +82,10 @@ class _BaseAdaptiveBottomNavBarState extends State<BaseAdaptiveBottomNavBar> {
     setState(() => _currentIndex = index);
   }
 
+  String _getTabLabel(int index) {
+    return widget.tabsText.length > index ? widget.tabsText[index] : "";
+  }
+
   @override
   Widget build(BuildContext context) {
     final int clampedIndex = _currentIndex.clamp(
@@ -110,8 +114,7 @@ class _BaseAdaptiveBottomNavBarState extends State<BaseAdaptiveBottomNavBar> {
                 for (int i = 0; i < widget.tabsIconData.length; i++)
                   AdaptiveNavigationDestination(
                     icon: widget.tabsIconData[i],
-                    label:
-                        widget.tabsText.length > i ? widget.tabsText[i] : "",
+                    label: _getTabLabel(i),
                   ),
               ],
             ),
@@ -121,13 +124,13 @@ class _BaseAdaptiveBottomNavBarState extends State<BaseAdaptiveBottomNavBar> {
 
 @AppPreview(name: "Bottom Navigation Bar")
 Widget baseAdaptiveBottomNavBarPreview() {
-  return BaseAdaptiveBottomNavBar(
+  return const BaseAdaptiveBottomNavBar(
     tabsIconData: <String>["home", "settings", "profile"],
     tabsText: <String>["Home", "Settings", "Profile"],
     tabsWidgets: <Widget>[
-      const Center(child: Text("Home")),
-      const Center(child: Text("Settings")),
-      const Center(child: Text("Profile")),
+      Center(child: Text("Home")),
+      Center(child: Text("Settings")),
+      Center(child: Text("Profile")),
     ],
   );
 }
