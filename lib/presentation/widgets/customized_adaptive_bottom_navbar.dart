@@ -104,20 +104,17 @@ class _BaseAdaptiveBottomNavBarState extends State<BaseAdaptiveBottomNavBar> {
       body: widget.backgroundColor == null
           ? body
           : ColoredBox(color: widget.backgroundColor!, child: body),
-      bottomNavigationBar: widget.isKeyboardVisible
-          ? null
-          : AdaptiveBottomNavigationBar(
-              useNativeBottomBar: true,
-              selectedIndex: clampedIndex,
-              onTap: _onTap,
-              items: <AdaptiveNavigationDestination>[
-                for (int i = 0; i < widget.tabsIconData.length; i++)
-                  AdaptiveNavigationDestination(
-                    icon: widget.tabsIconData[i],
-                    label: _getTabLabel(i),
-                  ),
-              ],
+      bottomNavigationBar: AdaptiveBottomNavigationBar(
+        selectedIndex: clampedIndex,
+        onTap: _onTap,
+        items: <AdaptiveNavigationDestination>[
+          for (int i = 0; i < widget.tabsIconData.length; i++)
+            AdaptiveNavigationDestination(
+              icon: widget.tabsIconData[i],
+              label: _getTabLabel(i),
             ),
+        ],
+      ),
     );
   }
 }
