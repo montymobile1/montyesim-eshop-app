@@ -1,8 +1,10 @@
 // home_local_data_source_test.dart
 
 import "package:esim_open_source/data/data_source/home_data_entities/bundle_category_entity.dart";
+import "package:esim_open_source/data/data_source/home_data_entities/bundle_entity.dart";
 import "package:esim_open_source/data/data_source/home_data_entities/country_entity.dart";
 import "package:esim_open_source/data/data_source/home_data_entities/home_data_entity.dart";
+import "package:esim_open_source/data/data_source/home_data_entities/supported_ships_entity.dart";
 import "package:esim_open_source/data/data_source/home_local_data_source.dart";
 import "package:esim_open_source/data/remote/responses/bundles/bundle_category_response_model_dto.dart";
 import "package:esim_open_source/data/remote/responses/bundles/bundle_response_model_dto.dart";
@@ -43,6 +45,8 @@ class FakeStore extends Fake implements Store {
   MockSpec<Box<HomeDataEntity>>(as: #MockHomeDataBox),
   MockSpec<Box<CountryEntity>>(as: #MockCountryBox),
   MockSpec<Box<BundleCategoryEntity>>(as: #MockBundleCategoryBox),
+  MockSpec<Box<BundleEntity>>(as: #MockBundleBox),
+  MockSpec<Box<SupportedShipsEntity>>(as: #MockSupportedShipsBox),
   MockSpec<Query<HomeDataEntity>>(as: #MockHomeDataQuery),
   MockSpec<Query<CountryEntity>>(as: #MockCountryQuery),
   MockSpec<QueryBuilder<HomeDataEntity>>(
@@ -59,6 +63,8 @@ void main() {
   late MockHomeDataBox mockHomeDataBox;
   late MockCountryBox mockCountryBox;
   late MockBundleCategoryBox mockBundleCategoryBox;
+  late MockBundleBox mockBundleBox;
+  late MockSupportedShipsBox mockSupportedShipsBox;
   late HomeLocalDataSource dataSource;
 
   setUp(() {
@@ -66,12 +72,16 @@ void main() {
     mockHomeDataBox = MockHomeDataBox();
     mockCountryBox = MockCountryBox();
     mockBundleCategoryBox = MockBundleCategoryBox();
+    mockBundleBox = MockBundleBox();
+    mockSupportedShipsBox = MockSupportedShipsBox();
 
     // Register boxes with the fake store
     fakeStore
       ..registerBox<HomeDataEntity>(mockHomeDataBox)
       ..registerBox<CountryEntity>(mockCountryBox)
-      ..registerBox<BundleCategoryEntity>(mockBundleCategoryBox);
+      ..registerBox<BundleCategoryEntity>(mockBundleCategoryBox)
+      ..registerBox<BundleEntity>(mockBundleBox)
+      ..registerBox<SupportedShipsEntity>(mockSupportedShipsBox);
 
     dataSource = HomeLocalDataSource(fakeStore);
   });

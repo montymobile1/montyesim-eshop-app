@@ -2,6 +2,7 @@ import "package:easy_localization/easy_localization.dart";
 import "package:esim_open_source/domain/data/response/bundles/bundle_category_response_model.dart";
 import "package:esim_open_source/domain/data/response/bundles/bundle_response_model.dart";
 import "package:esim_open_source/domain/data/response/bundles/country_response_model.dart";
+import "package:esim_open_source/domain/data/response/bundles/supported_ships_response_model.dart";
 import "package:esim_open_source/domain/data/response/bundles/transaction_history_response_model.dart";
 import "package:esim_open_source/presentation/extensions/context_extension.dart";
 import "package:esim_open_source/translations/locale_keys.g.dart";
@@ -107,6 +108,7 @@ class BundleCoverageParams {
     this.validity,
     this.validityLabel,
     this.countries,
+    this.supportedShips,
   });
 
   final num? countCountries;
@@ -115,6 +117,7 @@ class BundleCoverageParams {
   final num? validity;
   final String? validityLabel;
   final List<CountryResponseModel>? countries;
+  final List<SupportedShipsResponseModel>? supportedShips;
 }
 
 class PurchaseEsimBundleResponseModelParams {
@@ -170,6 +173,7 @@ class PurchaseEsimBundleResponseModel {
     String? activityPolicy,
     List<String>? bundleMessage,
     List<CountryResponseModel>? countries,
+    List<SupportedShipsResponseModel>? supportedShips,
     String? icon,
     List<TransactionHistoryResponseModel>? transactionHistory,
   }) {
@@ -204,6 +208,7 @@ class PurchaseEsimBundleResponseModel {
     _activityPolicy = activityPolicy;
     _bundleMessage = bundleMessage;
     _countries = countries;
+    _supportedShips = supportedShips;
     _icon = icon;
     _transactionHistory = transactionHistory;
   }
@@ -239,6 +244,7 @@ class PurchaseEsimBundleResponseModel {
   String? _activityPolicy;
   List<String>? _bundleMessage;
   List<CountryResponseModel>? _countries;
+  List<SupportedShipsResponseModel>? _supportedShips;
   String? _icon;
   List<TransactionHistoryResponseModel>? _transactionHistory;
 
@@ -279,6 +285,7 @@ class PurchaseEsimBundleResponseModel {
         activityPolicy: params?.bundleInfo?.activityPolicy ?? _activityPolicy,
         bundleMessage: params?.bundleInfo?.bundleMessage ?? _bundleMessage,
         countries: params?.coverage?.countries ?? _countries,
+        supportedShips: params?.coverage?.supportedShips ?? _supportedShips,
         icon: params?.display?.icon ?? _icon,
         transactionHistory:
             params?.orderInfo?.transactionHistory ?? _transactionHistory,
@@ -345,6 +352,10 @@ class PurchaseEsimBundleResponseModel {
   List<String>? get bundleMessage => _bundleMessage;
 
   List<CountryResponseModel>? get countries => _countries;
+
+  List<SupportedShipsResponseModel>? get supportedShips => _supportedShips;
+
+  bool get isCruise => _bundleCategory?.isCruise ?? false;
 
   String? get icon => _icon;
 

@@ -2,6 +2,7 @@ import "package:easy_localization/easy_localization.dart";
 import "package:esim_open_source/app/environment/environment_images.dart";
 import "package:esim_open_source/domain/data/response/bundles/bundle_response_model.dart";
 import "package:esim_open_source/domain/data/response/bundles/country_response_model.dart";
+import "package:esim_open_source/domain/data/response/bundles/supported_ships_response_model.dart";
 import "package:esim_open_source/presentation/extensions/shimmer_extensions.dart";
 import "package:esim_open_source/presentation/shared/ui_helpers.dart";
 import "package:esim_open_source/presentation/views/home_flow_views/data_plans_view/data_plans_components/esim_bundle_item_widget.dart";
@@ -15,6 +16,7 @@ class BundlesListView extends StatelessWidget {
     required this.showShimmer,
     required this.onBundleSelected,
     this.hideSupportedCountries = false,
+    this.hideSupportedShips = false,
     this.lastItemBottomPadding = 0,
     super.key,
   });
@@ -24,6 +26,7 @@ class BundlesListView extends StatelessWidget {
   final void Function(BundleResponseModel selectedBundle) onBundleSelected;
   final int lastItemBottomPadding;
   final bool hideSupportedCountries;
+  final bool hideSupportedShips;
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +42,7 @@ class BundlesListView extends StatelessWidget {
 
         return EsimBundleWidget(
           icon: bundles[index].isCruise
-              ? EnvironmentImages.globalFlag.fullImagePath
+              ? EnvironmentImages.cruise.fullImagePath
               : bundles[index].icon ?? "",
           title: bundles[index].bundleName ?? "",
           data: bundles[index].gprsLimitDisplay ?? "",
@@ -48,6 +51,9 @@ class BundlesListView extends StatelessWidget {
           supportedCountries: hideSupportedCountries
               ? <CountryResponseModel>[]
               : bundles[index].countries ?? <CountryResponseModel>[],
+          supportedShips: hideSupportedShips
+              ? <SupportedShipsResponseModel>[]
+              : bundles[index].supportedShips ?? <SupportedShipsResponseModel>[],
           priceButtonText: LocaleKeys.bundleInfo_priceText.tr(
             namedArgs: <String, String>{
               "price": bundles[index].priceDisplay ?? "",
@@ -83,6 +89,7 @@ class BundlesListView extends StatelessWidget {
           "hideSupportedCountries",
           hideSupportedCountries,
         ),
-      );
+      )
+      ..add(DiagnosticsProperty<bool>("hideSupportedShips", hideSupportedShips));
   }
 }

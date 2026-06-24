@@ -140,6 +140,11 @@
           "id": "1:9201578340172743855",
           "name": "countries",
           "targetId": "3:1274828313617314249"
+        },
+        {
+          "id": "9:344856886260333677",
+          "name": "supportedShips",
+          "targetId": "11:6374871404947220079"
         }
       ]
     },
@@ -705,11 +710,71 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "11:6374871404947220079",
+      "lastPropertyId": "9:5089758028089566782",
+      "name": "SupportedShipsEntity",
+      "properties": [
+        {
+          "id": "1:728117826206074475",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:8303946179660418792",
+          "name": "shipID",
+          "type": 9
+        },
+        {
+          "id": "3:1371373408319409967",
+          "name": "country",
+          "type": 9
+        },
+        {
+          "id": "4:1108006746356856674",
+          "name": "iso3Code",
+          "type": 9
+        },
+        {
+          "id": "5:4497333198352725664",
+          "name": "zoneName",
+          "type": 9
+        },
+        {
+          "id": "6:8483117538109703406",
+          "name": "countryCode",
+          "type": 9
+        },
+        {
+          "id": "7:7231187151630594786",
+          "name": "icon",
+          "type": 9
+        },
+        {
+          "id": "8:1773394784351892358",
+          "name": "operatorList",
+          "type": 30
+        },
+        {
+          "id": "9:5089758028089566782",
+          "name": "alternativeCountry",
+          "type": 9
+        }
+      ],
+      "relations": [
+        {
+          "id": "10:2038031381627024816",
+          "name": "bundles",
+          "targetId": "2:3904391743835608439"
+        }
+      ]
     }
   ],
-  "lastEntityId": "10:3152941530312633510",
+  "lastEntityId": "11:6374871404947220079",
   "lastIndexId": "7:4294559215289422009",
-  "lastRelationId": "8:1064166245855025265",
+  "lastRelationId": "10:2038031381627024816",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
   "modelVersionParserMinimum": 5,

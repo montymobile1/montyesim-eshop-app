@@ -402,5 +402,7 @@ abstract class  LocaleKeys {
   static const String validity_year = "validity_year";
   static const String validity_year_plural = "validity_year_plural";
   static const String primaryBundle = "primaryBundle";
+  static const String supportedShips_tittleText = "supportedShips_tittleText";
+  static const String supportedShips_card_tittleText = "supportedShips_card_tittleText";
 
 }

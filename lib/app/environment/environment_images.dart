@@ -110,6 +110,7 @@ enum EnvironmentImages {
   loginFacebook,
   //flags
   globalFlag,
+  cruise,
   //logo
   splashIcon,
   //stories
@@ -321,6 +322,7 @@ extension EnvironmentImagesExtension on EnvironmentImages {
       case EnvironmentImages.loginFacebook:
         return "login_icons/$name";
       case EnvironmentImages.globalFlag:
+      case EnvironmentImages.cruise:
         return "flags/$name";
       case EnvironmentImages.splashIcon:
         return "logo/$name";

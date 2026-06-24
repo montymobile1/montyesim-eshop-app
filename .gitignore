@@ -107,3 +107,4 @@ CLAUDE.md
 /fastlane/report.xml
 fastlane/android_plugin_patches.sh
 /android/gitlab.properties
+android/app/TelenorKey

@@ -2,6 +2,7 @@ import "package:esim_open_source/data/data_source/home_data_entities/bundle_cate
 import "package:esim_open_source/data/data_source/home_data_entities/bundle_type.dart";
 import "package:esim_open_source/data/data_source/home_data_entities/country_entity.dart";
 import "package:esim_open_source/data/data_source/home_data_entities/home_data_entity.dart";
+import "package:esim_open_source/data/data_source/home_data_entities/supported_ships_entity.dart";
 import "package:esim_open_source/data/remote/responses/bundles/bundle_response_model_dto.dart";
 import "package:objectbox/objectbox.dart";
 
@@ -68,6 +69,7 @@ class BundleEntity {
   final ToOne<BundleCategoryEntity> bundleCategory =
       ToOne<BundleCategoryEntity>();
   final ToMany<CountryEntity> countries = ToMany<CountryEntity>();
+  final ToMany<SupportedShipsEntity> supportedShips = ToMany<SupportedShipsEntity>();
 
   final ToOne<HomeDataEntity> homeData =
       ToOne<HomeDataEntity>(); // Add this relationship
@@ -98,6 +100,7 @@ class BundleEntity {
       validityLabel: validityLabel,
       bundleCategory: bundleCategory.target?.toModel(),
       countries: countries.map((CountryEntity c) => c.toModel()).toList(),
+      supportedShips: supportedShips.map((SupportedShipsEntity c) => c.toModel()).toList(),
     );
   }
 }

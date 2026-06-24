@@ -2,8 +2,10 @@ import "package:easy_localization/easy_localization.dart"
     show StringTranslateExtension;
 import "package:esim_open_source/data/remote/responses/bundles/bundle_category_response_model_dto.dart";
 import "package:esim_open_source/data/remote/responses/bundles/country_response_model_dto.dart";
+import "package:esim_open_source/data/remote/responses/bundles/supported_ships_response_model_dto.dart";
 import "package:esim_open_source/domain/data/response/bundles/bundle_response_model.dart";
 import "package:esim_open_source/domain/data/response/bundles/country_response_model.dart";
+import "package:esim_open_source/domain/data/response/bundles/supported_ships_response_model.dart";
 import "package:esim_open_source/translations/locale_keys.g.dart"
     show LocaleKeys;
 import "package:esim_open_source/utils/parsing_helper.dart";
@@ -25,6 +27,7 @@ class BundleResponseModelDto {
     this.validity,
     this.validityLabel,
     this.countries,
+    this.supportedShips,
     this.icon,
     this.label,
   });
@@ -56,6 +59,12 @@ class BundleResponseModelDto {
                   .map((dynamic item) => CountryResponseModelDto.fromJson(item)),
             )
           : null,
+      supportedShips: json["supported_ships"] != null
+          ? List<SupportedShipsResponseModelDto>.from(
+        json["supported_ships"]
+            .map((dynamic item) => SupportedShipsResponseModelDto.fromJson(item)),
+      )
+          : null,
     );
   }
 
@@ -75,6 +84,7 @@ class BundleResponseModelDto {
   final String? validityLabel;
   final String? icon;
   final List<CountryResponseModelDto>? countries;
+        final List<SupportedShipsResponseModelDto>? supportedShips;
   final String? label;
 
 
@@ -95,6 +105,7 @@ class BundleResponseModelDto {
       validity: validity,
       validityLabel: validityLabel,
       countries: countries?.map((CountryResponseModelDto dto) =>dto.toDomain()).toList(),
+      supportedShips: supportedShips?.map((SupportedShipsResponseModelDto dto) =>dto.toDomain()).toList(),
       icon: icon,
       label: label,
     );
@@ -122,6 +133,10 @@ class BundleResponseModelDto {
       countries: model?.countries
           ?.map((CountryResponseModel country) =>
               CountryResponseModelDto().fromDomain(country),)
+          .toList(),
+      supportedShips: model?.supportedShips
+          ?.map((SupportedShipsResponseModel supportedShip) =>
+          SupportedShipsResponseModelDto().fromDomain(supportedShip),)
           .toList(),
       icon: model?.icon,
       label: model?.label,
@@ -152,6 +167,8 @@ class BundleResponseModelDto {
       "validity_label": validityLabel,
       "countries":
           countries?.map((CountryResponseModelDto item) => item.toJson()).toList(),
+      "supported_ships":
+          supportedShips?.map((SupportedShipsResponseModelDto item) => item.toJson()).toList(),
     };
   }
 
@@ -211,6 +228,16 @@ class BundleResponseModelDto {
             alternativeCountry: "Albania",
           ),
         ],
+        supportedShips: <SupportedShipsResponseModelDto>[
+          SupportedShipsResponseModelDto(
+            country: "Albania",
+            countryCode: "Unknown",
+            iso3Code: "ALB",
+            icon: flagApiIcon,
+            zoneName: "Unknown",
+            alternativeCountry: "Albania",
+          ),
+        ],
       ),
       BundleResponseModelDto(
         icon: placeholderIcon,
@@ -233,6 +260,7 @@ class BundleResponseModelDto {
         validity: 1,
         validityLabel: mockValidityLabel,
         countries: <CountryResponseModelDto>[],
+        supportedShips: <SupportedShipsResponseModelDto>[],
       ),
       BundleResponseModelDto(
         icon: placeholderIcon,
@@ -255,6 +283,7 @@ class BundleResponseModelDto {
         validity: 1,
         validityLabel: mockValidityLabel,
         countries: <CountryResponseModelDto>[],
+        supportedShips: <SupportedShipsResponseModelDto>[],
       ),
       BundleResponseModelDto(
         icon: placeholderIcon,
@@ -294,6 +323,7 @@ class BundleResponseModelDto {
             alternativeCountry: "Türkiye",
           ),
         ],
+        supportedShips: <SupportedShipsResponseModelDto>[],
       ),
       BundleResponseModelDto(
         icon: placeholderIcon,
@@ -316,6 +346,7 @@ class BundleResponseModelDto {
         validity: 1,
         validityLabel: mockValidityLabel,
         countries: <CountryResponseModelDto>[],
+        supportedShips: <SupportedShipsResponseModelDto>[],
       ),
     ];
 

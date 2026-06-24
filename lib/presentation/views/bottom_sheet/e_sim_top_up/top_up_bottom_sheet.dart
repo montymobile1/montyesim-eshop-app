@@ -137,7 +137,7 @@ class TopUpBottomSheet extends StatelessWidget {
           },
           isLoading: viewModel.applyShimmer,
           icon: item.isCruise
-              ? EnvironmentImages.globalFlag.fullImagePath
+              ? EnvironmentImages.cruise.fullImagePath
               : item.icon ?? "",
         );
       },

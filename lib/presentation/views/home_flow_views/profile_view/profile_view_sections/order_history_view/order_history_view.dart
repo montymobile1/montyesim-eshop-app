@@ -122,7 +122,7 @@ class OrderHistoryView extends StatelessWidget {
                 dataValue: bundleOrder.bundleDetails?.gprsLimitDisplay ?? "",
                 countryPrice: bundleOrder.bundleDetails?.priceDisplay ?? "",
                 imagePath: (bundleOrder.bundleDetails?.isCruise ?? false)
-                    ? EnvironmentImages.globalFlag.fullImagePath
+                    ? EnvironmentImages.cruise.fullImagePath
                     : bundleOrder.bundleDetails?.icon ?? "",
                 isLoading: false,
                 showUnlimitedData:

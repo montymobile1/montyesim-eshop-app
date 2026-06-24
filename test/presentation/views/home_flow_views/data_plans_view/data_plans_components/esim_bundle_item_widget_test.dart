@@ -1,4 +1,5 @@
 import "package:esim_open_source/domain/data/response/bundles/country_response_model.dart";
+import "package:esim_open_source/domain/data/response/bundles/supported_ships_response_model.dart";
 import "package:esim_open_source/presentation/views/home_flow_views/data_plans_view/data_plans_components/esim_bundle_item_widget.dart";
 import "package:flutter/material.dart";
 import "package:flutter/rendering.dart";
@@ -30,6 +31,7 @@ Future<void> main() async {
             data: "5GB",
             validFor: "30 days",
             supportedCountries: <CountryResponseModel>[],
+            supportedShips: const <SupportedShipsResponseModel>[],
             onPriceButtonClick: mockOnTap,
             icon: "usa_icon",
             showUnlimitedData: false,
@@ -55,6 +57,7 @@ Future<void> main() async {
             data: "2GB",
             validFor: "7 days",
             supportedCountries: <CountryResponseModel>[],
+            supportedShips: const <SupportedShipsResponseModel>[],
             availableCountries: <CountryResponseModel>[],
             onPriceButtonClick: mockOnTap,
             icon: "simple_icon",
@@ -77,6 +80,7 @@ Future<void> main() async {
         data: "Unlimited",
         validFor: "15 days",
         supportedCountries: <CountryResponseModel>[],
+        supportedShips: const <SupportedShipsResponseModel>[],
         onPriceButtonClick: mockOnTap,
         icon: "europe_icon",
         showUnlimitedData: true,
@@ -96,6 +100,7 @@ Future<void> main() async {
         data: "5GB",
         validFor: "30 days",
         supportedCountries: <CountryResponseModel>[],
+        supportedShips: const <SupportedShipsResponseModel>[],
         onPriceButtonClick: () {
           wasTapped = true;
         },
@@ -115,6 +120,7 @@ Future<void> main() async {
         data: "10GB",
         validFor: "30 days",
         supportedCountries: <CountryResponseModel>[],
+        supportedShips: const <SupportedShipsResponseModel>[],
         availableCountries: <CountryResponseModel>[],
         onPriceButtonClick: mockOnTap,
         icon: "test_icon",

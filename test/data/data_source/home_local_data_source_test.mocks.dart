@@ -4,21 +4,25 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:async' as _i3;
-import 'dart:typed_data' as _i10;
+import 'dart:typed_data' as _i12;
 
 import 'package:esim_open_source/data/data_source/home_data_entities/bundle_category_entity.dart'
     as _i7;
+import 'package:esim_open_source/data/data_source/home_data_entities/bundle_entity.dart'
+    as _i8;
 import 'package:esim_open_source/data/data_source/home_data_entities/country_entity.dart'
     as _i6;
 import 'package:esim_open_source/data/data_source/home_data_entities/home_data_entity.dart'
     as _i4;
+import 'package:esim_open_source/data/data_source/home_data_entities/supported_ships_entity.dart'
+    as _i9;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:mockito/src/dummies.dart' as _i9;
-import 'package:objectbox/objectbox.dart' as _i12;
+import 'package:mockito/src/dummies.dart' as _i11;
+import 'package:objectbox/objectbox.dart' as _i14;
 import 'package:objectbox/src/native/box.dart' as _i2;
 import 'package:objectbox/src/native/query/query.dart' as _i5;
-import 'package:objectbox/src/store.dart' as _i8;
-import 'package:objectbox/src/transaction.dart' as _i11;
+import 'package:objectbox/src/store.dart' as _i10;
+import 'package:objectbox/src/transaction.dart' as _i13;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -98,9 +102,8 @@ class _FakeBundleCategoryEntity_5 extends _i1.SmartFake
         );
 }
 
-class _FakePropertyQuery_6<T> extends _i1.SmartFake
-    implements _i5.PropertyQuery<T> {
-  _FakePropertyQuery_6(
+class _FakeBundleEntity_6 extends _i1.SmartFake implements _i8.BundleEntity {
+  _FakeBundleEntity_6(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -109,8 +112,30 @@ class _FakePropertyQuery_6<T> extends _i1.SmartFake
         );
 }
 
-class _FakeQuery_7<T> extends _i1.SmartFake implements _i5.Query<T> {
-  _FakeQuery_7(
+class _FakeSupportedShipsEntity_7 extends _i1.SmartFake
+    implements _i9.SupportedShipsEntity {
+  _FakeSupportedShipsEntity_7(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+class _FakePropertyQuery_8<T> extends _i1.SmartFake
+    implements _i5.PropertyQuery<T> {
+  _FakePropertyQuery_8(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+class _FakeQuery_9<T> extends _i1.SmartFake implements _i5.Query<T> {
+  _FakeQuery_9(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -122,7 +147,7 @@ class _FakeQuery_7<T> extends _i1.SmartFake implements _i5.Query<T> {
 /// A class which mocks [Store].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockStore extends _i1.Mock implements _i8.Store {
+class MockStore extends _i1.Mock implements _i10.Store {
   MockStore() {
     _i1.throwOnMissingStub(this);
   }
@@ -130,17 +155,17 @@ class MockStore extends _i1.Mock implements _i8.Store {
   @override
   String get directoryPath => (super.noSuchMethod(
         Invocation.getter(#directoryPath),
-        returnValue: _i9.dummyValue<String>(
+        returnValue: _i11.dummyValue<String>(
           this,
           Invocation.getter(#directoryPath),
         ),
       ) as String);
 
   @override
-  _i10.ByteData get reference => (super.noSuchMethod(
+  _i12.ByteData get reference => (super.noSuchMethod(
         Invocation.getter(#reference),
-        returnValue: _i10.ByteData(0),
-      ) as _i10.ByteData);
+        returnValue: _i12.ByteData(0),
+      ) as _i12.ByteData);
 
   @override
   bool isClosed() => (super.noSuchMethod(
@@ -177,7 +202,7 @@ class MockStore extends _i1.Mock implements _i8.Store {
 
   @override
   R runInTransaction<R>(
-    _i11.TxMode? mode,
+    _i13.TxMode? mode,
     R Function()? fn,
   ) =>
       (super.noSuchMethod(
@@ -188,7 +213,7 @@ class MockStore extends _i1.Mock implements _i8.Store {
             fn,
           ],
         ),
-        returnValue: _i9.dummyValue<R>(
+        returnValue: _i11.dummyValue<R>(
           this,
           Invocation.method(
             #runInTransaction,
@@ -202,8 +227,8 @@ class MockStore extends _i1.Mock implements _i8.Store {
 
   @override
   _i3.Future<R> runInTransactionAsync<R, P>(
-    _i11.TxMode? mode,
-    _i8.TxAsyncCallback<R, P>? callback,
+    _i13.TxMode? mode,
+    _i10.TxAsyncCallback<R, P>? callback,
     P? param,
   ) =>
       (super.noSuchMethod(
@@ -215,8 +240,8 @@ class MockStore extends _i1.Mock implements _i8.Store {
             param,
           ],
         ),
-        returnValue: _i9.ifNotNull(
-              _i9.dummyValueOrNull<R>(
+        returnValue: _i11.ifNotNull(
+              _i11.dummyValueOrNull<R>(
                 this,
                 Invocation.method(
                   #runInTransactionAsync,
@@ -244,7 +269,7 @@ class MockStore extends _i1.Mock implements _i8.Store {
 
   @override
   _i3.Future<R> runAsync<P, R>(
-    _i8.RunAsyncCallback<P, R>? callback,
+    _i10.RunAsyncCallback<P, R>? callback,
     P? param,
   ) =>
       (super.noSuchMethod(
@@ -255,8 +280,8 @@ class MockStore extends _i1.Mock implements _i8.Store {
             param,
           ],
         ),
-        returnValue: _i9.ifNotNull(
-              _i9.dummyValueOrNull<R>(
+        returnValue: _i11.ifNotNull(
+              _i11.dummyValueOrNull<R>(
                 this,
                 Invocation.method(
                   #runAsync,
@@ -1328,6 +1353,695 @@ class MockBundleCategoryBox extends _i1.Mock
       ) as _i3.Future<int>);
 }
 
+/// A class which mocks [Box].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockBundleBox extends _i1.Mock implements _i2.Box<_i8.BundleEntity> {
+  @override
+  int put(
+    _i8.BundleEntity? object, {
+    _i2.PutMode? mode = _i2.PutMode.put,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #put,
+          [object],
+          {#mode: mode},
+        ),
+        returnValue: 0,
+        returnValueForMissingStub: 0,
+      ) as int);
+
+  @override
+  _i3.Future<int> putAsync(
+    _i8.BundleEntity? object, {
+    _i2.PutMode? mode = _i2.PutMode.put,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #putAsync,
+          [object],
+          {#mode: mode},
+        ),
+        returnValue: _i3.Future<int>.value(0),
+        returnValueForMissingStub: _i3.Future<int>.value(0),
+      ) as _i3.Future<int>);
+
+  @override
+  _i3.Future<_i8.BundleEntity> putAndGetAsync(
+    _i8.BundleEntity? object, {
+    _i2.PutMode? mode = _i2.PutMode.put,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #putAndGetAsync,
+          [object],
+          {#mode: mode},
+        ),
+        returnValue: _i3.Future<_i8.BundleEntity>.value(_FakeBundleEntity_6(
+          this,
+          Invocation.method(
+            #putAndGetAsync,
+            [object],
+            {#mode: mode},
+          ),
+        )),
+        returnValueForMissingStub:
+            _i3.Future<_i8.BundleEntity>.value(_FakeBundleEntity_6(
+          this,
+          Invocation.method(
+            #putAndGetAsync,
+            [object],
+            {#mode: mode},
+          ),
+        )),
+      ) as _i3.Future<_i8.BundleEntity>);
+
+  @override
+  _i3.Future<int> putQueuedAwaitResult(
+    _i8.BundleEntity? object, {
+    _i2.PutMode? mode = _i2.PutMode.put,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #putQueuedAwaitResult,
+          [object],
+          {#mode: mode},
+        ),
+        returnValue: _i3.Future<int>.value(0),
+        returnValueForMissingStub: _i3.Future<int>.value(0),
+      ) as _i3.Future<int>);
+
+  @override
+  int putQueued(
+    _i8.BundleEntity? object, {
+    _i2.PutMode? mode = _i2.PutMode.put,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #putQueued,
+          [object],
+          {#mode: mode},
+        ),
+        returnValue: 0,
+        returnValueForMissingStub: 0,
+      ) as int);
+
+  @override
+  List<int> putMany(
+    List<_i8.BundleEntity>? objects, {
+    _i2.PutMode? mode = _i2.PutMode.put,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #putMany,
+          [objects],
+          {#mode: mode},
+        ),
+        returnValue: <int>[],
+        returnValueForMissingStub: <int>[],
+      ) as List<int>);
+
+  @override
+  _i3.Future<List<int>> putManyAsync(
+    List<_i8.BundleEntity>? objects, {
+    _i2.PutMode? mode = _i2.PutMode.put,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #putManyAsync,
+          [objects],
+          {#mode: mode},
+        ),
+        returnValue: _i3.Future<List<int>>.value(<int>[]),
+        returnValueForMissingStub: _i3.Future<List<int>>.value(<int>[]),
+      ) as _i3.Future<List<int>>);
+
+  @override
+  _i3.Future<List<_i8.BundleEntity>> putAndGetManyAsync(
+    List<_i8.BundleEntity>? objects, {
+    _i2.PutMode? mode = _i2.PutMode.put,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #putAndGetManyAsync,
+          [objects],
+          {#mode: mode},
+        ),
+        returnValue:
+            _i3.Future<List<_i8.BundleEntity>>.value(<_i8.BundleEntity>[]),
+        returnValueForMissingStub:
+            _i3.Future<List<_i8.BundleEntity>>.value(<_i8.BundleEntity>[]),
+      ) as _i3.Future<List<_i8.BundleEntity>>);
+
+  @override
+  _i8.BundleEntity? get(int? id) => (super.noSuchMethod(
+        Invocation.method(
+          #get,
+          [id],
+        ),
+        returnValueForMissingStub: null,
+      ) as _i8.BundleEntity?);
+
+  @override
+  _i3.Future<_i8.BundleEntity?> getAsync(int? id) => (super.noSuchMethod(
+        Invocation.method(
+          #getAsync,
+          [id],
+        ),
+        returnValue: _i3.Future<_i8.BundleEntity?>.value(),
+        returnValueForMissingStub: _i3.Future<_i8.BundleEntity?>.value(),
+      ) as _i3.Future<_i8.BundleEntity?>);
+
+  @override
+  List<_i8.BundleEntity?> getMany(
+    List<int>? ids, {
+    bool? growableResult = false,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getMany,
+          [ids],
+          {#growableResult: growableResult},
+        ),
+        returnValue: <_i8.BundleEntity?>[],
+        returnValueForMissingStub: <_i8.BundleEntity?>[],
+      ) as List<_i8.BundleEntity?>);
+
+  @override
+  _i3.Future<List<_i8.BundleEntity?>> getManyAsync(
+    List<int>? ids, {
+    bool? growableResult = false,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getManyAsync,
+          [ids],
+          {#growableResult: growableResult},
+        ),
+        returnValue:
+            _i3.Future<List<_i8.BundleEntity?>>.value(<_i8.BundleEntity?>[]),
+        returnValueForMissingStub:
+            _i3.Future<List<_i8.BundleEntity?>>.value(<_i8.BundleEntity?>[]),
+      ) as _i3.Future<List<_i8.BundleEntity?>>);
+
+  @override
+  List<_i8.BundleEntity> getAll() => (super.noSuchMethod(
+        Invocation.method(
+          #getAll,
+          [],
+        ),
+        returnValue: <_i8.BundleEntity>[],
+        returnValueForMissingStub: <_i8.BundleEntity>[],
+      ) as List<_i8.BundleEntity>);
+
+  @override
+  _i3.Future<List<_i8.BundleEntity>> getAllAsync() => (super.noSuchMethod(
+        Invocation.method(
+          #getAllAsync,
+          [],
+        ),
+        returnValue:
+            _i3.Future<List<_i8.BundleEntity>>.value(<_i8.BundleEntity>[]),
+        returnValueForMissingStub:
+            _i3.Future<List<_i8.BundleEntity>>.value(<_i8.BundleEntity>[]),
+      ) as _i3.Future<List<_i8.BundleEntity>>);
+
+  @override
+  _i5.QueryBuilder<_i8.BundleEntity> query(
+          [_i5.Condition<_i8.BundleEntity>? qc]) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #query,
+          [qc],
+        ),
+        returnValue: _FakeQueryBuilder_3<_i8.BundleEntity>(
+          this,
+          Invocation.method(
+            #query,
+            [qc],
+          ),
+        ),
+        returnValueForMissingStub: _FakeQueryBuilder_3<_i8.BundleEntity>(
+          this,
+          Invocation.method(
+            #query,
+            [qc],
+          ),
+        ),
+      ) as _i5.QueryBuilder<_i8.BundleEntity>);
+
+  @override
+  int count({int? limit = 0}) => (super.noSuchMethod(
+        Invocation.method(
+          #count,
+          [],
+          {#limit: limit},
+        ),
+        returnValue: 0,
+        returnValueForMissingStub: 0,
+      ) as int);
+
+  @override
+  bool isEmpty() => (super.noSuchMethod(
+        Invocation.method(
+          #isEmpty,
+          [],
+        ),
+        returnValue: false,
+        returnValueForMissingStub: false,
+      ) as bool);
+
+  @override
+  bool contains(int? id) => (super.noSuchMethod(
+        Invocation.method(
+          #contains,
+          [id],
+        ),
+        returnValue: false,
+        returnValueForMissingStub: false,
+      ) as bool);
+
+  @override
+  bool containsMany(List<int>? ids) => (super.noSuchMethod(
+        Invocation.method(
+          #containsMany,
+          [ids],
+        ),
+        returnValue: false,
+        returnValueForMissingStub: false,
+      ) as bool);
+
+  @override
+  bool remove(int? id) => (super.noSuchMethod(
+        Invocation.method(
+          #remove,
+          [id],
+        ),
+        returnValue: false,
+        returnValueForMissingStub: false,
+      ) as bool);
+
+  @override
+  _i3.Future<bool> removeAsync(int? id) => (super.noSuchMethod(
+        Invocation.method(
+          #removeAsync,
+          [id],
+        ),
+        returnValue: _i3.Future<bool>.value(false),
+        returnValueForMissingStub: _i3.Future<bool>.value(false),
+      ) as _i3.Future<bool>);
+
+  @override
+  int removeMany(List<int>? ids) => (super.noSuchMethod(
+        Invocation.method(
+          #removeMany,
+          [ids],
+        ),
+        returnValue: 0,
+        returnValueForMissingStub: 0,
+      ) as int);
+
+  @override
+  _i3.Future<int> removeManyAsync(List<int>? ids) => (super.noSuchMethod(
+        Invocation.method(
+          #removeManyAsync,
+          [ids],
+        ),
+        returnValue: _i3.Future<int>.value(0),
+        returnValueForMissingStub: _i3.Future<int>.value(0),
+      ) as _i3.Future<int>);
+
+  @override
+  int removeAll() => (super.noSuchMethod(
+        Invocation.method(
+          #removeAll,
+          [],
+        ),
+        returnValue: 0,
+        returnValueForMissingStub: 0,
+      ) as int);
+
+  @override
+  _i3.Future<int> removeAllAsync() => (super.noSuchMethod(
+        Invocation.method(
+          #removeAllAsync,
+          [],
+        ),
+        returnValue: _i3.Future<int>.value(0),
+        returnValueForMissingStub: _i3.Future<int>.value(0),
+      ) as _i3.Future<int>);
+}
+
+/// A class which mocks [Box].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockSupportedShipsBox extends _i1.Mock
+    implements _i2.Box<_i9.SupportedShipsEntity> {
+  @override
+  int put(
+    _i9.SupportedShipsEntity? object, {
+    _i2.PutMode? mode = _i2.PutMode.put,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #put,
+          [object],
+          {#mode: mode},
+        ),
+        returnValue: 0,
+        returnValueForMissingStub: 0,
+      ) as int);
+
+  @override
+  _i3.Future<int> putAsync(
+    _i9.SupportedShipsEntity? object, {
+    _i2.PutMode? mode = _i2.PutMode.put,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #putAsync,
+          [object],
+          {#mode: mode},
+        ),
+        returnValue: _i3.Future<int>.value(0),
+        returnValueForMissingStub: _i3.Future<int>.value(0),
+      ) as _i3.Future<int>);
+
+  @override
+  _i3.Future<_i9.SupportedShipsEntity> putAndGetAsync(
+    _i9.SupportedShipsEntity? object, {
+    _i2.PutMode? mode = _i2.PutMode.put,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #putAndGetAsync,
+          [object],
+          {#mode: mode},
+        ),
+        returnValue: _i3.Future<_i9.SupportedShipsEntity>.value(
+            _FakeSupportedShipsEntity_7(
+          this,
+          Invocation.method(
+            #putAndGetAsync,
+            [object],
+            {#mode: mode},
+          ),
+        )),
+        returnValueForMissingStub: _i3.Future<_i9.SupportedShipsEntity>.value(
+            _FakeSupportedShipsEntity_7(
+          this,
+          Invocation.method(
+            #putAndGetAsync,
+            [object],
+            {#mode: mode},
+          ),
+        )),
+      ) as _i3.Future<_i9.SupportedShipsEntity>);
+
+  @override
+  _i3.Future<int> putQueuedAwaitResult(
+    _i9.SupportedShipsEntity? object, {
+    _i2.PutMode? mode = _i2.PutMode.put,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #putQueuedAwaitResult,
+          [object],
+          {#mode: mode},
+        ),
+        returnValue: _i3.Future<int>.value(0),
+        returnValueForMissingStub: _i3.Future<int>.value(0),
+      ) as _i3.Future<int>);
+
+  @override
+  int putQueued(
+    _i9.SupportedShipsEntity? object, {
+    _i2.PutMode? mode = _i2.PutMode.put,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #putQueued,
+          [object],
+          {#mode: mode},
+        ),
+        returnValue: 0,
+        returnValueForMissingStub: 0,
+      ) as int);
+
+  @override
+  List<int> putMany(
+    List<_i9.SupportedShipsEntity>? objects, {
+    _i2.PutMode? mode = _i2.PutMode.put,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #putMany,
+          [objects],
+          {#mode: mode},
+        ),
+        returnValue: <int>[],
+        returnValueForMissingStub: <int>[],
+      ) as List<int>);
+
+  @override
+  _i3.Future<List<int>> putManyAsync(
+    List<_i9.SupportedShipsEntity>? objects, {
+    _i2.PutMode? mode = _i2.PutMode.put,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #putManyAsync,
+          [objects],
+          {#mode: mode},
+        ),
+        returnValue: _i3.Future<List<int>>.value(<int>[]),
+        returnValueForMissingStub: _i3.Future<List<int>>.value(<int>[]),
+      ) as _i3.Future<List<int>>);
+
+  @override
+  _i3.Future<List<_i9.SupportedShipsEntity>> putAndGetManyAsync(
+    List<_i9.SupportedShipsEntity>? objects, {
+    _i2.PutMode? mode = _i2.PutMode.put,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #putAndGetManyAsync,
+          [objects],
+          {#mode: mode},
+        ),
+        returnValue: _i3.Future<List<_i9.SupportedShipsEntity>>.value(
+            <_i9.SupportedShipsEntity>[]),
+        returnValueForMissingStub:
+            _i3.Future<List<_i9.SupportedShipsEntity>>.value(
+                <_i9.SupportedShipsEntity>[]),
+      ) as _i3.Future<List<_i9.SupportedShipsEntity>>);
+
+  @override
+  _i9.SupportedShipsEntity? get(int? id) => (super.noSuchMethod(
+        Invocation.method(
+          #get,
+          [id],
+        ),
+        returnValueForMissingStub: null,
+      ) as _i9.SupportedShipsEntity?);
+
+  @override
+  _i3.Future<_i9.SupportedShipsEntity?> getAsync(int? id) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getAsync,
+          [id],
+        ),
+        returnValue: _i3.Future<_i9.SupportedShipsEntity?>.value(),
+        returnValueForMissingStub:
+            _i3.Future<_i9.SupportedShipsEntity?>.value(),
+      ) as _i3.Future<_i9.SupportedShipsEntity?>);
+
+  @override
+  List<_i9.SupportedShipsEntity?> getMany(
+    List<int>? ids, {
+    bool? growableResult = false,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getMany,
+          [ids],
+          {#growableResult: growableResult},
+        ),
+        returnValue: <_i9.SupportedShipsEntity?>[],
+        returnValueForMissingStub: <_i9.SupportedShipsEntity?>[],
+      ) as List<_i9.SupportedShipsEntity?>);
+
+  @override
+  _i3.Future<List<_i9.SupportedShipsEntity?>> getManyAsync(
+    List<int>? ids, {
+    bool? growableResult = false,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getManyAsync,
+          [ids],
+          {#growableResult: growableResult},
+        ),
+        returnValue: _i3.Future<List<_i9.SupportedShipsEntity?>>.value(
+            <_i9.SupportedShipsEntity?>[]),
+        returnValueForMissingStub:
+            _i3.Future<List<_i9.SupportedShipsEntity?>>.value(
+                <_i9.SupportedShipsEntity?>[]),
+      ) as _i3.Future<List<_i9.SupportedShipsEntity?>>);
+
+  @override
+  List<_i9.SupportedShipsEntity> getAll() => (super.noSuchMethod(
+        Invocation.method(
+          #getAll,
+          [],
+        ),
+        returnValue: <_i9.SupportedShipsEntity>[],
+        returnValueForMissingStub: <_i9.SupportedShipsEntity>[],
+      ) as List<_i9.SupportedShipsEntity>);
+
+  @override
+  _i3.Future<List<_i9.SupportedShipsEntity>> getAllAsync() =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getAllAsync,
+          [],
+        ),
+        returnValue: _i3.Future<List<_i9.SupportedShipsEntity>>.value(
+            <_i9.SupportedShipsEntity>[]),
+        returnValueForMissingStub:
+            _i3.Future<List<_i9.SupportedShipsEntity>>.value(
+                <_i9.SupportedShipsEntity>[]),
+      ) as _i3.Future<List<_i9.SupportedShipsEntity>>);
+
+  @override
+  _i5.QueryBuilder<_i9.SupportedShipsEntity> query(
+          [_i5.Condition<_i9.SupportedShipsEntity>? qc]) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #query,
+          [qc],
+        ),
+        returnValue: _FakeQueryBuilder_3<_i9.SupportedShipsEntity>(
+          this,
+          Invocation.method(
+            #query,
+            [qc],
+          ),
+        ),
+        returnValueForMissingStub:
+            _FakeQueryBuilder_3<_i9.SupportedShipsEntity>(
+          this,
+          Invocation.method(
+            #query,
+            [qc],
+          ),
+        ),
+      ) as _i5.QueryBuilder<_i9.SupportedShipsEntity>);
+
+  @override
+  int count({int? limit = 0}) => (super.noSuchMethod(
+        Invocation.method(
+          #count,
+          [],
+          {#limit: limit},
+        ),
+        returnValue: 0,
+        returnValueForMissingStub: 0,
+      ) as int);
+
+  @override
+  bool isEmpty() => (super.noSuchMethod(
+        Invocation.method(
+          #isEmpty,
+          [],
+        ),
+        returnValue: false,
+        returnValueForMissingStub: false,
+      ) as bool);
+
+  @override
+  bool contains(int? id) => (super.noSuchMethod(
+        Invocation.method(
+          #contains,
+          [id],
+        ),
+        returnValue: false,
+        returnValueForMissingStub: false,
+      ) as bool);
+
+  @override
+  bool containsMany(List<int>? ids) => (super.noSuchMethod(
+        Invocation.method(
+          #containsMany,
+          [ids],
+        ),
+        returnValue: false,
+        returnValueForMissingStub: false,
+      ) as bool);
+
+  @override
+  bool remove(int? id) => (super.noSuchMethod(
+        Invocation.method(
+          #remove,
+          [id],
+        ),
+        returnValue: false,
+        returnValueForMissingStub: false,
+      ) as bool);
+
+  @override
+  _i3.Future<bool> removeAsync(int? id) => (super.noSuchMethod(
+        Invocation.method(
+          #removeAsync,
+          [id],
+        ),
+        returnValue: _i3.Future<bool>.value(false),
+        returnValueForMissingStub: _i3.Future<bool>.value(false),
+      ) as _i3.Future<bool>);
+
+  @override
+  int removeMany(List<int>? ids) => (super.noSuchMethod(
+        Invocation.method(
+          #removeMany,
+          [ids],
+        ),
+        returnValue: 0,
+        returnValueForMissingStub: 0,
+      ) as int);
+
+  @override
+  _i3.Future<int> removeManyAsync(List<int>? ids) => (super.noSuchMethod(
+        Invocation.method(
+          #removeManyAsync,
+          [ids],
+        ),
+        returnValue: _i3.Future<int>.value(0),
+        returnValueForMissingStub: _i3.Future<int>.value(0),
+      ) as _i3.Future<int>);
+
+  @override
+  int removeAll() => (super.noSuchMethod(
+        Invocation.method(
+          #removeAll,
+          [],
+        ),
+        returnValue: 0,
+        returnValueForMissingStub: 0,
+      ) as int);
+
+  @override
+  _i3.Future<int> removeAllAsync() => (super.noSuchMethod(
+        Invocation.method(
+          #removeAllAsync,
+          [],
+        ),
+        returnValue: _i3.Future<int>.value(0),
+        returnValueForMissingStub: _i3.Future<int>.value(0),
+      ) as _i3.Future<int>);
+}
+
 /// A class which mocks [Query].
 ///
 /// See the documentation for Mockito's code generation for more information.
@@ -1460,55 +2174,55 @@ class MockHomeDataQuery extends _i1.Mock
       ) as _i3.Future<List<_i4.HomeDataEntity>>);
 
   @override
-  List<_i12.IdWithScore> findIdsWithScores() => (super.noSuchMethod(
+  List<_i14.IdWithScore> findIdsWithScores() => (super.noSuchMethod(
         Invocation.method(
           #findIdsWithScores,
           [],
         ),
-        returnValue: <_i12.IdWithScore>[],
-        returnValueForMissingStub: <_i12.IdWithScore>[],
-      ) as List<_i12.IdWithScore>);
+        returnValue: <_i14.IdWithScore>[],
+        returnValueForMissingStub: <_i14.IdWithScore>[],
+      ) as List<_i14.IdWithScore>);
 
   @override
-  _i3.Future<List<_i12.IdWithScore>> findIdsWithScoresAsync() =>
+  _i3.Future<List<_i14.IdWithScore>> findIdsWithScoresAsync() =>
       (super.noSuchMethod(
         Invocation.method(
           #findIdsWithScoresAsync,
           [],
         ),
         returnValue:
-            _i3.Future<List<_i12.IdWithScore>>.value(<_i12.IdWithScore>[]),
+            _i3.Future<List<_i14.IdWithScore>>.value(<_i14.IdWithScore>[]),
         returnValueForMissingStub:
-            _i3.Future<List<_i12.IdWithScore>>.value(<_i12.IdWithScore>[]),
-      ) as _i3.Future<List<_i12.IdWithScore>>);
+            _i3.Future<List<_i14.IdWithScore>>.value(<_i14.IdWithScore>[]),
+      ) as _i3.Future<List<_i14.IdWithScore>>);
 
   @override
-  List<_i12.ObjectWithScore<_i4.HomeDataEntity>> findWithScores() =>
+  List<_i14.ObjectWithScore<_i4.HomeDataEntity>> findWithScores() =>
       (super.noSuchMethod(
         Invocation.method(
           #findWithScores,
           [],
         ),
-        returnValue: <_i12.ObjectWithScore<_i4.HomeDataEntity>>[],
-        returnValueForMissingStub: <_i12.ObjectWithScore<_i4.HomeDataEntity>>[],
-      ) as List<_i12.ObjectWithScore<_i4.HomeDataEntity>>);
+        returnValue: <_i14.ObjectWithScore<_i4.HomeDataEntity>>[],
+        returnValueForMissingStub: <_i14.ObjectWithScore<_i4.HomeDataEntity>>[],
+      ) as List<_i14.ObjectWithScore<_i4.HomeDataEntity>>);
 
   @override
   _i3.Future<
       List<
-          _i12.ObjectWithScore<_i4.HomeDataEntity>>> findWithScoresAsync() =>
+          _i14.ObjectWithScore<_i4.HomeDataEntity>>> findWithScoresAsync() =>
       (super.noSuchMethod(
         Invocation.method(
           #findWithScoresAsync,
           [],
         ),
         returnValue:
-            _i3.Future<List<_i12.ObjectWithScore<_i4.HomeDataEntity>>>.value(
-                <_i12.ObjectWithScore<_i4.HomeDataEntity>>[]),
+            _i3.Future<List<_i14.ObjectWithScore<_i4.HomeDataEntity>>>.value(
+                <_i14.ObjectWithScore<_i4.HomeDataEntity>>[]),
         returnValueForMissingStub:
-            _i3.Future<List<_i12.ObjectWithScore<_i4.HomeDataEntity>>>.value(
-                <_i12.ObjectWithScore<_i4.HomeDataEntity>>[]),
-      ) as _i3.Future<List<_i12.ObjectWithScore<_i4.HomeDataEntity>>>);
+            _i3.Future<List<_i14.ObjectWithScore<_i4.HomeDataEntity>>>.value(
+                <_i14.ObjectWithScore<_i4.HomeDataEntity>>[]),
+      ) as _i3.Future<List<_i14.ObjectWithScore<_i4.HomeDataEntity>>>);
 
   @override
   _i3.Stream<_i4.HomeDataEntity> stream() => (super.noSuchMethod(
@@ -1526,14 +2240,14 @@ class MockHomeDataQuery extends _i1.Mock
           #describe,
           [],
         ),
-        returnValue: _i9.dummyValue<String>(
+        returnValue: _i11.dummyValue<String>(
           this,
           Invocation.method(
             #describe,
             [],
           ),
         ),
-        returnValueForMissingStub: _i9.dummyValue<String>(
+        returnValueForMissingStub: _i11.dummyValue<String>(
           this,
           Invocation.method(
             #describe,
@@ -1548,14 +2262,14 @@ class MockHomeDataQuery extends _i1.Mock
           #describeParameters,
           [],
         ),
-        returnValue: _i9.dummyValue<String>(
+        returnValue: _i11.dummyValue<String>(
           this,
           Invocation.method(
             #describeParameters,
             [],
           ),
         ),
-        returnValueForMissingStub: _i9.dummyValue<String>(
+        returnValueForMissingStub: _i11.dummyValue<String>(
           this,
           Invocation.method(
             #describeParameters,
@@ -1572,14 +2286,14 @@ class MockHomeDataQuery extends _i1.Mock
           #property,
           [prop],
         ),
-        returnValue: _FakePropertyQuery_6<DartType>(
+        returnValue: _FakePropertyQuery_8<DartType>(
           this,
           Invocation.method(
             #property,
             [prop],
           ),
         ),
-        returnValueForMissingStub: _FakePropertyQuery_6<DartType>(
+        returnValueForMissingStub: _FakePropertyQuery_8<DartType>(
           this,
           Invocation.method(
             #property,
@@ -1721,53 +2435,53 @@ class MockCountryQuery extends _i1.Mock
       ) as _i3.Future<List<_i6.CountryEntity>>);
 
   @override
-  List<_i12.IdWithScore> findIdsWithScores() => (super.noSuchMethod(
+  List<_i14.IdWithScore> findIdsWithScores() => (super.noSuchMethod(
         Invocation.method(
           #findIdsWithScores,
           [],
         ),
-        returnValue: <_i12.IdWithScore>[],
-        returnValueForMissingStub: <_i12.IdWithScore>[],
-      ) as List<_i12.IdWithScore>);
+        returnValue: <_i14.IdWithScore>[],
+        returnValueForMissingStub: <_i14.IdWithScore>[],
+      ) as List<_i14.IdWithScore>);
 
   @override
-  _i3.Future<List<_i12.IdWithScore>> findIdsWithScoresAsync() =>
+  _i3.Future<List<_i14.IdWithScore>> findIdsWithScoresAsync() =>
       (super.noSuchMethod(
         Invocation.method(
           #findIdsWithScoresAsync,
           [],
         ),
         returnValue:
-            _i3.Future<List<_i12.IdWithScore>>.value(<_i12.IdWithScore>[]),
+            _i3.Future<List<_i14.IdWithScore>>.value(<_i14.IdWithScore>[]),
         returnValueForMissingStub:
-            _i3.Future<List<_i12.IdWithScore>>.value(<_i12.IdWithScore>[]),
-      ) as _i3.Future<List<_i12.IdWithScore>>);
+            _i3.Future<List<_i14.IdWithScore>>.value(<_i14.IdWithScore>[]),
+      ) as _i3.Future<List<_i14.IdWithScore>>);
 
   @override
-  List<_i12.ObjectWithScore<_i6.CountryEntity>> findWithScores() =>
+  List<_i14.ObjectWithScore<_i6.CountryEntity>> findWithScores() =>
       (super.noSuchMethod(
         Invocation.method(
           #findWithScores,
           [],
         ),
-        returnValue: <_i12.ObjectWithScore<_i6.CountryEntity>>[],
-        returnValueForMissingStub: <_i12.ObjectWithScore<_i6.CountryEntity>>[],
-      ) as List<_i12.ObjectWithScore<_i6.CountryEntity>>);
+        returnValue: <_i14.ObjectWithScore<_i6.CountryEntity>>[],
+        returnValueForMissingStub: <_i14.ObjectWithScore<_i6.CountryEntity>>[],
+      ) as List<_i14.ObjectWithScore<_i6.CountryEntity>>);
 
   @override
-  _i3.Future<List<_i12.ObjectWithScore<_i6.CountryEntity>>>
+  _i3.Future<List<_i14.ObjectWithScore<_i6.CountryEntity>>>
       findWithScoresAsync() => (super.noSuchMethod(
             Invocation.method(
               #findWithScoresAsync,
               [],
             ),
             returnValue:
-                _i3.Future<List<_i12.ObjectWithScore<_i6.CountryEntity>>>.value(
-                    <_i12.ObjectWithScore<_i6.CountryEntity>>[]),
+                _i3.Future<List<_i14.ObjectWithScore<_i6.CountryEntity>>>.value(
+                    <_i14.ObjectWithScore<_i6.CountryEntity>>[]),
             returnValueForMissingStub:
-                _i3.Future<List<_i12.ObjectWithScore<_i6.CountryEntity>>>.value(
-                    <_i12.ObjectWithScore<_i6.CountryEntity>>[]),
-          ) as _i3.Future<List<_i12.ObjectWithScore<_i6.CountryEntity>>>);
+                _i3.Future<List<_i14.ObjectWithScore<_i6.CountryEntity>>>.value(
+                    <_i14.ObjectWithScore<_i6.CountryEntity>>[]),
+          ) as _i3.Future<List<_i14.ObjectWithScore<_i6.CountryEntity>>>);
 
   @override
   _i3.Stream<_i6.CountryEntity> stream() => (super.noSuchMethod(
@@ -1785,14 +2499,14 @@ class MockCountryQuery extends _i1.Mock
           #describe,
           [],
         ),
-        returnValue: _i9.dummyValue<String>(
+        returnValue: _i11.dummyValue<String>(
           this,
           Invocation.method(
             #describe,
             [],
           ),
         ),
-        returnValueForMissingStub: _i9.dummyValue<String>(
+        returnValueForMissingStub: _i11.dummyValue<String>(
           this,
           Invocation.method(
             #describe,
@@ -1807,14 +2521,14 @@ class MockCountryQuery extends _i1.Mock
           #describeParameters,
           [],
         ),
-        returnValue: _i9.dummyValue<String>(
+        returnValue: _i11.dummyValue<String>(
           this,
           Invocation.method(
             #describeParameters,
             [],
           ),
         ),
-        returnValueForMissingStub: _i9.dummyValue<String>(
+        returnValueForMissingStub: _i11.dummyValue<String>(
           this,
           Invocation.method(
             #describeParameters,
@@ -1831,14 +2545,14 @@ class MockCountryQuery extends _i1.Mock
           #property,
           [prop],
         ),
-        returnValue: _FakePropertyQuery_6<DartType>(
+        returnValue: _FakePropertyQuery_8<DartType>(
           this,
           Invocation.method(
             #property,
             [prop],
           ),
         ),
-        returnValueForMissingStub: _FakePropertyQuery_6<DartType>(
+        returnValueForMissingStub: _FakePropertyQuery_8<DartType>(
           this,
           Invocation.method(
             #property,
@@ -1859,14 +2573,14 @@ class MockHomeDataQueryBuilder extends _i1.Mock
           #build,
           [],
         ),
-        returnValue: _FakeQuery_7<_i4.HomeDataEntity>(
+        returnValue: _FakeQuery_9<_i4.HomeDataEntity>(
           this,
           Invocation.method(
             #build,
             [],
           ),
         ),
-        returnValueForMissingStub: _FakeQuery_7<_i4.HomeDataEntity>(
+        returnValueForMissingStub: _FakeQuery_9<_i4.HomeDataEntity>(
           this,
           Invocation.method(
             #build,
@@ -1962,14 +2676,14 @@ class MockCountryQueryBuilder extends _i1.Mock
           #build,
           [],
         ),
-        returnValue: _FakeQuery_7<_i6.CountryEntity>(
+        returnValue: _FakeQuery_9<_i6.CountryEntity>(
           this,
           Invocation.method(
             #build,
             [],
           ),
         ),
-        returnValueForMissingStub: _FakeQuery_7<_i6.CountryEntity>(
+        returnValueForMissingStub: _FakeQuery_9<_i6.CountryEntity>(
           this,
           Invocation.method(
             #build,

@@ -5,6 +5,7 @@ import "package:esim_open_source/app/environment/environment_images.dart";
 import "package:esim_open_source/di/locator.dart";
 import "package:esim_open_source/domain/data/response/bundles/country_response_model.dart";
 import "package:esim_open_source/domain/data/response/bundles/purchase_esim_bundle_response_model.dart";
+import "package:esim_open_source/domain/data/response/bundles/supported_ships_response_model.dart";
 import "package:esim_open_source/presentation/extensions/context_extension.dart";
 import "package:esim_open_source/presentation/shared/shared_styles.dart";
 import "package:esim_open_source/presentation/shared/ui_helpers.dart";
@@ -161,8 +162,8 @@ class MyESimView extends StatelessWidget {
               dataValue: item.gprsLimitDisplay ?? "",
               showInstallButton: viewModel.state.showInstallButton,
               showTopUpButton: item.isTopupAllowed ?? true,
-              iconPath: (item.bundleCategory?.isCruise ?? false)
-                  ? EnvironmentImages.globalFlag.fullImagePath
+              iconPath: item.isCruise
+                  ? EnvironmentImages.cruise.fullImagePath
                   : item.icon ?? "",
               price: "",
               validity: item.getValidityDisplay() ?? "",
@@ -170,9 +171,13 @@ class MyESimView extends StatelessWidget {
                 timestamp: int.parse(item.paymentDate ?? "0"),
                 format: DateTimeUtils.ddMmYyyy,
               ),
-              supportedCountries: (item.bundleCategory?.isCruise ?? false)
+              isCruise: item.isCruise,
+              supportedCountries: item.isCruise
                   ? <CountryResponseModel>[]
                   : item.countries ?? <CountryResponseModel>[],
+              supportedShips: item.isCruise
+                  ? item.supportedShips ?? <SupportedShipsResponseModel>[]
+                  : <SupportedShipsResponseModel>[],
               onEditName: () =>
                   unawaited(viewModel.onEditNameClick(iccid: item.iccid ?? "")),
               onTopUpClick: () =>

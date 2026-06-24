@@ -1,11 +1,13 @@
 import "package:easy_localization/easy_localization.dart" show StringTranslateExtension;
 import "package:esim_open_source/app/environment/environment_images.dart";
 import "package:esim_open_source/domain/data/response/bundles/country_response_model.dart";
+import "package:esim_open_source/domain/data/response/bundles/supported_ships_response_model.dart";
 import "package:esim_open_source/presentation/extensions/helper_extensions.dart";
 import "package:esim_open_source/presentation/shared/shared_styles.dart";
 import "package:esim_open_source/presentation/widgets/country_flag_image.dart";
 import "package:esim_open_source/presentation/widgets/main_button.dart";
 import "package:esim_open_source/presentation/widgets/supported_countries_widget.dart";
+import "package:esim_open_source/presentation/widgets/supported_ships_widget.dart";
 import "package:esim_open_source/presentation/widgets/unlimited_data_widget.dart";
 import "package:esim_open_source/translations/locale_keys.g.dart";
 import "package:flutter/foundation.dart";
@@ -18,6 +20,7 @@ class EsimBundleWidget extends StatelessWidget {
     required this.data,
     required this.validFor,
     required this.supportedCountries,
+    required this.supportedShips,
     required this.onPriceButtonClick,
     required this.icon,
     required this.showUnlimitedData,
@@ -32,6 +35,7 @@ class EsimBundleWidget extends StatelessWidget {
   final String validFor;
   final String icon;
   final List<CountryResponseModel> supportedCountries;
+  final List<SupportedShipsResponseModel> supportedShips;
   final bool showArrow;
   final VoidCallback onPriceButtonClick;
   final List<CountryResponseModel> availableCountries;
@@ -153,6 +157,15 @@ class EsimBundleWidget extends StatelessWidget {
                   backgroundColor: greyBackGroundColor(context: context),
                 ),
 
+              // Supported Countries
+              if (supportedShips.isNotEmpty)
+                SupportedShipsWidget(
+                  offset: 20,
+                  ships: supportedShips,
+                  label: LocaleKeys.supportedShips_tittleText.tr(),
+                  backgroundColor: greyBackGroundColor(context: context),
+                ),
+
               const SizedBox(height: 15),
 
               // Price Button
@@ -207,6 +220,7 @@ class EsimBundleWidget extends StatelessWidget {
           availableCountries,
         ),
       )
-      ..add(DiagnosticsProperty<bool>("showUnlimitedData", showUnlimitedData));
+      ..add(DiagnosticsProperty<bool>("showUnlimitedData", showUnlimitedData))
+      ..add(IterableProperty<SupportedShipsResponseModel>("supportedShips", supportedShips));
   }
 }

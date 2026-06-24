@@ -5,21 +5,27 @@ import "package:esim_open_source/data/data_source/home_data_entities/bundle_type
 import "package:esim_open_source/data/data_source/home_data_entities/country_entity.dart";
 import "package:esim_open_source/data/data_source/home_data_entities/home_data_entity.dart";
 import "package:esim_open_source/data/data_source/home_data_entities/region_entity.dart";
+import "package:esim_open_source/data/data_source/home_data_entities/supported_ships_entity.dart";
 import "package:esim_open_source/data/remote/responses/bundles/bundle_response_model_dto.dart";
 import "package:esim_open_source/data/remote/responses/bundles/country_response_model_dto.dart";
 import "package:esim_open_source/data/remote/responses/bundles/home_data_response_model_dto.dart";
 import "package:esim_open_source/data/remote/responses/bundles/regions_response_model_dto.dart";
+import "package:esim_open_source/data/remote/responses/bundles/supported_ships_response_model_dto.dart";
 import "package:esim_open_source/objectbox.g.dart";
 
 class HomeLocalDataSource {
   HomeLocalDataSource(this._store)
       : _homeDataBox = _store.box<HomeDataEntity>(),
         _countryBox = _store.box<CountryEntity>(),
-        _bundleCategoryBox = _store.box<BundleCategoryEntity>();
+        _bundleCategoryBox = _store.box<BundleCategoryEntity>(),
+        _bundleBox = _store.box<BundleEntity>(),
+        _supportedShipsBox = _store.box<SupportedShipsEntity>();
   final Store _store;
   final Box<HomeDataEntity> _homeDataBox;
   final Box<CountryEntity> _countryBox;
   final Box<BundleCategoryEntity> _bundleCategoryBox;
+  final Box<BundleEntity> _bundleBox;
+  final Box<SupportedShipsEntity> _supportedShipsBox;
 
   Future<void> saveHomeData(HomeDataResponseModelDto data) async {
     _store.runInTransaction(TxMode.write, () {
@@ -59,6 +65,7 @@ class HomeLocalDataSource {
     }
   }
 
+
   void _saveBundles(List<BundleResponseModelDto>? bundles, BundleType bundleType,
       HomeDataEntity homeData,) {
     if (bundles == null) {
@@ -77,8 +84,22 @@ class HomeLocalDataSource {
 
     _attachBundleCategory(bundle, bundleEntity);
     _linkBundleCountries(bundle, bundleEntity);
+    _linkBundleSupportedShips(bundle, bundleEntity);
 
     return bundleEntity;
+  }
+
+  void _linkBundleSupportedShips(
+      BundleResponseModelDto bundle, BundleEntity bundleEntity,) {
+    if (bundle.supportedShips == null) {
+      return;
+    }
+
+    for (final SupportedShipsResponseModelDto ship in bundle.supportedShips!) {
+      final SupportedShipsEntity shipEntity =
+          SupportedShipsEntity.fromModel(ship);
+      bundleEntity.supportedShips.add(shipEntity);
+    }
   }
 
   void _attachBundleCategory(
@@ -135,6 +156,8 @@ class HomeLocalDataSource {
       _homeDataBox.removeAll();
       _countryBox.removeAll();
       _bundleCategoryBox.removeAll();
+      _bundleBox.removeAll();
+      _supportedShipsBox.removeAll();
     });
   }
 }

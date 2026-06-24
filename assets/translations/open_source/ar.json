@@ -398,5 +398,7 @@
   "validity_week_plural": "أسابيع",
   "validity_year": "سنة",
   "validity_year_plural": "سنوات",
-  "primaryBundle": "الحزمة الأساسية"
+  "primaryBundle": "الحزمة الأساسية",
+  "supportedShips_tittleText": "السفن المدعومة",
+  "supportedShips_card_tittleText": "السفن المدعومة {ships}"
 }

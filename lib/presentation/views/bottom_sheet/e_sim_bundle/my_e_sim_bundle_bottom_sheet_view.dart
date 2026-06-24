@@ -4,6 +4,7 @@ import "package:esim_open_source/app/environment/environment_images.dart";
 import "package:esim_open_source/di/locator.dart";
 import "package:esim_open_source/domain/data/response/bundles/country_response_model.dart";
 import "package:esim_open_source/domain/data/response/bundles/purchase_esim_bundle_response_model.dart";
+import "package:esim_open_source/domain/data/response/bundles/supported_ships_response_model.dart";
 import "package:esim_open_source/domain/data/response/bundles/transaction_history_response_model.dart";
 import "package:esim_open_source/presentation/extensions/helper_extensions.dart";
 import "package:esim_open_source/presentation/extensions/shimmer_extensions.dart";
@@ -22,6 +23,7 @@ import "package:esim_open_source/presentation/widgets/bundle_header_view.dart";
 import "package:esim_open_source/presentation/widgets/my_card_wrap.dart";
 import "package:esim_open_source/presentation/widgets/padding_widget.dart";
 import "package:esim_open_source/presentation/widgets/supported_countries_card.dart";
+import "package:esim_open_source/presentation/widgets/supported_ships_card.dart";
 import "package:esim_open_source/presentation/widgets/top_up_button.dart";
 import "package:esim_open_source/presentation/widgets/unlimited_data_widget.dart";
 import "package:esim_open_source/presentation/widgets/warning_widget.dart";
@@ -103,14 +105,25 @@ class MyESimBundleBottomSheetView extends StatelessWidget {
                                 ),
                                 isLoading: false,
                               ),
-                              verticalSpaceSmall,
-                              viewModel.isCruise()
-                                  ? Container()
-                                  : SupportedCountriesCard(
-                                      countries:
-                                          viewModel.state.item?.countries ??
-                                              <CountryResponseModel>[],
-                                    ),
+                              if (viewModel.isCruise()) ...<Widget>[
+                                if ((viewModel.state.item?.supportedShips ??
+                                        <SupportedShipsResponseModel>[])
+                                    .isNotEmpty) ...<Widget>[
+                                  verticalSpaceSmall,
+                                  SupportedShipsCard(
+                                    ships:
+                                        viewModel.state.item?.supportedShips ??
+                                            <SupportedShipsResponseModel>[],
+                                  ),
+                                ],
+                              ] else ...<Widget>[
+                                verticalSpaceSmall,
+                                SupportedCountriesCard(
+                                  countries:
+                                      viewModel.state.item?.countries ??
+                                          <CountryResponseModel>[],
+                                ),
+                              ],
                               verticalSpaceSmall,
                               WarningWidget(
                                 warningTextContent:
@@ -162,7 +175,7 @@ class MyESimBundleBottomSheetView extends StatelessWidget {
           isLoading: false,
           hasNavArrow: false,
           imagePath: (item?.bundleCategory?.isCruise ?? false)
-              ? EnvironmentImages.globalFlag.fullImagePath
+              ? EnvironmentImages.cruise.fullImagePath
               : item?.icon ?? "",
           showUnlimitedData: item?.unlimited ?? false,
         ),

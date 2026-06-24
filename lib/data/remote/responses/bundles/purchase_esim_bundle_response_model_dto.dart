@@ -2,9 +2,11 @@ import "package:easy_localization/easy_localization.dart";
 import "package:esim_open_source/data/remote/responses/bundles/bundle_category_response_model_dto.dart";
 import "package:esim_open_source/data/remote/responses/bundles/bundle_response_model_dto.dart";
 import "package:esim_open_source/data/remote/responses/bundles/country_response_model_dto.dart";
+import "package:esim_open_source/data/remote/responses/bundles/supported_ships_response_model_dto.dart";
 import "package:esim_open_source/data/remote/responses/bundles/transaction_history_response_model_dto.dart";
 import "package:esim_open_source/domain/data/response/bundles/country_response_model.dart";
 import "package:esim_open_source/domain/data/response/bundles/purchase_esim_bundle_response_model.dart";
+import "package:esim_open_source/domain/data/response/bundles/supported_ships_response_model.dart";
 import "package:esim_open_source/domain/data/response/bundles/transaction_history_response_model.dart";
 import "package:esim_open_source/presentation/extensions/context_extension.dart";
 import "package:esim_open_source/translations/locale_keys.g.dart";
@@ -111,6 +113,7 @@ class BundleCoverageParamsDto {
     this.validity,
     this.validityLabel,
     this.countries,
+    this.supportedShips,
   });
 
   final num? countCountries;
@@ -119,6 +122,7 @@ class BundleCoverageParamsDto {
   final num? validity;
   final String? validityLabel;
   final List<CountryResponseModelDto>? countries;
+  final List<SupportedShipsResponseModelDto>? supportedShips;
 }
 
 class PurchaseEsimBundleResponseModelParamsDto {
@@ -174,6 +178,7 @@ class PurchaseEsimBundleResponseModelDto {
     String? activityPolicy,
     List<String>? bundleMessage,
     List<CountryResponseModelDto>? countries,
+    List<SupportedShipsResponseModelDto>? supportedShips,
     String? icon,
     List<TransactionHistoryResponseModelDto>? transactionHistory,
   }) {
@@ -208,6 +213,7 @@ class PurchaseEsimBundleResponseModelDto {
     _activityPolicy = activityPolicy;
     _bundleMessage = bundleMessage;
     _countries = countries;
+    _supportedShips = supportedShips;
     _icon = icon;
     _transactionHistory = transactionHistory;
   }
@@ -256,6 +262,13 @@ class PurchaseEsimBundleResponseModelDto {
       });
     }
 
+    if (json["supported_ships"] != null) {
+      _supportedShips = <SupportedShipsResponseModelDto>[];
+      json["supported_ships"].forEach((dynamic v) {
+        _supportedShips?.add(SupportedShipsResponseModelDto.fromJson(v));
+      });
+    }
+
     _icon = json["icon"];
     if (json["transaction_history"] != null) {
       _transactionHistory = <TransactionHistoryResponseModelDto>[];
@@ -297,6 +310,7 @@ class PurchaseEsimBundleResponseModelDto {
   String? _activityPolicy;
   List<String>? _bundleMessage;
   List<CountryResponseModelDto>? _countries;
+  List<SupportedShipsResponseModelDto>? _supportedShips;
   String? _icon;
   List<TransactionHistoryResponseModelDto>? _transactionHistory;
 
@@ -334,6 +348,9 @@ class PurchaseEsimBundleResponseModelDto {
       bundleMessage: bundleMessage,
       countries: countries
           ?.map((CountryResponseModelDto dto) => dto.toDomain())
+          .toList(),
+      supportedShips: supportedShips
+          ?.map((SupportedShipsResponseModelDto dto) => dto.toDomain())
           .toList(),
       icon: icon,
       transactionHistory: transactionHistory?.map((
@@ -380,6 +397,10 @@ class PurchaseEsimBundleResponseModelDto {
         countries: model.countries
             ?.map((CountryResponseModel country) =>
                 CountryResponseModelDto().fromDomain(country),)
+            .toList(),
+        supportedShips: model.supportedShips
+            ?.map((SupportedShipsResponseModel ship) =>
+                SupportedShipsResponseModelDto().fromDomain(ship),)
             .toList(),
         icon: model.icon,
         transactionHistory: model.transactionHistory
@@ -428,6 +449,7 @@ class PurchaseEsimBundleResponseModelDto {
         activityPolicy: params?.bundleInfo?.activityPolicy ?? _activityPolicy,
         bundleMessage: params?.bundleInfo?.bundleMessage ?? _bundleMessage,
         countries: params?.coverage?.countries ?? _countries,
+        supportedShips: params?.coverage?.supportedShips ?? _supportedShips,
         icon: params?.display?.icon ?? _icon,
         transactionHistory:
             params?.orderInfo?.transactionHistory ?? _transactionHistory,
@@ -496,6 +518,8 @@ class PurchaseEsimBundleResponseModelDto {
 
   List<CountryResponseModelDto>? get countries => _countries;
 
+  List<SupportedShipsResponseModelDto>? get supportedShips => _supportedShips;
+
   String? get icon => _icon;
 
   List<TransactionHistoryResponseModelDto>? get transactionHistory =>
@@ -537,6 +561,9 @@ class PurchaseEsimBundleResponseModelDto {
     map["bundle_message"] = _bundleMessage;
     map["countries"] =
         _countries?.map((CountryResponseModelDto v) => v.toJson()).toList();
+    map["supported_ships"] = _supportedShips
+        ?.map((SupportedShipsResponseModelDto v) => v.toJson())
+        .toList();
     map["icon"] = _icon;
     if (_transactionHistory != null) {
       map["transaction_history"] = _transactionHistory

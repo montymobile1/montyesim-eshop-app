@@ -2,6 +2,7 @@ import "package:easy_localization/easy_localization.dart";
 import "package:esim_open_source/app/app.locator.dart";
 import "package:esim_open_source/app/environment/app_environment.dart";
 import "package:esim_open_source/domain/data/response/bundles/country_response_model.dart";
+import "package:esim_open_source/domain/data/response/bundles/supported_ships_response_model.dart";
 import "package:esim_open_source/domain/repository/services/connectivity_service.dart";
 import "package:esim_open_source/presentation/extensions/shimmer_extensions.dart";
 import "package:esim_open_source/presentation/shared/shared_styles.dart";
@@ -13,6 +14,7 @@ import "package:esim_open_source/presentation/views/home_flow_views/my_esim_view
 import "package:esim_open_source/presentation/widgets/bundle_header_view.dart";
 import "package:esim_open_source/presentation/widgets/main_button.dart";
 import "package:esim_open_source/presentation/widgets/supported_countries_widget.dart";
+import "package:esim_open_source/presentation/widgets/supported_ships_widget.dart";
 import "package:esim_open_source/presentation/widgets/top_up_button.dart";
 import "package:esim_open_source/translations/locale_keys.g.dart";
 import "package:flutter/foundation.dart";
@@ -29,6 +31,8 @@ class ESimCurrentPlanItem extends StatelessWidget {
     required this.validity,
     required this.expiryDate,
     required this.supportedCountries,
+    required this.supportedShips,
+    required this.isCruise,
     required this.onEditName,
     required this.statusTextColor,
     required this.statusBgColor,
@@ -56,6 +60,8 @@ class ESimCurrentPlanItem extends StatelessWidget {
   final String validity;
   final String expiryDate;
   final List<CountryResponseModel> supportedCountries;
+  final List<SupportedShipsResponseModel> supportedShips;
+  final bool isCruise;
   final VoidCallback onEditName;
   final VoidCallback onTopUpClick;
   final VoidCallback onQrCodeClick;
@@ -115,14 +121,7 @@ class ESimCurrentPlanItem extends StatelessWidget {
                 isLoading: isLoading,
               ),
               verticalSpaceSmallMedium,
-              !isLoading && supportedCountries.isNotEmpty
-                  ? SupportedCountriesWidget(
-                      countries: supportedCountries,
-                      label: LocaleKeys.supportedCountries_tittleText.tr(),
-                      backgroundColor: greyBackGroundColor(context: context),
-                      isLoading: isLoading,
-                    )
-                  : Container(),
+              _buildSupportedWidget(context),
               verticalSpaceSmallMedium,
               buildBundleButtons(
                 params: BundleButtonsParams(
@@ -141,6 +140,30 @@ class ESimCurrentPlanItem extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Widget _buildSupportedWidget(BuildContext context) {
+    if (isLoading) {
+      return Container();
+    }
+    if (isCruise) {
+      return supportedShips.isNotEmpty
+          ? SupportedShipsWidget(
+              ships: supportedShips,
+              label: LocaleKeys.supportedShips_tittleText.tr(),
+              backgroundColor: greyBackGroundColor(context: context),
+              isLoading: isLoading,
+            )
+          : Container();
+    }
+    return supportedCountries.isNotEmpty
+        ? SupportedCountriesWidget(
+            countries: supportedCountries,
+            label: LocaleKeys.supportedCountries_tittleText.tr(),
+            backgroundColor: greyBackGroundColor(context: context),
+            isLoading: isLoading,
+          )
+        : Container();
   }
 
   @override
@@ -175,6 +198,13 @@ class ESimCurrentPlanItem extends StatelessWidget {
           supportedCountries,
         ),
       )
+      ..add(
+        IterableProperty<SupportedShipsResponseModel>(
+          "supportedShips",
+          supportedShips,
+        ),
+      )
+      ..add(DiagnosticsProperty<bool>("isCruise", isCruise))
       ..add(
         ObjectFlagProperty<VoidCallback>.has("onEditName", onEditName),
       )

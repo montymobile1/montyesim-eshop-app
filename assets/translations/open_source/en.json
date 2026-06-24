@@ -398,5 +398,7 @@
   "validity_week_plural": "weeks",
   "validity_year": "year",
   "validity_year_plural": "years",
-  "primaryBundle": "Primary Bundle"
+  "primaryBundle": "Primary Bundle",
+  "supportedShips_tittleText": "Supported Ships",
+  "supportedShips_card_tittleText": "Supported Ships {ships}"
 }

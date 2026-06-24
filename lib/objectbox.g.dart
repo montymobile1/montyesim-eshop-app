@@ -19,6 +19,7 @@ import 'data/data_source/home_data_entities/bundle_entity.dart';
 import 'data/data_source/home_data_entities/country_entity.dart';
 import 'data/data_source/home_data_entities/home_data_entity.dart';
 import 'data/data_source/home_data_entities/region_entity.dart';
+import 'data/data_source/home_data_entities/supported_ships_entity.dart';
 import 'data/data_source/my_esim_entities/esim_bundle_category_entity.dart';
 import 'data/data_source/my_esim_entities/esim_bundle_entity.dart';
 import 'data/data_source/my_esim_entities/esim_country_entity.dart';
@@ -188,6 +189,11 @@ final _entities = <obx_int.ModelEntity>[
         id: const obx_int.IdUid(1, 9201578340172743855),
         name: 'countries',
         targetId: const obx_int.IdUid(3, 1274828313617314249),
+      ),
+      obx_int.ModelRelation(
+        id: const obx_int.IdUid(9, 344856886260333677),
+        name: 'supportedShips',
+        targetId: const obx_int.IdUid(11, 6374871404947220079),
       ),
     ],
     backlinks: <obx_int.ModelBacklink>[],
@@ -865,6 +871,76 @@ final _entities = <obx_int.ModelEntity>[
     relations: <obx_int.ModelRelation>[],
     backlinks: <obx_int.ModelBacklink>[],
   ),
+  obx_int.ModelEntity(
+    id: const obx_int.IdUid(11, 6374871404947220079),
+    name: 'SupportedShipsEntity',
+    lastPropertyId: const obx_int.IdUid(9, 5089758028089566782),
+    flags: 0,
+    properties: <obx_int.ModelProperty>[
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(1, 728117826206074475),
+        name: 'id',
+        type: 6,
+        flags: 1,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(2, 8303946179660418792),
+        name: 'shipID',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(3, 1371373408319409967),
+        name: 'country',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(4, 1108006746356856674),
+        name: 'iso3Code',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(5, 4497333198352725664),
+        name: 'zoneName',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(6, 8483117538109703406),
+        name: 'countryCode',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(7, 7231187151630594786),
+        name: 'icon',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(8, 1773394784351892358),
+        name: 'operatorList',
+        type: 30,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(9, 5089758028089566782),
+        name: 'alternativeCountry',
+        type: 9,
+        flags: 0,
+      ),
+    ],
+    relations: <obx_int.ModelRelation>[
+      obx_int.ModelRelation(
+        id: const obx_int.IdUid(10, 2038031381627024816),
+        name: 'bundles',
+        targetId: const obx_int.IdUid(2, 3904391743835608439),
+      ),
+    ],
+    backlinks: <obx_int.ModelBacklink>[],
+  ),
 ];
 
 /// Shortcut for [obx.Store.new] that passes [getObjectBoxModel] and for Flutter
@@ -910,9 +986,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
     // Typically, this is done with `dart run build_runner build`.
     generatorVersion: obx_int.GeneratorVersion.v2025_12_16,
     entities: _entities,
-    lastEntityId: const obx_int.IdUid(10, 3152941530312633510),
+    lastEntityId: const obx_int.IdUid(11, 6374871404947220079),
     lastIndexId: const obx_int.IdUid(7, 4294559215289422009),
-    lastRelationId: const obx_int.IdUid(8, 1064166245855025265),
+    lastRelationId: const obx_int.IdUid(10, 2038031381627024816),
     lastSequenceId: const obx_int.IdUid(0, 0),
     retiredEntityUids: const [],
     retiredIndexUids: const [9208819239418557921],
@@ -1007,6 +1083,8 @@ obx_int.ModelDefinition getObjectBoxModel() {
       ],
       toManyRelations: (BundleEntity object) => {
         obx_int.RelInfo<BundleEntity>.toMany(1, object.id): object.countries,
+        obx_int.RelInfo<BundleEntity>.toMany(9, object.id):
+            object.supportedShips,
       },
       getId: (BundleEntity object) => object.id,
       setId: (BundleEntity object, int id) {
@@ -1159,6 +1237,11 @@ obx_int.ModelDefinition getObjectBoxModel() {
           object.countries,
           store,
           obx_int.RelInfo<BundleEntity>.toMany(1, object.id),
+        );
+        obx_int.InternalToManyAccess.setRelInfo<BundleEntity>(
+          object.supportedShips,
+          store,
+          obx_int.RelInfo<BundleEntity>.toMany(9, object.id),
         );
         return object;
       },
@@ -2073,6 +2156,105 @@ obx_int.ModelDefinition getObjectBoxModel() {
         return object;
       },
     ),
+    SupportedShipsEntity: obx_int.EntityDefinition<SupportedShipsEntity>(
+      model: _entities[10],
+      toOneRelations: (SupportedShipsEntity object) => [],
+      toManyRelations: (SupportedShipsEntity object) => {
+        obx_int.RelInfo<SupportedShipsEntity>.toMany(10, object.id):
+            object.bundles,
+      },
+      getId: (SupportedShipsEntity object) => object.id,
+      setId: (SupportedShipsEntity object, int id) {
+        object.id = id;
+      },
+      objectToFB: (SupportedShipsEntity object, fb.Builder fbb) {
+        final shipIDOffset = object.shipID == null
+            ? null
+            : fbb.writeString(object.shipID!);
+        final countryOffset = object.country == null
+            ? null
+            : fbb.writeString(object.country!);
+        final iso3CodeOffset = object.iso3Code == null
+            ? null
+            : fbb.writeString(object.iso3Code!);
+        final zoneNameOffset = object.zoneName == null
+            ? null
+            : fbb.writeString(object.zoneName!);
+        final countryCodeOffset = object.countryCode == null
+            ? null
+            : fbb.writeString(object.countryCode!);
+        final iconOffset = object.icon == null
+            ? null
+            : fbb.writeString(object.icon!);
+        final operatorListOffset = object.operatorList == null
+            ? null
+            : fbb.writeList(
+                object.operatorList!
+                    .map(fbb.writeString)
+                    .toList(growable: false),
+              );
+        final alternativeCountryOffset = object.alternativeCountry == null
+            ? null
+            : fbb.writeString(object.alternativeCountry!);
+        fbb.startTable(10);
+        fbb.addInt64(0, object.id);
+        fbb.addOffset(1, shipIDOffset);
+        fbb.addOffset(2, countryOffset);
+        fbb.addOffset(3, iso3CodeOffset);
+        fbb.addOffset(4, zoneNameOffset);
+        fbb.addOffset(5, countryCodeOffset);
+        fbb.addOffset(6, iconOffset);
+        fbb.addOffset(7, operatorListOffset);
+        fbb.addOffset(8, alternativeCountryOffset);
+        fbb.finish(fbb.endTable());
+        return object.id;
+      },
+      objectFromFB: (obx.Store store, ByteData fbData) {
+        final buffer = fb.BufferContext(fbData);
+        final rootOffset = buffer.derefObject(0);
+        final shipIDParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGetNullable(buffer, rootOffset, 6);
+        final countryParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGetNullable(buffer, rootOffset, 8);
+        final iso3CodeParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGetNullable(buffer, rootOffset, 10);
+        final zoneNameParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGetNullable(buffer, rootOffset, 12);
+        final countryCodeParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGetNullable(buffer, rootOffset, 14);
+        final alternativeCountryParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGetNullable(buffer, rootOffset, 20);
+        final iconParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGetNullable(buffer, rootOffset, 16);
+        final operatorListParam = const fb.ListReader<String>(
+          fb.StringReader(asciiOptimization: true),
+          lazy: false,
+        ).vTableGetNullable(buffer, rootOffset, 18);
+        final object = SupportedShipsEntity(
+          shipID: shipIDParam,
+          country: countryParam,
+          iso3Code: iso3CodeParam,
+          zoneName: zoneNameParam,
+          countryCode: countryCodeParam,
+          alternativeCountry: alternativeCountryParam,
+          icon: iconParam,
+          operatorList: operatorListParam,
+        )..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
+        obx_int.InternalToManyAccess.setRelInfo<SupportedShipsEntity>(
+          object.bundles,
+          store,
+          obx_int.RelInfo<SupportedShipsEntity>.toMany(10, object.id),
+        );
+        return object;
+      },
+    ),
   };
 
   return obx_int.ModelDefinition(model, bindings);
@@ -2198,6 +2380,12 @@ class BundleEntity_ {
   static final countries = obx.QueryRelationToMany<BundleEntity, CountryEntity>(
     _entities[1].relations[0],
   );
+
+  /// see [BundleEntity.supportedShips]
+  static final supportedShips =
+      obx.QueryRelationToMany<BundleEntity, SupportedShipsEntity>(
+        _entities[1].relations[1],
+      );
 }
 
 /// [CountryEntity] entity fields to define ObjectBox queries.
@@ -2716,4 +2904,60 @@ class EsimCountryEntity_ {
   static final alternativeCountry = obx.QueryStringProperty<EsimCountryEntity>(
     _entities[9].properties[8],
   );
+}
+
+/// [SupportedShipsEntity] entity fields to define ObjectBox queries.
+class SupportedShipsEntity_ {
+  /// See [SupportedShipsEntity.id].
+  static final id = obx.QueryIntegerProperty<SupportedShipsEntity>(
+    _entities[10].properties[0],
+  );
+
+  /// See [SupportedShipsEntity.shipID].
+  static final shipID = obx.QueryStringProperty<SupportedShipsEntity>(
+    _entities[10].properties[1],
+  );
+
+  /// See [SupportedShipsEntity.country].
+  static final country = obx.QueryStringProperty<SupportedShipsEntity>(
+    _entities[10].properties[2],
+  );
+
+  /// See [SupportedShipsEntity.iso3Code].
+  static final iso3Code = obx.QueryStringProperty<SupportedShipsEntity>(
+    _entities[10].properties[3],
+  );
+
+  /// See [SupportedShipsEntity.zoneName].
+  static final zoneName = obx.QueryStringProperty<SupportedShipsEntity>(
+    _entities[10].properties[4],
+  );
+
+  /// See [SupportedShipsEntity.countryCode].
+  static final countryCode = obx.QueryStringProperty<SupportedShipsEntity>(
+    _entities[10].properties[5],
+  );
+
+  /// See [SupportedShipsEntity.icon].
+  static final icon = obx.QueryStringProperty<SupportedShipsEntity>(
+    _entities[10].properties[6],
+  );
+
+  /// See [SupportedShipsEntity.operatorList].
+  static final operatorList =
+      obx.QueryStringVectorProperty<SupportedShipsEntity>(
+        _entities[10].properties[7],
+      );
+
+  /// See [SupportedShipsEntity.alternativeCountry].
+  static final alternativeCountry =
+      obx.QueryStringProperty<SupportedShipsEntity>(
+        _entities[10].properties[8],
+      );
+
+  /// see [SupportedShipsEntity.bundles]
+  static final bundles =
+      obx.QueryRelationToMany<SupportedShipsEntity, BundleEntity>(
+        _entities[10].relations[0],
+      );
 }

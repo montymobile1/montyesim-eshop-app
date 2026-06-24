@@ -1,9 +1,9 @@
 import "package:easy_localization/easy_localization.dart" show StringTranslateExtension;
-import "package:esim_open_source/app/environment/app_environment.dart";
 import "package:esim_open_source/app/environment/environment_images.dart";
 import "package:esim_open_source/di/locator.dart";
 import "package:esim_open_source/domain/data/response/bundles/bundle_response_model.dart";
 import "package:esim_open_source/domain/data/response/bundles/country_response_model.dart";
+import "package:esim_open_source/domain/data/response/bundles/supported_ships_response_model.dart";
 import "package:esim_open_source/presentation/extensions/helper_extensions.dart";
 import "package:esim_open_source/presentation/setup_bottom_sheet_ui.dart";
 import "package:esim_open_source/presentation/shared/shared_styles.dart";
@@ -21,6 +21,7 @@ import "package:esim_open_source/presentation/widgets/main_input_field.dart";
 import "package:esim_open_source/presentation/widgets/my_phone_input.dart";
 import "package:esim_open_source/presentation/widgets/padding_widget.dart";
 import "package:esim_open_source/presentation/widgets/supported_countries_card.dart";
+import "package:esim_open_source/presentation/widgets/supported_ships_card.dart";
 import "package:esim_open_source/presentation/widgets/unlimited_data_widget.dart";
 import "package:esim_open_source/translations/locale_keys.g.dart";
 import "package:flutter/foundation.dart";
@@ -83,7 +84,7 @@ class BundleDetailBottomSheetView extends StatelessWidget {
                             bundleExpiryDate: "",
                           ),
                           verticalSpaceSmall,
-                          _buildCountriesCard(viewModel.bundle),
+                          _buildSupportedCard(viewModel.bundle),
                           _buildPromoCodeSection(context, viewModel),
                           BundleTitleContentView(
                             titleText:
@@ -135,7 +136,7 @@ class BundleDetailBottomSheetView extends StatelessWidget {
 
   String? _getBundleHeaderImagePath(BundleResponseModel? bundle) {
     final bool isCruise = bundle?.isCruise ?? false;
-    return isCruise ? EnvironmentImages.globalFlag.fullImagePath : bundle?.icon;
+    return isCruise ? EnvironmentImages.cruise.fullImagePath : bundle?.icon;
   }
 
   Widget _buildDataAndPrice(BuildContext context, BundleResponseModel? bundle) {
@@ -173,28 +174,20 @@ class BundleDetailBottomSheetView extends StatelessWidget {
     );
   }
 
-  Widget _buildCountriesCard(BundleResponseModel? bundle) {
-    if (!_shouldShowCountriesCard(bundle)) {
-      return const SizedBox.shrink();
+  Widget _buildSupportedCard(BundleResponseModel? bundle) {
+    if (bundle?.isCruise ?? false) {
+      final List<SupportedShipsResponseModel> ships =
+          bundle?.supportedShips ?? <SupportedShipsResponseModel>[];
+      return ships.isEmpty
+          ? const SizedBox.shrink()
+          : SupportedShipsCard(ships: ships);
     }
-    return SupportedCountriesCard(
-      countries: _getCountriesToDisplay(bundle),
-    );
-  }
 
-  bool _shouldShowCountriesCard(BundleResponseModel? bundle) {
-    final bool isNotCruiseType = bundle?.bundleCategory?.type?.toLowerCase() !=
-        AppEnvironment.appEnvironmentHelper.cruiseIdentifier;
-    final bool hasCountries = bundle?.countries?.isNotEmpty ?? false;
-    return isNotCruiseType && hasCountries;
-  }
-
-  List<CountryResponseModel> _getCountriesToDisplay(BundleResponseModel? bundle) {
-    final bool isCruiseCategory = bundle?.bundleCategory?.isCruise ?? false;
-    if (isCruiseCategory) {
-      return <CountryResponseModel>[];
-    }
-    return bundle?.countries ?? <CountryResponseModel>[];
+    final List<CountryResponseModel> countries =
+        bundle?.countries ?? <CountryResponseModel>[];
+    return countries.isEmpty
+        ? const SizedBox.shrink()
+        : SupportedCountriesCard(countries: countries);
   }
 
   Widget _buildPromoCodeSection(

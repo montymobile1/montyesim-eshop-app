@@ -2,6 +2,7 @@ import "package:easy_localization/easy_localization.dart"
     show StringTranslateExtension;
 import "package:esim_open_source/domain/data/response/bundles/bundle_category_response_model.dart";
 import "package:esim_open_source/domain/data/response/bundles/country_response_model.dart";
+import "package:esim_open_source/domain/data/response/bundles/supported_ships_response_model.dart";
 import "package:esim_open_source/translations/locale_keys.g.dart"
     show LocaleKeys;
 
@@ -22,6 +23,7 @@ class BundleResponseModel {
     this.validity,
     this.validityLabel,
     this.countries,
+    this.supportedShips,
     this.icon,
     this.label,
   });
@@ -42,6 +44,7 @@ class BundleResponseModel {
   final String? validityLabel;
   final String? icon;
   final List<CountryResponseModel>? countries;
+  final List<SupportedShipsResponseModel>? supportedShips;
   final String? label;
 
   bool get isCruise => bundleCategory?.isCruise ?? false;
@@ -98,6 +101,16 @@ class BundleResponseModel {
             alternativeCountry: "Albania",
           ),
         ],
+        supportedShips: <SupportedShipsResponseModel>[
+          SupportedShipsResponseModel(
+            country: "Albania",
+            countryCode: "Unknown",
+            iso3Code: "ALB",
+            icon: flagApiIcon,
+            zoneName: "Unknown",
+            alternativeCountry: "Albania",
+          ),
+        ],
       ),
       BundleResponseModel(
         icon: placeholderIcon,
@@ -120,6 +133,7 @@ class BundleResponseModel {
         validity: 1,
         validityLabel: mockValidityLabel,
         countries: <CountryResponseModel>[],
+        supportedShips: <SupportedShipsResponseModel>[],
       ),
       BundleResponseModel(
         icon: placeholderIcon,
@@ -142,6 +156,7 @@ class BundleResponseModel {
         validity: 1,
         validityLabel: mockValidityLabel,
         countries: <CountryResponseModel>[],
+        supportedShips: <SupportedShipsResponseModel>[],
       ),
       BundleResponseModel(
         icon: placeholderIcon,
@@ -181,6 +196,7 @@ class BundleResponseModel {
             alternativeCountry: "Türkiye",
           ),
         ],
+        supportedShips: <SupportedShipsResponseModel>[],
       ),
       BundleResponseModel(
         icon: placeholderIcon,
@@ -203,6 +219,7 @@ class BundleResponseModel {
         validity: 1,
         validityLabel: mockValidityLabel,
         countries: <CountryResponseModel>[],
+        supportedShips: <SupportedShipsResponseModel>[],
       ),
     ];
 
