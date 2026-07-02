@@ -1,4 +1,3 @@
-import "package:esim_open_source/domain/data/response/bundles/country_response_model.dart";
 import "package:esim_open_source/domain/data/response/bundles/supported_ships_response_model.dart";
 
 class SupportedShipsResponseModelDto {

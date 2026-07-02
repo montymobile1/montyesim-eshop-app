@@ -165,6 +165,7 @@
   "rewardHistory_titleText": "Rewards History",
   "rewardHistory_emptyTitleText": "No rewards yet",
   "rewardHistory_emptyContentText": "You haven't earned any rewards yet. Start referring your friends to get rewarded!",
+  "rewardHistory_emptyContentText_hiddenReferral": "You haven't earned any rewards yet.",
   "rewardHistory_referTypeTitle": "Refer & Earn",
   "rewardHistory_cashbackTypeTitle": "Cashback",
   "userGuideView_titleText" : "User Guide",

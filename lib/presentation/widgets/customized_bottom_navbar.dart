@@ -112,9 +112,7 @@ class _BaseFlutterBottomNavBarState extends State<BaseFlutterBottomNavBar> {
               ),
             ),
           ),
-          widget.isKeyboardVisible
-              ? Container()
-              : Stack(
+          if (widget.isKeyboardVisible) Container() else Stack(
                   children: <Widget>[
                     // Positioned.fill(
                     //   child: Align(
@@ -145,37 +143,44 @@ class _BaseFlutterBottomNavBarState extends State<BaseFlutterBottomNavBar> {
                       ),
                       child: Container(
                         color: Colors.white,
-                        height: widget.height,
-                        child: TabBar(
-                          controller: widget.tabController,
-                          overlayColor: WidgetStateProperty.all(
-                            widget.selectedColor?.withValues(alpha: 0.015) ??
-                                Colors.transparent,
-                          ),
-                          onTap: (int index) {
-                            if (widget.tabController?.isLocked ?? false) {
-                              return;
-                            }
-                            // if (mounted) {
-                            setState(() {
-                              _currentIndex = index;
-                            });
-                            // }
-                          },
-                          indicatorColor:
-                              getColorForIndex(selectedIndex: _currentIndex),
-                          indicator: TopIndicator(
-                            color: getColorForIndex(
-                              selectedIndex: _currentIndex,
+                        child: SafeArea(
+                          maintainBottomViewPadding: true,
+                          top: false,
+                          child: Container(
+                            color: Colors.white,
+                            height: widget.height,
+                            child: TabBar(
+                              controller: widget.tabController,
+                              overlayColor: WidgetStateProperty.all(
+                                widget.selectedColor?.withValues(alpha: 0.015) ??
+                                    Colors.transparent,
+                              ),
+                              onTap: (int index) {
+                                if (widget.tabController?.isLocked ?? false) {
+                                  return;
+                                }
+                                // if (mounted) {
+                                setState(() {
+                                  _currentIndex = index;
+                                });
+                                // }
+                              },
+                              indicatorColor:
+                                  getColorForIndex(selectedIndex: _currentIndex),
+                              indicator: TopIndicator(
+                                color: getColorForIndex(
+                                  selectedIndex: _currentIndex,
+                                ),
+                                strokeWidth: 2,
+                                additionalWidth: 5,
+                              ),
+                              indicatorWeight: 1,
+                              tabs: generateTabs(
+                                selectedIndex: _currentIndex,
+                                tabsIconData: widget.tabsIconData,
+                                tabsText: widget.tabsText,
+                              ),
                             ),
-                            strokeWidth: 2,
-                            additionalWidth: 5,
-                          ),
-                          indicatorWeight: 1,
-                          tabs: generateTabs(
-                            selectedIndex: _currentIndex,
-                            tabsIconData: widget.tabsIconData,
-                            tabsText: widget.tabsText,
                           ),
                         ),
                       ),

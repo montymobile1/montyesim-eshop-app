@@ -65,21 +65,27 @@ class RewardsHistoryView extends StatelessWidget {
                         title: LocaleKeys.rewardHistory_emptyTitleText.tr(),
                         imagePath:
                             EnvironmentImages.emptyRewardHistory.fullImagePath,
-                        content: LocaleKeys.rewardHistory_emptyContentText.tr(),
-                        button: MainButton.bannerButton(
-                          params: BannerButtonParams(
-                            title: LocaleKeys.rewardHistory_referTypeTitle
-                                .tr() /*viewModel.selectedType.titleText*/,
-                            action: () async => viewModel.onEmptyStateTapped(),
-                            themeColor: themeColor,
-                            textColor:
-                                enabledMainButtonTextColor(context: context),
-                            buttonColor: enabledMainButtonColor(context: context),
-                            titleTextStyle: captionOneBoldTextStyle(
-                              context: context,
-                            ),
-                          ),
-                        ),
+                        content: viewModel.isReferEarnEnabled()
+                            ? LocaleKeys.rewardHistory_emptyContentText.tr()
+                            : LocaleKeys.rewardHistory_emptyContentText_hiddenReferral.tr(),
+                        button: viewModel.isReferEarnEnabled()
+                            ? MainButton.bannerButton(
+                                params: BannerButtonParams(
+                                  title: LocaleKeys.rewardHistory_referTypeTitle.tr(),
+                                  action: () async =>
+                                      viewModel.onEmptyStateTapped(),
+                                  themeColor: themeColor,
+                                  textColor: enabledMainButtonTextColor(
+                                    context: context,
+                                  ),
+                                  buttonColor:
+                                      enabledMainButtonColor(context: context),
+                                  titleTextStyle: captionOneBoldTextStyle(
+                                    context: context,
+                                  ),
+                                ),
+                              )
+                            : Container(),
                       ),
                     ),
                     separatorBuilder: (BuildContext context, int index) =>

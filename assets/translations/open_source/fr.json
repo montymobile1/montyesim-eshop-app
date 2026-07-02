@@ -165,6 +165,7 @@
   "rewardHistory_titleText": "Historique des récompenses",
   "rewardHistory_emptyTitleText": "Aucune récompense pour le moment",
   "rewardHistory_emptyContentText": "Vous n’avez encore gagné aucune récompense. Commencez à parrainer vos amis pour être récompensé !",
+  "rewardHistory_emptyContentText_hiddenReferral": "Vous n’avez encore gagné aucune récompense.",
   "rewardHistory_referTypeTitle": "Parrainez et gagnez",
   "rewardHistory_cashbackTypeTitle": "Cashback",
   "userGuideView_titleText": "Guide d’utilisation",

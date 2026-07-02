@@ -39,7 +39,7 @@ Future<void> main() async {
       test("all sections are not hidden", () {
         for (final MyWalletViewSections section
             in MyWalletViewSections.values) {
-          expect(section.isSectionHidden, isFalse);
+          expect(section.isSectionEnabled, isTrue);
         }
       });
 

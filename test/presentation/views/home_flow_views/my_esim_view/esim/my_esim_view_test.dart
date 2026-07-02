@@ -1,8 +1,15 @@
 import "package:easy_localization/easy_localization.dart";
+import "package:esim_open_source/domain/data/response/bundles/bundle_category_response_model.dart";
+import "package:esim_open_source/domain/data/response/bundles/country_response_model.dart";
 import "package:esim_open_source/domain/data/response/bundles/purchase_esim_bundle_response_model.dart";
+import "package:esim_open_source/domain/data/response/bundles/supported_ships_response_model.dart";
+import "package:esim_open_source/domain/repository/api_user_repository.dart";
 import "package:esim_open_source/domain/repository/services/flutter_channel_handler_service.dart";
+import "package:esim_open_source/domain/util/resource.dart";
 import "package:esim_open_source/presentation/views/home_flow_views/my_esim_view/my_esim_view.dart";
 import "package:esim_open_source/presentation/views/home_flow_views/my_esim_view/my_esim_view_model.dart";
+import "package:esim_open_source/presentation/views/home_flow_views/my_esim_view/widgets/e_sim_current_plan_item.dart";
+import "package:esim_open_source/presentation/views/home_flow_views/my_esim_view/widgets/e_sim_expired_plan_item.dart";
 import "package:esim_open_source/presentation/widgets/custom_tab_view.dart";
 import "package:esim_open_source/presentation/widgets/empty_content.dart";
 import "package:esim_open_source/translations/locale_keys.g.dart";
@@ -144,17 +151,21 @@ Future<void> main() async {
       onViewModelReadyMock(viewName: "MyEsimView");
 
       // Setup mock responses
-      when(mockBottomSheetService.showCustomSheet(
-        variant: anyNamed("variant"),
-        isScrollControlled: anyNamed("isScrollControlled"),
-        ignoreSafeArea: anyNamed("ignoreSafeArea"),
-        data: anyNamed("data"),
-      ),).thenAnswer((_) async => null);
+      when(
+        mockBottomSheetService.showCustomSheet(
+          variant: anyNamed("variant"),
+          isScrollControlled: anyNamed("isScrollControlled"),
+          ignoreSafeArea: anyNamed("ignoreSafeArea"),
+          data: anyNamed("data"),
+        ),
+      ).thenAnswer((_) async => null);
 
-      when(mockFlutterChannelHandlerService.openEsimSetupForAndroid(
-        smdpAddress: anyNamed("smdpAddress"),
-        activationCode: anyNamed("activationCode"),
-      ),).thenAnswer((_) async => true);
+      when(
+        mockFlutterChannelHandlerService.openEsimSetupForAndroid(
+          smdpAddress: anyNamed("smdpAddress"),
+          activationCode: anyNamed("activationCode"),
+        ),
+      ).thenAnswer((_) async => true);
 
       // Build the widget first
       await tester.pumpWidget(createTestableWidget(const MyESimView()));
@@ -164,7 +175,8 @@ Future<void> main() async {
       expect(viewModel.state.currentESimList.length, equals(0));
 
       // Add test data to trigger item builders
-      final PurchaseEsimBundleResponseModel testBundle = PurchaseEsimBundleResponseModel(
+      final PurchaseEsimBundleResponseModel testBundle =
+          PurchaseEsimBundleResponseModel(
         iccid: "test-iccid",
         displayTitle: "Test Bundle",
         paymentDate: "1640995200000",
@@ -178,59 +190,73 @@ Future<void> main() async {
 
       // Test onEditName callback directly through view model
       await viewModel.onEditNameClick(iccid: "test-iccid");
-      verify(mockBottomSheetService.showCustomSheet(
-        variant: anyNamed("variant"),
-        isScrollControlled: anyNamed("isScrollControlled"),
-        data: anyNamed("data"),
-      ),).called(1);
+      verify(
+        mockBottomSheetService.showCustomSheet(
+          variant: anyNamed("variant"),
+          isScrollControlled: anyNamed("isScrollControlled"),
+          data: anyNamed("data"),
+        ),
+      ).called(1);
 
       // Reset mock for next test
       reset(mockBottomSheetService);
-      when(mockBottomSheetService.showCustomSheet(
-        variant: anyNamed("variant"),
-        isScrollControlled: anyNamed("isScrollControlled"),
-        data: anyNamed("data"),
-      ),).thenAnswer((_) async => null);
+      when(
+        mockBottomSheetService.showCustomSheet(
+          variant: anyNamed("variant"),
+          isScrollControlled: anyNamed("isScrollControlled"),
+          data: anyNamed("data"),
+        ),
+      ).thenAnswer((_) async => null);
 
       // Test onTopUpClick callback
       await viewModel.onTopUpClick(iccid: "test-iccid");
-      verify(mockBottomSheetService.showCustomSheet(
-        variant: anyNamed("variant"),
-        isScrollControlled: anyNamed("isScrollControlled"),
-        data: anyNamed("data"),
-      ),).called(1);
+      verify(
+        mockBottomSheetService.showCustomSheet(
+          variant: anyNamed("variant"),
+          isScrollControlled: anyNamed("isScrollControlled"),
+          data: anyNamed("data"),
+        ),
+      ).called(1);
 
       // Reset mock for next test
       reset(mockBottomSheetService);
-      when(mockBottomSheetService.showCustomSheet(
-        variant: anyNamed("variant"),
-        isScrollControlled: anyNamed("isScrollControlled"),
-        data: anyNamed("data"),
-      ),).thenAnswer((_) async => null);
+      when(
+        mockBottomSheetService.showCustomSheet(
+          variant: anyNamed("variant"),
+          isScrollControlled: anyNamed("isScrollControlled"),
+          data: anyNamed("data"),
+        ),
+      ).thenAnswer((_) async => null);
 
       // Test onConsumptionClick callback
       await viewModel.onConsumptionClick(iccid: "test-iccid");
-      verify(mockBottomSheetService.showCustomSheet(
-        variant: anyNamed("variant"),
-        isScrollControlled: anyNamed("isScrollControlled"),
-        data: anyNamed("data"),
-      ),).called(1);
+      verify(
+        mockBottomSheetService.showCustomSheet(
+          variant: anyNamed("variant"),
+          isScrollControlled: anyNamed("isScrollControlled"),
+          data: anyNamed("data"),
+        ),
+      ).called(1);
 
       // Reset mock for next test
       reset(mockBottomSheetService);
-      when(mockBottomSheetService.showCustomSheet(
-        variant: anyNamed("variant"),
-        isScrollControlled: anyNamed("isScrollControlled"),
-        data: anyNamed("data"),
-      ),).thenAnswer((_) async => null);
+      when(
+        mockBottomSheetService.showCustomSheet(
+          variant: anyNamed("variant"),
+          isScrollControlled: anyNamed("isScrollControlled"),
+          data: anyNamed("data"),
+        ),
+      ).thenAnswer((_) async => null);
 
       // Test onQrCodeClick callback
       await viewModel.onQrCodeClick(iccid: "test-iccid");
-      verify(mockBottomSheetService.showCustomSheet(
-        variant: anyNamed("variant"),
-        isScrollControlled: anyNamed("isScrollControlled"),
-        data: anyNamed("data"),
-      ),).called(1);
+      verify(
+        mockBottomSheetService.showCustomSheet(
+          variant: anyNamed("variant"),
+          isScrollControlled: anyNamed("isScrollControlled"),
+          data: anyNamed("data"),
+        ),
+      ).called(1);
 
       // Test onInstallClick callback
       await viewModel.onInstallClick(iccid: "test-iccid");
@@ -255,10 +281,11 @@ Future<void> main() async {
 
       // Test that the widget was created with the callback
       expect(
-          tester
-              .widget<MyESimView>(find.byType(MyESimView))
-              .onRequestDataPlansTab,
-          isNotNull,);
+        tester
+            .widget<MyESimView>(find.byType(MyESimView))
+            .onRequestDataPlansTab,
+        isNotNull,
+      );
 
       // The callback would be triggered through user interaction or view model state changes
       // For coverage, we can verify it's properly passed to the widget
@@ -270,12 +297,14 @@ Future<void> main() async {
       onViewModelReadyMock(viewName: "MyEsimView");
 
       // Setup mocks
-      when(mockBottomSheetService.showCustomSheet(
-        variant: anyNamed("variant"),
-        isScrollControlled: anyNamed("isScrollControlled"),
-        ignoreSafeArea: anyNamed("ignoreSafeArea"),
-        data: anyNamed("data"),
-      ),).thenAnswer((_) async => null);
+      when(
+        mockBottomSheetService.showCustomSheet(
+          variant: anyNamed("variant"),
+          isScrollControlled: anyNamed("isScrollControlled"),
+          ignoreSafeArea: anyNamed("ignoreSafeArea"),
+          data: anyNamed("data"),
+        ),
+      ).thenAnswer((_) async => null);
 
       // Build widget first
       await tester.pumpWidget(createTestableWidget(const MyESimView()));
@@ -285,7 +314,8 @@ Future<void> main() async {
       expect(find.byType(MyESimView), findsOneWidget);
 
       // Add test data after widget is built
-      final PurchaseEsimBundleResponseModel testBundle = PurchaseEsimBundleResponseModel(
+      final PurchaseEsimBundleResponseModel testBundle =
+          PurchaseEsimBundleResponseModel(
         iccid: "test-iccid",
         displayTitle: "Test Bundle",
         displaySubtitle: "Test Subtitle",
@@ -305,15 +335,191 @@ Future<void> main() async {
 
       // Test callbacks directly to ensure coverage of callback logic
       await viewModel.onEditNameClick(iccid: "test-iccid");
-      verify(mockBottomSheetService.showCustomSheet(
-        variant: anyNamed("variant"),
-        isScrollControlled: anyNamed("isScrollControlled"),
-        data: anyNamed("data"),
-      ),).called(1);
+      verify(
+        mockBottomSheetService.showCustomSheet(
+          variant: anyNamed("variant"),
+          isScrollControlled: anyNamed("isScrollControlled"),
+          data: anyNamed("data"),
+        ),
+      ).called(1);
 
       // Test that the view can handle the callback assignments
       // This covers the lambda function assignments in the view
       expect(find.byType(MyESimView), findsOneWidget);
+    });
+  });
+
+  group("MyESimView Item Builder Coverage", () {
+    late MyESimViewModel viewModel;
+    late MockApiUserRepository mockApiUserRepository;
+    late MockBottomSheetService mockBottomSheetService;
+
+    // Two non-expired (one normal, one cruise) and two expired bundles so the
+    // GetUserPurchasedEsims fetch populates both lists once the view is ready.
+    List<PurchaseEsimBundleResponseModel> buildBundles() {
+      return <PurchaseEsimBundleResponseModel>[
+        PurchaseEsimBundleResponseModel(
+          iccid: "normal-iccid",
+          orderStatus: "active",
+          displayTitle: "Normal Bundle",
+          displaySubtitle: "Normal Subtitle",
+          paymentDate: "1640995200000",
+          gprsLimitDisplay: "1GB",
+          validityLabel: "DAYS",
+          validity: 30,
+          isTopupAllowed: true,
+          icon: "",
+          countries: <CountryResponseModel>[],
+        ),
+        PurchaseEsimBundleResponseModel(
+          iccid: "cruise-iccid",
+          orderStatus: "inactive",
+          displayTitle: "Cruise Bundle",
+          displaySubtitle: "Cruise Subtitle",
+          paymentDate: "1640995200000",
+          unlimited: true,
+          bundleCategory: BundleCategoryResponseModel(type: "CRUISE"),
+          supportedShips: <SupportedShipsResponseModel>[],
+        ),
+        PurchaseEsimBundleResponseModel(
+          iccid: "expired-iccid-1",
+          orderStatus: "expired",
+          displayTitle: "Expired Bundle 1",
+          displaySubtitle: "Expired Subtitle 1",
+          paymentDate: "1640995200000",
+          gprsLimitDisplay: "1GB",
+          validityLabel: "DAYS",
+          validity: 30,
+          bundleExpired: true,
+          icon: "",
+        ),
+        PurchaseEsimBundleResponseModel(
+          iccid: "expired-iccid-2",
+          orderStatus: "expired",
+          displayTitle: "Expired Bundle 2",
+          displaySubtitle: "Expired Subtitle 2",
+          paymentDate: "1640995200000",
+          unlimited: true,
+          bundleExpired: true,
+          icon: "",
+        ),
+      ];
+    }
+
+    setUp(() async {
+      viewModel = locator<MyESimViewModel>();
+      mockApiUserRepository =
+          locator<ApiUserRepository>() as MockApiUserRepository;
+      mockBottomSheetService =
+          locator<BottomSheetService>() as MockBottomSheetService;
+    });
+
+    testWidgets("renders current plan items and exercises their callbacks",
+        (WidgetTester tester) async {
+      // Arrange — stub the fetch so refreshScreen populates the lists, keeping
+      // the item widgets in the tree (covers _currentPlans itemBuilder).
+      onViewModelReadyMock(viewName: "MyEsimView");
+      when(mockApiUserRepository.getMyEsims()).thenAnswer(
+        (_) async => Resource<List<PurchaseEsimBundleResponseModel>?>.success(
+          buildBundles(),
+          message: "Success",
+        ),
+      );
+      when(
+        mockBottomSheetService.showCustomSheet(
+          variant: anyNamed("variant"),
+          isScrollControlled: anyNamed("isScrollControlled"),
+          ignoreSafeArea: anyNamed("ignoreSafeArea"),
+          enableDrag: anyNamed("enableDrag"),
+          data: anyNamed("data"),
+        ),
+      ).thenAnswer((_) async => null);
+
+      // Act
+      await tester.pumpWidget(
+        createTestableWidget(
+          const MediaQuery(
+            data: MediaQueryData(size: Size(1200, 1600)),
+            child: MyESimView(),
+          ),
+        ),
+      );
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 500));
+      tester.takeException(); // Consume layout/overflow exceptions
+
+      // Assert the cruise + normal current plan items rendered.
+      expect(find.byType(ESimCurrentPlanItem), findsWidgets);
+      expect(viewModel.state.currentESimList.length, equals(2));
+
+      // Invoke each callback the view wires up so the closures are covered.
+      final ESimCurrentPlanItem currentItem =
+          tester.widget<ESimCurrentPlanItem>(
+        find.byType(ESimCurrentPlanItem).first,
+      )
+            ..onEditName()
+            ..onTopUpClick()
+            ..onConsumptionClick()
+            ..onQrCodeClick()
+            ..onInstallClick()
+            ..onItemClick();
+      expect(currentItem, isNotNull);
+
+      await tester.pump();
+      tester.takeException();
+    });
+
+    testWidgets("renders expired plan items after switching to expired tab",
+        (WidgetTester tester) async {
+      // Arrange
+      onViewModelReadyMock(viewName: "MyEsimView");
+      when(mockApiUserRepository.getMyEsims()).thenAnswer(
+        (_) async => Resource<List<PurchaseEsimBundleResponseModel>?>.success(
+          buildBundles(),
+          message: "Success",
+        ),
+      );
+      when(
+        mockBottomSheetService.showCustomSheet(
+          variant: anyNamed("variant"),
+          isScrollControlled: anyNamed("isScrollControlled"),
+          ignoreSafeArea: anyNamed("ignoreSafeArea"),
+          enableDrag: anyNamed("enableDrag"),
+          data: anyNamed("data"),
+        ),
+      ).thenAnswer((_) async => null);
+
+      // Act
+      await tester.pumpWidget(
+        createTestableWidget(
+          const MediaQuery(
+            data: MediaQueryData(size: Size(1200, 1600)),
+            child: MyESimView(),
+          ),
+        ),
+      );
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 500));
+      tester.takeException();
+
+      // Switch to the expired tab (covers the onTabChange callback).
+      await tester.tap(find.text(LocaleKeys.expired_plans.tr()));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 500));
+      tester.takeException();
+
+      // Assert the expired itemBuilder ran and exercise its callback.
+      expect(find.byType(ESimExpiredPlanItem), findsWidgets);
+      expect(viewModel.state.selectedTabIndex, equals(1));
+
+      tester
+          .widget<ESimExpiredPlanItem>(
+            find.byType(ESimExpiredPlanItem).first,
+          )
+          .onItemClick();
+
+      await tester.pump();
+      tester.takeException();
     });
   });
 }

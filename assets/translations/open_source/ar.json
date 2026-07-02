@@ -165,6 +165,7 @@
   "rewardHistory_titleText": "سجل المكافآت",
   "rewardHistory_emptyTitleText": "لا توجد مكافآت حتى الآن",
   "rewardHistory_emptyContentText": "لم تحصل على أي مكافأة حتى الآن. ابدأ بإحالة الأصدقاء للحصول على مكافأة!",
+  "rewardHistory_emptyContentText_hiddenReferral": "لم تحصل على أي مكافأة حتى الآن.",
   "rewardHistory_referTypeTitle": "قم بالإحالة واكسب",
   "rewardHistory_cashbackTypeTitle": "الاسترداد النقدي",
   "userGuideView_titleText" : "دليل المستخدم",

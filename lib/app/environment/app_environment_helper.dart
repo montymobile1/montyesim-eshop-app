@@ -20,6 +20,10 @@ class AppEnvironmentHelper {
     this.enableCurrencySelection = true,
     this.environmentTheme = EnvironmentTheme.openSource,
     this.enableLanguageSelection = true,
+    this.enableVoucherCode = true,
+    this.enableReferEarn = true,
+    this.enableRewardHistory = true,
+    this.enableUpgradeWallet = true,
     this.enableAppleSignIn = true,
     this.enableGoogleSignIn = true,
     this.enableFacebookSignIn = true,
@@ -56,6 +60,10 @@ class AppEnvironmentHelper {
   bool enableCurrencySelection;
   bool enableLanguageSelection;
   bool enableGuestFlowPurchase;
+  bool enableVoucherCode;
+  bool enableReferEarn;
+  bool enableRewardHistory;
+  bool enableUpgradeWallet;
   List<PaymentType> defaultPaymentTypeList;
 
   //social media flags

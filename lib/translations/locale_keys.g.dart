@@ -169,6 +169,7 @@ abstract class  LocaleKeys {
   static const String rewardHistory_titleText = "rewardHistory_titleText";
   static const String rewardHistory_emptyTitleText = "rewardHistory_emptyTitleText";
   static const String rewardHistory_emptyContentText = "rewardHistory_emptyContentText";
+  static const String rewardHistory_emptyContentText_hiddenReferral = "rewardHistory_emptyContentText_hiddenReferral";
   static const String rewardHistory_referTypeTitle = "rewardHistory_referTypeTitle";
   static const String rewardHistory_cashbackTypeTitle = "rewardHistory_cashbackTypeTitle";
   static const String userGuideView_titleText = "userGuideView_titleText";

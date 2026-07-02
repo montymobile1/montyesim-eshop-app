@@ -1,6 +1,7 @@
 import "dart:developer";
 
 import "package:easy_localization/easy_localization.dart";
+import "package:esim_open_source/app/environment/app_environment.dart";
 import "package:esim_open_source/app/environment/environment_images.dart";
 import "package:esim_open_source/presentation/enums/bottomsheet_type.dart";
 import "package:esim_open_source/presentation/setup_bottom_sheet_ui.dart";
@@ -19,7 +20,18 @@ enum MyWalletViewSections {
   rewardHistory,
   upgradeWallet;
 
-  bool get isSectionHidden => false;
+  bool get isSectionEnabled {
+    switch (this) {
+      case MyWalletViewSections.voucherCode:
+        return AppEnvironment.appEnvironmentHelper.enableVoucherCode;
+      case MyWalletViewSections.referEarn:
+        return AppEnvironment.appEnvironmentHelper.enableReferEarn;
+      case MyWalletViewSections.rewardHistory:
+        return AppEnvironment.appEnvironmentHelper.enableRewardHistory;
+      case MyWalletViewSections.upgradeWallet:
+        return AppEnvironment.appEnvironmentHelper.enableUpgradeWallet;
+    }
+  }
 
   String get sectionTitle {
     switch (this) {

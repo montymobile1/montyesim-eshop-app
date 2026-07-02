@@ -1,6 +1,7 @@
 import "dart:async";
 
 import "package:esim_open_source/app/app.locator.dart";
+import "package:esim_open_source/app/environment/app_environment.dart";
 import "package:esim_open_source/domain/data/response/promotion/reward_history_response_model.dart";
 import "package:esim_open_source/domain/repository/api_promotion_repository.dart";
 import "package:esim_open_source/domain/use_case/base_use_case.dart";
@@ -132,5 +133,9 @@ class RewardsHistoryViewModel extends BaseModel {
     //       ReferalStoriesView(StackedService.navigatorKey!.currentContext!)
     //           .storyViewerArgs,
     // );
+  }
+
+  bool isReferEarnEnabled() {
+    return AppEnvironment.appEnvironmentHelper.enableReferEarn;
   }
 }
