@@ -60,6 +60,7 @@ class MainInputField extends StatefulWidget {
     this.errorIcon,
     this.errorMessage,
     this.errorBorderColor,
+    this.borderColor,
     this.textFieldHeight = 55,
     this.hintTextStyle,
     this.onTap,
@@ -120,6 +121,7 @@ class MainInputField extends StatefulWidget {
   final String? labelTitleText;
   final String? errorMessage;
   final Color? errorBorderColor;
+  final Color? borderColor;
   final IconData? errorIcon;
   final double textFieldHeight;
   final TextStyle? hintTextStyle;
@@ -225,6 +227,7 @@ class MainInputField extends StatefulWidget {
         controller: controller,
         backgroundColor: appearanceConfig?.backgroundColor,
         errorMessage: textConfig?.errorMessage,
+        borderColor: appearanceConfig?.borderColor,
         labelStyle: appearanceConfig?.labelStyle,
         enterPressed: () {
           FocusManager.instance.primaryFocus?.unfocus();
@@ -371,6 +374,7 @@ class MainInputField extends StatefulWidget {
         DiagnosticsProperty<TextStyle?>("hintTextStyle", hintTextStyle),)..add(
         ObjectFlagProperty<VoidCallback?>.has("onTap", onTap),)..add(
         ColorProperty("errorBorderColor", errorBorderColor),)..add(
+        ColorProperty("borderColor", borderColor),)..add(
         DiagnosticsProperty<IconData?>("errorIcon", errorIcon),)..add(
       DiagnosticsProperty<bool>("clearSearchEnabled", clearSearchEnabled),);
   }
@@ -562,6 +566,10 @@ class _MainInputFieldState extends State<MainInputField> {
   }
 
   Color _getBoxShadowColor(BuildContext context) {
+    if (widget.borderColor != null) {
+      return widget.borderColor!;
+    }
+
     final bool hasNoError =
         widget.errorMessage == null || widget.errorMessage == "";
     if (hasNoError) {
@@ -719,6 +727,7 @@ class MainInputFieldAppearanceConfig {
     this.textFieldHeight,
     this.errorColor,
     this.errorIcon,
+    this.borderColor,
   });
 
   final TextStyle? labelStyle;
@@ -728,6 +737,7 @@ class MainInputFieldAppearanceConfig {
   final double? textFieldHeight;
   final Color? errorColor;
   final IconData? errorIcon;
+  final Color? borderColor;
 }
 
 /// Configuration class for behavior-related properties of MainInputField

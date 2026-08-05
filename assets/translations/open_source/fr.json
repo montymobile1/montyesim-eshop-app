@@ -358,6 +358,8 @@
   "paymentSelection_walletText": "Portefeuille",
   "paymentSelection_dcbText": "Facturation directe opérateur",
   "topUpWallet_error": "Échec de la recharge du portefeuille",
+  "logout_error": "Échec de la déconnexion, veuillez réessayer",
+  "deleteAccount_error": "Échec de la suppression du compte, veuillez réessayer",
   "topUpWallet_success": "Recharge du portefeuille réussie",
   "confirmation_languageTitle": "Changer de langue",
   "confirmation_languageContent": "Êtes-vous sûr de vouloir changer la langue en",

@@ -362,6 +362,8 @@ abstract class  LocaleKeys {
   static const String paymentSelection_walletText = "paymentSelection_walletText";
   static const String paymentSelection_dcbText = "paymentSelection_dcbText";
   static const String topUpWallet_error = "topUpWallet_error";
+  static const String logout_error = "logout_error";
+  static const String deleteAccount_error = "deleteAccount_error";
   static const String topUpWallet_success = "topUpWallet_success";
   static const String confirmation_languageTitle = "confirmation_languageTitle";
   static const String confirmation_languageContent = "confirmation_languageContent";

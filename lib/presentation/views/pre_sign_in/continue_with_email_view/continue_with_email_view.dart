@@ -124,6 +124,9 @@ class ContinueWithEmailView extends StatelessWidget {
                               ),
                               appearanceConfig: MainInputFieldAppearanceConfig(
                                 backgroundColor: context.appColors.baseWhite,
+                                borderColor: viewModel.errorMessage.isEmpty
+                                    ? null
+                                    : context.appColors.error_500,
                                 labelStyle: bodyNormalTextStyle(
                                   context: context,
                                   fontColor: secondaryTextColor(context: context),
@@ -165,8 +168,28 @@ class ContinueWithEmailView extends StatelessWidget {
                                   },
                                   phoneController: viewModel.phoneController,
                                   validateRequired: true,
+                                  focusedBorderColor:
+                                      viewModel.errorMessage.isEmpty
+                                          ? context.appColors.grey_200!
+                                          : context.appColors.error_500!,
+                                  enabledBorderColor:
+                                      viewModel.errorMessage.isEmpty
+                                          ? context.appColors.grey_200!
+                                          : context.appColors.error_500!,
                                 ),
                               ],
+                            )
+                          : Container(),
+                      viewModel.errorMessage.isNotEmpty
+                          ? PaddingWidget.applySymmetricPadding(
+                              vertical: 5,
+                              child: Text(
+                                viewModel.errorMessage,
+                                style: captionOneNormalTextStyle(
+                                  context: context,
+                                  fontColor: errorTextColor(context: context),
+                                ),
+                              ),
                             )
                           : Container(),
                       verticalSpaceMediumLarge,

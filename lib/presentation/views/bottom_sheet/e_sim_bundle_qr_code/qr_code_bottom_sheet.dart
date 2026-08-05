@@ -231,7 +231,7 @@ class ESimQrBottomSheet extends StatelessWidget {
                 ),
               ),
             )
-          : Text(LocaleKeys.error_generating_qr_code.tr()),
+          : Text(viewModel.qrCodeErrorMessage),
     );
   }
 

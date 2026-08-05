@@ -359,6 +359,8 @@
   "paymentSelection_walletText": "Wallet",
   "paymentSelection_dcbText": "Direct Carrier Billing",
   "topUpWallet_error": "Top up wallet failed",
+  "logout_error": "Logout failed, please try again",
+  "deleteAccount_error": "Failed to delete account, please try again",
   "topUpWallet_success": "Top up wallet success",
   "confirmation_languageTitle": "Change Language",
   "confirmation_languageContent": "Are you sure you want to change the language to",

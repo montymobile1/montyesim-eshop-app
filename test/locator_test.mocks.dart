@@ -17812,6 +17812,15 @@ class MockContinueWithEmailViewModel extends _i1.Mock
   }
 
   @override
+  String get errorMessage => (super.noSuchMethod(
+        Invocation.getter(#errorMessage),
+        returnValue: _i48.dummyValue<String>(
+          this,
+          Invocation.getter(#errorMessage),
+        ),
+      ) as String);
+
+  @override
   _i38.LoginUseCase get loginUseCase => (super.noSuchMethod(
         Invocation.getter(#loginUseCase),
         returnValue: _FakeLoginUseCase_42(

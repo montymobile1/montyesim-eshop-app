@@ -29,6 +29,11 @@ class ContinueWithEmailViewModel extends BaseModel {
   InAppRedirection? redirection;
   final LoginType _localLoginType;
 
+  String _errorMessage = "";
+
+  @override
+  String get errorMessage => _errorMessage;
+
   //#region UseCases
   final LoginUseCase loginUseCase = LoginUseCase(locator<ApiAuthRepository>());
 
@@ -96,6 +101,7 @@ class ContinueWithEmailViewModel extends BaseModel {
   void _validateForm() {
     final String emailAddress = _state.emailController.text;
     _state.emailErrorMessage = validateEmailAddress(emailAddress);
+    _errorMessage = "";
 
     switch (_localLoginType) {
       case LoginType.email:
@@ -121,6 +127,7 @@ class ContinueWithEmailViewModel extends BaseModel {
     required bool isValid,
   }) {
     _state.isValidPhoneNumber = isValid;
+    _errorMessage = "";
 
     switch (_localLoginType) {
       case LoginType.email:
@@ -243,10 +250,12 @@ class ContinueWithEmailViewModel extends BaseModel {
       notifyListeners();
       return;
     }
-    handleError(response);
+    _errorMessage = response.message ?? "";
+    notifyListeners();
   }
 
   Future<void> _loginWithEmail() async {
+    _errorMessage = "";
     setViewState(ViewState.busy);
 
     String? otpChannel = _determineOtpChannel();

@@ -359,6 +359,8 @@
   "paymentSelection_walletText": "محفظتي",
   "paymentSelection_dcbText": "الفوترة عبر مزود الخدمة",
   "topUpWallet_error": "فشل في تعبئة المحفظة",
+  "logout_error": "فشل تسجيل الخروج، يُرجى المحاولة مرة أخرى",
+  "deleteAccount_error": "فشل حذف الحساب، يُرجى المحاولة مرة أخرى",
   "topUpWallet_success": "تم تعبئة المحفظة بنجاح",
   "confirmation_languageTitle": "تغيير اللغة",
   "confirmation_languageContent": "هل أنت متأكد أنك تريد تغيير اللغة إلى",

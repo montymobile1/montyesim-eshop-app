@@ -16,6 +16,8 @@ class MyPhoneInput extends StatelessWidget {
     this.validateRequired = false,
     this.validateEmpty = false,
     this.enabled = true,
+    this.enabledBorderColor,
+    this.focusedBorderColor,
     super.key,
   });
 
@@ -29,6 +31,8 @@ class MyPhoneInput extends StatelessWidget {
   final bool validateRequired;
   final bool validateEmpty;
   final bool enabled;
+  final Color? enabledBorderColor;
+  final Color? focusedBorderColor;
 
   @override
   Widget build(BuildContext context) {
@@ -87,8 +91,12 @@ class MyPhoneInput extends StatelessWidget {
         : context.appColors.grey_300;
 
     final Color borderColor = enabled
-        ? context.appColors.grey_200!
+        ? (enabledBorderColor ?? context.appColors.grey_200!)
         : context.appColors.grey_100!;
+
+    final Color focusedColor = enabled
+        ? (focusedBorderColor ?? context.appColors.grey_200!)
+        : borderColor;
 
     return InputDecoration(
       focusColor: Colors.transparent,
@@ -112,15 +120,15 @@ class MyPhoneInput extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
       ),
       errorBorder: OutlineInputBorder(
-        borderSide: BorderSide(
-          color: enabled ? context.appColors.grey_200! : borderColor,
-        ),
+        borderSide: BorderSide(color: borderColor),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      focusedErrorBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: focusedColor),
         borderRadius: BorderRadius.circular(12),
       ),
       focusedBorder: OutlineInputBorder(
-        borderSide: BorderSide(
-          color: enabled ? context.appColors.grey_200! : borderColor,
-        ),
+        borderSide: BorderSide(color: focusedColor),
         borderRadius: BorderRadius.circular(12),
       ),
       fillColor: enabled ? null : context.appColors.grey_50,
@@ -182,7 +190,9 @@ class MyPhoneInput extends StatelessWidget {
       )
       ..add(DiagnosticsProperty<bool>("validateRequired", validateRequired))
       ..add(DiagnosticsProperty<bool>("validateEmpty", validateEmpty))
-      ..add(DiagnosticsProperty<bool>("enabled", enabled));
+      ..add(DiagnosticsProperty<bool>("enabled", enabled))
+      ..add(ColorProperty("enabledBorderColor", enabledBorderColor))
+      ..add(ColorProperty("focusedBorderColor", focusedBorderColor));
   }
 }
 

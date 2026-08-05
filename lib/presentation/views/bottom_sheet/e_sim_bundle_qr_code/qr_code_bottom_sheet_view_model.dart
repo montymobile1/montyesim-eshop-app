@@ -31,7 +31,14 @@ class QrCodeBottomSheetViewModel extends BaseModel {
   String? smDpAddress = "";
   String? activationCode = "";
 
+  String? _qrCodeApiErrorMessage;
+
   String get qrCodeValue => "LPA:1\$$smDpAddress\$$activationCode";
+
+  String get qrCodeErrorMessage =>
+      _qrCodeApiErrorMessage == null || _qrCodeApiErrorMessage!.isEmpty
+          ? LocaleKeys.error_generating_qr_code.tr()
+          : _qrCodeApiErrorMessage!;
 
   //#endregion
 
@@ -98,6 +105,7 @@ class QrCodeBottomSheetViewModel extends BaseModel {
       response,
       onSuccess: (Resource<PurchaseEsimBundleResponseModel?> result) async {
         if (result.data == null) {
+          _qrCodeApiErrorMessage = response.message;
           handleError(response);
           return;
         }
@@ -105,6 +113,7 @@ class QrCodeBottomSheetViewModel extends BaseModel {
         activationCode = result.data?.activationCode ?? "";
       },
       onFailure: (Resource<PurchaseEsimBundleResponseModel?> result) async {
+        _qrCodeApiErrorMessage = response.message;
         await handleError(response);
         completer(SheetResponse<MainBottomSheetResponse>());
       },

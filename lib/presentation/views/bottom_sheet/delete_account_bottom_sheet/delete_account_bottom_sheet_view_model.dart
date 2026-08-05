@@ -11,6 +11,7 @@ import "package:esim_open_source/domain/util/resource.dart";
 import "package:esim_open_source/presentation/enums/login_type.dart";
 import "package:esim_open_source/presentation/enums/view_state.dart";
 import "package:esim_open_source/presentation/extensions/helper_extensions.dart";
+import "package:esim_open_source/presentation/shared/ui_helpers.dart";
 import "package:esim_open_source/presentation/views/base/base_model.dart";
 import "package:esim_open_source/translations/locale_keys.g.dart";
 import "package:flutter/cupertino.dart";
@@ -105,7 +106,14 @@ class DeleteAccountBottomSheetViewModel extends BaseModel {
     await handleResponse(
       deleteAccountResponse,
       onSuccess: (Resource<EmptyResponse?> response) async {},
-      onFailure: (Resource<EmptyResponse?> response) async {},
+      onFailure: (Resource<EmptyResponse?> response) async {
+        final String? apiMessage = response.message;
+        await showToast(
+          apiMessage == null || apiMessage.isEmpty
+              ? LocaleKeys.deleteAccount_error.tr()
+              : apiMessage,
+        );
+      },
     );
 
     setViewState(ViewState.idle);

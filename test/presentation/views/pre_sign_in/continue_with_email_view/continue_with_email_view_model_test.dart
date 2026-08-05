@@ -359,6 +359,72 @@ Future<void> main() async {
       expect(viewModel.otpSendErrorMessage, isNull);
     });
 
+    test("errorMessage is empty by default", () {
+      // Assert
+      expect(viewModel.errorMessage, isEmpty);
+    });
+
+    test("errorMessage is populated after a failed login", () async {
+      // Arrange
+      viewModel.state?.isTermsChecked = true;
+      viewModel.state?.emailController.text = "test@example.com";
+      viewModel.state?.emailErrorMessage = "";
+      when(
+        locator<ApiAuthRepository>().login(
+          email: anyNamed("email"),
+          phoneNumber: anyNamed("phoneNumber"),
+        ),
+      ).thenAnswer(
+        (_) async => Resource<OtpResponseModel?>.error(
+          "Your account has been temporarily restricted.",
+          error: GeneralError(
+            message: "Your account has been temporarily restricted.",
+            errorCode: 403,
+          ),
+        ),
+      );
+
+      // Act
+      await viewModel.loginButtonTapped();
+
+      // Assert
+      expect(
+        viewModel.errorMessage,
+        "Your account has been temporarily restricted.",
+      );
+    });
+
+    test("errorMessage clears once the user edits the email field", () async {
+      // Arrange
+      onViewModelReadyMock();
+      viewModel.onViewModelReady();
+      viewModel.state?.isTermsChecked = true;
+      viewModel.state?.emailController.text = "test@example.com";
+      viewModel.state?.emailErrorMessage = "";
+      when(
+        locator<ApiAuthRepository>().login(
+          email: anyNamed("email"),
+          phoneNumber: anyNamed("phoneNumber"),
+        ),
+      ).thenAnswer(
+        (_) async => Resource<OtpResponseModel?>.error(
+          "Your account has been temporarily restricted.",
+          error: GeneralError(
+            message: "Your account has been temporarily restricted.",
+            errorCode: 403,
+          ),
+        ),
+      );
+      await viewModel.loginButtonTapped();
+      expect(viewModel.errorMessage, isNotEmpty);
+
+      // Act
+      viewModel.state?.emailController.text = "test2@example.com";
+
+      // Assert
+      expect(viewModel.errorMessage, isEmpty);
+    });
+
     test("selectOtpChannel updates channel and clears error message", () {
       // Arrange
       viewModel.state?.otpSendErrorMessage = "some error";
@@ -760,7 +826,7 @@ Future<void> main() async {
       expect(vm.otpSendErrorMessage, isNotNull);
     });
 
-    test("loginWithEmail non-429 error for email type calls handleError",
+    test("loginWithEmail non-429 error for email type sets errorMessage inline",
         () async {
       // Arrange
       when(locator<AppConfigurationService>().getLoginType)
@@ -775,17 +841,58 @@ Future<void> main() async {
         ),
       ).thenAnswer(
         (_) async => Resource<OtpResponseModel?>.error(
-          "Server error",
-          error: GeneralError(message: "Server error", errorCode: 500),
+          "Your account has been temporarily restricted. Contact support "
+          "for further assistance",
+          error: GeneralError(
+            message: "Your account has been temporarily restricted. "
+                "Contact support for further assistance",
+            errorCode: 403,
+          ),
         ),
       );
-      when(locator<DialogService>().showDialog(
-        title: anyNamed("title"),
-        description: anyNamed("description"),
-      )).thenAnswer((_) async => null);
 
-      // Act — should not throw
+      // Act
       await viewModel.loginButtonTapped();
+
+      // Assert
+      expect(
+        viewModel.errorMessage,
+        "Your account has been temporarily restricted. Contact support "
+        "for further assistance",
+      );
+    });
+
+    test("validateNumber clears errorMessage after a failed login", () async {
+      // Arrange
+      final ContinueWithEmailViewModel vm = ContinueWithEmailViewModel(
+        localLoginType: LoginType.phoneNumber,
+      );
+      vm.state?.isTermsChecked = true;
+      vm.validateNumber(code: "1", number: "1234567890", isValid: true);
+      when(
+        locator<ApiAuthRepository>().login(
+          email: anyNamed("email"),
+          phoneNumber: anyNamed("phoneNumber"),
+        ),
+      ).thenAnswer(
+        (_) async => Resource<OtpResponseModel?>.error(
+          "Your account has been temporarily restricted. Contact support "
+          "for further assistance",
+          error: GeneralError(
+            message: "Your account has been temporarily restricted. "
+                "Contact support for further assistance",
+            errorCode: 403,
+          ),
+        ),
+      );
+      await vm.loginButtonTapped();
+      expect(vm.errorMessage, isNotEmpty);
+
+      // Act
+      vm.validateNumber(code: "1", number: "1234567891", isValid: true);
+
+      // Assert
+      expect(vm.errorMessage, "");
     });
 
     test("loginWithEmail with valid phone includes phone number in args",

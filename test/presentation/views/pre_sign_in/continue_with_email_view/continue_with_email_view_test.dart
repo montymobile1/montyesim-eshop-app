@@ -2,15 +2,18 @@
 
 import "package:esim_open_source/presentation/enums/login_type.dart";
 import "package:esim_open_source/presentation/enums/view_state.dart";
+import "package:esim_open_source/presentation/extensions/context_extension.dart";
 import "package:esim_open_source/presentation/shared/in_app_redirection_heper.dart";
 import "package:esim_open_source/presentation/views/pre_sign_in/continue_with_email_view/continue_with_email_view.dart";
 import "package:esim_open_source/presentation/views/pre_sign_in/continue_with_email_view/continue_with_email_view_model.dart";
 import "package:esim_open_source/presentation/widgets/main_button.dart";
 import "package:esim_open_source/presentation/widgets/main_input_field.dart";
+import "package:esim_open_source/presentation/widgets/my_phone_input.dart";
 import "package:flutter/cupertino.dart";
 import "package:flutter/foundation.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:mockito/mockito.dart";
+import "package:phone_input/phone_input_package.dart";
 
 import "../../../../helpers/view_helper.dart";
 import "../../../../locator_test.dart";
@@ -30,6 +33,7 @@ Future<void> main() async {
     when(mockViewModel.state).thenReturn(ContinueWithEmailState());
     when(mockViewModel.showEmailField).thenReturn(true);
     when(mockViewModel.showPhoneField).thenReturn(false);
+    when(mockViewModel.errorMessage).thenReturn("");
   });
 
   group("View Testing", () {
@@ -314,6 +318,121 @@ Future<void> main() async {
 
       // Assert
       expect(find.text("OTP failed via email"), findsOneWidget);
+    });
+
+    testWidgets(
+        "displays errorMessage text after both fields and reddens both "
+        "borders when emailAndPhone login fails", (WidgetTester tester) async {
+      // Arrange
+      when(mockViewModel.showEmailField).thenReturn(true);
+      when(mockViewModel.showPhoneField).thenReturn(true);
+      when(mockViewModel.phoneController).thenReturn(
+        PhoneController(const PhoneNumber(isoCode: IsoCode.LB, nsn: "")),
+      );
+      when(mockViewModel.errorMessage).thenReturn(
+        "Your account has been temporarily restricted. Contact support "
+        "for further assistance",
+      );
+
+      // Act
+      await tester.pumpWidget(
+        createTestableWidget(
+          const ContinueWithEmailView(localLoginType: LoginType.emailAndPhone),
+        ),
+      );
+      await tester.pumpAndSettle(const Duration(milliseconds: 500));
+
+      // Assert
+      expect(
+        find.text(
+          "Your account has been temporarily restricted. Contact support "
+          "for further assistance",
+        ),
+        findsOneWidget,
+      );
+
+      final BuildContext context = tester.element(find.byType(MyPhoneInput));
+      final Color errorColor = context.appColors.error_500!;
+
+      final MainInputField emailField =
+          tester.widget<MainInputField>(find.byType(MainInputField));
+      expect(emailField.borderColor, errorColor);
+
+      final MyPhoneInput phoneField =
+          tester.widget<MyPhoneInput>(find.byType(MyPhoneInput));
+      expect(phoneField.enabledBorderColor, errorColor);
+      expect(phoneField.focusedBorderColor, errorColor);
+    });
+
+    testWidgets("does not redden field borders when errorMessage is empty",
+        (WidgetTester tester) async {
+      // Arrange
+      when(mockViewModel.showEmailField).thenReturn(true);
+      when(mockViewModel.showPhoneField).thenReturn(true);
+      when(mockViewModel.phoneController).thenReturn(
+        PhoneController(const PhoneNumber(isoCode: IsoCode.LB, nsn: "")),
+      );
+
+      // Act
+      await tester.pumpWidget(
+        createTestableWidget(
+          const ContinueWithEmailView(localLoginType: LoginType.emailAndPhone),
+        ),
+      );
+      await tester.pumpAndSettle(const Duration(milliseconds: 500));
+
+      // Assert
+      final BuildContext context = tester.element(find.byType(MyPhoneInput));
+      final Color greyColor = context.appColors.grey_200!;
+
+      final MainInputField emailField =
+          tester.widget<MainInputField>(find.byType(MainInputField));
+      expect(emailField.borderColor, isNull);
+
+      final MyPhoneInput phoneField =
+          tester.widget<MyPhoneInput>(find.byType(MyPhoneInput));
+      expect(phoneField.enabledBorderColor, greyColor);
+      expect(phoneField.focusedBorderColor, greyColor);
+    });
+
+    testWidgets(
+        "displays errorMessage text after phone field for phoneNumber "
+        "login when there is no email field", (WidgetTester tester) async {
+      // Arrange
+      when(mockViewModel.showEmailField).thenReturn(false);
+      when(mockViewModel.showPhoneField).thenReturn(true);
+      when(mockViewModel.phoneController).thenReturn(
+        PhoneController(const PhoneNumber(isoCode: IsoCode.LB, nsn: "")),
+      );
+      when(mockViewModel.errorMessage).thenReturn(
+        "Your account has been temporarily restricted. Contact support "
+        "for further assistance",
+      );
+
+      // Act
+      await tester.pumpWidget(
+        createTestableWidget(
+          const ContinueWithEmailView(localLoginType: LoginType.phoneNumber),
+        ),
+      );
+      await tester.pumpAndSettle(const Duration(milliseconds: 500));
+
+      // Assert
+      expect(
+        find.text(
+          "Your account has been temporarily restricted. Contact support "
+          "for further assistance",
+        ),
+        findsOneWidget,
+      );
+
+      final BuildContext context = tester.element(find.byType(MyPhoneInput));
+      final Color errorColor = context.appColors.error_500!;
+
+      final MyPhoneInput phoneField =
+          tester.widget<MyPhoneInput>(find.byType(MyPhoneInput));
+      expect(phoneField.enabledBorderColor, errorColor);
+      expect(phoneField.focusedBorderColor, errorColor);
     });
 
     testWidgets("getLoginInstructionText returns text for phoneNumber",
