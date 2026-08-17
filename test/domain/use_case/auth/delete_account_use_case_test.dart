@@ -34,16 +34,17 @@ Future<void> main() async {
       // Arrange
       final EmptyResponse emptyResponse = EmptyResponse();
 
-      final Resource<EmptyResponse> expectedResponse =
-          TestDataFactory.createSuccessResource<EmptyResponse>(
+      final Resource<EmptyResponse?> expectedResponse =
+          TestDataFactory.createSuccessResource<EmptyResponse?>(
         data: emptyResponse,
         message: "Account deleted successfully",
       );
 
-      when(mockRepository.deleteAccount()).thenAnswer((_) async => expectedResponse);
+      when(mockRepository.deleteAccount())
+          .thenAnswer((_) async => expectedResponse);
 
       // Act
-      final Resource<EmptyResponse> result = await useCase.execute(NoParams());
+      final Resource<EmptyResponse?> result = await useCase.execute(NoParams());
 
       // Assert
       expect(result.resourceType, equals(ResourceType.success));
@@ -55,15 +56,16 @@ Future<void> main() async {
 
     test("execute returns error resource when repository fails", () async {
       // Arrange
-      final Resource<EmptyResponse> expectedResponse =
-          TestDataFactory.createErrorResource<EmptyResponse>(
+      final Resource<EmptyResponse?> expectedResponse =
+          TestDataFactory.createErrorResource<EmptyResponse?>(
         message: "Failed to delete account",
       );
 
-      when(mockRepository.deleteAccount()).thenAnswer((_) async => expectedResponse);
+      when(mockRepository.deleteAccount())
+          .thenAnswer((_) async => expectedResponse);
 
       // Act
-      final Resource<EmptyResponse> result = await useCase.execute(NoParams());
+      final Resource<EmptyResponse?> result = await useCase.execute(NoParams());
 
       // Assert
       expect(result.resourceType, equals(ResourceType.error));
@@ -74,16 +76,17 @@ Future<void> main() async {
 
     test("execute returns error for unauthorized access", () async {
       // Arrange
-      final Resource<EmptyResponse> expectedResponse =
-          TestDataFactory.createErrorResource<EmptyResponse>(
+      final Resource<EmptyResponse?> expectedResponse =
+          TestDataFactory.createErrorResource<EmptyResponse?>(
         message: "Unauthorized",
         code: 401,
       );
 
-      when(mockRepository.deleteAccount()).thenAnswer((_) async => expectedResponse);
+      when(mockRepository.deleteAccount())
+          .thenAnswer((_) async => expectedResponse);
 
       // Act
-      final Resource<EmptyResponse> result = await useCase.execute(NoParams());
+      final Resource<EmptyResponse?> result = await useCase.execute(NoParams());
 
       // Assert
       expect(result.resourceType, equals(ResourceType.error));
@@ -93,35 +96,38 @@ Future<void> main() async {
 
     test("execute returns error for forbidden action", () async {
       // Arrange
-      final Resource<EmptyResponse> expectedResponse =
-          TestDataFactory.createErrorResource<EmptyResponse>(
+      final Resource<EmptyResponse?> expectedResponse =
+          TestDataFactory.createErrorResource<EmptyResponse?>(
         message: "Cannot delete account with active subscriptions",
         code: 403,
       );
 
-      when(mockRepository.deleteAccount()).thenAnswer((_) async => expectedResponse);
+      when(mockRepository.deleteAccount())
+          .thenAnswer((_) async => expectedResponse);
 
       // Act
-      final Resource<EmptyResponse> result = await useCase.execute(NoParams());
+      final Resource<EmptyResponse?> result = await useCase.execute(NoParams());
 
       // Assert
       expect(result.resourceType, equals(ResourceType.error));
-      expect(result.message, equals("Cannot delete account with active subscriptions"));
+      expect(result.message,
+          equals("Cannot delete account with active subscriptions"));
       expect(result.error?.errorCode, equals(403));
     });
 
     test("execute returns error for network error", () async {
       // Arrange
-      final Resource<EmptyResponse> expectedResponse =
-          TestDataFactory.createErrorResource<EmptyResponse>(
+      final Resource<EmptyResponse?> expectedResponse =
+          TestDataFactory.createErrorResource<EmptyResponse?>(
         message: "Network error",
         code: 500,
       );
 
-      when(mockRepository.deleteAccount()).thenAnswer((_) async => expectedResponse);
+      when(mockRepository.deleteAccount())
+          .thenAnswer((_) async => expectedResponse);
 
       // Act
-      final Resource<EmptyResponse> result = await useCase.execute(NoParams());
+      final Resource<EmptyResponse?> result = await useCase.execute(NoParams());
 
       // Assert
       expect(result.resourceType, equals(ResourceType.error));
@@ -133,15 +139,16 @@ Future<void> main() async {
       // Arrange
       final EmptyResponse emptyResponse = EmptyResponse();
 
-      final Resource<EmptyResponse> expectedResponse =
-          TestDataFactory.createSuccessResource<EmptyResponse>(
+      final Resource<EmptyResponse?> expectedResponse =
+          TestDataFactory.createSuccessResource<EmptyResponse?>(
         data: emptyResponse,
       );
 
-      when(mockRepository.deleteAccount()).thenAnswer((_) async => expectedResponse);
+      when(mockRepository.deleteAccount())
+          .thenAnswer((_) async => expectedResponse);
 
       // Act
-      final Resource<EmptyResponse> result = await useCase.execute(NoParams());
+      final Resource<EmptyResponse?> result = await useCase.execute(NoParams());
 
       // Assert
       expect(result.resourceType, equals(ResourceType.success));

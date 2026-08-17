@@ -37,7 +37,7 @@ class TestUnauthorizedAccessListener implements UnauthorizedAccessListener {
 class TestAuthReloadListener implements AuthReloadListener {
   @override
   void onAuthReloadListenerCallBackUseCase(
-      AuthResponseModel? authResponse,
+    AuthResponseModel? authResponse,
   ) {}
 }
 
@@ -191,8 +191,8 @@ void main() {
         when(mockApiAuth.logout()).thenAnswer((_) async => responseMain);
 
         // Act
-        final Resource<EmptyResponse> result =
-            await repository.logout() as Resource<EmptyResponse>;
+        final Resource<EmptyResponse?> result =
+            await repository.logout() as Resource<EmptyResponse?>;
 
         // Assert
         expect(result.resourceType, ResourceType.success);
@@ -215,8 +215,8 @@ void main() {
         when(mockApiAuth.logout()).thenAnswer((_) async => responseMain);
 
         // Act
-        final Resource<EmptyResponse> result =
-            await repository.logout() as Resource<EmptyResponse>;
+        final Resource<EmptyResponse?> result =
+            await repository.logout() as Resource<EmptyResponse?>;
 
         // Assert
         expect(result.resourceType, ResourceType.error);
@@ -225,13 +225,36 @@ void main() {
 
         verify(mockApiAuth.logout()).called(1);
       });
+
+      test("should return success resource when logout returns null data",
+          () async {
+        // Arrange
+        final ResponseMainDto<EmptyResponseDto?> responseMain =
+            ResponseMainDto<EmptyResponseDto?>.createErrorWithData(
+          message: "Logged out successfully",
+          statusCode: 200,
+        );
+
+        when(mockApiAuth.logout()).thenAnswer((_) async => responseMain);
+
+        // Act
+        final Resource<EmptyResponse?> result =
+            await repository.logout() as Resource<EmptyResponse?>;
+
+        // Assert
+        expect(result.resourceType, ResourceType.success);
+        expect(result.data, isNull);
+        expect(result.message, "Logged out successfully");
+        expect(result.error, isNull);
+
+        verify(mockApiAuth.logout()).called(1);
+      });
     });
 
     group("resendOtp", () {
       const String testEmail = "test@example.com";
 
-      test("should return success resource when resend OTP succeeds",
-          () async {
+      test("should return success resource when resend OTP succeeds", () async {
         // Arrange
         final EmptyResponseDto expectedResponse = EmptyResponseDto();
         final ResponseMainDto<EmptyResponseDto> responseMain =
@@ -707,12 +730,11 @@ void main() {
           statusCode: 200,
         );
 
-        when(mockApiAuth.deleteAccount())
-            .thenAnswer((_) async => responseMain);
+        when(mockApiAuth.deleteAccount()).thenAnswer((_) async => responseMain);
 
         // Act
-        final Resource<EmptyResponse> result =
-            await repository.deleteAccount() as Resource<EmptyResponse>;
+        final Resource<EmptyResponse?> result =
+            await repository.deleteAccount() as Resource<EmptyResponse?>;
 
         // Assert
         expect(result.resourceType, ResourceType.success);
@@ -733,12 +755,11 @@ void main() {
           title: "Cannot delete account with active orders",
         );
 
-        when(mockApiAuth.deleteAccount())
-            .thenAnswer((_) async => responseMain);
+        when(mockApiAuth.deleteAccount()).thenAnswer((_) async => responseMain);
 
         // Act
-        final Resource<EmptyResponse> result =
-            await repository.deleteAccount() as Resource<EmptyResponse>;
+        final Resource<EmptyResponse?> result =
+            await repository.deleteAccount() as Resource<EmptyResponse?>;
 
         // Assert
         expect(result.resourceType, ResourceType.error);
@@ -757,14 +778,15 @@ void main() {
       const String testCurrencyCode = "USD";
       const String testLanguageCode = "en";
 
-      test("should return success resource when user info update succeeds", () async {
+      test("should return success resource when user info update succeeds",
+          () async {
         // Arrange
         final AuthResponseModelDto expectedResponse = AuthResponseModelDto(
           accessToken: "updated-token",
           refreshToken: "updated-refresh",
         );
         final ResponseMainDto<AuthResponseModelDto> responseMain =
-        ResponseMainDto<AuthResponseModelDto>.createErrorWithData(
+            ResponseMainDto<AuthResponseModelDto>.createErrorWithData(
           data: expectedResponse,
           message: "User info updated successfully",
           statusCode: 200,
@@ -777,7 +799,7 @@ void main() {
 
         // Act
         final Resource<AuthResponseModel> result =
-        await repository.updateUserInfo(
+            await repository.updateUserInfo(
           request: UpdateUserInfoRequest(
             email: testEmail,
             msisdn: testPhone,
@@ -795,13 +817,15 @@ void main() {
         expect(result.message, "User info updated successfully");
         expect(result.error, isNull);
 
-        verify(mockApiAuth.updateUserInfo(request: anyNamed("request"))).called(1);
+        verify(mockApiAuth.updateUserInfo(request: anyNamed("request")))
+            .called(1);
       });
 
-      test("should return error resource when user info update fails", () async {
+      test("should return error resource when user info update fails",
+          () async {
         // Arrange
         final ResponseMainDto<AuthResponseModelDto> responseMain =
-        ResponseMainDto<AuthResponseModelDto>.createErrorWithData(
+            ResponseMainDto<AuthResponseModelDto>.createErrorWithData(
           statusCode: 422,
           developerMessage: "Invalid email format",
           title: "Invalid email format",
@@ -813,7 +837,7 @@ void main() {
 
         // Act
         final Resource<AuthResponseModel> result =
-        await repository.updateUserInfo(
+            await repository.updateUserInfo(
           request: UpdateUserInfoRequest(
             email: testEmail,
             msisdn: testPhone,
@@ -829,7 +853,8 @@ void main() {
         expect(result.message, "Invalid email format");
         expect(result.data, isNull);
 
-        verify(mockApiAuth.updateUserInfo(request: anyNamed("request"))).called(1);
+        verify(mockApiAuth.updateUserInfo(request: anyNamed("request")))
+            .called(1);
       });
 
       test("should handle partial user info updates", () async {
@@ -838,7 +863,7 @@ void main() {
           accessToken: "updated-token",
         );
         final ResponseMainDto<AuthResponseModelDto> responseMain =
-        ResponseMainDto<AuthResponseModelDto>.createErrorWithData(
+            ResponseMainDto<AuthResponseModelDto>.createErrorWithData(
           data: expectedResponse,
           message: "Partial update successful",
           statusCode: 200,
@@ -850,7 +875,7 @@ void main() {
 
         // Act
         final Resource<AuthResponseModel> result =
-        await repository.updateUserInfo(
+            await repository.updateUserInfo(
           request: UpdateUserInfoRequest(
             firstName: testFirstName,
           ),
@@ -860,10 +885,10 @@ void main() {
         expect(result.resourceType, ResourceType.success);
         expect(result.message, "Partial update successful");
 
-        verify(mockApiAuth.updateUserInfo(request: anyNamed("request"))).called(1);
+        verify(mockApiAuth.updateUserInfo(request: anyNamed("request")))
+            .called(1);
       });
     });
-
 
     group("getUserInfo", () {
       const String testBearerToken = "bearer-token-123";
@@ -898,8 +923,7 @@ void main() {
         expect(result.message, "User info retrieved");
         expect(result.error, isNull);
 
-        verify(mockApiAuth.getUserInfo(bearerToken: testBearerToken))
-            .called(1);
+        verify(mockApiAuth.getUserInfo(bearerToken: testBearerToken)).called(1);
       });
 
       test(
@@ -921,9 +945,8 @@ void main() {
         ).thenAnswer((_) async => responseMain);
 
         // Act
-        final Resource<AuthResponseModel> result = await repository.getUserInfo(
-          
-        ) as Resource<AuthResponseModel>;
+        final Resource<AuthResponseModel> result =
+            await repository.getUserInfo() as Resource<AuthResponseModel>;
 
         // Assert
         expect(result.resourceType, ResourceType.success);
@@ -955,8 +978,7 @@ void main() {
         expect(result.message, "Invalid or expired token");
         expect(result.data, isNull);
 
-        verify(mockApiAuth.getUserInfo(bearerToken: testBearerToken))
-            .called(1);
+        verify(mockApiAuth.getUserInfo(bearerToken: testBearerToken)).called(1);
       });
     });
 
@@ -979,8 +1001,8 @@ void main() {
             .thenAnswer((_) async => responseMain);
 
         // Act
-        final Resource<AuthResponseModel> result = await repository
-            .refreshTokenAPITrigger();
+        final Resource<AuthResponseModel> result =
+            await repository.refreshTokenAPITrigger();
 
         // Assert
         expect(result.resourceType, ResourceType.success);
@@ -1005,8 +1027,8 @@ void main() {
             .thenAnswer((_) async => responseMain);
 
         // Act
-        final Resource<AuthResponseModel> result = await repository
-            .refreshTokenAPITrigger();
+        final Resource<AuthResponseModel> result =
+            await repository.refreshTokenAPITrigger();
 
         // Assert
         expect(result.resourceType, ResourceType.error);
@@ -1087,8 +1109,7 @@ void main() {
         verify(mockApiAuth.tmpLogin(email: null, phone: testPhone)).called(1);
       });
 
-      test("should return error resource when temporary login fails",
-          () async {
+      test("should return error resource when temporary login fails", () async {
         // Arrange
         final ResponseMainDto<AuthResponseModelDto> responseMain =
             ResponseMainDto<AuthResponseModelDto>.createErrorWithData(
@@ -1174,9 +1195,10 @@ void main() {
             TestUnauthorizedAccessListener();
 
         // Act
-        repository..addUnauthorizedAccessListener(listener1)
-        ..addUnauthorizedAccessListener(listener2)
-        ..removeUnauthorizedAccessListener(listener1);
+        repository
+          ..addUnauthorizedAccessListener(listener1)
+          ..addUnauthorizedAccessListener(listener2)
+          ..removeUnauthorizedAccessListener(listener1);
 
         // Assert
         verify(mockApiAuth.addUnauthorizedAccessListener(listener1)).called(1);
@@ -1202,7 +1224,8 @@ void main() {
             phoneNumber: anyNamed("phoneNumber"),
           ),
         ).thenAnswer(
-          (_) async => ResponseMainDto<OtpResponseModelDto?>.createErrorWithData(
+          (_) async =>
+              ResponseMainDto<OtpResponseModelDto?>.createErrorWithData(
             data: OtpResponseModelDto(),
             statusCode: 200,
           ),
@@ -1221,7 +1244,7 @@ void main() {
           ),
         );
         final dynamic logoutResult = await repository.logout();
-        expect(logoutResult, isA<Resource<EmptyResponse>>());
+        expect(logoutResult, isA<Resource<EmptyResponse?>>());
 
         // VerifyOtp
         when(
@@ -1233,7 +1256,8 @@ void main() {
             providerType: anyNamed("providerType"),
           ),
         ).thenAnswer(
-          (_) async => ResponseMainDto<AuthResponseModelDto>.createErrorWithData(
+          (_) async =>
+              ResponseMainDto<AuthResponseModelDto>.createErrorWithData(
             data: AuthResponseModelDto(),
             statusCode: 200,
           ),

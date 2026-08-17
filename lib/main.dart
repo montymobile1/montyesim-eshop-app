@@ -205,6 +205,11 @@ class _MyFlutterActivityState extends State<MyFlutterActivity>
               child: MaterialApp(
                 debugShowCheckedModeBanner: false,
                 title: LocaleKeys.appName,
+                builder: (BuildContext context, Widget? child) =>
+                    MediaQuery.withClampedTextScaling(
+                  maxScaleFactor: 1.1,
+                  child: child!,
+                ),
                 theme: regularTheme,
                 // ThemeData(
                 //   primarySwatch: Colors.lightGreen,

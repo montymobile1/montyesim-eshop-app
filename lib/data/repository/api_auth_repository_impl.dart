@@ -33,8 +33,8 @@ class ApiAuthRepositoryImpl implements ApiAuthRepository {
   }
 
   @override
-  FutureOr<Resource<EmptyResponse>> logout() async {
-    return responseToResource<EmptyResponseDto, EmptyResponse>(
+  FutureOr<Resource<EmptyResponse?>> logout() async {
+    return responseToResource<EmptyResponseDto, EmptyResponse?>(
       apiAuth.logout(),
       (EmptyResponseDto dto) => dto.toDomain(),
     );
@@ -71,8 +71,8 @@ class ApiAuthRepositoryImpl implements ApiAuthRepository {
   }
 
   @override
-  FutureOr<Resource<EmptyResponse>> deleteAccount() async {
-    return responseToResource<EmptyResponseDto, EmptyResponse>(
+  FutureOr<Resource<EmptyResponse?>> deleteAccount() async {
+    return responseToResource<EmptyResponseDto, EmptyResponse?>(
       apiAuth.deleteAccount(),
       (EmptyResponseDto dto) => dto.toDomain(),
     );

@@ -34,8 +34,8 @@ Future<void> main() async {
       // Arrange
       final EmptyResponse emptyResponse = EmptyResponse();
 
-      final Resource<EmptyResponse> expectedResponse =
-          TestDataFactory.createSuccessResource<EmptyResponse>(
+      final Resource<EmptyResponse?> expectedResponse =
+          TestDataFactory.createSuccessResource<EmptyResponse?>(
         data: emptyResponse,
         message: "Logged out successfully",
       );
@@ -43,7 +43,7 @@ Future<void> main() async {
       when(mockRepository.logout()).thenAnswer((_) async => expectedResponse);
 
       // Act
-      final Resource<EmptyResponse> result = await useCase.execute(NoParams());
+      final Resource<EmptyResponse?> result = await useCase.execute(NoParams());
 
       // Assert
       expect(result.resourceType, equals(ResourceType.success));
@@ -55,15 +55,15 @@ Future<void> main() async {
 
     test("execute returns error resource when repository fails", () async {
       // Arrange
-      final Resource<EmptyResponse> expectedResponse =
-          TestDataFactory.createErrorResource<EmptyResponse>(
+      final Resource<EmptyResponse?> expectedResponse =
+          TestDataFactory.createErrorResource<EmptyResponse?>(
         message: "Failed to logout",
       );
 
       when(mockRepository.logout()).thenAnswer((_) async => expectedResponse);
 
       // Act
-      final Resource<EmptyResponse> result = await useCase.execute(NoParams());
+      final Resource<EmptyResponse?> result = await useCase.execute(NoParams());
 
       // Assert
       expect(result.resourceType, equals(ResourceType.error));
@@ -74,8 +74,8 @@ Future<void> main() async {
 
     test("execute returns error resource for network error", () async {
       // Arrange
-      final Resource<EmptyResponse> expectedResponse =
-          TestDataFactory.createErrorResource<EmptyResponse>(
+      final Resource<EmptyResponse?> expectedResponse =
+          TestDataFactory.createErrorResource<EmptyResponse?>(
         message: "Network error",
         code: 500,
       );
@@ -83,7 +83,7 @@ Future<void> main() async {
       when(mockRepository.logout()).thenAnswer((_) async => expectedResponse);
 
       // Act
-      final Resource<EmptyResponse> result = await useCase.execute(NoParams());
+      final Resource<EmptyResponse?> result = await useCase.execute(NoParams());
 
       // Assert
       expect(result.resourceType, equals(ResourceType.error));
@@ -95,8 +95,8 @@ Future<void> main() async {
 
     test("execute returns error for 401 unauthorized", () async {
       // Arrange
-      final Resource<EmptyResponse> expectedResponse =
-          TestDataFactory.createErrorResource<EmptyResponse>(
+      final Resource<EmptyResponse?> expectedResponse =
+          TestDataFactory.createErrorResource<EmptyResponse?>(
         message: "Unauthorized",
         code: 401,
       );
@@ -104,7 +104,7 @@ Future<void> main() async {
       when(mockRepository.logout()).thenAnswer((_) async => expectedResponse);
 
       // Act
-      final Resource<EmptyResponse> result = await useCase.execute(NoParams());
+      final Resource<EmptyResponse?> result = await useCase.execute(NoParams());
 
       // Assert
       expect(result.resourceType, equals(ResourceType.error));
@@ -117,15 +117,15 @@ Future<void> main() async {
       // Arrange
       final EmptyResponse emptyResponse = EmptyResponse();
 
-      final Resource<EmptyResponse> expectedResponse =
-          TestDataFactory.createSuccessResource<EmptyResponse>(
+      final Resource<EmptyResponse?> expectedResponse =
+          TestDataFactory.createSuccessResource<EmptyResponse?>(
         data: emptyResponse,
       );
 
       when(mockRepository.logout()).thenAnswer((_) async => expectedResponse);
 
       // Act
-      final Resource<EmptyResponse> result = await useCase.execute(NoParams());
+      final Resource<EmptyResponse?> result = await useCase.execute(NoParams());
 
       // Assert
       expect(result.resourceType, equals(ResourceType.success));
@@ -135,8 +135,8 @@ Future<void> main() async {
 
     test("execute handles timeout error", () async {
       // Arrange
-      final Resource<EmptyResponse> expectedResponse =
-          TestDataFactory.createErrorResource<EmptyResponse>(
+      final Resource<EmptyResponse?> expectedResponse =
+          TestDataFactory.createErrorResource<EmptyResponse?>(
         message: "Request timeout",
         code: 408,
       );
@@ -144,7 +144,7 @@ Future<void> main() async {
       when(mockRepository.logout()).thenAnswer((_) async => expectedResponse);
 
       // Act
-      final Resource<EmptyResponse> result = await useCase.execute(NoParams());
+      final Resource<EmptyResponse?> result = await useCase.execute(NoParams());
 
       // Assert
       expect(result.resourceType, equals(ResourceType.error));
