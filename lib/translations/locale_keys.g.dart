@@ -311,6 +311,7 @@ abstract class  LocaleKeys {
   static const String bundleExistsView_buttonOneText = "bundleExistsView_buttonOneText";
   static const String bundleExistsView_buttonTwoText = "bundleExistsView_buttonTwoText";
   static const String image_saved = "image_saved";
+  static const String image_save_failed = "image_save_failed";
   static const String qr_code_saved = "qr_code_saved";
   static const String permission_required = "permission_required";
   static const String esim_warning = "esim_warning";

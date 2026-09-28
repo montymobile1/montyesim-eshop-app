@@ -308,6 +308,7 @@
   "bundleExistsView_buttonTwoText": "الانتقال إلى شريحة eSIM",
   "copied_to_clipboard": "تم النسخ إلى الحافظة",
   "image_saved": "تم حفظ الصورة بنجاح",
+  "image_save_failed": "تعذّر حفظ الصورة. يرجى التأكد من أن التطبيق يمكنه الوصول إلى صورك.",
   "qr_code_saved": "تم حفظ رمز QR",
   "permission_required": "مطلوب إذن: {permission}",
   "esim_warning": "يمكن تثبيت معظم الشرائح الإلكترونية (eSIM) مرة واحدة فقط. إذا قمت بحذف الشريحة الإلكترونية eSIM من جهازك، فلن تتمكن من إعادة تثبيتها مرة أخرى.",

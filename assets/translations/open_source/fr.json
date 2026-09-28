@@ -307,6 +307,7 @@
   "bundleExistsView_buttonOneText": "Acheter une nouvelle eSIM",
   "bundleExistsView_buttonTwoText": "Aller à mon eSIM",
   "image_saved": "Image enregistrée",
+  "image_save_failed": "Impossible d'enregistrer l'image. Vérifiez que l'application a accès à vos photos.",
   "qr_code_saved": "Code QR enregistré",
   "permission_required": "Permission requise : {permission}",
   "esim_warning": "La plupart des eSIM ne peuvent être installées qu’une seule fois. Si vous supprimez l’eSIM de votre appareil, vous ne pourrez pas la réinstaller.",

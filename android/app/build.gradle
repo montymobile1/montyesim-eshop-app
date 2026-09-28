@@ -34,8 +34,12 @@ if (flutterVersionName == null) {
 
 android {
     namespace "com.BaseFlutter.BaseFlutter"
-    compileSdk flutter.compileSdkVersion
-    ndkVersion "27.0.12077973"
+    compileSdk 37
+    ndkVersion "28.2.13676358"
+
+    buildFeatures {
+        resValues true
+    }
 
     compileOptions {
         coreLibraryDesugaringEnabled true
@@ -78,7 +82,7 @@ android {
             signingConfig signingConfigs.release
             minifyEnabled true
             shrinkResources true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
 
@@ -154,5 +158,4 @@ dependencies {
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.4'
     implementation 'androidx.window:window:1.0.0'
     implementation 'androidx.window:window-java:1.0.0'
-    implementation 'com.facebook.android:facebook-login:[version]'
 }

@@ -308,6 +308,7 @@
   "bundleExistsView_buttonOneText": "Buy a new eSIM",
   "bundleExistsView_buttonTwoText": "Go to My eSIM",
   "image_saved": "Image saved",
+  "image_save_failed": "Couldn't save the image. Please check that the app can access your photos.",
   "qr_code_saved": "Qr Code Saved",
   "permission_required": "Permission required: {permission}",
   "esim_warning": "Most eSIMs can only be installed once. if you delete the eSIM from your device, you cannot install it again",

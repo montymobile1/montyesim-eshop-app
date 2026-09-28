@@ -3,10 +3,8 @@ import "dart:io";
 import "package:easy_localization/easy_localization.dart";
 import "package:esim_open_source/translations/locale_keys.g.dart";
 import "package:esim_open_source/utils/display_message_helper.dart";
-import "package:esim_open_source/utils/permission_helper.dart";
 import "package:flutter_image_compress/flutter_image_compress.dart";
-import "package:gallery_saver_plus/gallery_saver.dart";
-import "package:permission_handler/permission_handler.dart";
+import "package:gal/gal.dart";
 import "package:share_plus/share_plus.dart";
 
 Future<XFile?> compressImage(File file) async {
@@ -49,26 +47,21 @@ Future<dynamic> shareImage({required String imagePath}) async {
   }
 }
 
+// Gal.putImage requests gallery access itself and throws GalException when access
+// is denied or the save fails, so the success toast only shows after a real save.
 Future<dynamic> saveImageToGallery({
   required String imagePath,
   String? toastMessage,
 }) async {
-  Map<Permission, PermissionStatus> result =
-      await PermissionHelper.requestStoragePermission();
-
-  result.forEach((Permission permission, PermissionStatus status) {
-    if (status != PermissionStatus.granted) {
-      // DisplayMessageHelper.toast(
-      //   LocaleKeys.permission_required.tr(
-      //     namedArgs: <String, String>{"permission": permission.toString()},
-      //   ),
-      // );
-      return;
-    }
-  });
-
-  if (imagePath.isNotEmpty) {
-    await GallerySaver.saveImage(imagePath);
-    DisplayMessageHelper.toast(toastMessage ?? LocaleKeys.image_saved.tr());
+  if (imagePath.isEmpty) {
+    return;
   }
+
+  try {
+    await Gal.putImage(imagePath);
+  } on GalException {
+    DisplayMessageHelper.toast(LocaleKeys.image_save_failed.tr());
+    return;
+  }
+  DisplayMessageHelper.toast(toastMessage ?? LocaleKeys.image_saved.tr());
 }

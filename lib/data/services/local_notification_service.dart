@@ -50,7 +50,7 @@ class LocalNotificationService {
       iOS: initializationSettingsIOS,
     );
     await flutterLocalNotificationsPlugin.initialize(
-      initializationSettings,
+      settings: initializationSettings,
       onDidReceiveNotificationResponse: (NotificationResponse details) async {
         Map<String, dynamic>? payload;
         if (details.payload != null && details.payload!.isNotEmpty) {
@@ -103,10 +103,10 @@ class LocalNotificationService {
       payloadStr = jsonEncode(payload);
     }
     await flutterLocalNotificationsPlugin.show(
-      id ?? _id++,
-      title,
-      summaryText,
-      platformChannelSpecifics,
+      id: id ?? _id++,
+      title: title,
+      body: summaryText,
+      notificationDetails: platformChannelSpecifics,
       payload: payloadStr,
     );
   }
@@ -138,10 +138,10 @@ class LocalNotificationService {
     }
 
     await flutterLocalNotificationsPlugin.show(
-      id ?? _id++,
-      title,
-      summaryText,
-      platformChannelSpecifics,
+      id: id ?? _id++,
+      title: title,
+      body: summaryText,
+      notificationDetails: platformChannelSpecifics,
       payload: payloadStr,
     );
   }

@@ -15,15 +15,7 @@ final class AppPreview extends Preview {
 
   static PreviewThemeData _previewTheme() {
     _ensureEnvironment();
-    return PreviewThemeData(
-      materialLight: ThemeData(
-        extensions: <ThemeExtension<AppColors>>[AppColors.lightThemeColors],
-      ),
-      materialDark: ThemeData(
-        brightness: Brightness.dark,
-        extensions: <ThemeExtension<AppColors>>[AppColors.darkThemeColors],
-      ),
-    );
+    return const _AppPreviewThemeData();
   }
 
   static Widget _previewWrapper(Widget child) {
@@ -46,7 +38,31 @@ final class AppPreview extends Preview {
   }
 
   static void _ensureEnvironment() {
-    AppEnvironment.appEnvironmentHelper =
-        Environment.getAppEnvironmentHelper();
+    AppEnvironment.appEnvironmentHelper = Environment.getAppEnvironmentHelper();
+  }
+}
+
+final class _AppPreviewThemeData extends PreviewThemeData {
+  const _AppPreviewThemeData();
+
+  @override
+  Widget apply(BuildContext context, Widget child) {
+    final bool isDark =
+        MediaQuery.platformBrightnessOf(context) == Brightness.dark;
+    return Theme(
+      data: isDark
+          ? ThemeData(
+              brightness: Brightness.dark,
+              extensions: <ThemeExtension<AppColors>>[
+                AppColors.darkThemeColors,
+              ],
+            )
+          : ThemeData(
+              extensions: <ThemeExtension<AppColors>>[
+                AppColors.lightThemeColors,
+              ],
+            ),
+      child: child,
+    );
   }
 }

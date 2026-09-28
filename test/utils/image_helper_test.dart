@@ -1,5 +1,7 @@
 import "dart:io";
 
+import "package:easy_localization/easy_localization.dart";
+import "package:esim_open_source/translations/locale_keys.g.dart";
 import "package:esim_open_source/utils/image_helper.dart";
 import "package:flutter/services.dart";
 import "package:flutter_test/flutter_test.dart";
@@ -7,7 +9,30 @@ import "package:share_plus/share_plus.dart";
 
 import "../helpers/fluttertoast_helper.dart";
 
+// Calls received on gal's method channel, and toast messages shown, per test.
+final List<MethodCall> galCalls = <MethodCall>[];
+final List<String> toasts = <String>[];
+
+const MethodChannel galChannel = MethodChannel("gal");
+
+Future<Object?> galSuccessHandler(MethodCall methodCall) async {
+  galCalls.add(methodCall);
+  switch (methodCall.method) {
+    case "requestAccess":
+      return true;
+    default:
+      return null;
+  }
+}
+
 Future<void> main() async {
+  setUp(() {
+    galCalls.clear();
+    toasts.clear();
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(galChannel, galSuccessHandler);
+  });
+
   setUpAll(() {
     TestWidgetsFlutterBinding.ensureInitialized();
     FluttertoastHelperTest.implementFluttertoast();
@@ -57,15 +82,16 @@ Future<void> main() async {
       }
     });
 
-    // Mock gallery_saver_plus
-    const MethodChannel gallerySaverChannel = MethodChannel("gallery_saver");
+    // Record toast messages (replaces the no-op handler set above)
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
-        .setMockMethodCallHandler(gallerySaverChannel,
+        .setMockMethodCallHandler(FluttertoastHelperTest.channel,
             (MethodCall methodCall) async {
-      if (methodCall.method == "saveImage") {
-        return true; // Mock successful save
+      if (methodCall.method == "showToast") {
+        final Map<Object?, Object?> args =
+            methodCall.arguments as Map<Object?, Object?>;
+        toasts.add(args["msg"].toString());
       }
-      return false;
+      return null;
     });
 
     // Mock easy_localization
@@ -93,7 +119,6 @@ Future<void> main() async {
         MethodChannel("dev.fluttercommunity.plus/share");
     const MethodChannel permissionChannel =
         MethodChannel("flutter.baseflow.com/permissions/methods");
-    const MethodChannel gallerySaverChannel = MethodChannel("gallery_saver");
     const MethodChannel localizationChannel =
         MethodChannel("easy_localization");
 
@@ -104,7 +129,7 @@ Future<void> main() async {
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(permissionChannel, null);
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
-        .setMockMethodCallHandler(gallerySaverChannel, null);
+        .setMockMethodCallHandler(galChannel, null);
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(localizationChannel, null);
   });
@@ -187,8 +212,50 @@ Future<void> main() async {
       test("saveImageToGallery saves image with valid path", () async {
         const String imagePath = "/test/path/image.png";
         await saveImageToGallery(imagePath: imagePath);
-        // Function should complete successfully with mocked permissions
-        expect(true, isTrue);
+
+        final MethodCall putImage = galCalls
+            .singleWhere((MethodCall call) => call.method == "putImage");
+        expect(
+          (putImage.arguments as Map<Object?, Object?>)["path"],
+          imagePath,
+        );
+        expect(toasts, <String>[LocaleKeys.image_saved.tr()]);
+      });
+
+      test("saveImageToGallery shows failure toast when access is denied",
+          () async {
+        TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+            .setMockMethodCallHandler(galChannel,
+                (MethodCall methodCall) async {
+          galCalls.add(methodCall);
+          if (methodCall.method == "requestAccess") {
+            return false;
+          }
+          throw PlatformException(code: "ACCESS_DENIED");
+        });
+
+        await saveImageToGallery(imagePath: "/test/path/image.png");
+
+        expect(toasts, <String>[LocaleKeys.image_save_failed.tr()]);
+      });
+
+      test("saveImageToGallery shows failure toast when save fails", () async {
+        TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+            .setMockMethodCallHandler(galChannel,
+                (MethodCall methodCall) async {
+          galCalls.add(methodCall);
+          if (methodCall.method == "requestAccess") {
+            return true;
+          }
+          throw PlatformException(code: "NOT_ENOUGH_SPACE");
+        });
+
+        await saveImageToGallery(
+          imagePath: "/test/path/image.png",
+          toastMessage: "Custom save message",
+        );
+
+        expect(toasts, <String>[LocaleKeys.image_save_failed.tr()]);
       });
 
       test("saveImageToGallery saves image with custom toast message",
@@ -199,14 +266,15 @@ Future<void> main() async {
           imagePath: imagePath,
           toastMessage: customMessage,
         );
-        expect(true, isTrue);
+        expect(toasts, <String>[customMessage]);
       });
 
       test("saveImageToGallery handles empty path", () async {
         const String imagePath = "";
         await saveImageToGallery(imagePath: imagePath);
-        // Should not save but should not crash
-        expect(true, isTrue);
+
+        expect(galCalls, isEmpty);
+        expect(toasts, isEmpty);
       });
 
       test("saveImageToGallery saves different image formats", () async {

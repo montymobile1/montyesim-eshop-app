@@ -5,14 +5,32 @@ allprojects {
     }
 }
 
-rootProject.buildDir = '../build'
+rootProject.layout.buildDirectory.value(rootProject.layout.projectDirectory.dir('../build'))
 subprojects {
-    project.buildDir = "${rootProject.buildDir}/${project.name}"
+    project.layout.buildDirectory.value(rootProject.layout.buildDirectory.dir(project.name))
+    // AGP 9 removed android.defaults.buildfeatures.buildconfig; some plugins still
+    // reference BuildConfig without enabling it themselves.
+    plugins.withId('com.android.library') {
+        project.android.buildFeatures.buildConfig = true
+    }
+    // stripe_android declares stripe-android-issuing-push-provisioning as compileOnly, which
+    // drags in play-services-tapandpay. Google only distributes that privately, so the
+    // release lint classpath fails to resolve. We don't use push provisioning.
+    if (project.name == 'stripe_android') {
+        configurations.configureEach {
+            exclude group: 'com.google.android.gms', module: 'play-services-tapandpay'
+        }
+    }
     afterEvaluate { project ->
         if (project.hasProperty('android')) {
             project.android {
                 if (namespace == null) {
                     namespace project.group
+                }
+                // Current AndroidX libraries require compileSdk 34+. Some unmaintained
+                // plugins (e.g. qr_code_scanner 1.0.1) still compile against 32.
+                if (compileSdk != null && compileSdk < 34) {
+                    compileSdk = 36
                 }
                 compileOptions {
                     sourceCompatibility JavaVersion.VERSION_17
@@ -30,5 +48,5 @@ subprojects {
 }
 
 tasks.register("clean", Delete) {
-    delete rootProject.buildDir
+    delete rootProject.layout.buildDirectory
 }

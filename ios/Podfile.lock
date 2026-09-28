@@ -1,171 +1,50 @@
 PODS:
-  - adaptive_platform_ui (0.1.0):
-    - Flutter
-  - cupertino_http (0.0.1):
-    - Flutter
-    - FlutterMacOS
-  - DTTJailbreakDetection (0.4.0)
-  - facebook_app_events (0.20.0):
-    - FBSDKCoreKit (~> 18.0)
-    - Flutter
-  - FBAEMKit (18.0.2):
-    - FBSDKCoreKit_Basics (= 18.0.2)
-  - FBSDKCoreKit (18.0.2):
-    - FBAEMKit (= 18.0.2)
-    - FBSDKCoreKit_Basics (= 18.0.2)
-  - FBSDKCoreKit_Basics (18.0.2)
-  - FBSDKLoginKit (18.0.2):
-    - FBSDKCoreKit (= 18.0.2)
   - Flutter (1.0.0)
   - flutter_esim (0.0.1):
     - Flutter
-  - flutter_facebook_auth (7.1.5):
-    - FBSDKLoginKit (= 18.0.2)
-    - Flutter
-  - flutter_image_compress_common (1.0.0):
-    - Flutter
-    - Mantle
-    - SDWebImage
-    - SDWebImageWebPCoder
-  - flutter_keyboard_visibility (0.0.1):
-    - Flutter
-  - flutter_secure_storage (6.0.0):
-    - Flutter
   - flutter_statusbarcolor_ns (0.0.1):
     - Flutter
-  - gallery_saver_plus (0.0.1):
-    - Flutter
-  - libwebp (1.6.0):
-    - libwebp/demux (= 1.6.0)
-    - libwebp/mux (= 1.6.0)
-    - libwebp/sharpyuv (= 1.6.0)
-    - libwebp/webp (= 1.6.0)
-  - libwebp/demux (1.6.0):
-    - libwebp/webp
-  - libwebp/mux (1.6.0):
-    - libwebp/demux
-  - libwebp/sharpyuv (1.6.0)
-  - libwebp/webp (1.6.0):
-    - libwebp/sharpyuv
-  - Mantle (2.2.0):
-    - Mantle/extobjc (= 2.2.0)
-  - Mantle/extobjc (2.2.0)
   - MTBBarcodeScanner (5.0.11)
-  - ObjectBox (5.3.0-beta.4)
+  - ObjectBox (5.3.0)
   - objectbox_flutter_libs (0.0.1):
     - Flutter
-    - ObjectBox (= 5.3.0-beta.4)
-  - objective_c (0.0.1):
-    - Flutter
+    - ObjectBox (= 5.3.0)
   - qr_code_scanner (0.2.0):
     - Flutter
     - MTBBarcodeScanner
-  - safe_device (1.0.0):
-    - DTTJailbreakDetection
-    - Flutter
-  - SDWebImage (5.21.7):
-    - SDWebImage/Core (= 5.21.7)
-  - SDWebImage/Core (5.21.7)
-  - SDWebImageWebPCoder (0.15.0):
-    - libwebp (~> 1.0)
-    - SDWebImage/Core (~> 5.17)
-  - sign_in_with_apple (0.0.1):
-    - Flutter
 
 DEPENDENCIES:
-  - adaptive_platform_ui (from `.symlinks/plugins/adaptive_platform_ui/ios`)
-  - cupertino_http (from `.symlinks/plugins/cupertino_http/darwin`)
-  - facebook_app_events (from `.symlinks/plugins/facebook_app_events/ios`)
   - Flutter (from `Flutter`)
   - flutter_esim (from `.symlinks/plugins/flutter_esim/ios`)
-  - flutter_facebook_auth (from `.symlinks/plugins/flutter_facebook_auth/ios`)
-  - flutter_image_compress_common (from `.symlinks/plugins/flutter_image_compress_common/ios`)
-  - flutter_keyboard_visibility (from `.symlinks/plugins/flutter_keyboard_visibility/ios`)
-  - flutter_secure_storage (from `.symlinks/plugins/flutter_secure_storage/ios`)
   - flutter_statusbarcolor_ns (from `.symlinks/plugins/flutter_statusbarcolor_ns/ios`)
-  - gallery_saver_plus (from `.symlinks/plugins/gallery_saver_plus/ios`)
   - objectbox_flutter_libs (from `.symlinks/plugins/objectbox_flutter_libs/ios`)
-  - objective_c (from `.symlinks/plugins/objective_c/ios`)
   - qr_code_scanner (from `.symlinks/plugins/qr_code_scanner/ios`)
-  - safe_device (from `.symlinks/plugins/safe_device/ios`)
-  - sign_in_with_apple (from `.symlinks/plugins/sign_in_with_apple/ios`)
 
 SPEC REPOS:
   trunk:
-    - DTTJailbreakDetection
-    - FBAEMKit
-    - FBSDKCoreKit
-    - FBSDKCoreKit_Basics
-    - FBSDKLoginKit
-    - libwebp
-    - Mantle
     - MTBBarcodeScanner
     - ObjectBox
-    - SDWebImage
-    - SDWebImageWebPCoder
 
 EXTERNAL SOURCES:
-  adaptive_platform_ui:
-    :path: ".symlinks/plugins/adaptive_platform_ui/ios"
-  cupertino_http:
-    :path: ".symlinks/plugins/cupertino_http/darwin"
-  facebook_app_events:
-    :path: ".symlinks/plugins/facebook_app_events/ios"
   Flutter:
     :path: Flutter
   flutter_esim:
     :path: ".symlinks/plugins/flutter_esim/ios"
-  flutter_facebook_auth:
-    :path: ".symlinks/plugins/flutter_facebook_auth/ios"
-  flutter_image_compress_common:
-    :path: ".symlinks/plugins/flutter_image_compress_common/ios"
-  flutter_keyboard_visibility:
-    :path: ".symlinks/plugins/flutter_keyboard_visibility/ios"
-  flutter_secure_storage:
-    :path: ".symlinks/plugins/flutter_secure_storage/ios"
   flutter_statusbarcolor_ns:
     :path: ".symlinks/plugins/flutter_statusbarcolor_ns/ios"
-  gallery_saver_plus:
-    :path: ".symlinks/plugins/gallery_saver_plus/ios"
   objectbox_flutter_libs:
     :path: ".symlinks/plugins/objectbox_flutter_libs/ios"
-  objective_c:
-    :path: ".symlinks/plugins/objective_c/ios"
   qr_code_scanner:
     :path: ".symlinks/plugins/qr_code_scanner/ios"
-  safe_device:
-    :path: ".symlinks/plugins/safe_device/ios"
-  sign_in_with_apple:
-    :path: ".symlinks/plugins/sign_in_with_apple/ios"
 
 SPEC CHECKSUMS:
-  adaptive_platform_ui: f54f620666d1797636f9ef06f49137ef2cc13611
-  cupertino_http: 94ac07f5ff090b8effa6c5e2c47871d48ab7c86c
-  DTTJailbreakDetection: 5e356c5badc17995f65a83ed9483f787a0057b71
-  facebook_app_events: cfa07e73912a052992b5f218f79a19a66a99bf1a
-  FBAEMKit: 56a4f5a9607957b547b6458b17a98c5bb2736367
-  FBSDKCoreKit: 54f1240567e16862ab71c53c33dc347db5c524c5
-  FBSDKCoreKit_Basics: eb530cd6a79030dbb11df460aafb2767bcad9028
-  FBSDKLoginKit: 6a70798793e499335a98fab1a758d7da34af196e
-  Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
+  Flutter: 71a624a5bc0c04062bf19101d501e466baf2fb47
   flutter_esim: 99a7c04932507d4864018c9232fdac787d331ab2
-  flutter_facebook_auth: fa3b69b1df0831d2178fe87a05ee2d7d0156db70
-  flutter_image_compress_common: 1697a328fd72bfb335507c6bca1a65fa5ad87df1
-  flutter_keyboard_visibility: 4625131e43015dbbe759d9b20daaf77e0e3f6619
-  flutter_secure_storage: 1ed9476fba7e7a782b22888f956cce43e2c62f13
   flutter_statusbarcolor_ns: 28ea17050f37c962fe05a4722a6d43afc4fca76b
-  gallery_saver_plus: 61c8a831d5975e2bf57f87bcd64379dcc7d29ff2
-  libwebp: af5937a13536ef73f3784d69cc342b98961acf33
-  Mantle: c5aa8794a29a022dfbbfc9799af95f477a69b62d
   MTBBarcodeScanner: f453b33c4b7dfe545d8c6484ed744d55671788cb
-  ObjectBox: eccb95ea2054c39d81dfa2d4ccc5f1e31187228a
-  objectbox_flutter_libs: ed1510f71602e4a0d3f2a721324e468d066fdbb9
-  objective_c: 89e720c30d716b036faf9c9684022048eee1eee2
+  ObjectBox: 2aae8ad350012cb53c6e7848064307cf68617f73
+  objectbox_flutter_libs: 42b57158b8c4869b731487f220e07d6edc6616e0
   qr_code_scanner: d77f94ecc9abf96d9b9b8fc04ef13f611e5a147a
-  safe_device: 205ad04de30f4512ca889418d4783e1b6fdf8cfe
-  SDWebImage: e9fc87c1aab89a8ab1bbd74eba378c6f53be8abf
-  SDWebImageWebPCoder: 0e06e365080397465cc73a7a9b472d8a3bd0f377
-  sign_in_with_apple: c5dcc141574c8c54d5ac99dd2163c0c72ad22418
 
 PODFILE CHECKSUM: 02b37c7e362bdbb120844f2ed82ff95616a21287
 

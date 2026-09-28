@@ -32,3 +32,6 @@
 -dontwarn com.stripe.android.pushProvisioning.PushProvisioningActivityStarter$Error
 -dontwarn com.stripe.android.pushProvisioning.PushProvisioningActivityStarter
 -dontwarn com.stripe.android.pushProvisioning.PushProvisioningEphemeralKeyProvider
+# AGP 9 requires proguard-android-optimize.txt; keep R8 optimizations off
+# (matches the old proguard-android.txt behavior) until release builds are verified.
+-dontoptimize
