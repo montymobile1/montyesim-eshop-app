@@ -50,19 +50,19 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBUvPwPV70qUa08c4vYw1AqJ8CdfUnvA1k',
-    appId: '1:221368510791:android:c51df057507248a84cc462',
-    messagingSenderId: '221368510791',
-    projectId: 'esim-opensource---test',
-    storageBucket: 'esim-opensource---test.firebasestorage.app',
+    apiKey: 'apiKey',
+    appId: 'appId',
+    messagingSenderId: 'messagingSenderId',
+    projectId: 'projectId',
+    storageBucket: 'storageBucket',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBcuxZAcNFZH-uhbiyyrTpRp9tAeVskajw',
-    appId: '1:221368510791:ios:06b67807e2ee54c84cc462',
-    messagingSenderId: '221368510791',
-    projectId: 'esim-opensource---test',
-    storageBucket: 'esim-opensource---test.firebasestorage.app',
-    iosBundleId: 'monty.esim.opensource.test',
+    apiKey: 'apiKey',
+    appId: 'appId',
+    messagingSenderId: 'messagingSenderId',
+    projectId: 'projectId',
+    storageBucket: 'storageBucket',
+    iosBundleId: 'iosBundleId',
   );
 }

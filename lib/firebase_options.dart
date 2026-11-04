@@ -50,19 +50,19 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCvp18eRlB2BDUFixvZFPvkecd1SsF_44g',
-    appId: '1:81669114717:android:da8057b463a1a6c96776b4',
-    messagingSenderId: '81669114717',
-    projectId: 'monty-BaseFlutter',
-    storageBucket: 'monty-BaseFlutter.appspot.com',
+    apiKey: 'apiKey',
+    appId: 'appId',
+    messagingSenderId: 'messagingSenderId',
+    projectId: 'projectId',
+    storageBucket: 'storageBucket',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCeqiE1AbuaJTDcTLZNs2IfpNUzxPpO0cU',
-    appId: '1:81669114717:ios:638f08d018f431516776b4',
-    messagingSenderId: '81669114717',
-    projectId: 'monty-BaseFlutter',
-    storageBucket: 'monty-BaseFlutter.appspot.com',
-    iosBundleId: 'com.monty.BaseFlutter',
+    apiKey: 'apiKey',
+    appId: 'appId',
+    messagingSenderId: 'messagingSenderId',
+    projectId: 'projectId',
+    storageBucket: 'storageBucket',
+    iosBundleId: 'iosBundleId',
   );
 }
